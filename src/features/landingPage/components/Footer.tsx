@@ -14,7 +14,7 @@ const Footer = () => {
           <span>·</span>
           <span>ANCHOR</span>
         </div>
-        <div className="text-[10px] text-[#6b7280] mt-5 max-w-2xl mx-auto leading-relaxed italic">
+        <div className="text-[10px] text-[#6b7280] mt-6 max-w-2xl mx-auto leading-relaxed italic">
           Riby Inc and JompStart Digital Limited are DobbleHelix Limited
           companies (
           <Link
