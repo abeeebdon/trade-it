@@ -1,23 +1,15 @@
 import { formatUSD } from '@/lib/func';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Truck, Storefront } from '@phosphor-icons/react';
+import { Listing } from './data';
+import { Store, Truck } from 'lucide-react';
 
 const FALLBACK_IMG =
   'https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?auto=format&fit=crop&w=900&q=80';
-export type Listing = {
-  id: string | number;
-  title: string;
-  category: string;
-  photos?: string[];
-  fulfillment_mode: 'riby_dtc' | string;
-  retail_price_usd: number;
-  seller_name: string;
-  stock_qty: number;
-};
+
 export default function ListingCard({ l }: { l: Listing }) {
   const isDtc = l.fulfillment_mode === 'riby_dtc';
-  const photo = l.photos?.[0] || FALLBACK_IMG;
+  const photo = FALLBACK_IMG;
   return (
     <Link
       href={`/shop/product/${l.id}`}
@@ -27,6 +19,8 @@ export default function ListingCard({ l }: { l: Listing }) {
       <div className="aspect-4/3 relative overflow-hidden">
         <Image
           src={photo}
+          width={200}
+          height={200}
           alt={l.title}
           onError={(e) => {
             if (e.currentTarget.src !== FALLBACK_IMG)
@@ -34,31 +28,31 @@ export default function ListingCard({ l }: { l: Listing }) {
           }}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
-        <div className="absolute top-2 left-2">
+        <div className=" absolute top-2 left-2 ">
           {isDtc ? (
             <span className="helix-status helix-status-gold">
-              <Truck size={10} /> Direct · Riby of Record
+              <Truck size={20} /> Direct · Riby of Record
             </span>
           ) : (
             <span className="helix-status helix-status-ok">
-              <Storefront size={10} weight="fill" /> US · 48hr
+              <Store size={20} /> US · 48hr
             </span>
           )}
         </div>
       </div>
-      <div className="p-4 flex-1 flex flex-col">
-        <div className="text-[10px] font-mono uppercase tracking-wider text-[#1A7A6E]">
+      <article className="p-4 flex-1  flex flex-col">
+        <p className="text-[10px] font-mono uppercase tracking-wider text-[#1A7A6E]">
           {l.category.replace('-', ' ')}
-        </div>
-        <div className="helix-h3 mt-1 line-clamp-2 text-[15px]">{l.title}</div>
+        </p>
+        <p className="helix-h3 mt-1 line-clamp-2 text-[15px]">{l.title}</p>
         <div className="mt-auto pt-4 flex items-end justify-between">
           <div>
-            <div className="font-mono text-xl text-[#C9922A] font-bold">
+            <p className="font-mono text-xl text-[#C9922A] font-bold">
               {formatUSD(l.retail_price_usd)}
-            </div>
-            <div className="text-[10px] text-[#9CA3AF] font-mono uppercase tracking-wider">
+            </p>
+            <p className="text-[10px] text-[#9CA3AF] font-mono uppercase tracking-wider">
               {l.seller_name}
-            </div>
+            </p>
           </div>
           <div className="text-right text-[10px] text-[#9CA3AF]">
             {l.stock_qty > 5 ? (
@@ -68,7 +62,7 @@ export default function ListingCard({ l }: { l: Listing }) {
             )}
           </div>
         </div>
-      </div>
+      </article>
     </Link>
   );
 }

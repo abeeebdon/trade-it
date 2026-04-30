@@ -1,9 +1,10 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ShopShell from '../components/ShopShell';
-import ListingCard, { Listing } from '../components/ListingCard';
-import { CATS } from '../components/data';
+import ListingCard from '../components/ListingCard';
+import { CATS, goodslistings, Listing } from '../components/data';
 import { Search, Store, Truck } from 'lucide-react';
+import { ListingCardSkeleton } from '../components/ListingCardSkeleton';
 
 export default function ShopPage() {
   const [items, setItems] = useState<Listing[]>([]);
@@ -11,6 +12,16 @@ export default function ShopPage() {
   const [category, setCategory] = useState('');
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    const simulateFetch = setTimeout(() => {
+      const fetchedItems: Listing[] = goodslistings;
+      setItems(fetchedItems);
+      setLoading(false);
+    }, 1500); // Simulate a 1.5 second fetch time
+
+    return () => clearTimeout(simulateFetch); // Cleanup on unmount
+  }, [mode, category, search]);
 
   return (
     <ShopShell setMode={setMode}>
@@ -84,7 +95,11 @@ export default function ShopPage() {
       </div>
 
       {loading ? (
-        <div className="text-[#9CA3AF]">Loading shop…</div>
+        <article className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          {[...Array(8)].map((_, i) => (
+            <ListingCardSkeleton key={i} />
+          ))}
+        </article>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {items.map((l: Listing) => (
