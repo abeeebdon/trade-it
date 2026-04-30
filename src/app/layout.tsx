@@ -1,5 +1,10 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Noto_Sans, Playfair_Display } from 'next/font/google';
+import {
+  Geist,
+  Geist_Mono,
+  Noto_Sans,
+  Playfair_Display,
+} from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/providers/ThemeProvider';
 import ReduxPersistGate from '@/store/persist-gate';
@@ -7,11 +12,15 @@ import ReduxProvider from '@/store/redux-provider';
 import { ReactQueryProvider } from '@/lib/react-query';
 import { Inter } from 'next/font/google';
 import AOSWrapper from '@/providers/AOSProviders';
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
+import { Toaster } from '@/components/ui/sonner';
 
-const playfairDisplayHeading = Playfair_Display({subsets:['latin'],variable:'--font-heading'});
+const playfairDisplayHeading = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-heading',
+});
 
-const notoSans = Noto_Sans({subsets:['latin'],variable:'--font-sans'});
+const notoSans = Noto_Sans({ subsets: ['latin'], variable: '--font-sans' });
 
 const inter = Inter({
   subsets: ['latin'],
@@ -42,7 +51,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", notoSans.variable, playfairDisplayHeading.variable)}
+      className={cn(
+        'h-full',
+        'antialiased',
+        geistSans.variable,
+        geistMono.variable,
+        'font-sans',
+        notoSans.variable,
+        playfairDisplayHeading.variable,
+      )}
       suppressHydrationWarning
     >
       <body className={`"min-h-full flex flex-col", ${inter.className}`}>
@@ -50,7 +67,10 @@ export default function RootLayout({
           <ReduxPersistGate>
             <ReactQueryProvider>
               <ThemeProvider attribute="class">
-                <AOSWrapper>{children}</AOSWrapper>
+                <AOSWrapper>
+                  <Toaster />
+                  {children}
+                </AOSWrapper>
               </ThemeProvider>
             </ReactQueryProvider>
           </ReduxPersistGate>
