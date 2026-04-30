@@ -7,7 +7,7 @@ import 'aos/dist/aos.css';
 export default function AOSWrapper({ children }: { children: ReactNode }) {
   useEffect(() => {
     AOS.init({
-      duration: 500,
+      duration: 800,
       easing: 'ease-in-out',
       once: false,
       offset: 100,

@@ -102,6 +102,45 @@ body {
   transform: translateY(-1px);
   transition: all 180ms ease;
 }
+
+.helix-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  border: 1px solid;
+}
+.helix-status-ok {
+  color: #5fd3c3;
+  background: rgba(26, 122, 110, 0.15);
+  border-color: rgba(26, 122, 110, 0.5);
+}
+.helix-status-warn {
+  color: #e9b45e;
+  background: rgba(201, 146, 42, 0.13);
+  border-color: rgba(201, 146, 42, 0.55);
+}
+.helix-status-danger {
+  color: #ff6a5c;
+  background: rgba(231, 76, 60, 0.12);
+  border-color: rgba(231, 76, 60, 0.55);
+}
+.helix-status-neutral {
+  color: #9ca3af;
+  background: rgba(156, 163, 175, 0.08);
+  border-color: rgba(156, 163, 175, 0.3);
+}
+.helix-status-gold {
+  color: #c9922a;
+  background: rgba(201, 146, 42, 0.1);
+  border-color: rgba(201, 146, 42, 0.45);
+}
 @keyframes fadeUp {
   from {
     opacity: 0;
