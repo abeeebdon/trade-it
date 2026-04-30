@@ -44,9 +44,9 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
   }, [id]);
   if (!l)
     return (
-      <ShopShell setMode={setMode}>
+      <div>
         <div className="text-[#9CA3AF]">Loading…</div>
-      </ShopShell>
+      </div>
     );
   const FALLBACK_IMG =
     'https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?auto=format&fit=crop&w=900&q=80';
