@@ -24,7 +24,7 @@ export default function ShopPage() {
   }, [mode, category, search]);
 
   return (
-    <ShopShell setMode={setMode}>
+    <>
       {/* Hero */}
       <section className="mb-10 relative">
         <div className="helix-card p-8 md:p-12 relative overflow-hidden">
@@ -112,6 +112,6 @@ export default function ShopPage() {
           )}
         </div>
       )}
-    </ShopShell>
+    </>
   );
 }

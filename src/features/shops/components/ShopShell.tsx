@@ -1,23 +1,29 @@
+'use client';
+import { Handbag, SignOut, UserCircle } from '@phosphor-icons/react';
 import ThemeToggle from '@/features/buttons/ToggleButton';
 import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
 import { logout } from '@/store/auth/auth.slice';
-import { Handbag, SignOut, UserCircle } from '@phosphor-icons/react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ReactNode } from 'react';
 interface ShopShellProps {
-  children: ReactNode;
-  setMode: (mode: string) => void;
+  setMode?: (mode: string) => void;
 }
 /** Minimal top-bar shell for the consumer shop experience (no left rail). */
-export default function ShopShell({ children, setMode }: ShopShellProps) {
+export default function ShopShell({ setMode }: ShopShellProps) {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const user = useAppSelector((state) => state.auth.user);
   const handleCLick = (mode: string) => {
-    setMode(mode);
+    if (setMode) {
+      setMode(mode);
+    } else {
+      router.push('/shop');
+    }
   };
   return (
-    <div className="min-h-screen bg-[#0A1628] text-[#F5F5F5] w-full">
+    <div className=" bg-[#0A1628] text-[#F5F5F5] w-full">
       <header className="sticky top-0 z-30 bg-[#0A1628]/95 backdrop-blur border-b border-[#1A7A6E]/20">
         <div className="max-w-350 mx-auto px-6 lg:px-10 py-4 flex items-center justify-between gap-6">
           <Link
@@ -101,26 +107,6 @@ export default function ShopShell({ children, setMode }: ShopShellProps) {
           </div>
         </div>
       </header>
-      <main className="max-w-350 mx-auto px-6 lg:px-10 py-8 fade-up">
-        {children}
-      </main>
-      <footer className="border-t border-[#1A7A6E]/15 py-8 mt-10">
-        <div className="max-w-350 mx-auto px-6 lg:px-10 text-center">
-          <div className="text-[12px] text-[#9CA3AF]">
-            Jomp Shop — Direct-from-Africa commerce, powered by the Jomp Trade
-            platform.
-          </div>
-          <div className="text-[11px] text-[#1A7A6E] font-mono tracking-widest mt-3 flex flex-wrap justify-center gap-x-3 gap-y-1">
-            <span>JOMP TRADE · POWERED BY</span>
-            <span>·</span>
-            <span>RIBY INC</span>
-            <span>·</span>
-            <span>JOMPSTART DIGITAL</span>
-            <span>·</span>
-            <span>ANCHOR</span>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

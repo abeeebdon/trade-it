@@ -11,7 +11,14 @@ import {
   Truck,
 } from 'lucide-react';
 import { formatUSD } from '@/lib/func';
-import { Listing } from '../components/data';
+import { goodslistings, Listing } from '../components/data';
+import Image from 'next/image';
+
+interface Quote {
+  id: string;
+  quote_number: string;
+  quoted_unit_price_usd: number;
+}
 
 const ProductDetailsPage = ({ id }: { id: string }) => {
   const { user } = useAppSelector((state) => state.auth);
@@ -26,8 +33,15 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
   });
   const [quoteMsg, setQuoteMsg] = useState('');
   const [placing, setPlacing] = useState(false);
-  const [quote, setQuote] = useState(null); // if quote_id passed in URL
+  const [quote, setQuote] = useState<Quote | null>(null); // if quote_id passed in URL
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const datum = goodslistings.find((item) => item.id === id);
+      setL(datum || null);
+    };
+    fetchData();
+  }, [id]);
   if (!l)
     return (
       <ShopShell setMode={setMode}>
@@ -86,18 +100,19 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
 
   return (
     <div>
-      ProductDetailsPage: {id}
       <div className="grid lg:grid-cols-5 gap-8">
         <div className="lg:col-span-3">
           <div className="helix-card overflow-hidden">
-            <div className="aspect-[4/3] bg-[#0A1628]">
-              <img
+            <div className="aspect-4/3 bg-[#0A1628]">
+              <Image
                 src={heroPhoto}
                 alt={l.title}
                 onError={(e) => {
                   if (e.currentTarget.src !== FALLBACK_IMG)
                     e.currentTarget.src = FALLBACK_IMG;
                 }}
+                width={300}
+                height={300}
                 className="w-full h-full object-cover"
               />
             </div>
