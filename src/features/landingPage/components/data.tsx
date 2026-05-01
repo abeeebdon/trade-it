@@ -1,5 +1,22 @@
-import { CurrencyCircleDollar, Lightning } from '@phosphor-icons/react';
-import { ChartLine, Package, ShieldCheck } from 'lucide-react';
+import { NavItems } from '@/types';
+import {
+  ChartLine,
+  LayoutDashboard,
+  Package,
+  Store,
+  Receipt,
+  Truck,
+  ShoppingCart,
+  ShieldCheck,
+  Wallet,
+  HandCoins,
+  RefreshCw,
+  FileText,
+  DollarSign,
+  Users,
+  Currency,
+  Lightbulb,
+} from 'lucide-react';
 
 export const helixCards = [
   {
@@ -52,12 +69,12 @@ export const moduleArr = [
     body: 'SON, NAFDAC, phytosanitary, FDA prior notice. Expiry alerts at 30 and 7 days. Auto score per business.',
   },
   {
-    icon: CurrencyCircleDollar,
+    icon: Currency,
     title: 'Anchor-Powered Finance',
     body: 'NGN + USD balances, virtual accounts, NIP withdrawals, book transfers, platform fees — all live via Anchor.',
   },
   {
-    icon: Lightning,
+    icon: Lightbulb,
     title: 'Document Automation',
     body: 'Commercial Invoice, Packing List, Proforma, Certificate of Origin — generated on demand, ready to ship.',
   },
@@ -68,3 +85,50 @@ export const catData = [
   'Staple Foods',
   'General Goods',
 ];
+export const NAV: {
+  exporter: NavItems[];
+  buyer: NavItems[];
+  super_admin: NavItems[];
+  admin: NavItems[];
+} = {
+  exporter: [
+    { to: '/dashboard', label: 'Command Center', icon: LayoutDashboard },
+    { to: '/my-products', label: 'My Products', icon: Package },
+    { to: '/catalog', label: 'Marketplace', icon: Store },
+    { to: '/orders', label: 'Orders', icon: Receipt },
+    { to: '/sell', label: 'Sell Direct (DTC)', icon: Truck },
+    { to: '/fulfillment', label: 'Fulfillment', icon: ShoppingCart },
+    { to: '/compliance', label: 'Compliance', icon: ShieldCheck },
+    { to: '/finance', label: 'Finance', icon: Wallet },
+    { to: '/credit', label: 'Business Credit', icon: HandCoins },
+    { to: '/repayment', label: 'Repayments', icon: RefreshCw },
+    { to: '/onboarding', label: 'Business Profile', icon: FileText },
+  ],
+
+  buyer: [
+    { to: '/dashboard', label: 'Command Center', icon: LayoutDashboard },
+    { to: '/catalog', label: 'Marketplace', icon: Store },
+    { to: '/orders', label: 'My Orders', icon: Receipt },
+    { to: '/sell', label: 'Local Inventory Shop', icon: ShoppingCart },
+    { to: '/fulfillment', label: 'Fulfillment', icon: Truck },
+    { to: '/finance', label: 'Finance', icon: Wallet },
+    { to: '/onboarding', label: 'Business Profile', icon: FileText },
+  ],
+
+  admin: [
+    { to: '/admin', label: 'Admin Overview', icon: LayoutDashboard },
+    { to: '/admin/verifications', label: 'Verifications', icon: ShieldCheck },
+    { to: '/admin/credit', label: 'JompStart Credit', icon: HandCoins },
+    { to: '/admin/disputes', label: 'Disputes', icon: RefreshCw },
+    {
+      to: '/admin/finance',
+      label: 'Financial Overview',
+      icon: DollarSign,
+    },
+    { to: '/catalog', label: 'Marketplace', icon: Store },
+  ],
+
+  super_admin: [
+    { to: '/admin/credit', label: 'JompStart Credit', icon: HandCoins },
+  ],
+};

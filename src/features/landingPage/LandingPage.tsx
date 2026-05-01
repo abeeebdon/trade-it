@@ -22,8 +22,8 @@ export default function Landing() {
   const router = useRouter();
   useEffect(() => {
     if (!user) return;
-    if (user.role === 'consumer') router.push('/shop');
-    else if (user.role === 'jompstart_admin') router.push('/admin/credit');
+    if (user.role === 'buyer') router.push('/shop');
+    else if (user.role === 'super_admin') router.push('/admin/credit');
     else router.push('/dashboard');
   }, [user, router]);
 

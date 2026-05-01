@@ -1,6 +1,6 @@
 'use client';
 import { Handbag, SignOut, UserCircle } from '@phosphor-icons/react';
-import ThemeToggle from '@/features/buttons/ToggleButton';
+import ThemeToggle from '@/components/buttons/ToggleButton';
 import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
 import { logout } from '@/store/auth/auth.slice';
 import Image from 'next/image';

@@ -141,23 +141,23 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
 
             <div className="mt-6 pt-6 border-t border-[#1A7A6E]/15 grid grid-cols-2 gap-6 text-[13px]">
               <div>
-                <div className="helix-label">Country of origin</div>
-                <div className="mt-1">{l.country_of_origin}</div>
+                <p className="helix-label">Country of origin</p>
+                <p className="mt-1">{l.country_of_origin}</p>
               </div>
               <div>
-                <div className="helix-label">Ships from</div>
-                <div className="mt-1">{l.ships_from}</div>
+                <p className="helix-label">Ships from</p>
+                <p className="mt-1">{l.ships_from}</p>
               </div>
               <div>
-                <div className="helix-label">Seller</div>
-                <div className="mt-1"></div>
+                <p className="helix-label">Seller</p>
+                <p className="mt-1"></p>
               </div>
               {l.delivery_partner_of_record && (
                 <div>
-                  <div className="helix-label">Delivery Partner of Record</div>
-                  <div className="mt-1 text-[#C9922A] font-medium">
+                  <p className="helix-label">Delivery Partner of Record</p>
+                  <p className="mt-1 text-[#C9922A] font-medium">
                     {l.delivery_partner_of_record}
-                  </div>
+                  </p>
                 </div>
               )}
             </div>
@@ -167,10 +167,10 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
 
       <div className="lg:col-span-2 space-y-4">
         <div className="helix-card p-6">
-          <div className="helix-label">Price</div>
-          <div className="font-mono text-4xl text-[#C9922A] font-bold mt-1">
+          <p className="helix-label">Price</p>
+          <p className="font-mono text-4xl text-[#C9922A] font-bold mt-1">
             {formatUSD(effectiveUnit)}
-          </div>
+          </p>
           <div className="text-[12px] text-[#9CA3AF] mt-1">
             {l.stock_qty > 0 ? `${l.stock_qty} in stock` : 'Sold out'}
             {quote && (

@@ -1,8 +1,11 @@
+import { Icon } from '@phosphor-icons/react';
+import { LucideIcon } from 'lucide-react';
+export type UserRole = 'exporter' | 'buyer' | 'super_admin' | 'admin';
 export interface UserType {
   name: string;
   email: string;
   password: string;
-  role: string;
+  role: UserRole;
 }
 
 export interface InitialAuthStateType {
@@ -11,4 +14,10 @@ export interface InitialAuthStateType {
 }
 export interface RootReducerType {
   auth: InitialAuthStateType;
+}
+
+export interface NavItems {
+  to: string;
+  label: string;
+  icon: LucideIcon;
 }

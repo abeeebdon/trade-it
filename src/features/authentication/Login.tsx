@@ -10,24 +10,34 @@ import InputField from '@/components/form/InputFIeld';
 import { LoginFormValues, loginSchema } from './components/validation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-// REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
-function startEmergentOAuth() {
-  const redirect = window.location.origin + '/dashboard';
-  window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirect)}`;
-}
+import { cookiesStorage } from '@/lib/helpers/cookie';
+import Loader from '@/components/buttons/Loader';
 
 export default function Login() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   });
 
   const onSubmit = async (data: LoginFormValues) => {
     console.log('LOGIN DATA:', data);
+    setLoading(true);
+    cookiesStorage.setItem('token', new Date());
+    const proceed = () => {
+      setLoading(false);
+      if (data.email == 'admin@jomptrade.com') {
+        router.push('/admin');
+      }
+      router.push('/admin');
+    };
+    setTimeout(() => {
+      proceed();
+    }, 3000);
   };
 
   return (
@@ -64,11 +74,11 @@ export default function Login() {
 
         {/* SUBMIT */}
         <button
-          data-testid="login-submit"
-          disabled={isSubmitting}
+          disabled={loading}
+          type="submit"
           className="helix-btn-primary w-full"
         >
-          {isSubmitting ? 'Signing in…' : 'Sign in'}
+          {loading ? <Loader /> : 'Sign in'}
         </button>
       </form>
       <div className="flex items-center gap-3 my-6 text-[11px] font-mono tracking-widest text-[#9CA3AF]">
