@@ -1,4 +1,4 @@
-import ThemeToggle from '@/features/buttons/ToggleButton';
+import ThemeToggle from '@/components/buttons/ToggleButton';
 import { cn } from '@/lib/cn';
 import { X } from 'lucide-react';
 import { motion } from 'motion/react';

@@ -2,7 +2,7 @@ import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { CARGO_IMG, heroText } from './data';
 import Image from 'next/image';
-import PressableBtn from '@/features/buttons/PressableBtn';
+import PressableBtn from '@/components/buttons/PressableBtn';
 import { useRouter } from 'next/navigation';
 
 const HeroComponent = () => {

@@ -1,5 +1,5 @@
 'use client';
-import ThemeToggle from '@/features/buttons/ToggleButton';
+import ThemeToggle from '@/components/buttons/ToggleButton';
 import { Menu } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
