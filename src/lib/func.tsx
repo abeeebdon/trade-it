@@ -18,3 +18,10 @@ export const formatDateTime = (iso: Date | string) => {
     return String(iso);
   }
 };
+
+export const formatNGN = (n) =>
+  new Intl.NumberFormat('en-NG', {
+    style: 'currency',
+    currency: 'NGN',
+    maximumFractionDigits: 0,
+  }).format(n || 0);

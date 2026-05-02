@@ -14,13 +14,11 @@ const DashboardHeader = () => {
   const title = getTitle(pathname);
   const kicker = getKicker(pathname);
   return (
-    <header className="sticky top-0 z-30 w-full border bg-[#0A1628]/95 backdrop-blur border-b border-[#1A7A6E]/15">
+    <header className="sticky top-0 z-30 w-full border bg-bg backdrop-blur border-b border-[#1A7A6E]/15">
       <div className="max-w-350 mx-auto px-6 lg:px-10 py-6 flex items-start justify-between gap-4 flex-wrap">
         <div>
-          {kicker}
-          <h1 className="helix-h2" data-testid="page-title">
-            {title}
-          </h1>
+          <p className="helix-kicker mb-2">{kicker}</p>
+          <h1 className="helix-h2">{title}</h1>
         </div>
         <div className="flex items-center gap-3 flex-wrap">
           {/* {actions} */}

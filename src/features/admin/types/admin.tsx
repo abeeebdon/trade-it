@@ -55,3 +55,66 @@ export interface VerificationItem {
   kyc_status: VerificationStatus;
   kyb_status: VerificationStatus;
 }
+type CreditStatus =
+  | 'submitted'
+  | 'under_review'
+  | 'approved'
+  | 'rejected'
+  | 'offered';
+
+export interface CreditApplication {
+  id: string;
+  application_number: string;
+  business_name: string;
+  business_country: string;
+  amount_usd: number;
+  indicative_apr: number;
+  term_months: number;
+  risk_score: number;
+  status: CreditStatus;
+  created_at: string;
+  snapshot_sales?: {
+    total_volume_usd: number;
+  };
+}
+
+export interface OfferState {
+  offered_amount_usd: string;
+  offered_apr: string;
+  offered_term_months: string;
+  decision_note: string;
+}
+export type DisputeStatus = 'open' | 'resolved' | 'rejected' | 'under_review';
+
+export interface Dispute {
+  id: string;
+  reason: string;
+  order_id: string;
+  description: string;
+  status: DisputeStatus;
+  created_at: string;
+}
+export interface DisputeCardPRops {
+  d: Dispute;
+}
+export type ProductStatus = 'active' | 'inactive' | 'draft';
+
+export interface Product {
+  id: string;
+  business_id: string;
+  name: string;
+  category: string;
+  description: string;
+  photos: string[];
+  price_ngn: number;
+  price_usd: number;
+  min_order_qty: number;
+  unit: string;
+  export_readiness_score: number;
+  compliance_badges: string[];
+  status: ProductStatus;
+  created_at: string;
+}
+export interface ProductCardPRops {
+  p: Product;
+}

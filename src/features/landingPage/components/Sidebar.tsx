@@ -28,7 +28,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="fixed left-0 top-0 h-screen hidden sm:flex w-16 lg:w-60 bg-[#0A1628] border-r border-[#1A7A6E]/20  flex-col z-40">
+    <aside className="fixed left-0 top-0 h-screen hidden sm:flex w-16 lg:w-60 bg-bg border-r border-[#1A7A6E]/20  flex-col z-40">
       <div className="px-4 lg:px-6 py-5 border-b border-[#1A7A6E]/15 flex items-center gap-2">
         <Image
           src="/jomp-icon.png"
@@ -39,7 +39,7 @@ export default function Sidebar() {
         />
         <div className="hidden lg:flex flex-col leading-tight">
           <span className="font-bold tracking-[0.2em] text-[13px]">
-            JOMP TRADE
+            JOMP SHOP
           </span>
           <span className="text-[9px] tracking-[0.3em] text-[#1A7A6E] font-mono">
             EXPORT OS v1.1
@@ -47,7 +47,7 @@ export default function Sidebar() {
         </div>
       </div>
 
-      <nav className="flex-1 py-4 overflow-y-auto">
+      <nav className="flex-1 mt-6 py-4 overflow-y-auto">
         {items.map((item) => {
           const Icon = item.icon;
           const isActive = item.to === pathname;

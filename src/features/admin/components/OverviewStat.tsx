@@ -10,8 +10,8 @@ export default function Stat({ label, value, icon: Icon, accent }: StatProps) {
       )}
       <div className="flex justify-between items-start relative">
         <div>
-          <div className="helix-label">{label}</div>
-          <div className="font-mono text-3xl font-bold mt-2">{value}</div>
+          <p className="helix-label">{label}</p>
+          <p className="font-mono text-3xl font-bold mt-2">{value}</p>
         </div>
         <Icon size={22} className="text-[#1A7A6E]" />
       </div>
