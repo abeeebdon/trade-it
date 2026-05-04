@@ -1,4 +1,3 @@
-import { Icon } from '@phosphor-icons/react';
 import { LucideIcon } from 'lucide-react';
 export type UserRole = 'exporter' | 'buyer' | 'super_admin' | 'admin';
 export interface UserType {

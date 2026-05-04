@@ -6,6 +6,7 @@
 :root {
   /* Core palette */
   --helix-navy: #ffffff;
+  --helix-primeBackground: #fffdfd;
   --helix-surface: #fffdf7;
   --helix-gold: #f39c12;
   --helix-gold-dim: #c77f0a;
@@ -36,6 +37,8 @@
 
 .dark {
   --helix-navy: #0a1628;
+  --helix-primeBackground: #14253f;
+
   --helix-surface: #0f2040;
   --helix-gold: #c9922a;
   --helix-gold-dim: #a87b23;
@@ -61,6 +64,7 @@
 
 @theme {
   --color-bg: var(--helix-navy);
+  --color-bg-soft: var(--helix-primeBackground);
   --color-surface: var(--helix-surface);
   --color-primary: var(--helix-gold);
   --color-primary-dim: var(--helix-gold-dim);
@@ -116,6 +120,50 @@ body {
   font-weight: 600;
   border: 1px solid;
 }
+
+.helix-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--helix-text-dim);
+  margin-bottom: 6px;
+  display: block;
+  font-weight: 500;
+}
+
+.helix-h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--helix-text);
+}
+
+.helix-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.helix-table thead th {
+  background: var(--helix-navy);
+  border-bottom: 1px solid var(--helix-border);
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--helix-text-dim);
+  font-weight: 500;
+}
+.helix-table tbody td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--helix-border-soft);
+  font-size: 14px;
+  color: var(--helix-text);
+}
+.helix-table tbody tr:hover {
+  background: var(--helix-hover);
+}
+
 .helix-status-ok {
   color: #5fd3c3;
   background: rgba(26, 122, 110, 0.15);

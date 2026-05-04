@@ -125,7 +125,7 @@ export const NAV: {
       label: 'Financial Overview',
       icon: DollarSign,
     },
-    { to: '/catalog', label: 'Marketplace', icon: Store },
+    { to: '/admin/catalog', label: 'Marketplace', icon: Store },
   ],
 
   super_admin: [
