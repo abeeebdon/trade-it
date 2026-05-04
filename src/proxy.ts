@@ -20,7 +20,7 @@ export function proxy(req: NextRequest) {
   }
 
   if (token && isAuthRoute) {
-    return NextResponse.redirect(new URL('/admin', req.url));
+    return NextResponse.redirect(new URL('/user', req.url));
   }
 
   return NextResponse.next();
