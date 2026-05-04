@@ -5,10 +5,11 @@ import { motion } from 'motion/react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import LogoutModal from './LogoutModal';
-import { useAppSelector } from '@/hooks/store/store';
+import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
 import { NAV } from './data';
 import { useState } from 'react';
 import { cookiesStorage } from '@/lib/helpers/cookie';
+import { setAuthRole } from '@/store/auth/auth.slice';
 interface Props {
   setOpenSideBar: (open: boolean) => void;
   openSidebar: boolean;
@@ -19,13 +20,14 @@ const DashboardSidebar = ({ setOpenSideBar, openSidebar }: Props) => {
 
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const router = useRouter();
-
+  const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const items = NAV[user?.role ?? 'admin'] || NAV.exporter;
   const logout = () => {
     setLoading(true);
     setTimeout(() => {
       cookiesStorage.clearAll();
+      dispatch(setAuthRole(null));
       setLoading(false);
       router.push('/login');
     }, 3000);

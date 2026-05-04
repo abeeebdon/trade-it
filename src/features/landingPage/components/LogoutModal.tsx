@@ -1,7 +1,7 @@
 'use client';
 
 import Loader from '@/components/buttons/Loader';
-import { LoaderCircle, X } from 'lucide-react';
+import { X } from 'lucide-react';
 
 type LogoutModalProps = {
   open: boolean;

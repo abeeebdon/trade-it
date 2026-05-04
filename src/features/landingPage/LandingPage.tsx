@@ -2,7 +2,6 @@
 import { useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { useAppSelector } from '@/hooks/store/store';
 import Image from 'next/image';
 import PartnerComponents from './components/PartnerComponents';
@@ -20,12 +19,12 @@ const AGRO_IMG =
 export default function Landing() {
   const user = useAppSelector((state) => state.auth.user);
   const router = useRouter();
-  useEffect(() => {
-    if (!user) return;
-    if (user.role === 'buyer') router.push('/shop');
-    else if (user.role === 'super_admin') router.push('/admin/credit');
-    else router.push('/dashboard');
-  }, [user, router]);
+  // useEffect(() => {
+  //   if (!user) return;
+  //   if (user.role === 'buyer') router.push('/shop');
+  //   else if (user.role === 'super_admin') router.push('/admin/credit');
+  //   else router.push('/dashboard');
+  // }, [user, router]);
 
   return (
     <main className="min-h-screen bg-white text-[] dark:bg-[#0A1628] dark:text-[#F5F5F5]">

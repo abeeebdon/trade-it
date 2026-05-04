@@ -18,10 +18,10 @@ const GetStarted = () => {
       dispatch(setAuthRole(selected));
       router.push('/register');
       return;
+    } else {
+      return toast.message('You have not selected any type ');
     }
-    toast.message('You have not selected any type ');
   };
-  console.log(selected);
   return (
     <div className="w-full mx-auto p-6 my-6 max-w-4xl fade-up">
       <div className="text-center mb-8">

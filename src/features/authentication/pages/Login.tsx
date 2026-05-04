@@ -40,8 +40,8 @@ export default function Login() {
         router.push('/admin');
         return;
       } else {
-        dispatch(login({ ...newUser, role: 'exporter' }));
-        router.push('/exporter');
+        dispatch(login({ ...newUser, role: 'buyer' }));
+        router.push('/buyer');
         return;
       }
     };
