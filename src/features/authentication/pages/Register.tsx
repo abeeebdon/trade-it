@@ -2,12 +2,17 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
-import { RegisterFormValues, registerSchema } from './components/validation';
+import { RegisterFormValues, registerSchema } from '../components/validation';
 import InputField from '@/components/form/InputFIeld';
-import SelectField from '@/components/form/SelectField';
 import { useRouter } from 'next/navigation';
-
+import { useAppSelector } from '@/hooks/store/store';
+import { ArrowLeft } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { ROLES } from '../components/data';
+import Loader from '@/components/buttons/Loader';
+import { motion } from 'motion/react';
 export default function Register() {
+  const [loading, setLoading] = useState(false);
   // const upd = (k) => (e) => setForm({ ...form, [k]: e.target.value });
 
   // const submit = async (e) => {
@@ -25,29 +30,51 @@ export default function Register() {
   //   }
   // };
   const router = useRouter();
+  const { authRole } = useAppSelector((state) => state.auth);
+  console.log(authRole);
+  const role = useMemo(() => {
+    if (!authRole) {
+      return router.push('/getstarted');
+    }
+    return ROLES.find((r, i) => r.value == authRole);
+  }, [authRole]);
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      role: 'exporter',
+      role: authRole ?? 'buyer',
     },
   });
 
   const onSubmit = async (data: RegisterFormValues) => {
-    console.log('REGISTER DATA:', data);
-    router.push('/login');
+    setLoading(true);
+
+    setTimeout(() => {
+      console.log('REGISTER DATA:', data);
+      setLoading(false);
+      router.push('/login');
+    }, 3000);
   };
 
   return (
     <div className="w-full max-w-md helix-card p-8 fade-up">
-      <div className="helix-kicker mb-2">Jomp Trade · Create account</div>
-      <h1 className="helix-h2">Start trading in minutes</h1>
-      <p className="text-[#9CA3AF] text-sm mt-2">
-        Open your business profile, upload CAC, receive USD.
-      </p>
+      <button
+        onClick={() => router.push('/getstarted')}
+        className="text-[12px] text-[#9CA3AF] hover:text-[#F5F5F5] inline-flex items-center gap-1.5 mb-4"
+        data-testid="back-to-roles"
+      >
+        <ArrowLeft size={12} /> change role
+      </button>
+      <h2 className="helix-kicker mb-2">Sign up · {role?.title}</h2>
+      <h1 className="helix-h2">
+        {role?.value === 'consumer'
+          ? 'Start shopping in seconds'
+          : 'Create your business profile'}
+      </h1>
+      <p className="text-[#9CA3AF] text-sm mt-2">{role?.blurb}</p>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="mt-7 space-y-4"
@@ -82,25 +109,17 @@ export default function Register() {
         />
 
         {/* ROLE */}
-        <SelectField
-          label="I am registering as"
-          {...register('role')}
-          error={errors.role?.message}
-          name="role"
-        >
-          <option value="exporter">Exporter / Supplier (Business)</option>
-          <option value="buyer">Buyer / Importer (Business)</option>
-          <option value="consumer">Consumer — just shopping</option>
-        </SelectField>
 
         {/* SUBMIT */}
-        <button
-          data-testid="register-submit"
-          disabled={isSubmitting}
+
+        <motion.button
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.9 }}
+          disabled={loading}
           className="helix-btn-primary w-full"
         >
-          {isSubmitting ? 'Creating…' : 'Create account'}
-        </button>
+          {loading ? <Loader /> : `Create my ${role?.title} account`}
+        </motion.button>
       </form>
       <div className="mt-8 text-center text-[13px] text-[#9CA3AF]">
         Already have an account?{' '}

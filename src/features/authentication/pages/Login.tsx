@@ -4,10 +4,9 @@ import { login } from '@/store/auth/auth.slice';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { AuthShell } from './components/AuthShell';
 import Image from 'next/image';
 import InputField from '@/components/form/InputFIeld';
-import { LoginFormValues, loginSchema } from './components/validation';
+import { LoginFormValues, loginSchema } from '../components/validation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { cookiesStorage } from '@/lib/helpers/cookie';
@@ -41,8 +40,8 @@ export default function Login() {
         router.push('/admin');
         return;
       } else {
-        dispatch(login({ ...newUser, role: 'exporter' }));
-        router.push('/exporter');
+        dispatch(login({ ...newUser, role: 'buyer' }));
+        router.push('/buyer');
         return;
       }
     };
@@ -112,7 +111,7 @@ export default function Login() {
 
       <div className="mt-8 text-center text-[13px] text-[#9CA3AF]">
         New to Helix?{' '}
-        <Link href="/register" className="text-[#C9922A] font-semibold">
+        <Link href="/getstarted" className="text-[#C9922A] font-semibold">
           Create an account
         </Link>
       </div>
