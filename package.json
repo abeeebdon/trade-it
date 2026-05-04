@@ -7,9 +7,17 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "lint:fix": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "prepare": "husky",
     "pre-commit": "lint-staged",
-    "pre-push": "yarn build"
+    "pre-push": "pnpm build"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -20,6 +28,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "js-cookie": "^3.0.5",
+    "lint-staged": "^16.4.0",
     "lucide-react": "^1.14.0",
     "motion": "^12.38.0",
     "next": "16.2.4",
