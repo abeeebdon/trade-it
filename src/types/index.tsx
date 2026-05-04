@@ -1,5 +1,6 @@
 import { LucideIcon } from 'lucide-react';
 export type UserRole = 'exporter' | 'buyer' | 'super_admin' | 'admin';
+export type authRoleType = 'buyer' | 'exporter' | 'consumer';
 export interface UserType {
   name: string;
   email: string;
@@ -9,6 +10,7 @@ export interface UserType {
 export interface InitialAuthStateType {
   isAuth: boolean;
   user: UserType | null;
+  authRole: authRoleType | null;
 }
 export interface RootReducerType {
   auth: InitialAuthStateType;

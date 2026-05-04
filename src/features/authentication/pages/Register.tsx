@@ -2,7 +2,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
-import { RegisterFormValues, registerSchema } from './components/validation';
+import { RegisterFormValues, registerSchema } from '../components/validation';
 import InputField from '@/components/form/InputFIeld';
 import SelectField from '@/components/form/SelectField';
 import { useRouter } from 'next/navigation';
