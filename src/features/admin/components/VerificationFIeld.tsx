@@ -7,8 +7,8 @@ export function VerificationField({
 }) {
   return (
     <div>
-      <p className="text-[10px] text-[#9CA3AF] tracking-widest">{label}</p>
-      <p className="font-mono">{value}</p>
+      <p className="text-[10px] text-muted tracking-widest">{label}</p>
+      <p className="font-mono text-text">{value}</p>
     </div>
   );
 }

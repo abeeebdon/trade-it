@@ -62,7 +62,7 @@ export default function AdminOverview() {
 
       <div className="grid lg:grid-cols-2 gap-6">
         <div className="helix-card p-6">
-          <div className="helix-label">Volume by Currency</div>
+          <p className="helix-label">Volume by Currency</p>
           <div className="mt-4 space-y-3">
             {Object.entries(overview?.total_volume_by_currency || {}).map(
               ([ccy, vol]) => (
@@ -70,7 +70,7 @@ export default function AdminOverview() {
                   key={ccy}
                   className="flex justify-between items-center py-2 border-b border-[#1A7A6E]/15 last:border-0"
                 >
-                  <span className="text-[13px]">{ccy}</span>
+                  <span className="text-[13px] text-text">{ccy}</span>
                   <span className="font-mono text-[#C9922A] font-bold">
                     {ccy === 'USD' ? formatUSD(vol) : vol.toLocaleString()}
                   </span>
@@ -89,13 +89,13 @@ export default function AdminOverview() {
                   <span className="uppercase tracking-wider text-[#9CA3AF]">
                     {sec.replace('-', ' ')}
                   </span>
-                  <span className="font-mono text-[#F5F5F5]">
+                  <span className="font-mono text-text">
                     {formatUSD(v.volume_usd)} · {v.count} orders
                   </span>
                 </div>
                 <div className="h-1.5 bg-[#0A1628] rounded overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-[#1A7A6E] to-[#C9922A]"
+                    className="h-full bg-linear-to-r from-[#1A7A6E] to-[#C9922A]"
                     style={{
                       width: `${Math.min(100, (v.volume_usd / 50000) * 100)}%`,
                     }}
@@ -109,18 +109,18 @@ export default function AdminOverview() {
 
       <div className="mt-8 helix-card overflow-hidden">
         <div className="px-5 py-4 border-b border-[#1A7A6E]/15">
-          <div className="helix-label">Pending Verifications</div>
-          <div className="helix-h3 mt-1">{verifs.length} in queue</div>
+          <h3 className="helix-label">Pending Verifications</h3>
+          <p className="helix-h3 mt-1">{verifs.length} in queue</p>
         </div>
         {verifs.length === 0 ? (
-          <div className="p-10 text-center text-[#9CA3AF]">
+          <div className="p-10 text-center text-muted">
             No pending verifications.
           </div>
         ) : (
-          <table className="helix-table">
-            <thead>
-              <tr>
-                <th>Business</th>
+          <table className="w-full mx-4  overflow-auto   ">
+            <thead className="space-y-4">
+              <tr className="text-text text-left ">
+                <th className="pt-4">Business</th>
                 <th>Country</th>
                 <th>Sector</th>
                 <th>KYC</th>
@@ -128,19 +128,19 @@ export default function AdminOverview() {
                 <th>Submitted</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="">
               {verifs.slice(0, 8).map((v) => (
-                <tr key={v.id}>
-                  <td>{v.business_name}</td>
+                <tr key={v.id} className="   text-text">
+                  <td className="py-2">{v.business_name}</td>
                   <td>{v.country}</td>
-                  <td className="text-[#9CA3AF]">{v.sector}</td>
+                  <td className="text-muted">{v.sector}</td>
                   <td>
                     <StatusPill status={v.kyc_status} />
                   </td>
                   <td>
                     <StatusPill status={v.kyb_status} />
                   </td>
-                  <td className="text-[11px] font-mono text-[#9CA3AF]">
+                  <td className="text-[11px] font-mono text-muted">
                     {formatDateTime(v.updated_at)}
                   </td>
                 </tr>

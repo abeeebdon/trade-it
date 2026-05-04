@@ -16,11 +16,11 @@ const DisputeCard = ({ d }: DisputeCardPRops) => {
       <div className="flex justify-between items-start flex-wrap gap-3">
         <div>
           <p className="helix-h3">{d.reason}</p>
-          <p className="text-[12px] text-[#9CA3AF] mt-1">
+          <p className="text-[12px] text-text mt-1">
             Order <span className="font-mono text-[#C9922A]">{d.order_id}</span>{' '}
             · {formatDateTime(d.created_at)}
           </p>
-          <p className="mt-3 text-[14px]">{d.description}</p>
+          <p className="mt-3 text-[14px] text-muted">{d.description}</p>
         </div>
         <StatusPill status={d.status} />
       </div>

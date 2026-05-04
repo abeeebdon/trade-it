@@ -40,7 +40,7 @@ export default function Catalog() {
   // }, [category, country, search]);
 
   return (
-    <main>
+    <main className="min-h-[70vh]">
       <div className="flex flex-wrap gap-2 mb-8">
         {CATEGORIES.map((c) => (
           <button

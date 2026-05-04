@@ -6,9 +6,11 @@ import { toast } from 'sonner';
 import { StatusPill } from '@/features/shops/components/StatusPill';
 import { CreditApplication, OfferState } from '../types/admin';
 import { creditApplications } from '../components/data';
+import DisputeCardSkeleton from '../components/DisputeCardSkeleton';
 
 export default function AdminCredit() {
   const [apps, setApps] = useState<CreditApplication[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<CreditApplication | null>(null);
 
   const [offer, setOffer] = useState<OfferState>({
@@ -18,12 +20,11 @@ export default function AdminCredit() {
     decision_note: '',
   });
   useEffect(() => {
-    const fetchData = () => {
+    const timer = setTimeout(() => {
       setApps(creditApplications);
-    };
-    setTimeout(() => {
-      fetchData();
+      setLoading(false);
     }, 2000);
+    return () => clearTimeout(timer);
   }, []);
   // const load = async () => { const { data } = await api.get("/credit/admin/applications"); setApps(data); };
   // useEffect(() => { load(); }, []);
@@ -62,8 +63,14 @@ export default function AdminCredit() {
   };
 
   return (
-    <main>
-      {apps.length === 0 ? (
+    <main className="min-h-[70vh]">
+      {loading ? (
+        <div className="space-y-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <DisputeCardSkeleton key={i} />
+          ))}
+        </div>
+      ) : apps.length === 0 ? (
         <div className="helix-card p-12 text-center text-[#9CA3AF]">
           No credit applications submitted yet.
         </div>
