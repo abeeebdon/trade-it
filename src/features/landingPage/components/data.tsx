@@ -92,17 +92,17 @@ export const NAV: {
   admin: NavItems[];
 } = {
   exporter: [
-    { to: '/dashboard', label: 'Command Center', icon: LayoutDashboard },
-    { to: '/my-products', label: 'My Products', icon: Package },
-    { to: '/catalog', label: 'Marketplace', icon: Store },
-    { to: '/orders', label: 'Orders', icon: Receipt },
-    { to: '/sell', label: 'Sell Direct (DTC)', icon: Truck },
-    { to: '/fulfillment', label: 'Fulfillment', icon: ShoppingCart },
-    { to: '/compliance', label: 'Compliance', icon: ShieldCheck },
-    { to: '/finance', label: 'Finance', icon: Wallet },
-    { to: '/credit', label: 'Business Credit', icon: HandCoins },
-    { to: '/repayment', label: 'Repayments', icon: RefreshCw },
-    { to: '/onboarding', label: 'Business Profile', icon: FileText },
+    { to: '/exporter', label: 'Command Center', icon: LayoutDashboard },
+    { to: '/exporter/my-products', label: 'My Products', icon: Package },
+    { to: '/exporter/catalog', label: 'Marketplace', icon: Store },
+    { to: '/exporter/orders', label: 'Orders', icon: Receipt },
+    { to: '/exporter/sell', label: 'Sell Direct (DTC)', icon: Truck },
+    { to: '/exporter/fulfillment', label: 'Fulfillment', icon: ShoppingCart },
+    { to: '/exporter/compliance', label: 'Compliance', icon: ShieldCheck },
+    { to: '/exporter/finance', label: 'Finance', icon: Wallet },
+    { to: '/exporter/credit', label: 'Business Credit', icon: HandCoins },
+    { to: '/exporter/repayment', label: 'Repayments', icon: RefreshCw },
+    { to: '/exporter/onboarding', label: 'Business Profile', icon: FileText },
   ],
 
   buyer: [

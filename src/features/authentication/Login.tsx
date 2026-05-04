@@ -15,6 +15,7 @@ import Loader from '@/components/buttons/Loader';
 
 export default function Login() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const {
     register,
@@ -30,10 +31,20 @@ export default function Login() {
     cookiesStorage.setItem('token', new Date());
     const proceed = () => {
       setLoading(false);
+      const newUser = {
+        name: 'JompStart',
+        email: 'jompstart@jomptrade.com',
+        role: 'admin',
+      };
       if (data.email == 'admin@jomptrade.com') {
+        dispatch(login({ ...newUser, role: 'exporter' }));
         router.push('/admin');
+        return;
+      } else {
+        dispatch(login({ ...newUser, role: 'exporter' }));
+        router.push('/exporter');
+        return;
       }
-      router.push('/admin');
     };
     setTimeout(() => {
       proceed();
