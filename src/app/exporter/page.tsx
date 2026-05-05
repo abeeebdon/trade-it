@@ -1,7 +1,6 @@
-import ExporterOverview from '@/features/exporter/pages/ExporterOverview';
-
+import Dashboard from '@/features/exporter/pages/Dashboard';
 const page = () => {
-  return <ExporterOverview />;
+  return <Dashboard />;
 };
 
 export default page;

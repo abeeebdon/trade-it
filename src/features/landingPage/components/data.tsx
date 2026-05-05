@@ -13,7 +13,7 @@ import {
   RefreshCw,
   FileText,
   DollarSign,
-  Users,
+  // Users,
   Currency,
   Lightbulb,
 } from 'lucide-react';
@@ -100,6 +100,11 @@ export const NAV: {
     { to: '/exporter/fulfillment', label: 'Fulfillment', icon: ShoppingCart },
     { to: '/exporter/compliance', label: 'Compliance', icon: ShieldCheck },
     { to: '/exporter/finance', label: 'Finance', icon: Wallet },
+    {
+      to: '/exporter/withdrawal-accounts',
+      label: 'Withdrawal Accounts',
+      icon: HandCoins,
+    },
     { to: '/exporter/credit', label: 'Business Credit', icon: HandCoins },
     { to: '/exporter/repayment', label: 'Repayments', icon: RefreshCw },
     { to: '/exporter/onboarding', label: 'Business Profile', icon: FileText },

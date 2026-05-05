@@ -1,5 +1,6 @@
 export const getKicker = (path: string): string => {
   switch (path) {
+    // Admin
     case '/admin':
       return 'Helix Platform Control';
     case '/admin/verifications':
@@ -10,13 +11,41 @@ export const getKicker = (path: string): string => {
       return 'Operations · Mediation';
     case '/admin/catalog':
       return 'Verified African Suppliers';
+
+    // Exporter
+    case '/exporter':
+      return 'Exporter · Command Center';
+    case '/exporter/orders':
+      return 'Exporter · Orders';
+    case '/exporter/finance':
+      return 'Exporter · Finance';
+    case '/exporter/compliance':
+      return 'Exporter · Compliance';
+    case '/exporter/onboarding':
+      return 'Exporter · Onboarding';
+    case '/exporter/catalog':
+      return 'Exporter · Marketplace';
+
+    // Buyer
+    case '/buyer':
+      return 'Buyer · Trade Desk';
+    case '/buyer/orders':
+      return 'Buyer · Orders';
+    case '/buyer/finance':
+      return 'Buyer · Finance';
+    case '/buyer/onboarding':
+      return 'Buyer · Onboarding';
+    case '/buyer/catalog':
+      return 'Buyer · Marketplace';
+
     default:
-      return 'Loading';
+      return '';
   }
 };
 
 export const getTitle = (path: string): string => {
   switch (path) {
+    // Admin
     case '/admin':
       return 'Admin · Operations Overview';
     case '/admin/verifications':
@@ -28,7 +57,33 @@ export const getTitle = (path: string): string => {
     case '/admin/catalog':
       return 'Marketplace';
 
+    // Exporter
+    case '/exporter':
+      return 'Welcome back, Callistus';
+    case '/exporter/orders':
+      return 'Orders';
+    case '/exporter/finance':
+      return 'Finance & Ledger';
+    case '/exporter/compliance':
+      return 'Compliance Vault';
+    case '/exporter/onboarding':
+      return 'Onboarding';
+    case '/exporter/catalog':
+      return 'Marketplace';
+
+    // Buyer
+    case '/buyer':
+      return 'Trade Desk';
+    case '/buyer/orders':
+      return 'Orders';
+    case '/buyer/finance':
+      return 'Finance & Ledger';
+    case '/buyer/onboarding':
+      return 'Onboarding';
+    case '/buyer/catalog':
+      return 'Marketplace';
+
     default:
-      return 'Loading';
+      return '';
   }
 };

@@ -277,11 +277,12 @@ body {
 
 @layer components {
   .helix-kicker {
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 11px;
     text-transform: uppercase;
+    letter-spacing: 0.22em;
     color: var(--helix-gold);
-    letter-spacing: 1.2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
   }
   .helix-h1 {
     font-size: clamp(2rem, 4.5vw, 3.4rem);

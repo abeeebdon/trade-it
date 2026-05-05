@@ -63,18 +63,20 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className={`"min-h-full flex flex-col", ${inter.className}`}>
-        <ReduxProvider>
-          <ReduxPersistGate>
-            <ReactQueryProvider>
-              <ThemeProvider attribute="class">
+        <ThemeProvider attribute="class" disableTransitionOnChange>
+          {' '}
+          {/* ← moved up, added disableTransitionOnChange */}
+          <ReduxProvider>
+            <ReduxPersistGate>
+              <ReactQueryProvider>
                 <AOSWrapper>
                   <Toaster />
                   {children}
                 </AOSWrapper>
-              </ThemeProvider>
-            </ReactQueryProvider>
-          </ReduxPersistGate>
-        </ReduxProvider>
+              </ReactQueryProvider>
+            </ReduxPersistGate>
+          </ReduxProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
