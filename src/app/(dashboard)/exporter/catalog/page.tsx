@@ -1,5 +1,6 @@
+import Catalog from '@/features/admin/pages/Catalog';
 const page = () => {
-  return <div>page</div>;
+  return <Catalog />;
 };
 
 export default page;

@@ -99,7 +99,7 @@ const mockFx: Fx = {
 
 // ─── MyProducts ─────────────────────────────────────────────────────────────────
 
-export default function MyProducts() {
+export default function ExporterProducts() {
   const [products, setProducts] = useState<Product[]>([]);
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Product | null>(null);

@@ -1,5 +1,7 @@
+import ExporterProducts from '@/features/exporter/pages/MyProducts';
+
 const page = () => {
-  return <div>page</div>;
+  return <ExporterProducts />;
 };
 
 export default page;
