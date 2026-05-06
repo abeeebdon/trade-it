@@ -5,6 +5,7 @@ export interface UserType {
   name: string;
   email: string;
   role: UserRole;
+  user_id: string;
 }
 
 export interface InitialAuthStateType {

@@ -1,5 +1,7 @@
+import BuyerDashboard from '@/features/buyer/pages/BuyerDashboard';
+
 const page = () => {
-  return <div>page</div>;
+  return <BuyerDashboard />;
 };
 
 export default page;

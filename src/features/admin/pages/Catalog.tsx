@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import { Product } from '../types/admin';
 import { products } from '../components/data';
+import ProductCardSkeleton from '../components/ProductCardSkeleton';
 
 const CATEGORIES = [
   { value: '', label: 'All Sectors' },
@@ -70,7 +71,11 @@ export default function Catalog() {
       </div>
 
       {loading ? (
-        <div className="text-[#9CA3AF]">Loading marketplace…</div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <ProductCardSkeleton key={i} />
+          ))}
+        </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {items.map((p) => (
