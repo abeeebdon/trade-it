@@ -114,25 +114,7 @@ export interface Product {
   compliance_badges: string[];
   status: ProductStatus;
   created_at: string;
-  country?: string;
 }
-
 export interface ProductCardPRops {
   p: Product;
 }
-
-//supplier
-export type Supplier = {
-  business_name: string;
-  country: string;
-  address: string;
-  compliance_score: number;
-  kyb_status: string;
-  kyc_status: string;
-  anchor_customer_id: string | null;
-};
-
-export type ProductData = {
-  product: Product;
-  supplier: Supplier;
-};

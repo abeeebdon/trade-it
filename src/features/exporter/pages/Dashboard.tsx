@@ -15,7 +15,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 
-// ─── Mock Data ──────
+// ─── Mock Data ──────────────────────────────────────────────────────────────────
 
 const mockFinance = {
   usd_balance: 12450.0,
@@ -103,7 +103,7 @@ const mockComplianceScore = {
   missing: ['Utility Bill (last 3 months)', 'Board Resolution Letter'],
 };
 
-// ─── Types ─────────────────────
+// ─── Types ──────────────────────────────────────────────────────────────────────
 
 type Finance = typeof mockFinance;
 type Order = (typeof mockOrders)[number];
@@ -111,7 +111,7 @@ type Fx = typeof mockFx;
 type Biz = typeof mockBiz;
 type ComplianceScore = typeof mockComplianceScore;
 
-// ─── Dashboard ────────
+// ─── Dashboard ──────────────────────────────────────────────────────────────────
 
 export default function Dashboard() {
   const user = useSelector((state: RootState) => state.auth.user);
