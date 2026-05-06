@@ -65,8 +65,6 @@ export default function RootLayout({
     >
       <body className={`"min-h-full flex flex-col", ${inter.className}`}>
         <ThemeProvider attribute="class" disableTransitionOnChange>
-          {' '}
-          {/* ← moved up, added disableTransitionOnChange */}
           <ReduxProvider>
             <ReduxPersistGate>
               <ReactQueryProvider>

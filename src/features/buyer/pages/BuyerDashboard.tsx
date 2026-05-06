@@ -1,5 +1,6 @@
+'use client';
 import { formatDateTime, formatNGN, formatUSD } from '@/lib/func';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import BalanceCard from '../components/BalanceCard';
 import { ArrowUpRight, Coins, Package, Receipt } from 'lucide-react';
 import Link from 'next/link';

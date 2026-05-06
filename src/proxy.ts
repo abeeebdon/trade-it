@@ -1,6 +1,12 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-const PROTECTED_ROUTES = ['/admin', '/dashboard', '/shop/orders'];
+const PROTECTED_ROUTES = [
+  '/admin',
+  '/dashboard',
+  '/buyer',
+  '/exporter',
+  '/shop/orders',
+];
 const AUTH_ROUTES = ['/login', '/register'];
 // This function can be marked `async` if using `await` inside
 export function proxy(req: NextRequest) {
@@ -32,6 +38,8 @@ export function proxy(req: NextRequest) {
 export const config = {
   matcher: [
     '/admin/:path*',
+    '/buyer/:path*',
+    '/exporter/:path*',
     '/dashboard/:path*',
     '/shop/orders/:path*',
     '/login',

@@ -19,7 +19,7 @@ export function AuthShell() {
             className="w-9 h-9 rounded-full"
           />
           <div>
-            <h2 className="font-bold tracking-[0.22em] text-sm">JOMP TRADE</h2>
+            <h2 className="font-bold tracking-[0.22em] text-sm">JOMP SHOP</h2>
             <p className="text-[10px] tracking-[0.3em] text-[#1A7A6E] font-mono">
               EXPORT OS
             </p>
