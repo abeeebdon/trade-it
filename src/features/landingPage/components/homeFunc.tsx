@@ -1,4 +1,15 @@
-export const getKicker = (path: string): string => {
+type ProductMeta = {
+  name?: string;
+  category?: string;
+  country?: string;
+};
+
+export const getKicker = (path: string, product?: ProductMeta): string => {
+  // 🔥 Dynamic Product Page
+  if (path.startsWith('/exporter/products/') && product) {
+    return `${product.category} · ${product.country}`;
+  }
+
   switch (path) {
     // Admin
     case '/admin':
@@ -23,8 +34,10 @@ export const getKicker = (path: string): string => {
       return 'Exporter · Compliance';
     case '/exporter/onboarding':
       return 'Exporter · Onboarding';
+    case '/exporter/my-products':
+      return 'Exporter · Catalog Management';
     case '/exporter/catalog':
-      return 'Exporter · Marketplace';
+      return 'Verified African Suppliers';
 
     // Buyer
     case '/buyer':
@@ -43,7 +56,12 @@ export const getKicker = (path: string): string => {
   }
 };
 
-export const getTitle = (path: string): string => {
+export const getTitle = (path: string, product?: ProductMeta): string => {
+  // 🔥 Dynamic Product Page
+  if (path.startsWith('/exporter/products/') && product) {
+    return product.name || '';
+  }
+
   switch (path) {
     // Admin
     case '/admin':
@@ -70,6 +88,8 @@ export const getTitle = (path: string): string => {
       return 'Onboarding';
     case '/exporter/catalog':
       return 'Marketplace';
+    case '/exporter/my-products':
+      return 'My Products';
 
     // Buyer
     case '/buyer':
