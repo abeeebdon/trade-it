@@ -7,7 +7,6 @@ import ProductCard from '../components/ProductCard';
 import { products as mockProducts } from '../components/data';
 import type { Product } from '../types/exporter';
 import { paginate } from '@/lib/utils';
-
 // ─── Constants ──────────────────────────────────────────────────────────────────
 
 const PER_PAGE = 12;
