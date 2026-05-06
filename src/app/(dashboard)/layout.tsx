@@ -1,7 +1,7 @@
 import DashboardHeader from '@/features/landingPage/components/DashboardHeader';
 import Sidebar from '@/features/landingPage/components/Sidebar';
 
-export default function AdminLayout({
+export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

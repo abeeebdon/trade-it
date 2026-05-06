@@ -32,16 +32,20 @@ export default function Login() {
       setLoading(false);
       const newUser = {
         name: 'JompStart',
-        email: 'jompstart@jomptrade.com',
+        email: data.email,
         role: 'admin',
       };
       if (data.email == 'admin@jomptrade.com') {
         dispatch(login({ ...newUser, role: 'exporter' }));
         router.push('/admin');
         return;
-      } else {
+      } else if (data.email === 'buyer@jomptrade.com') {
         dispatch(login({ ...newUser, role: 'buyer' }));
         router.push('/buyer');
+        return;
+      } else {
+        dispatch(login({ ...newUser, role: 'exporter' }));
+        router.push('/exporter');
         return;
       }
     };
