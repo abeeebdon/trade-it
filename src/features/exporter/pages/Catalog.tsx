@@ -1,12 +1,11 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Search } from 'lucide-react';
-import Pagination from '../components/pagination';
+import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import { products as mockProducts } from '../components/data';
 import type { Product } from '../types/exporter';
-import { paginate } from '@/lib/utils';
+
 // ─── Constants ──────────────────────────────────────────────────────────────────
 
 const PER_PAGE = 12;
@@ -36,30 +35,32 @@ export default function Catalog() {
     }, 500);
   }, []);
 
-  // Reset page on filter change
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setPage(1);
-    }, 0);
-    return () => clearTimeout(timer);
-  }, [category, country, search]);
-
-  // Filtering
+  // Filtering Logic
   const filtered = useMemo(() => {
     return items.filter((p) => {
       const matchCat = category ? p.category === category : true;
-
-      const matchCountry = country ? p.country === country : true;
       const matchSearch = search
         ? p.name.toLowerCase().includes(search.toLowerCase()) ||
           p.description.toLowerCase().includes(search.toLowerCase())
         : true;
 
-      return matchCat && matchCountry && matchSearch;
+      return matchCat && matchSearch;
     });
-  }, [items, category, country, search]);
+  }, [items, category, search]);
 
-  const paginated = paginate(filtered, page, PER_PAGE);
+  // Pagination Logic
+  const paginatedData = useMemo(() => {
+    const totalPages = Math.ceil(filtered.length / PER_PAGE);
+    const start = (page - 1) * PER_PAGE;
+    const end = start + PER_PAGE;
+    const slicedItems = filtered.slice(start, end);
+
+    return {
+      items: slicedItems,
+      totalPages,
+      page,
+    };
+  }, [filtered, page]);
 
   return (
     <>
@@ -120,7 +121,7 @@ export default function Catalog() {
               key={i}
               className="helix-card overflow-hidden animate-pulse opacity-40"
             >
-              <div className="aspect-[4/3] bg-[#1A7A6E]/10" />
+              <div className="aspect-4/3 bg-[#1A7A6E]/10" />
               <div className="p-4 space-y-2">
                 <div className="h-3 bg-[#1A7A6E]/10 rounded w-1/3" />
                 <div className="h-4 bg-[#1A7A6E]/10 rounded w-3/4" />
@@ -132,7 +133,7 @@ export default function Catalog() {
       ) : (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {paginated.items.map((it) => (
+            {paginatedData.items.map((it) => (
               <ProductCard key={it.id} p={it} />
             ))}
 
@@ -143,16 +144,55 @@ export default function Catalog() {
             )}
           </div>
 
-          <Pagination
-            page={paginated.page}
-            totalPages={paginated.totalPages}
-            onChange={(np) => {
-              setPage(np);
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-          />
+          {paginatedData.totalPages > 1 && (
+            <Pagination
+              currentPage={paginatedData.page}
+              totalPages={paginatedData.totalPages}
+              onChange={(np) => {
+                setPage(np);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
+          )}
         </>
       )}
     </>
+  );
+}
+
+// ─── Sub-Component: Pagination ──────────────────────────────────────────────────
+
+function Pagination({
+  currentPage,
+  totalPages,
+  onChange,
+}: {
+  currentPage: number;
+  totalPages: number;
+  onChange: (page: number) => void;
+}) {
+  return (
+    <div className="mt-12 flex items-center justify-center gap-4">
+      <button
+        disabled={currentPage === 1}
+        onClick={() => onChange(currentPage - 1)}
+        className="p-2 rounded-lg border border-[#1A7A6E]/20 text-[#9CA3AF] disabled:opacity-30 hover:bg-[#1A7A6E]/5 transition"
+      >
+        <ChevronLeft size={20} />
+      </button>
+
+      <span className="text-sm font-medium text-[#9CA3AF]">
+        Page <span className="text-[#C9922A]">{currentPage}</span> of{' '}
+        {totalPages}
+      </span>
+
+      <button
+        disabled={currentPage === totalPages}
+        onClick={() => onChange(currentPage + 1)}
+        className="p-2 rounded-lg border border-[#1A7A6E]/20 text-[#9CA3AF] disabled:opacity-30 hover:bg-[#1A7A6E]/5 transition"
+      >
+        <ChevronRight size={20} />
+      </button>
+    </div>
   );
 }

@@ -16,6 +16,7 @@ import {
   // Users,
   Currency,
   Lightbulb,
+  HandHelping,
 } from 'lucide-react';
 
 export const helixCards = [
@@ -111,13 +112,14 @@ export const NAV: {
   ],
 
   buyer: [
-    { to: '/dashboard', label: 'Command Center', icon: LayoutDashboard },
-    { to: '/catalog', label: 'Marketplace', icon: Store },
-    { to: '/orders', label: 'My Orders', icon: Receipt },
-    { to: '/sell', label: 'Local Inventory Shop', icon: ShoppingCart },
-    { to: '/fulfillment', label: 'Fulfillment', icon: Truck },
-    { to: '/finance', label: 'Finance', icon: Wallet },
-    { to: '/onboarding', label: 'Business Profile', icon: FileText },
+    { to: '/buyer', label: 'Command Center', icon: LayoutDashboard },
+    { to: '/buyer/catalog', label: 'Marketplace', icon: Store },
+    { to: '/buyer/orders', label: 'My Orders', icon: Receipt },
+    { to: '/buyer/sell', label: 'Local Inventory Shop', icon: ShoppingCart },
+    { to: '/buyer/fulfillment', label: 'Fulfillment', icon: Truck },
+    { to: '/buyer/finance', label: 'Finance', icon: Wallet },
+    { to: '/buyer/accounts', label: 'Withdrawal Accounts', icon: HandHelping },
+    { to: '/buyer/onboarding', label: 'Business Profile', icon: FileText },
   ],
 
   admin: [
