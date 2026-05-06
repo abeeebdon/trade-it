@@ -1,5 +1,7 @@
-const page = () => {
-  return <div>page</div>;
+import Catalog from '@/features/exporter/pages/Catalog';
+
+const Page = () => {
+  return <Catalog />;
 };
 
-export default page;
+export default Page;
