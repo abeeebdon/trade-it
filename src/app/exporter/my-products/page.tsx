@@ -1,5 +1,6 @@
+import MyProducts from '@/features/exporter/pages/MyProducts';
 const page = () => {
-  return <div>page</div>;
+  return <MyProducts />;
 };
 
 export default page;
