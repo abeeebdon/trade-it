@@ -14,7 +14,6 @@ import { Inter } from 'next/font/google';
 import AOSWrapper from '@/providers/AOSProviders';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/sonner';
-import { HeaderProvider } from '@/context/HeaderContext';
 
 const playfairDisplayHeading = Playfair_Display({
   subsets: ['latin'],
@@ -71,10 +70,8 @@ export default function RootLayout({
             <ReduxPersistGate>
               <ReactQueryProvider>
                 <AOSWrapper>
-                  <HeaderProvider>
-                    <Toaster />
-                    {children}
-                  </HeaderProvider>
+                  <Toaster />
+                  {children}
                 </AOSWrapper>
               </ReactQueryProvider>
             </ReduxPersistGate>

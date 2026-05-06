@@ -1,7 +1,5 @@
-import Catalog from '@/features/exporter/pages/Catalog';
-
-const Page = () => {
-  return <Catalog />;
+const page = () => {
+  return <div>page</div>;
 };
 
-export default Page;
+export default page;
