@@ -80,6 +80,7 @@ export interface Business {
 
   anchor_ngn_virtual_account?: string;
   anchor_usd_virtual_account?: string;
+  compliance_score?: number;
 }
 
 export interface ProfileStep2Props {
