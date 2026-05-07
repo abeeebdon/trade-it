@@ -37,6 +37,7 @@ export const dummyBusiness: Business = {
 
   anchor_ngn_virtual_account: '8779683395',
   anchor_usd_virtual_account: 'HLX-USD-6012CAB8',
+  anchor_account_ngn: '2',
 };
 export const SECTORS = [
   { value: 'fashion', label: 'Fashion & Textiles' },
