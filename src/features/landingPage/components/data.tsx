@@ -118,7 +118,11 @@ export const NAV: {
     { to: '/buyer/sell', label: 'Local Inventory Shop', icon: ShoppingCart },
     { to: '/buyer/fulfillment', label: 'Fulfillment', icon: Truck },
     { to: '/buyer/finance', label: 'Finance', icon: Wallet },
-    { to: '/buyer/accounts', label: 'Withdrawal Accounts', icon: HandHelping },
+    {
+      to: '/buyer/finance/accounts',
+      label: 'Withdrawal Accounts',
+      icon: HandHelping,
+    },
     { to: '/buyer/onboarding', label: 'Business Profile', icon: FileText },
   ],
 

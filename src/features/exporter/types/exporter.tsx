@@ -1,4 +1,5 @@
 import { Icon } from '@phosphor-icons/react';
+import { ReactNode } from 'react';
 
 export interface StatProps {
   label: string;
@@ -135,4 +136,9 @@ export type Supplier = {
 export type ProductData = {
   product: Product;
   supplier: Supplier;
+};
+export type FieldProps = {
+  label: string;
+  full?: boolean;
+  children?: ReactNode;
 };

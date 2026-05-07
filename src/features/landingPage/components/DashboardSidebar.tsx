@@ -42,7 +42,7 @@ const DashboardSidebar = ({ setOpenSideBar, openSidebar }: Props) => {
       )}
       <article
         className={cn(
-          'fixed inset-y-0 right-0 z-50 w-2/3 max-w-64 bg-[#39414fe4] h-screen  justify-between p-4 flex flex-col  shadow-lg sm:hidden transform transition-transform duration-600  ease-in-out ',
+          'fixed inset-y-0 right-0 z-50 w-2/3 max-w-64 bg-[#39414fe4] h-screen overflow-y-auto justify-between p-4 flex flex-col  shadow-lg sm:hidden transform transition-transform duration-600 hide-scrollbar  ease-in-out  ',
           !openSidebar ? 'translate-x-full' : 'translate-x-0',
         )}
       >

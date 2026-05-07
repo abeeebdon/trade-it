@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 type Currency = 'ngn' | 'usd';
 
 type KYCStatus = 'pending' | 'approved' | 'rejected';
@@ -56,6 +58,40 @@ export type ComplianceScore = {
   missing: string[];
 };
 
-export type Business = {
-  compliance_score: number;
-};
+export interface KYCForm {
+  cac_number: string;
+  tin: string;
+  director_name: string;
+  bvn: string;
+  nin: string;
+  docs: File[];
+}
+export interface Business {
+  id: string;
+  business_name: string;
+  sector: string;
+  country: string;
+  anchor_customer_id: string;
+
+  kyc_status: 'pending' | 'approved' | 'rejected' | 'under_review';
+  kyb_status: 'pending' | 'approved' | 'rejected' | 'under_review';
+  anchor_account_ngn: string;
+  registration_type: 'business' | 'individual';
+
+  anchor_ngn_virtual_account?: string;
+  anchor_usd_virtual_account?: string;
+}
+
+export interface ProfileStep2Props {
+  biz: Business;
+  kycForm: KYCForm;
+  setKycForm: Dispatch<SetStateAction<KYCForm>>;
+}
+export interface SteppersProps {
+  biz: Business;
+  step: number;
+}
+export interface ProfileStep1Props {
+  setStep: Dispatch<SetStateAction<number>>;
+  createBiz: (biz: Business) => void;
+}
