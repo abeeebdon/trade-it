@@ -1,4 +1,4 @@
-import { Business, BuyerDashboardData } from '../types/buyers';
+import { Business, BuyerDashboardData, ListingItem } from '../types/buyers';
 
 export const dataBuyerDashboard: BuyerDashboardData = {
   ngn_balance: 0.0,
@@ -44,4 +44,43 @@ export const SECTORS = [
   { value: 'agriculture', label: 'Agriculture' },
   { value: 'staple-foods', label: 'Staple Foods' },
   { value: 'general-goods', label: 'General Goods' },
+];
+
+export const dummyItems: ListingItem[] = [
+  {
+    id: 1,
+    title: 'African Ankara Tote Bag',
+    category: 'fashion',
+    retail_price_usd: 45,
+    stock_qty: 20,
+    fulfillment_mode: 'riby_dtc',
+    status: 'active',
+    photos: ['/images/product-1.jpg'],
+    description: 'Premium handmade Ankara tote bag.',
+    ships_from: 'Lagos → Riby US fulfillment',
+  },
+  {
+    id: 2,
+    title: 'Organic Shea Butter',
+    category: 'beauty',
+    retail_price_usd: 18,
+    stock_qty: 50,
+    fulfillment_mode: 'buyer_local',
+    status: 'active',
+    photos: ['/images/product-2.jpg'],
+    description: 'Raw organic shea butter.',
+    ships_from: 'Brooklyn, NY',
+  },
+  {
+    id: 3,
+    title: 'Leather Sandals',
+    category: 'fashion',
+    retail_price_usd: 60,
+    stock_qty: 0,
+    fulfillment_mode: 'riby_dtc',
+    status: 'out_of_stock',
+    photos: ['/images/product-3.jpg'],
+    description: 'Handcrafted premium leather sandals.',
+    ships_from: 'Lagos → Riby US fulfillment',
+  },
 ];

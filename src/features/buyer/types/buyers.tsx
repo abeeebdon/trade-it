@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 
-type Currency = 'ngn' | 'usd';
+export type Currency = 'ngn' | 'usd';
 
 type KYCStatus = 'pending' | 'approved' | 'rejected';
 type KYBStatus = 'pending' | 'approved' | 'rejected';
@@ -25,6 +25,7 @@ export interface Transaction {
   description?: string;
   timestamp: string;
   anchor_transaction_ref: string;
+  status: string;
 }
 
 export interface BuyerDashboardData {
@@ -95,4 +96,60 @@ export interface SteppersProps {
 export interface ProfileStep1Props {
   setStep: Dispatch<SetStateAction<number>>;
   createBiz: (biz: Business) => void;
+}
+
+export interface WithdrawalAccount {
+  id: string;
+  label: string;
+  bank_name: string;
+  account_number_masked: string;
+  is_default?: boolean;
+}
+export interface WithdrawModalProps {
+  currency: Currency;
+  accounts: WithdrawalAccount[];
+  balance: number;
+  onClose: () => void;
+}
+export interface BalanceBlockProps {
+  label: string;
+  balance: number;
+  va?: VirtualAccount | null;
+  onCopy: (value: string) => void;
+  accent?: boolean;
+  currency: 'USD' | 'NGN';
+  count: number;
+}
+export interface DashboardData {
+  usd_balance: number;
+  ngn_balance: number;
+  virtual_accounts?: {
+    usd?: VirtualAccount;
+    ngn?: VirtualAccount;
+  };
+}
+export interface FilterState {
+  currency: '' | Currency;
+  type: '' | 'credit' | 'debit' | 'transfer' | 'fee';
+}
+type ListingStatus = 'active' | 'out_of_stock' | 'archived';
+type FulfillmentMode = 'riby_dtc' | 'buyer_local';
+type Category = string;
+
+export interface ListingItem {
+  id?: number;
+  title: string;
+  description: string;
+  category: Category;
+  fulfillment_mode?: FulfillmentMode;
+  retail_price_usd: number;
+  stock_qty: number;
+  photos: string[];
+  ships_from: string;
+  status: ListingStatus;
+}
+export interface ListingFormProps {
+  isExporter: boolean;
+  editing?: ListingItem | null;
+  onClose: () => void;
 }
