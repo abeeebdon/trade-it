@@ -136,3 +136,62 @@ export type ProductData = {
   product: Product;
   supplier: Supplier;
 };
+
+//order types
+export type OrderStatus =
+  | 'pending'
+  | 'confirmed'
+  | 'draft'
+  | 'in_progress'
+  | 'delivered'
+  | 'completed'
+  | 'disputed'
+  | 'cancelled';
+
+export type PaymentStatus =
+  | 'awaiting'
+  | 'paid'
+  | 'confirmed'
+  | 'refunded'
+  | 'failed';
+
+export type Order = {
+  id: string;
+  order_number: string;
+  buyer_user_id: string;
+  product_name: string;
+  quantity: number;
+  agreed_price_usd: number;
+  target_delivery_date: string;
+  status: OrderStatus;
+  payment_status: PaymentStatus;
+};
+
+// Order Details
+export type TimelineEvent = {
+  event: string;
+  at: string;
+};
+
+export type OrderDetail = {
+  id: string;
+  order_number: string;
+  buyer_user_id: string;
+  supplier_user_id: string;
+  product_name: string;
+  quantity: number;
+  agreed_price_usd: number;
+  unit_price_usd: number;
+  target_delivery_date: string;
+  delivery_address: string;
+  status: OrderStatus;
+  payment_status: PaymentStatus;
+  anchor_reserved_account_number: string | null;
+  timeline: TimelineEvent[];
+};
+
+export type OrderDetailData = {
+  order: OrderDetail;
+  supplier: { business_name: string; country: string };
+  buyer: { business_name: string; country: string };
+};
