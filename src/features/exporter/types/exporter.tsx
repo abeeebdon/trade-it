@@ -196,3 +196,8 @@ export type OrderDetailData = {
   supplier: { business_name: string; country: string };
   buyer: { business_name: string; country: string };
 };
+export interface FieldProps {
+  label?: string;
+  children: ReactNode;
+  full?: string;
+}
