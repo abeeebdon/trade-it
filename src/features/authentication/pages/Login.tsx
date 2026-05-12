@@ -36,7 +36,7 @@ export default function Login() {
         role: 'admin',
       };
       if (data.email == 'admin@jomptrade.com') {
-        dispatch(login({ ...newUser, role: 'exporter' }));
+        dispatch(login({ ...newUser, role: 'admin' }));
         router.push('/admin');
         return;
       } else if (data.email === 'buyer@jomptrade.com') {

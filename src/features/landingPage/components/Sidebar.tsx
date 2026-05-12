@@ -15,6 +15,7 @@ export default function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
   const { user } = useAppSelector((state) => state.auth);
+  console.log(user);
   const items = NAV[user?.role ?? 'admin'] || NAV.exporter;
   const [loading, setLoading] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
