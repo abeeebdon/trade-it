@@ -5,11 +5,13 @@ import { createContext, useContext, useState } from 'react';
 type HeaderData = {
   title: string;
   kicker: string;
+  badge?: string;
 };
 
 type HeaderContextType = {
   title: string | null;
   kicker: string | null;
+  badge: string | null;
   setHeader: (data: HeaderData | null) => void;
 };
 
@@ -27,6 +29,7 @@ export const HeaderProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         title: header?.title ?? null,
         kicker: header?.kicker ?? null,
+        badge: header?.badge ?? null,
         setHeader,
       }}
     >
