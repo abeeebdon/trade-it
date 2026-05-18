@@ -195,3 +195,116 @@ export type OrderDetailData = {
   supplier: { business_name: string; country: string };
   buyer: { business_name: string; country: string };
 };
+
+export type FulfillmentMode = 'riby_dtc' | 'buyer_local';
+
+export type ListingStatus = 'active' | 'out_of_stock' | 'archived';
+
+export type Listing = {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  retail_price_usd: number;
+  stock_qty: number;
+  fulfillment_mode: FulfillmentMode;
+  ships_from: string;
+  photos: string[];
+  status: ListingStatus;
+};
+
+export type ListingFormData = Omit<Listing, 'id' | 'fulfillment_mode'>;
+
+// Fulfillment Types
+
+export type QuoteStatus =
+  | 'pending'
+  | 'quoted'
+  | 'accepted'
+  | 'rejected'
+  | 'expired';
+export type EscrowStatus = 'held' | 'released' | 'refunded';
+export type FulfillmentOrderStatus =
+  | 'paid'
+  | 'shipped'
+  | 'delivered'
+  | 'cancelled';
+export type CheckoutMode = 'quote_prepay' | 'listed';
+
+export type SellerQuote = {
+  id: string;
+  quote_number: string;
+  listing_title: string;
+  quantity: number;
+  consumer_name: string;
+  consumer_email: string;
+  message?: string;
+  quoted_unit_price_usd?: number;
+  quoted_total_usd?: number;
+  quote_valid_until?: string;
+  status: QuoteStatus;
+};
+
+export type FulfillmentOrder = {
+  id: string;
+  order_number: string;
+  listing_title: string;
+  quantity: number;
+  unit_price_usd: number;
+  total_usd: number;
+  checkout_mode: CheckoutMode;
+  delivery_partner_of_record?: string;
+  status: FulfillmentOrderStatus;
+  escrow_status: EscrowStatus;
+  created_at: string;
+  shipping_name: string;
+  shipping_address: string;
+  shipping_email: string;
+  shipping_phone?: string;
+  tracking_number?: string;
+};
+
+export type RespondForm = {
+  quoted_unit_price_usd: string;
+  quote_note: string;
+  valid_days: number;
+};
+
+// Compliance Types
+
+export type DocStatus = 'active' | 'expired' | 'expiring_soon' | 'pending';
+
+export type ComplianceDocument = {
+  id: string;
+  document_type: string;
+  issuing_authority: string;
+  issued_date: string;
+  expiry_date: string;
+  original_filename: string;
+  file_url: string;
+  status: DocStatus;
+};
+
+export type CategoryScore = {
+  score: number;
+  max: number;
+};
+
+export type ComplianceScore = {
+  score: number;
+  missing: string[];
+  category_scores?: Record<string, CategoryScore>;
+};
+
+export type ComplianceRequirement = {
+  us_import_guide: string[];
+};
+
+export type AddDocForm = {
+  document_type: string;
+  issuing_authority: string;
+  issued_date: string;
+  expiry_date: string;
+  file_url: string;
+  original_filename: string;
+};

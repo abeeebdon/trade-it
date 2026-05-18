@@ -38,6 +38,8 @@ export const getKicker = (path: string, product?: ProductMeta): string => {
       return 'Exporter · Catalog Management';
     case '/exporter/catalog':
       return 'Verified African Suppliers';
+    case '/exporter/fulfillment':
+      return 'Consumer Orders · Quotes · Escrow';
 
     // Buyer
     case '/buyer':
@@ -90,6 +92,8 @@ export const getTitle = (path: string, product?: ProductMeta): string => {
       return 'Marketplace';
     case '/exporter/my-products':
       return 'My Products';
+    case '/exporter/fulfillment':
+      return 'Fulfillment Queue';
 
     // Buyer
     case '/buyer':
