@@ -1,6 +1,6 @@
-// mock.ts
-
 import {
+  CreditApplicationX,
+  CreditEligibility,
   CreditApplication,
   Dispute,
   OverviewType,
@@ -10,6 +10,16 @@ import {
   Order,
   OrderDetailData,
   OrderStatus,
+  Listing,
+  SellerQuote,
+  FulfillmentOrder,
+  ComplianceDocument,
+  ComplianceScore,
+  ComplianceRequirement,
+  WithdrawalAccount,
+  NgnBank,
+  RepaymentData,
+  Business,
 } from '../types/exporter';
 
 export const mockOverview: OverviewType = {
@@ -110,7 +120,7 @@ export const sampleVerifications: VerificationItem[] = [
     kyb_status: 'rejected',
   },
 ];
-export const creditApplications: CreditApplication[] = [
+export const creditApplications: CreditApplicationX[] = [
   {
     id: 'app_1',
     application_number: 'JSC-10021',
@@ -544,4 +554,549 @@ export const mockOrderDetails: Record<string, OrderDetailData> = {
     supplier: { business_name: 'Eko Botanicals Ltd', country: 'Nigeria' },
     buyer: { business_name: 'Herbal Direct SARL', country: 'France' },
   },
+};
+
+//Listings
+
+export const mockListings: Listing[] = [
+  {
+    id: 'lst-001',
+    title: 'Hand-Dyed Adire Fabric Set (3 yards)',
+    category: 'fashion',
+    description:
+      'Authentic hand-dyed Adire fabric from Abeokuta artisans. Ships from Lagos via Riby US fulfillment.',
+    retail_price_usd: 65,
+    stock_qty: 40,
+    fulfillment_mode: 'riby_dtc',
+    ships_from: 'Lagos → Riby US fulfillment',
+    photos: [
+      'https://images.unsplash.com/photo-1528459105426-b9548367069b?w=400&auto=format&fit=crop',
+    ],
+    status: 'active',
+  },
+  {
+    id: 'lst-002',
+    title: 'Organic Shea Butter (500g jar)',
+    category: 'general-goods',
+    description:
+      'Cold-pressed unrefined shea butter from Northern Nigeria. US-stocked for 48-hour delivery.',
+    retail_price_usd: 28,
+    stock_qty: 120,
+    fulfillment_mode: 'buyer_local',
+    ships_from: 'Brooklyn, NY',
+    photos: [
+      'https://images.unsplash.com/photo-1590086782792-42dd2350140d?w=400&auto=format&fit=crop',
+    ],
+    status: 'active',
+  },
+  {
+    id: 'lst-003',
+    title: 'Premium Hibiscus Tea (250g export pack)',
+    category: 'agriculture',
+    description:
+      'Sun-dried hibiscus petals packaged for US retail. DTC via Riby from Lagos.',
+    retail_price_usd: 18,
+    stock_qty: 0,
+    fulfillment_mode: 'riby_dtc',
+    ships_from: 'Lagos → Riby US fulfillment',
+    photos: [
+      'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=400&auto=format&fit=crop',
+    ],
+    status: 'out_of_stock',
+  },
+  {
+    id: 'lst-004',
+    title: 'Handcrafted Leather Tote — Lagos Edition',
+    category: 'fashion',
+    description:
+      'Full-grain Nigerian leather tote, hand-stitched in Lagos. Individually numbered with origin cert.',
+    retail_price_usd: 120,
+    stock_qty: 15,
+    fulfillment_mode: 'riby_dtc',
+    ships_from: 'Lagos → Riby US fulfillment',
+    photos: [
+      'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&auto=format&fit=crop',
+    ],
+    status: 'active',
+  },
+  {
+    id: 'lst-005',
+    title: 'Moringa Powder (200g — USDA Organic)',
+    category: 'general-goods',
+    description:
+      'USDA Organic certified moringa powder, US warehouse stocked for next-day dispatch.',
+    retail_price_usd: 34,
+    stock_qty: 80,
+    fulfillment_mode: 'buyer_local',
+    ships_from: 'Atlanta, GA',
+    photos: [
+      'https://images.unsplash.com/photo-1515023115689-589c33041d3c?w=400&auto=format&fit=crop',
+    ],
+    status: 'active',
+  },
+];
+
+export const mockSellerQuotes: SellerQuote[] = [
+  {
+    id: 'qt-001',
+    quote_number: 'QT-0041',
+    listing_title: 'Hand-Dyed Adire Fabric Set (3 yards)',
+    quantity: 5,
+    consumer_name: 'Sarah Mitchell',
+    consumer_email: 'sarah.m@gmail.com',
+    message:
+      'Can you do a bulk discount for 5 sets? Looking for wedding decor.',
+    status: 'pending',
+  },
+  {
+    id: 'qt-002',
+    quote_number: 'QT-0038',
+    listing_title: 'Organic Shea Butter (500g jar)',
+    quantity: 12,
+    consumer_name: 'James Okafor',
+    consumer_email: 'j.okafor@yahoo.com',
+    message: 'Monthly subscription possible?',
+    quoted_unit_price_usd: 24,
+    quoted_total_usd: 288,
+    quote_valid_until: '2026-06-10',
+    status: 'quoted',
+  },
+  {
+    id: 'qt-003',
+    quote_number: 'QT-0035',
+    listing_title: 'Premium Hibiscus Tea (250g export pack)',
+    quantity: 20,
+    consumer_name: 'Amara Williams',
+    consumer_email: 'amara.w@outlook.com',
+    status: 'pending',
+  },
+];
+
+export const mockFulfillmentOrders: FulfillmentOrder[] = [
+  {
+    id: 'ffo-001',
+    order_number: 'SHP-0091',
+    listing_title: 'Handcrafted Leather Tote — Lagos Edition',
+    quantity: 2,
+    unit_price_usd: 120,
+    total_usd: 240,
+    checkout_mode: 'listed',
+    delivery_partner_of_record: 'Riby Inc',
+    status: 'paid',
+    escrow_status: 'held',
+    created_at: '2026-05-10T09:22:00Z',
+    shipping_name: 'Patricia Osei',
+    shipping_address: '44 Harlem Ave, New York, NY 10037',
+    shipping_email: 'p.osei@gmail.com',
+    shipping_phone: '+1 646 555 0182',
+  },
+  {
+    id: 'ffo-002',
+    order_number: 'SHP-0088',
+    listing_title: 'Organic Shea Butter (500g jar)',
+    quantity: 12,
+    unit_price_usd: 24,
+    total_usd: 288,
+    checkout_mode: 'quote_prepay',
+    status: 'shipped',
+    escrow_status: 'held',
+    created_at: '2026-05-08T14:05:00Z',
+    shipping_name: 'James Okafor',
+    shipping_address: '12 Maple Street, Atlanta, GA 30301',
+    shipping_email: 'j.okafor@yahoo.com',
+    tracking_number: 'UPS-1Z999AA10123456784',
+  },
+  {
+    id: 'ffo-003',
+    order_number: 'SHP-0081',
+    listing_title: 'Moringa Powder (200g — USDA Organic)',
+    quantity: 4,
+    unit_price_usd: 34,
+    total_usd: 136,
+    checkout_mode: 'listed',
+    delivery_partner_of_record: 'Riby Inc',
+    status: 'delivered',
+    escrow_status: 'released',
+    created_at: '2026-04-28T11:30:00Z',
+    shipping_name: 'Chinonso Eze',
+    shipping_address: '7 Oak Drive, Houston, TX 77001',
+    shipping_email: 'c.eze@hotmail.com',
+    shipping_phone: '+1 713 555 0244',
+    tracking_number: 'FEDEX-276847211310',
+  },
+];
+
+export const mockComplianceDocuments: ComplianceDocument[] = [
+  {
+    id: 'doc-001',
+    document_type: 'NAFDAC',
+    issuing_authority: 'NAFDAC Nigeria',
+    issued_date: '2025-01-15',
+    expiry_date: '2027-01-14',
+    original_filename: 'nafdac-cert-2025.pdf',
+    file_url: '/docs/nafdac-cert-2025.pdf',
+    status: 'active',
+  },
+  {
+    id: 'doc-002',
+    document_type: 'Phytosanitary Certificate',
+    issuing_authority: 'Federal Ministry of Agriculture',
+    issued_date: '2026-02-01',
+    expiry_date: '2026-08-01',
+    original_filename: 'phyto-cert-feb2026.pdf',
+    file_url: '/docs/phyto-cert-feb2026.pdf',
+    status: 'expiring_soon',
+  },
+  {
+    id: 'doc-003',
+    document_type: 'SON Certification',
+    issuing_authority: 'Standards Organisation of Nigeria',
+    issued_date: '2024-06-10',
+    expiry_date: '2025-06-09',
+    original_filename: 'son-cert-2024.pdf',
+    file_url: '/docs/son-cert-2024.pdf',
+    status: 'expired',
+  },
+  {
+    id: 'doc-004',
+    document_type: 'Country of Origin Label',
+    issuing_authority: 'Nigeria Customs Service',
+    issued_date: '2026-01-20',
+    expiry_date: '2028-01-19',
+    original_filename: 'origin-label-2026.pdf',
+    file_url: '/docs/origin-label-2026.pdf',
+    status: 'active',
+  },
+];
+
+export const mockComplianceScore: ComplianceScore = {
+  score: 74,
+  missing: [
+    'Fumigation Certificate',
+    'Halal Certification',
+    'FSSAI / FDA Equivalence',
+  ],
+  category_scores: {
+    agriculture: { score: 30, max: 40 },
+    'general-goods': { score: 24, max: 40 },
+    fashion: { score: 20, max: 20 },
+  },
+};
+
+export const mockRequirements: Record<string, ComplianceRequirement> = {
+  agriculture: {
+    us_import_guide: [
+      'Phytosanitary Certificate required for all plant-based exports.',
+      'USDA APHIS inspection may apply to raw agricultural commodities.',
+      'FDA Prior Notice required for food shipments entering the US.',
+      'Aflatoxin testing required for nuts, grains, and dried fruits.',
+      'Country of Origin labelling must comply with COOL regulations.',
+    ],
+  },
+  'general-goods': {
+    us_import_guide: [
+      'FCC certification required for electronics.',
+      'CPSC compliance needed for consumer goods targeting children.',
+      'All products must carry country-of-origin labels (19 CFR 134).',
+      'Shea butter and cosmetics must meet FDA import alert thresholds.',
+      'REACH compliance required if goods are destined for EU re-export.',
+    ],
+  },
+  fashion: {
+    us_import_guide: [
+      'Fibre content labelling required under the Textile Fiber Act.',
+      'Care instructions must be permanently attached to garments.',
+      'Quota/visa requirements vary by HTS code and country.',
+      'Customs bond required for commercial imports over $2,500.',
+    ],
+  },
+};
+
+// Withdrawal Accounts Mock Data
+export const mockWithdrawalAccounts: WithdrawalAccount[] = [
+  {
+    id: 'wa-001',
+    label: 'Chase Business · Primary',
+    currency: 'USD',
+    bank_name: 'JPMorgan Chase',
+    account_number_masked: '••••••4821',
+    account_name: 'Callistus Exports Ltd',
+    account_type: 'checking',
+    routing_number: '021000021',
+    swift_code: 'CHASUS33',
+    is_default: true,
+    approval_status: 'approved',
+  },
+  {
+    id: 'wa-002',
+    label: 'Bank of America · Backup',
+    currency: 'USD',
+    bank_name: 'Bank of America',
+    account_number_masked: '••••••9134',
+    account_name: 'Callistus Exports Ltd',
+    account_type: 'checking',
+    routing_number: '026009593',
+    is_default: false,
+    approval_status: 'approved',
+  },
+  {
+    id: 'wa-003',
+    label: 'GTBank Lagos · Operations',
+    currency: 'NGN',
+    bank_name: 'Guaranty Trust Bank',
+    account_number_masked: '••••••7723',
+    account_name: 'Callistus Nwosu',
+    is_default: true,
+    approval_status: 'approved',
+  },
+  {
+    id: 'wa-004',
+    label: 'Zenith Bank · Savings',
+    currency: 'NGN',
+    bank_name: 'Zenith Bank Plc',
+    account_number_masked: '••••••3341',
+    account_name: 'Callistus Nwosu',
+    is_default: false,
+    approval_status: 'pending',
+  },
+];
+
+export const mockNgnBanks: NgnBank[] = [
+  { code: '044', name: 'Access Bank' },
+  { code: '050', name: 'EcoBank Nigeria' },
+  { code: '070', name: 'Fidelity Bank' },
+  { code: '011', name: 'First Bank of Nigeria' },
+  { code: '214', name: 'First City Monument Bank' },
+  { code: '058', name: 'Guaranty Trust Bank' },
+  { code: '030', name: 'Heritage Bank' },
+  { code: '301', name: 'Jaiz Bank' },
+  { code: '082', name: 'Keystone Bank' },
+  { code: '076', name: 'Polaris Bank' },
+  { code: '221', name: 'Stanbic IBTC Bank' },
+  { code: '068', name: 'Standard Chartered Bank' },
+  { code: '232', name: 'Sterling Bank' },
+  { code: '032', name: 'Union Bank of Nigeria' },
+  { code: '033', name: 'United Bank for Africa' },
+  { code: '215', name: 'Unity Bank' },
+  { code: '035', name: 'Wema Bank' },
+  { code: '057', name: 'Zenith Bank' },
+];
+
+// Credit Mock Data
+export const mockCreditEligibility: CreditEligibility = {
+  eligible: true,
+  max_limit_usd: 25000,
+  indicative_apr_percent: 14.5,
+  indicative_term_months: 6,
+  risk_score: 78,
+  compliance_score: 82,
+  sales: {
+    paid_order_count: 12,
+    total_volume_usd: 48500,
+    average_order_usd: 4041.67,
+  },
+};
+
+export const mockCreditApplications: CreditApplication[] = [
+  {
+    id: 'cred-001',
+    application_number: 'JMPST-0041',
+    amount_usd: 10000,
+    offered_amount_usd: 9500,
+    term_months: 6,
+    offered_term_months: 6,
+    indicative_apr: 14.5,
+    offered_apr: 15.2,
+    status: 'offered',
+    created_at: '2026-04-10T09:00:00Z',
+  },
+  {
+    id: 'cred-002',
+    application_number: 'JMPST-0033',
+    amount_usd: 5000,
+    term_months: 3,
+    indicative_apr: 14.5,
+    status: 'approved',
+    created_at: '2026-02-18T11:30:00Z',
+  },
+  {
+    id: 'cred-003',
+    application_number: 'JMPST-0021',
+    amount_usd: 15000,
+    term_months: 12,
+    indicative_apr: 14.5,
+    status: 'rejected',
+    created_at: '2025-12-05T08:45:00Z',
+  },
+];
+
+// Repayment Mock Data
+export const mockRepaymentData: RepaymentData = {
+  total_outstanding_usd: 13750,
+  applications: [
+    {
+      application: {
+        id: 'cred-001',
+        application_number: 'JMPST-0041',
+        offered_amount_usd: 9500,
+        offered_term_months: 6,
+        offered_apr: 15.2,
+      },
+      outstanding_usd: 6450,
+      next_due: {
+        due_date: '2026-06-01',
+        total_due_usd: 1625,
+        paid_usd: 0,
+      },
+      installments: [
+        {
+          id: 'inst-001-1',
+          installment_number: 1,
+          due_date: '2026-03-01',
+          principal_usd: 1500,
+          interest_usd: 120.42,
+          total_due_usd: 1620.42,
+          paid_usd: 1620.42,
+          status: 'paid',
+        },
+        {
+          id: 'inst-001-2',
+          installment_number: 2,
+          due_date: '2026-04-01',
+          principal_usd: 1500,
+          interest_usd: 101.08,
+          total_due_usd: 1601.08,
+          paid_usd: 1601.08,
+          status: 'paid',
+        },
+        {
+          id: 'inst-001-3',
+          installment_number: 3,
+          due_date: '2026-05-01',
+          principal_usd: 1500,
+          interest_usd: 81.75,
+          total_due_usd: 1581.75,
+          paid_usd: 1581.75,
+          status: 'paid',
+        },
+        {
+          id: 'inst-001-4',
+          installment_number: 4,
+          due_date: '2026-06-01',
+          principal_usd: 1500,
+          interest_usd: 62.42,
+          total_due_usd: 1562.42,
+          paid_usd: 0,
+          status: 'pending',
+        },
+        {
+          id: 'inst-001-5',
+          installment_number: 5,
+          due_date: '2026-07-01',
+          principal_usd: 1500,
+          interest_usd: 43.08,
+          total_due_usd: 1543.08,
+          paid_usd: 0,
+          status: 'upcoming',
+        },
+        {
+          id: 'inst-001-6',
+          installment_number: 6,
+          due_date: '2026-08-01',
+          principal_usd: 1500,
+          interest_usd: 23.75,
+          total_due_usd: 1523.75,
+          paid_usd: 0,
+          status: 'upcoming',
+        },
+      ],
+    },
+    {
+      application: {
+        id: 'cred-002',
+        application_number: 'JMPST-0033',
+        offered_amount_usd: 5000,
+        offered_term_months: 3,
+        offered_apr: 14.5,
+      },
+      outstanding_usd: 7300,
+      next_due: {
+        due_date: '2026-06-15',
+        total_due_usd: 1700,
+        paid_usd: 200,
+      },
+      installments: [
+        {
+          id: 'inst-002-1',
+          installment_number: 1,
+          due_date: '2026-04-15',
+          principal_usd: 1600,
+          interest_usd: 60.42,
+          total_due_usd: 1660.42,
+          paid_usd: 1660.42,
+          status: 'paid',
+        },
+        {
+          id: 'inst-002-2',
+          installment_number: 2,
+          due_date: '2026-05-15',
+          principal_usd: 1700,
+          interest_usd: 40.29,
+          total_due_usd: 1740.29,
+          paid_usd: 900,
+          status: 'overdue',
+        },
+        {
+          id: 'inst-002-3',
+          installment_number: 3,
+          due_date: '2026-06-15',
+          principal_usd: 1700,
+          interest_usd: 20.14,
+          total_due_usd: 1720.14,
+          paid_usd: 0,
+          status: 'upcoming',
+        },
+      ],
+    },
+  ],
+};
+
+// Onboarding Mock Data
+
+// Uncomment to simulate a returning user mid-onboarding:
+// export const mockBusiness: Business = {
+//   id: 'biz-001',
+//   business_name: 'Callistus Exports Ltd',
+//   registration_type: 'business',
+//   country: 'Nigeria',
+//   sector: 'agriculture',
+//   contact_phone: '+2348012345678',
+//   contact_email: 'callistus@exports.ng',
+//   address: '14 Apapa Industrial Estate, Lagos',
+//   anchor_customer_id: 'ANC-BIZ-00124',
+//   kyc_status: 'pending',
+//   kyb_status: 'under_review',
+//   cac_number: 'RC-1234567',
+//   tin: '12345678-0001',
+//   director_name: 'Callistus Nwosu',
+// };
+
+// Uncomment to simulate a fully approved business:
+export const mockBusiness: Business = {
+  id: 'biz-001',
+  business_name: 'Callistus Exports Ltd',
+  registration_type: 'business',
+  country: 'Nigeria',
+  sector: 'agriculture',
+  contact_phone: '+2348012345678',
+  contact_email: 'callistus@exports.ng',
+  address: '14 Apapa Industrial Estate, Lagos',
+  anchor_customer_id: 'ANC-BIZ-00124',
+  anchor_ngn_virtual_account: '0123456789',
+  anchor_usd_virtual_account: '9900012345',
+  kyc_status: 'approved',
+  kyb_status: 'approved',
+  cac_number: 'RC-1234567',
+  tin: '12345678-0001',
+  director_name: 'Callistus Nwosu',
 };

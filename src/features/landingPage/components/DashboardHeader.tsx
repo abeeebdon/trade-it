@@ -11,7 +11,12 @@ import DashboardSidebar from './DashboardSidebar';
 
 const DashboardHeader = () => {
   const pathname = usePathname();
-  const { title: customTitle, kicker: customKicker, badge } = useHeader();
+  const {
+    title: customTitle,
+    kicker: customKicker,
+    badge,
+    action,
+  } = useHeader(); // ← action added
 
   const [showSidebar, setShowSidebar] = useState(false);
 
@@ -23,9 +28,8 @@ const DashboardHeader = () => {
 
   const isExporter = pathname.startsWith('/exporter');
 
-  // Show ANCHOR badge only on exporter pages that are NOT dynamic order/product pages
-  // (those pages set their own badge via context instead)
-  const showAnchorBadge = isExporter && !badge;
+  // ANCHOR badge only when on exporter pages with no dynamic badge or action
+  const showAnchorBadge = isExporter && !badge && !action; // ← also suppress when action present
 
   return (
     <header className="sticky top-0 z-30 w-full border bg-bg backdrop-blur border-b border-[#1A7A6E]/15">
@@ -36,23 +40,24 @@ const DashboardHeader = () => {
           <h1 className="helix-h2">{title}</h1>
         </div>
 
-        {/* RIGHT: Actions */}
+        {/* RIGHT: Actions — priority: action > badge > ANCHOR badge */}
         <div className="flex items-center gap-3 flex-wrap">
-          {/* Static ANCHOR badge — shown on exporter pages without a dynamic badge */}
-          {showAnchorBadge && (
-            <div className="flex items-center gap-2 text-[11px] font-mono tracking-widest text-[#1A7A6E]">
-              ANCHOR · SANDBOX · MOCK
-              <span className="w-2 h-2 rounded-full bg-[#1A7A6E] inline-block animate-pulse" />
-            </div>
-          )}
-
-          {/* Dynamic badge — shown on pages that call setHeader with a badge value */}
-          {badge && (
+          {action ? (
+            // Dynamic CTA button (e.g. "+ New Listing" on Sell page)
+            <>{action}</>
+          ) : badge ? (
+            // Dynamic status badge (e.g. on OrderDetail page)
             <div className="flex items-center gap-2 text-[11px] font-mono tracking-widest text-[#C9922A]">
               {badge}
               <span className="w-2 h-2 rounded-full bg-[#C9922A] inline-block animate-pulse" />
             </div>
-          )}
+          ) : showAnchorBadge ? (
+            // Static ANCHOR badge for all other exporter pages
+            <div className="flex items-center gap-2 text-[11px] font-mono tracking-widest text-[#1A7A6E]">
+              ANCHOR · SANDBOX · MOCK
+              <span className="w-2 h-2 rounded-full bg-[#1A7A6E] inline-block animate-pulse" />
+            </div>
+          ) : null}
 
           <ThemeToggle />
 
