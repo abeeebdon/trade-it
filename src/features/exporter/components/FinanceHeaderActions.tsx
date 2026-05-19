@@ -15,7 +15,7 @@ export default function FinanceHeaderActions({
   return (
     <div className="flex items-center gap-2 flex-wrap">
       <Link
-        href="/finance/accounts"
+        href="/exporter/withdrawal-accounts"
         className="helix-btn-secondary inline-flex items-center gap-2"
       >
         <WalletCards size={15} />

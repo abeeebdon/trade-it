@@ -40,6 +40,8 @@ export const getKicker = (path: string, product?: ProductMeta): string => {
       return 'Verified African Suppliers';
     case '/exporter/fulfillment':
       return 'Consumer Orders · Quotes · Escrow';
+    case '/exporter/repayments':
+      return 'Auto-debit · Schedule';
 
     // Buyer
     case '/buyer':
@@ -94,6 +96,8 @@ export const getTitle = (path: string, product?: ProductMeta): string => {
       return 'My Products';
     case '/exporter/fulfillment':
       return 'Fulfillment Queue';
+    case '/exporter/repayments':
+      return 'JompStart Repayments';
 
     // Buyer
     case '/buyer':

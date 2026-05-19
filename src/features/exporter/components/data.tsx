@@ -1,4 +1,6 @@
 import {
+  CreditApplicationX,
+  CreditEligibility,
   CreditApplication,
   Dispute,
   OverviewType,
@@ -14,6 +16,10 @@ import {
   ComplianceDocument,
   ComplianceScore,
   ComplianceRequirement,
+  WithdrawalAccount,
+  NgnBank,
+  RepaymentData,
+  Business,
 } from '../types/exporter';
 
 export const mockOverview: OverviewType = {
@@ -114,7 +120,7 @@ export const sampleVerifications: VerificationItem[] = [
     kyb_status: 'rejected',
   },
 ];
-export const creditApplications: CreditApplication[] = [
+export const creditApplications: CreditApplicationX[] = [
   {
     id: 'app_1',
     application_number: 'JSC-10021',
@@ -804,4 +810,293 @@ export const mockRequirements: Record<string, ComplianceRequirement> = {
       'Customs bond required for commercial imports over $2,500.',
     ],
   },
+};
+
+// Withdrawal Accounts Mock Data
+export const mockWithdrawalAccounts: WithdrawalAccount[] = [
+  {
+    id: 'wa-001',
+    label: 'Chase Business · Primary',
+    currency: 'USD',
+    bank_name: 'JPMorgan Chase',
+    account_number_masked: '••••••4821',
+    account_name: 'Callistus Exports Ltd',
+    account_type: 'checking',
+    routing_number: '021000021',
+    swift_code: 'CHASUS33',
+    is_default: true,
+    approval_status: 'approved',
+  },
+  {
+    id: 'wa-002',
+    label: 'Bank of America · Backup',
+    currency: 'USD',
+    bank_name: 'Bank of America',
+    account_number_masked: '••••••9134',
+    account_name: 'Callistus Exports Ltd',
+    account_type: 'checking',
+    routing_number: '026009593',
+    is_default: false,
+    approval_status: 'approved',
+  },
+  {
+    id: 'wa-003',
+    label: 'GTBank Lagos · Operations',
+    currency: 'NGN',
+    bank_name: 'Guaranty Trust Bank',
+    account_number_masked: '••••••7723',
+    account_name: 'Callistus Nwosu',
+    is_default: true,
+    approval_status: 'approved',
+  },
+  {
+    id: 'wa-004',
+    label: 'Zenith Bank · Savings',
+    currency: 'NGN',
+    bank_name: 'Zenith Bank Plc',
+    account_number_masked: '••••••3341',
+    account_name: 'Callistus Nwosu',
+    is_default: false,
+    approval_status: 'pending',
+  },
+];
+
+export const mockNgnBanks: NgnBank[] = [
+  { code: '044', name: 'Access Bank' },
+  { code: '050', name: 'EcoBank Nigeria' },
+  { code: '070', name: 'Fidelity Bank' },
+  { code: '011', name: 'First Bank of Nigeria' },
+  { code: '214', name: 'First City Monument Bank' },
+  { code: '058', name: 'Guaranty Trust Bank' },
+  { code: '030', name: 'Heritage Bank' },
+  { code: '301', name: 'Jaiz Bank' },
+  { code: '082', name: 'Keystone Bank' },
+  { code: '076', name: 'Polaris Bank' },
+  { code: '221', name: 'Stanbic IBTC Bank' },
+  { code: '068', name: 'Standard Chartered Bank' },
+  { code: '232', name: 'Sterling Bank' },
+  { code: '032', name: 'Union Bank of Nigeria' },
+  { code: '033', name: 'United Bank for Africa' },
+  { code: '215', name: 'Unity Bank' },
+  { code: '035', name: 'Wema Bank' },
+  { code: '057', name: 'Zenith Bank' },
+];
+
+// Credit Mock Data
+export const mockCreditEligibility: CreditEligibility = {
+  eligible: true,
+  max_limit_usd: 25000,
+  indicative_apr_percent: 14.5,
+  indicative_term_months: 6,
+  risk_score: 78,
+  compliance_score: 82,
+  sales: {
+    paid_order_count: 12,
+    total_volume_usd: 48500,
+    average_order_usd: 4041.67,
+  },
+};
+
+export const mockCreditApplications: CreditApplication[] = [
+  {
+    id: 'cred-001',
+    application_number: 'JMPST-0041',
+    amount_usd: 10000,
+    offered_amount_usd: 9500,
+    term_months: 6,
+    offered_term_months: 6,
+    indicative_apr: 14.5,
+    offered_apr: 15.2,
+    status: 'offered',
+    created_at: '2026-04-10T09:00:00Z',
+  },
+  {
+    id: 'cred-002',
+    application_number: 'JMPST-0033',
+    amount_usd: 5000,
+    term_months: 3,
+    indicative_apr: 14.5,
+    status: 'approved',
+    created_at: '2026-02-18T11:30:00Z',
+  },
+  {
+    id: 'cred-003',
+    application_number: 'JMPST-0021',
+    amount_usd: 15000,
+    term_months: 12,
+    indicative_apr: 14.5,
+    status: 'rejected',
+    created_at: '2025-12-05T08:45:00Z',
+  },
+];
+
+// Repayment Mock Data
+export const mockRepaymentData: RepaymentData = {
+  total_outstanding_usd: 13750,
+  applications: [
+    {
+      application: {
+        id: 'cred-001',
+        application_number: 'JMPST-0041',
+        offered_amount_usd: 9500,
+        offered_term_months: 6,
+        offered_apr: 15.2,
+      },
+      outstanding_usd: 6450,
+      next_due: {
+        due_date: '2026-06-01',
+        total_due_usd: 1625,
+        paid_usd: 0,
+      },
+      installments: [
+        {
+          id: 'inst-001-1',
+          installment_number: 1,
+          due_date: '2026-03-01',
+          principal_usd: 1500,
+          interest_usd: 120.42,
+          total_due_usd: 1620.42,
+          paid_usd: 1620.42,
+          status: 'paid',
+        },
+        {
+          id: 'inst-001-2',
+          installment_number: 2,
+          due_date: '2026-04-01',
+          principal_usd: 1500,
+          interest_usd: 101.08,
+          total_due_usd: 1601.08,
+          paid_usd: 1601.08,
+          status: 'paid',
+        },
+        {
+          id: 'inst-001-3',
+          installment_number: 3,
+          due_date: '2026-05-01',
+          principal_usd: 1500,
+          interest_usd: 81.75,
+          total_due_usd: 1581.75,
+          paid_usd: 1581.75,
+          status: 'paid',
+        },
+        {
+          id: 'inst-001-4',
+          installment_number: 4,
+          due_date: '2026-06-01',
+          principal_usd: 1500,
+          interest_usd: 62.42,
+          total_due_usd: 1562.42,
+          paid_usd: 0,
+          status: 'pending',
+        },
+        {
+          id: 'inst-001-5',
+          installment_number: 5,
+          due_date: '2026-07-01',
+          principal_usd: 1500,
+          interest_usd: 43.08,
+          total_due_usd: 1543.08,
+          paid_usd: 0,
+          status: 'upcoming',
+        },
+        {
+          id: 'inst-001-6',
+          installment_number: 6,
+          due_date: '2026-08-01',
+          principal_usd: 1500,
+          interest_usd: 23.75,
+          total_due_usd: 1523.75,
+          paid_usd: 0,
+          status: 'upcoming',
+        },
+      ],
+    },
+    {
+      application: {
+        id: 'cred-002',
+        application_number: 'JMPST-0033',
+        offered_amount_usd: 5000,
+        offered_term_months: 3,
+        offered_apr: 14.5,
+      },
+      outstanding_usd: 7300,
+      next_due: {
+        due_date: '2026-06-15',
+        total_due_usd: 1700,
+        paid_usd: 200,
+      },
+      installments: [
+        {
+          id: 'inst-002-1',
+          installment_number: 1,
+          due_date: '2026-04-15',
+          principal_usd: 1600,
+          interest_usd: 60.42,
+          total_due_usd: 1660.42,
+          paid_usd: 1660.42,
+          status: 'paid',
+        },
+        {
+          id: 'inst-002-2',
+          installment_number: 2,
+          due_date: '2026-05-15',
+          principal_usd: 1700,
+          interest_usd: 40.29,
+          total_due_usd: 1740.29,
+          paid_usd: 900,
+          status: 'overdue',
+        },
+        {
+          id: 'inst-002-3',
+          installment_number: 3,
+          due_date: '2026-06-15',
+          principal_usd: 1700,
+          interest_usd: 20.14,
+          total_due_usd: 1720.14,
+          paid_usd: 0,
+          status: 'upcoming',
+        },
+      ],
+    },
+  ],
+};
+
+// Onboarding Mock Data
+
+// Uncomment to simulate a returning user mid-onboarding:
+// export const mockBusiness: Business = {
+//   id: 'biz-001',
+//   business_name: 'Callistus Exports Ltd',
+//   registration_type: 'business',
+//   country: 'Nigeria',
+//   sector: 'agriculture',
+//   contact_phone: '+2348012345678',
+//   contact_email: 'callistus@exports.ng',
+//   address: '14 Apapa Industrial Estate, Lagos',
+//   anchor_customer_id: 'ANC-BIZ-00124',
+//   kyc_status: 'pending',
+//   kyb_status: 'under_review',
+//   cac_number: 'RC-1234567',
+//   tin: '12345678-0001',
+//   director_name: 'Callistus Nwosu',
+// };
+
+// Uncomment to simulate a fully approved business:
+export const mockBusiness: Business = {
+  id: 'biz-001',
+  business_name: 'Callistus Exports Ltd',
+  registration_type: 'business',
+  country: 'Nigeria',
+  sector: 'agriculture',
+  contact_phone: '+2348012345678',
+  contact_email: 'callistus@exports.ng',
+  address: '14 Apapa Industrial Estate, Lagos',
+  anchor_customer_id: 'ANC-BIZ-00124',
+  anchor_ngn_virtual_account: '0123456789',
+  anchor_usd_virtual_account: '9900012345',
+  kyc_status: 'approved',
+  kyb_status: 'approved',
+  cac_number: 'RC-1234567',
+  tin: '12345678-0001',
+  director_name: 'Callistus Nwosu',
 };

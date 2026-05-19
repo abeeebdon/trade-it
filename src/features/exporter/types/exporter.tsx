@@ -25,7 +25,11 @@ export type OverviewType = {
   by_sector: Record<string, SectorStat>;
 };
 
-export type VerificationStatus = 'pending' | 'approved' | 'rejected';
+export type VerificationStatus =
+  | 'pending'
+  | 'approved'
+  | 'rejected'
+  | 'under_review';
 export type Verification = {
   id: string;
   business_name: string;
@@ -62,7 +66,7 @@ type CreditStatus =
   | 'rejected'
   | 'offered';
 
-export interface CreditApplication {
+export interface CreditApplicationX {
   id: string;
   application_number: string;
   business_name: string;
@@ -307,4 +311,186 @@ export type AddDocForm = {
   expiry_date: string;
   file_url: string;
   original_filename: string;
+};
+
+// Withdrawal Account Types
+export type AccountCurrency = 'USD' | 'NGN';
+export type AccountType = 'checking' | 'savings';
+export type ApprovalStatus = 'approved' | 'pending' | 'rejected';
+
+export type WithdrawalAccount = {
+  id: string;
+  label: string;
+  currency: AccountCurrency;
+  bank_name: string;
+  account_number_masked: string;
+  account_name: string;
+  account_type?: AccountType;
+  routing_number?: string;
+  swift_code?: string;
+  is_default: boolean;
+  approval_status: ApprovalStatus;
+};
+
+export type NgnBank = {
+  code: string;
+  name: string;
+};
+
+export type WithdrawalAccountForm = {
+  label: string;
+  account_name: string;
+  is_default: boolean;
+  bank_code: string;
+  account_number: string;
+  bank_name: string;
+  routing_number: string;
+  account_type: AccountType;
+  swift_code: string;
+};
+
+// Credit Types
+
+export type CreditApplicationStatus =
+  | 'submitted'
+  | 'under_review'
+  | 'approved'
+  | 'rejected'
+  | 'disbursed'
+  | 'offered';
+
+export type CreditSales = {
+  paid_order_count: number;
+  total_volume_usd: number;
+  average_order_usd: number;
+};
+
+export type CreditTimelineEvent = {
+  event: string;
+  at: string;
+};
+
+export type CreditEligibility = {
+  eligible: boolean;
+  max_limit_usd: number;
+  indicative_apr_percent: number | null;
+  indicative_term_months: number | null;
+  risk_score: number;
+  compliance_score: number;
+  reasons_blocked?: string[];
+  sales?: CreditSales;
+};
+
+export type CreditApplication = {
+  id: string;
+  application_number: string;
+  amount_usd: number;
+  offered_amount_usd?: number;
+  term_months: number;
+  offered_term_months?: number;
+  indicative_apr?: number;
+  offered_apr?: number;
+  status: CreditApplicationStatus;
+  created_at: string;
+  risk_score?: number;
+  purpose?: string;
+  decision_note?: string;
+  timeline?: CreditTimelineEvent[];
+  snapshot_sales?: CreditSales;
+};
+
+// Repayment Types
+
+export type InstallmentStatus = 'paid' | 'pending' | 'overdue' | 'upcoming';
+
+export type Installment = {
+  id: string;
+  installment_number: number;
+  due_date: string;
+  principal_usd: number;
+  interest_usd: number;
+  total_due_usd: number;
+  paid_usd: number;
+  status: InstallmentStatus;
+};
+
+export type NextDue = {
+  due_date: string;
+  total_due_usd: number;
+  paid_usd: number;
+};
+
+export type RepaymentApplication = {
+  application: {
+    id: string;
+    application_number: string;
+    offered_amount_usd: number;
+    offered_term_months: number;
+    offered_apr: number;
+  };
+  outstanding_usd: number;
+  next_due: NextDue | null;
+  installments: Installment[];
+};
+
+export type RepaymentData = {
+  total_outstanding_usd: number;
+  applications: RepaymentApplication[];
+};
+
+// Onboarding Types
+
+export type RegistrationType = 'business' | 'individual';
+
+export type Business = {
+  id: string;
+  business_name: string;
+  registration_type: RegistrationType;
+  country: string;
+  sector: string;
+  contact_phone: string;
+  contact_email: string;
+  address: string;
+  anchor_customer_id: string;
+  anchor_ngn_virtual_account?: string;
+  anchor_usd_virtual_account?: string;
+  kyc_status: VerificationStatus;
+  kyb_status: VerificationStatus;
+  cac_number?: string;
+  tin?: string;
+  bvn?: string;
+  nin?: string;
+  director_name?: string;
+};
+
+export type BusinessForm = {
+  business_name: string;
+  registration_type: RegistrationType;
+  country: string;
+  sector: string;
+  role: string;
+  cac_number: string;
+  tin: string;
+  bvn: string;
+  nin: string;
+  ein: string;
+  director_name: string;
+  contact_phone: string;
+  contact_email: string;
+  address: string;
+};
+
+export type KycForm = {
+  bvn: string;
+  nin: string;
+  cac_number: string;
+  tin: string;
+  director_name: string;
+  docs: string[];
+};
+
+export type OnboardingStep = {
+  n: number;
+  label: string;
+  done: boolean;
 };

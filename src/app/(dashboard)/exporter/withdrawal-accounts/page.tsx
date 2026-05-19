@@ -1,5 +1,6 @@
-const page = () => {
-  return <div>page</div>;
+import WithdrawalAccounts from '@/features/exporter/pages/WithdrawalAccounts';
+const Page = () => {
+  return <WithdrawalAccounts />;
 };
 
-export default page;
+export default Page;

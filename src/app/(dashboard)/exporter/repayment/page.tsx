@@ -1,5 +1,7 @@
-const page = () => {
-  return <div>page</div>;
+import Repayment from '@/features/exporter/pages/Repayment';
+
+const Page = () => {
+  return <Repayment />;
 };
 
-export default page;
+export default Page;

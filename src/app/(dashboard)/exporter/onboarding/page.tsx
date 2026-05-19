@@ -1,5 +1,7 @@
-const page = () => {
-  return <div>page</div>;
+import Onboarding from '@/features/exporter/pages/Onboarding';
+
+const Page = () => {
+  return <Onboarding />;
 };
 
-export default page;
+export default Page;

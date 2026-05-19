@@ -1,14 +1,10 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-
 import { toast } from 'sonner';
-
 import { useHeader } from '@/context/HeaderContext';
-
 import BalanceBlock from '../components/BalanceBlock';
 import FinanceHeaderActions from '../components/FinanceHeaderActions';
-
 import WithdrawModal from '../modals/WithdrawModal';
 
 import {
