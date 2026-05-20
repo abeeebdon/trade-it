@@ -1,5 +1,7 @@
-import Landing from '@/features/landingPage/LandingPage';
+import HomePage from '@/features/landingPage/HomePage';
 
-export default function Home() {
-  return <Landing />;
-}
+const page = () => {
+  return <HomePage />;
+};
+
+export default page;

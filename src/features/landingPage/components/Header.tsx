@@ -31,22 +31,32 @@ const Header = () => {
           </div>
         </Link>
         <nav className="hidden md:flex items-center gap-8 text-[13px] text-[#9CA3AF]">
-          <a href="#solutions" className="hover:text-[#F5F5F5]">
-            Solutions
-          </a>
-          <a href="#modules" className="hover:text-[#F5F5F5]">
-            Modules
-          </a>
           <Link
-            href="/shop"
+            href="/"
             className="hover:text-[#F5F5F5]"
-            data-testid="shop-nav-link"
+            data-testid="nav-direct"
           >
-            Shop
+            Shops
           </Link>
-          <a href="#partners" className="hover:text-[#F5F5F5]">
+          {/* <a href="#modules" className="hover:text-[#F5F5F5]">
+            Modules
+          </a> */}
+          <Link href="/?mode=buyer_local" className="hover:text-[#F5F5F5]">
+            Direct from Africa
+          </Link>
+          <Link href="/?mode=riby_dtc" className="hover:text-[#F5F5F5]">
+            US In-Stock
+          </Link>
+          <Link href="/about" className="hover:text-[#F5F5F5]">
+            About
+          </Link>
+          <Link href="/register?role=exporter" className="hover:text-[#F5F5F5]">
+            Become a Seller
+          </Link>
+
+          {/* <a href="#partners" className="hover:text-[#F5F5F5]">
             Partners
-          </a>
+          </a> */}
         </nav>
         <div className="flex items-center gap-3">
           <ThemeToggle />
@@ -59,7 +69,7 @@ const Header = () => {
               Sign in
             </Link>
             <Link
-              href="/register"
+              href="/getstarted"
               data-testid="register-cta"
               className="helix-btn-primary text-sm"
             >

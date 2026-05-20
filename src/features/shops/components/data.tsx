@@ -1,11 +1,56 @@
+import {
+  Coffee,
+  Cuboid,
+  House,
+  PackageIcon,
+  ShoppingBag,
+  Sparkle,
+} from 'lucide-react';
 import { Order, Quote } from '../types/shops';
 
 export const CATS = [
-  { value: '', label: 'All' },
-  { value: 'fashion', label: 'Fashion' },
-  { value: 'agriculture', label: 'Agriculture' },
-  { value: 'staple-foods', label: 'Staple Foods' },
-  { value: 'general-goods', label: 'General' },
+  {
+    value: 'fashion',
+    label: 'Fashion & Textiles',
+    icon: <ShoppingBag color="#f39c12" />,
+    hint: 'Adire · Ankara · Kente · Aso-Oke',
+  },
+  {
+    value: 'agriculture',
+    label: 'Agriculture',
+    icon: <Coffee color="#f39c12" />,
+    hint: 'Cocoa · Sesame · Cashew · Palm Oil',
+  },
+  {
+    value: 'staple-foods',
+    label: 'Staple Foods',
+    icon: <PackageIcon color="#f39c12" />,
+    hint: 'Ofada Rice · Garri · Suya Spice',
+  },
+  {
+    value: 'beauty',
+    label: 'Beauty & Cosmetics',
+    icon: <Sparkle color="#f39c12" />,
+    hint: 'Black Soap · Shea Butter · Marula Oil',
+  },
+  {
+    value: 'home-decor',
+    label: 'Home & Decor',
+    icon: <House color="#f39c12" />,
+    hint: 'Bolga Baskets · Masks · Mudcloth',
+  },
+  {
+    value: 'accessories',
+    label: 'Accessories',
+    icon: <Cuboid color="#f39c12" />,
+    hint: 'Leather · Maasai Beads · Raffia',
+  },
+  {
+    value: 'beverages',
+    label: 'Beverages',
+    icon: <Coffee color="#f39c12" />,
+    hint: 'Hibiscus · Baobab · Rooibos',
+  },
 ];
 
 export type Listing = {

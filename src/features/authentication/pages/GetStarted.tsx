@@ -5,18 +5,14 @@ import { CheckCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { useAppDispatch } from '@/hooks/store/store';
-import { setAuthRole } from '@/store/auth/auth.slice';
 import { authRoleType } from '@/types';
 
 const GetStarted = () => {
   const router = useRouter();
-  const dispatch = useAppDispatch();
   const [selected, setSelected] = useState<authRoleType | null>(null);
   const handleProceed = () => {
     if (selected) {
-      dispatch(setAuthRole(selected));
-      router.push('/register');
+      router.push(`/register/?role=${selected}`);
       return;
     } else {
       return toast.message('You have not selected any type ');

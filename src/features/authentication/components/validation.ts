@@ -19,7 +19,7 @@ export const registerSchema = z.object({
   name: z.string().min(2, 'Name is too short'),
   email: z.string().email('Enter a valid email'),
   password: passwordSchema,
-  role: z.enum(['exporter', 'buyer', 'consumer']),
+  role: z.string(),
 });
 
 export type RegisterFormValues = z.infer<typeof registerSchema>;
