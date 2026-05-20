@@ -25,7 +25,6 @@ export default function Login() {
   });
 
   const onSubmit = async (data: LoginFormValues) => {
-    console.log('LOGIN DATA:', data);
     setLoading(true);
     cookiesStorage.setItem('token', new Date());
     const proceed = () => {
@@ -42,6 +41,10 @@ export default function Login() {
       } else if (data.email === 'buyer@jomptrade.com') {
         dispatch(login({ ...newUser, role: 'buyer' }));
         router.push('/buyer');
+        return;
+      } else if (data.email === 'shopper@jomptrade.com') {
+        dispatch(login({ ...newUser, role: 'consumer' }));
+        router.push('/');
         return;
       } else {
         dispatch(login({ ...newUser, role: 'exporter' }));
@@ -102,7 +105,7 @@ export default function Login() {
 
       <button
         data-testid="google-login-btn"
-        className="w-full flex items-center justify-center gap-3 border border-[#1A7A6E]/40 rounded px-4 py-3 text-sm font-medium hover:bg-[#1A7A6E]/10 transition"
+        className="w-full cursor-pointer flex items-center justify-center gap-3 border border-secondary/40 rounded px-4 py-3 text-sm text-text font-medium hover:bg-secondary/10 transition"
       >
         <Image
           src="/icons/googleicon.png"

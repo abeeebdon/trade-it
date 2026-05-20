@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export function AuthShell() {
   return (
-    <div className="hidden md:flex md:w-1/2 relative overflow-hidden border-r border-[#1A7A6E]/20">
+    <div className="hidden md:flex md:w-1/2 relative overflow-hidden border-r border-secondary/20">
       <div className="absolute inset-0 helix-dot-bg" />
       <div className="relative z-10 flex flex-col justify-between p-10 w-full">
         <Link
@@ -18,10 +18,13 @@ export function AuthShell() {
             alt="Jomp"
             className="w-9 h-9 rounded-full"
           />
-          <div>
-            <h2 className="font-bold tracking-[0.22em] text-sm">JOMP SHOP</h2>
-            <p className="text-[10px] tracking-[0.3em] text-[#1A7A6E] font-mono">
-              EXPORT OS
+          <div className="leading-tight">
+            <div className="font-bold text-text tracking-[0.22em] text-sm">
+              JOMP SHOP
+            </div>
+
+            <p className="text-[10px] tracking-[0.3em] dark:text-[#1A7A6E] text-[#4a2e8a] font-mono">
+              DIRECT · FROM AFRICA
             </p>
           </div>
         </Link>

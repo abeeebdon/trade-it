@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { CheckCircle2, Lock } from 'lucide-react';
 import { Order, Quote } from '../types/shops';
 import { testOrders, testQuotes } from '../components/data';
+import { useAppSelector } from '@/hooks/store/store';
+import { useRouter } from 'next/navigation';
 
 export default function ConsumerOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -47,6 +49,8 @@ export default function ConsumerOrders() {
   //   try { await api.post(`/shop/quotes/${qid}/decline`); toast.success("Quote declined"); load(); }
   //   catch (err) { toast.error(err.response?.data?.detail || "Failed"); }
   // };
+  const router = useRouter();
+  const user = useAppSelector((state) => state.auth.user);
 
   useEffect(() => {
     setTimeout(() => {
@@ -58,6 +62,10 @@ export default function ConsumerOrders() {
       setLoading(false);
     }, 800); // simulate API delay
   }, []);
+  if (!user) {
+    router.push('/login');
+    return <></>;
+  }
   return (
     <main>
       <div className="helix-kicker mb-2">My orders & quotes</div>
