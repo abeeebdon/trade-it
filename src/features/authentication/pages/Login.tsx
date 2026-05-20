@@ -1,5 +1,6 @@
 'use client';
 import { useAppDispatch } from '@/hooks/store/store';
+import jwt from 'jsonwebtoken';
 import { login } from '@/store/auth/auth.slice';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -11,6 +12,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { cookiesStorage } from '@/lib/helpers/cookie';
 import Loader from '@/components/buttons/Loader';
+import { UserRole } from '@/types';
 
 export default function Login() {
   const router = useRouter();
@@ -26,37 +28,39 @@ export default function Login() {
 
   const onSubmit = async (data: LoginFormValues) => {
     setLoading(true);
-    cookiesStorage.setItem('token', new Date());
-    const proceed = () => {
-      setLoading(false);
-      const newUser = {
-        name: 'JompStart',
-        email: data.email,
-        role: 'admin',
-      };
-      if (data.email == 'admin@jomptrade.com') {
-        dispatch(login({ ...newUser, role: 'exporter' }));
-        router.push('/admin');
-        return;
-      } else if (data.email === 'buyer@jomptrade.com') {
-        dispatch(login({ ...newUser, role: 'buyer' }));
-        router.push('/buyer');
-        return;
-      } else if (data.email === 'shopper@jomptrade.com') {
-        dispatch(login({ ...newUser, role: 'consumer' }));
-        router.push('/');
-        return;
-      } else {
-        dispatch(login({ ...newUser, role: 'exporter' }));
-        router.push('/exporter');
-        return;
-      }
-    };
-    setTimeout(() => {
-      proceed();
-    }, 3000);
-  };
 
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await res.json();
+      const newData = { ...result, name: 'JompStart' };
+
+      dispatch(login(newData));
+
+      // redirect based on role returned from server
+      switch (result.role) {
+        case 'admin':
+          router.push('/admin');
+          break;
+        case 'buyer':
+          router.push('/buyer');
+          break;
+        case 'consumer':
+          router.push('/');
+          break;
+        default:
+          router.push('/exporter');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="w-full border max-w-md mx-auto helix-card p-8 fade-up">
       <div className="helix-kicker mb-2">Jomp Trade · Sign in</div>

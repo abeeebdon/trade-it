@@ -1,20 +1,17 @@
 'use client';
 import ThemeToggle from '@/components/buttons/ToggleButton';
-import { ArrowDown, LogOut, Menu, UserCircle } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import { useState } from 'react';
 import SidebarComp from './SidebarComp';
 import { NAV_LINKS } from './data';
-import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
-import { logout } from '@/store/auth/auth.slice';
-import { cookiesStorage } from '@/lib/helpers/cookie';
+import { useAppSelector } from '@/hooks/store/store';
 import UserComponent from './UserComponent';
 const Header = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const user = useAppSelector((state) => state.auth.user);
-  const dispatch = useAppDispatch();
   return (
     <header className="fixed top-0 inset-x-0 z-30  dark:bg-[#0A1628]/85 bg-[#ffffffee] backdrop-blur border-b border-[#1A7A6E]/15">
       <div className="max-w-350 mx-auto px-6 lg:px-10 py-4 flex items-center justify-between">

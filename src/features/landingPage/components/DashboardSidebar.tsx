@@ -9,7 +9,8 @@ import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
 import { NAV } from './data';
 import { useState } from 'react';
 import { cookiesStorage } from '@/lib/helpers/cookie';
-import { setAuthRole } from '@/store/auth/auth.slice';
+import { logout, setAuthRole } from '@/store/auth/auth.slice';
+import { logoutAction } from '@/app/action/auth';
 interface Props {
   setOpenSideBar: (open: boolean) => void;
   openSidebar: boolean;
@@ -23,15 +24,20 @@ const DashboardSidebar = ({ setOpenSideBar, openSidebar }: Props) => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const items = NAV[user?.role ?? 'admin'] || NAV.exporter;
-  const logout = () => {
+
+  const handlelogout = () => {
     setLoading(true);
     setTimeout(() => {
-      cookiesStorage.clearAll();
-      dispatch(setAuthRole(null));
+      logoutFn();
       setLoading(false);
-      router.push('/login');
-    }, 3000);
+    }, 2000);
   };
+  const logoutFn = async () => {
+    await logoutAction();
+    dispatch(logout());
+    router.push('/login');
+  };
+
   return (
     <>
       {openSidebar && (
@@ -106,7 +112,7 @@ const DashboardSidebar = ({ setOpenSideBar, openSidebar }: Props) => {
       </article>
       <LogoutModal
         open={showLogoutModal}
-        onConfirm={logout}
+        onConfirm={handlelogout}
         onClose={() => setShowLogoutModal(false)}
         loading={loading}
       />

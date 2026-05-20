@@ -5,8 +5,11 @@ import { ChevronDown, LogOut, UserCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import LogoutModal from './LogoutModal';
+import { logoutAction } from '@/app/action/auth';
+import { useRouter } from 'next/navigation';
 
 const UserComponent = () => {
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const user = useAppSelector((state) => state.auth.user);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -17,12 +20,13 @@ const UserComponent = () => {
       : user?.role === 'super_admin'
         ? '/admin/credit'
         : user
-          ? '/dashboard'
+          ? `/${user?.role}`
           : null;
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await logoutAction();
     dispatch(logout());
-    cookiesStorage.clearAll();
+    router.push('/login');
   };
   return (
     <div className="relative">
@@ -31,7 +35,8 @@ const UserComponent = () => {
         className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border cursor-pointer border-[#1A7A6E]/30 text-[12px] hover:border-[#C9922A]/50"
         data-testid="user-menu-trigger"
       >
-        <UserCircle size={14} /> {user?.name.split(' ')[0]}{' '}
+        <UserCircle size={14} />{' '}
+        <p className="hidden md:block">{user?.name.split(' ')[0]} </p>
         <ChevronDown size={10} />
       </button>
       {menuOpen && (
@@ -57,7 +62,7 @@ const UserComponent = () => {
           )}
           {(user?.role === 'exporter' || user?.role === 'buyer') && (
             <Link
-              href="/dashboard"
+              href={`/${user?.role}`}
               className="block px-3 py-2 text-[12px] hover:bg-[#1A7A6E]/10 rounded"
             >
               Business workspace
