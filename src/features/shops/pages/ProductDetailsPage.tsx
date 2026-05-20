@@ -100,7 +100,7 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
   //  };
 
   return (
-    <div className="grid lg:grid-cols-5 gap-8">
+    <section className="grid lg:grid-cols-5 gap-8">
       <div className="lg:col-span-3">
         <div className="helix-card overflow-hidden">
           <div className="aspect-4/3 bg-[#0A1628]">
@@ -378,7 +378,7 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
           )}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
