@@ -3,13 +3,15 @@ import { cn } from '@/lib/cn';
 import { X } from 'lucide-react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { NAV_LINKS } from './data';
+import { useAppSelector } from '@/hooks/store/store';
 interface Props {
   setOpenSideBar: (open: boolean) => void;
   openSidebar: boolean;
 }
 const SidebarComp = ({ setOpenSideBar, openSidebar }: Props) => {
+  const user = useAppSelector((state) => state.auth.user);
+
   return (
     <>
       {openSidebar && (
@@ -35,15 +37,22 @@ const SidebarComp = ({ setOpenSideBar, openSidebar }: Props) => {
             <Link
               key={link.href}
               href={link.href}
-              className="hover:text-[#F5F5F5]"
+              onClick={() => setOpenSideBar(false)}
+              className="text-muted hover:text-text"
             >
               {link.label}
             </Link>
           ))}
-          <Link href="/getstarted" className="hover:text-[#F5F5F5]">
+
+          {user?.role === 'consumer' && (
+            <Link href="/shop/orders" className="text-muted hover:text-text">
+              My Orders
+            </Link>
+          )}
+          <Link href="/getstarted" className="text-muted hover:text-text">
             Get Started
           </Link>
-          <Link href="/getstarted" className="hover:text-[#F5F5F5]">
+          <Link href="/login" className="text-muted hover:text-text">
             Signin
           </Link>
         </nav>
