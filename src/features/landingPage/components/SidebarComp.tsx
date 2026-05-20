@@ -20,7 +20,7 @@ const SidebarComp = ({ setOpenSideBar, openSidebar }: Props) => {
       )}
       <article
         className={cn(
-          'fixed inset-y-0 right-0 z-1999 w-2/3 max-w-64 bg-[#39414fe4] h-screen  justify-between p-4 shadow-lg md:hidden transform transition-transform duration-600  ease-in-out',
+          'fixed inset-y-0 right-0 z-1999 w-2/3 max-w-64 bg-white dark:bg-[#39414fe4] h-screen  justify-between p-4 shadow-lg md:hidden transform transition-transform duration-600  ease-in-out',
           !openSidebar ? 'translate-x-full' : 'translate-x-0',
         )}
       >
@@ -30,7 +30,7 @@ const SidebarComp = ({ setOpenSideBar, openSidebar }: Props) => {
             <X className="cursor-pointer" />
           </motion.button>
         </div>
-        <nav className=" flex mt-10 flex-col items-center gap-8 text-[13px] text-[#e4e8f0]">
+        <nav className=" flex mt-10 flex-col items-center gap-8 text-[13px] dark:text-[#e4e8f0]">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
