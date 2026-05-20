@@ -91,6 +91,7 @@ export const NAV: {
   buyer: NavItems[];
   super_admin: NavItems[];
   admin: NavItems[];
+  consumer: NavItems[];
 } = {
   exporter: [
     { to: '/exporter', label: 'Command Center', icon: LayoutDashboard },
@@ -121,6 +122,7 @@ export const NAV: {
     { to: '/buyer/accounts', label: 'Withdrawal Accounts', icon: HandHelping },
     { to: '/buyer/onboarding', label: 'Business Profile', icon: FileText },
   ],
+  consumer: [{ to: '/shop/orders', label: 'My Orders', icon: LayoutDashboard }],
 
   admin: [
     { to: '/admin', label: 'Admin Overview', icon: LayoutDashboard },
