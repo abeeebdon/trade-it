@@ -7,8 +7,11 @@ import { motion } from 'motion/react';
 import { useState } from 'react';
 import SidebarComp from './SidebarComp';
 import { NAV_LINKS } from './data';
+import { useAppSelector } from '@/hooks/store/store';
+import UserComponent from './UserComponent';
 const Header = () => {
   const [showSidebar, setShowSidebar] = useState(false);
+  const user = useAppSelector((state) => state.auth.user);
   return (
     <header className="fixed top-0 inset-x-0 z-30  dark:bg-[#0A1628]/85 bg-[#ffffffee] backdrop-blur border-b border-[#1A7A6E]/15">
       <div className="max-w-350 mx-auto px-6 lg:px-10 py-4 flex items-center justify-between">
@@ -27,9 +30,9 @@ const Header = () => {
           <div className="leading-tight">
             <div className="font-bold tracking-[0.22em] text-sm">JOMP SHOP</div>
 
-            <div className="text-[10px] tracking-[0.3em] dark:text-[#1A7A6E] text-[#4a2e8a] font-mono">
+            <p className="text-[10px] tracking-[0.3em] dark:text-[#1A7A6E] text-[#4a2e8a] font-mono">
               DIRECT · FROM AFRICA
-            </div>
+            </p>
           </div>
         </Link>
         <nav className="hidden md:flex items-center lg:gap-8 gap-2 text-[13px] text-[#9CA3AF]">
@@ -37,7 +40,7 @@ const Header = () => {
             <Link
               key={link.href}
               href={link.href}
-              className="hover:text-[#F5F5F5]"
+              className="text-muted hover:text-text"
             >
               {link.label}
             </Link>
@@ -45,22 +48,27 @@ const Header = () => {
         </nav>
         <div className="flex items-center gap-3">
           <ThemeToggle />
-          <div className="md:flex gap-3 hidden items-center">
-            <Link
-              href="/login"
-              data-testid="login-link"
-              className="text-[13px] hidden lg:inline-block text-[#9CA3AF] hover:text-[#F5F5F5]"
-            >
-              Sign in
-            </Link>
-            <Link
-              href="/getstarted"
-              data-testid="register-cta"
-              className="helix-btn-primary text-sm"
-            >
-              Get Started
-            </Link>
-          </div>
+
+          {user ? (
+            <UserComponent />
+          ) : (
+            <div className="md:flex gap-3 hidden items-center">
+              <Link
+                href="/login"
+                className="text-[13px] hidden lg:inline-block text-muted hover:text-text"
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/getstarted"
+                data-testid="register-cta"
+                className="helix-btn-primary text-sm"
+              >
+                Get Started
+              </Link>
+            </div>
+          )}
+
           <div className="md:hidden items-center flex ">
             <motion.button
               whileHover={{ scale: 1.05 }}

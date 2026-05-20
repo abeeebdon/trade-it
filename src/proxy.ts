@@ -1,39 +1,82 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-const PROTECTED_ROUTES = [
-  '/admin',
-  '/dashboard',
-  '/buyer',
-  '/exporter',
-  '/shop/orders',
-];
+import { jwtVerify } from 'jose';
+
+type UserRole = 'admin' | 'super_admin' | 'buyer' | 'exporter' | 'consumer';
+
 const AUTH_ROUTES = ['/login', '/register'];
-// This function can be marked `async` if using `await` inside
-export function proxy(req: NextRequest) {
+
+const ROLE_ROUTES: Record<string, UserRole[]> = {
+  '/admin': ['admin', 'super_admin'],
+  '/buyer': ['buyer'],
+  '/exporter': ['exporter'],
+  '/shop/orders': ['consumer'],
+};
+const JWT_SECRET = 'jompTrade';
+
+const secret = new TextEncoder().encode(JWT_SECRET);
+
+async function verifyToken(token: string) {
+  try {
+    const { payload } = await jwtVerify(token, secret);
+
+    return payload as {
+      id: string;
+      email: string;
+      role: UserRole;
+    };
+  } catch {
+    return null;
+  }
+}
+
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // 🔐 get token (set this after login)
-  const token = req.cookies.get('token');
+  const token = req.cookies.get('token')?.value;
 
-  const isProtected = PROTECTED_ROUTES.some((route) =>
+  const matchedRoute = Object.keys(ROLE_ROUTES).find((route) =>
     pathname.startsWith(route),
   );
 
+  const isProtected = !!matchedRoute;
+
   const isAuthRoute = AUTH_ROUTES.includes(pathname);
 
+  // No token → protected route
   if (!token && isProtected) {
     return NextResponse.redirect(new URL('/login', req.url));
   }
 
+  // Logged in user → auth page
   if (token && isAuthRoute) {
     return NextResponse.redirect(new URL('/user', req.url));
   }
 
+  // Protected route role check
+  if (token && matchedRoute) {
+    const user = await verifyToken(token);
+
+    // Invalid/expired token
+    if (!user) {
+      const response = NextResponse.redirect(new URL('/login', req.url));
+
+      response.cookies.delete('token');
+
+      return response;
+    }
+
+    const allowedRoles = ROLE_ROUTES[matchedRoute];
+
+    const hasAccess = allowedRoles.includes(user.role);
+
+    if (!hasAccess) {
+      return NextResponse.redirect(new URL('/unauthorized', req.url));
+    }
+  }
+
   return NextResponse.next();
 }
-
-// Alternatively, you can use a default export:
-// export default function proxy(request: NextRequest) { ... }
 
 export const config = {
   matcher: [

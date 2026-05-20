@@ -1,13 +1,14 @@
 'use client';
 import Image from 'next/image';
 import { NAV } from './data';
-import { useAppSelector } from '@/hooks/store/store';
+import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
 import Link from 'next/link';
 import { LogOut } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import LogoutModal from './LogoutModal';
-import { cookiesStorage } from '@/lib/helpers/cookie';
+import { logoutAction } from '@/app/action/auth';
+import { logout } from '@/store/auth/auth.slice';
 
 NAV.super_admin = NAV.admin;
 
@@ -18,13 +19,18 @@ export default function Sidebar() {
   const items = NAV[user?.role ?? 'admin'] || NAV.exporter;
   const [loading, setLoading] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const logout = () => {
+  const dispatch = useAppDispatch();
+  const handlelogout = () => {
     setLoading(true);
     setTimeout(() => {
-      cookiesStorage.clearAll();
+      logoutFn();
       setLoading(false);
-      router.push('/login');
-    }, 3000);
+    }, 2000);
+  };
+  const logoutFn = async () => {
+    await logoutAction();
+    dispatch(logout());
+    router.push('/login');
   };
 
   return (
@@ -95,7 +101,7 @@ export default function Sidebar() {
       </div>
       <LogoutModal
         open={showLogoutModal}
-        onConfirm={logout}
+        onConfirm={handlelogout}
         onClose={() => setShowLogoutModal(false)}
         loading={loading}
       />

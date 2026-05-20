@@ -121,6 +121,12 @@ body {
   border: 1px solid;
 }
 
+.helix-dot-bg {
+  background-image: radial-gradient(var(--helix-dot) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-position: 0 0;
+}
+
 .helix-label {
   font-size: 11px;
   text-transform: uppercase;

@@ -1,6 +1,11 @@
 import { LucideIcon } from 'lucide-react';
-export type UserRole = 'exporter' | 'buyer' | 'super_admin' | 'admin';
-export type authRoleType = 'buyer' | 'exporter' | 'consumer';
+export type UserRole =
+  | 'exporter'
+  | 'buyer'
+  | 'super_admin'
+  | 'admin'
+  | 'consumer';
+export type authRoleType = UserRole;
 export interface UserType {
   name: string;
   email: string;
