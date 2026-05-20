@@ -139,3 +139,26 @@ export const NAV: {
     { to: '/admin/credit', label: 'JompStart Credit', icon: HandCoins },
   ],
 };
+
+export const NAV_LINKS = [
+  {
+    label: 'Shops',
+    href: '/',
+  },
+  {
+    label: 'Direct from Africa',
+    href: '/?mode=buyer_local',
+  },
+  {
+    label: 'US In-Stock',
+    href: '/?mode=riby_dtc',
+  },
+  {
+    label: 'About',
+    href: '/about',
+  },
+  {
+    label: 'Become a Seller',
+    href: '/register?role=exporter',
+  },
+];

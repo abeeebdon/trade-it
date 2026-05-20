@@ -85,12 +85,12 @@ export default function HomePage() {
   return (
     <main className="min-h-screen  bg-white text-[] dark:bg-[#0A1628] w-full max-w-350 mx-auto dark:text-[#F5F5F5]">
       {/* Hero */}
-      <section className="mb-10  relative">
-        <div className="helix-card p-8 md:p-12 relative overflow-hidden">
-          <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-[#C9922A]/10 blur-3xl pointer-events-none" />
-          <div className="helix-kicker mb-3">
+      <section className="mb-10 relative">
+        <div className="helix-card p-6 sm:p-8 md:p-12 relative overflow-hidden">
+          <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-[#C9922A]/15 blur-3xl pointer-events-none" />
+          <p className="helix-kicker mb-3">
             Africa&apos;s marketplace · From maker to your door
-          </div>
+          </p>
           <h1 className="helix-h1 max-w-4xl">
             Shop authentic African goods. Direct from makers.
           </h1>
@@ -103,7 +103,7 @@ export default function HomePage() {
           </p>
           <form
             onSubmit={submitSearch}
-            className="mt-7 flex gap-2 max-w-2xl"
+            className="mt-7 flex sm:flex-row flex-col gap-2 max-w-2xl"
             data-testid="hero-search-form"
           >
             <div className="flex-1 flex items-center h-14 gap-2  helix-input">
@@ -115,7 +115,7 @@ export default function HomePage() {
                 id="hero-search"
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search shea butter, ankara, cocoa beans, jewelry…"
-                className="w-full text-[15px] py-3.5 border-none outline-none"
+                className="w-full text-sm py-1.5 sm:text-[15px] sm:py-3.5 border-none outline-none"
               />
             </div>
             <button
@@ -187,6 +187,7 @@ export default function HomePage() {
         <div className="flex flex-wrap gap-2 mb-8">
           {CATS.map((c) => (
             <button
+              onClick={() => setCategory(c.value)}
               key={c.value}
               className={`px-3 py-1.5 rounded-full text-[11px] font-mono tracking-wider uppercase border ${category === c.value ? 'bg-[#1A7A6E]/20 text-[#1A7A6E] border-[#1A7A6E]' : 'border-[#1A7A6E]/30 text-[#9CA3AF] hover:border-[#1A7A6E]/60'}`}
             >

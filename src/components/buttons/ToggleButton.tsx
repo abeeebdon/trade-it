@@ -1,7 +1,6 @@
 'use client';
 
 import { Moon, Sun } from 'lucide-react';
-import { motion } from 'motion/react';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 
@@ -24,7 +23,7 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
-      className="p-2 bg-border  rounded-full hover:border-primary border border-border-soft cursor-pointer  hover:text-primary "
+      className="p-2 rounded-full hover:border-primary border border-border-soft cursor-pointer  hover:text-primary "
     >
       {isDark ? <Sun size={18} /> : <Moon size={18} />}
     </button>

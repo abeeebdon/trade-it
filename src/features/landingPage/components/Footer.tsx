@@ -146,7 +146,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 mt-8 pt-6 border-t border-[#1A7A6E]/15 text-center">
+      <div className="max-w-350 mx-auto px-6 lg:px-10 mt-8 pt-6 border-t border-[#1A7A6E]/15 text-center">
         <div className="text-[11px] text-[#1A7A6E] font-mono tracking-widest flex flex-wrap justify-center gap-x-3 gap-y-1">
           <span>JOMP SHOP · POWERED BY</span>
           <span>·</span>

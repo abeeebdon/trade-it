@@ -4,6 +4,7 @@ import { X } from 'lucide-react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { NAV_LINKS } from './data';
 interface Props {
   setOpenSideBar: (open: boolean) => void;
   openSidebar: boolean;
@@ -30,22 +31,21 @@ const SidebarComp = ({ setOpenSideBar, openSidebar }: Props) => {
           </motion.button>
         </div>
         <nav className=" flex mt-10 flex-col items-center gap-8 text-[13px] text-[#e4e8f0]">
-          <a href="#solutions" className="hover:text-[#F5F5F5]">
-            Solutions
-          </a>
-          <a href="#modules" className="hover:text-[#F5F5F5]">
-            Modules
-          </a>
-          <Link
-            href="/shop"
-            className="hover:text-[#F5F5F5]"
-            data-testid="shop-nav-link"
-          >
-            Shop
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="hover:text-[#F5F5F5]"
+            >
+              {link.label}
+            </Link>
+          ))}
+          <Link href="/getstarted" className="hover:text-[#F5F5F5]">
+            Get Started
           </Link>
-          <a href="#partners" className="hover:text-[#F5F5F5]">
-            Partners
-          </a>
+          <Link href="/getstarted" className="hover:text-[#F5F5F5]">
+            Signin
+          </Link>
         </nav>
       </article>
     </>
