@@ -14,8 +14,6 @@ const RedirectUser = () => {
     return router.push('/admin');
   } else if (user.role === 'exporter') {
     return router.push('/exporter');
-  } else if (user.role === 'shopper') {
-    return router.push('/exporter');
   } else {
     toast.error('You are logged in');
     router.push('/');
