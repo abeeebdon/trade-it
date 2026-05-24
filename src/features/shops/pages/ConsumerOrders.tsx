@@ -160,7 +160,7 @@ export default function ConsumerOrders() {
       ) : orders.length === 0 ? (
         <div className="helix-card p-12 text-center text-[#9CA3AF]">
           No orders yet.{' '}
-          <Link href="/shop" className="text-[#C9922A]">
+          <Link href="/" className="text-[#C9922A]">
             Start shopping →
           </Link>
         </div>

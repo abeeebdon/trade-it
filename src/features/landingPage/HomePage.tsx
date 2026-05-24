@@ -5,6 +5,7 @@ import { CATS, goodslistings, Listing } from '../shops/components/data';
 import { Search, Store, Truck } from 'lucide-react';
 import { ListingCardSkeleton } from '../shops/components/ListingCardSkeleton';
 import { useRouter, useSearchParams } from 'next/navigation';
+import HomePageFIlter from './components/HomePageFIlter';
 
 export default function HomePage() {
   const [items, setItems] = useState<Listing[]>([]);
@@ -130,32 +131,13 @@ export default function HomePage() {
       </section>
 
       {/* Mode filters */}
-      <article className="flex flex-wrap gap-3 mb-8 items-center">
-        <button
-          onClick={clearCategory}
-          className={`cursor-pointer px-4 py-2 rounded-full text-[12px] border ${!category || category == '' ? 'bg-[#C9922A] text-[#0A1628] border-[#C9922A]' : 'border-[#1A7A6E]/40 text-[#9CA3AF] hover:border-[#1A7A6E]'}`}
-        >
-          All Categories
-        </button>
-        <button
-          onClick={clearMode}
-          className={`px-4 py-2 rounded-full text-[12px] border ${!mode || mode == '' ? 'bg-[#C9922A] text-[#0A1628] border-[#C9922A]' : 'border-[#1A7A6E]/40 text-[#9CA3AF] hover:border-[#1A7A6E]'}`}
-        >
-          All sources
-        </button>
-        <button
-          onClick={() => setMode('riby_dtc')}
-          className={`px-4 py-2 rounded-full text-[12px] border inline-flex items-center gap-2 ${mode === 'riby_dtc' ? 'bg-[#C9922A] text-[#0A1628] border-[#C9922A]' : 'border-[#1A7A6E]/40 text-[#9CA3AF] hover:border-[#1A7A6E]'}`}
-        >
-          <Store size={14} /> US In-Stock · 48hr
-        </button>
-        <button
-          onClick={() => setMode('buyer_local')}
-          className={`px-4 py-2 rounded-full text-[12px] border inline-flex items-center gap-2 ${mode === 'buyer_local' ? 'bg-[#C9922A] text-[#0A1628] border-[#C9922A]' : 'border-[#1A7A6E]/40 text-[#9CA3AF] hover:border-[#1A7A6E]'}`}
-        >
-          <Truck size={14} /> Direct from Africa · Riby of Record
-        </button>
-      </article>
+      <HomePageFIlter
+        category={category}
+        clearMode={clearMode}
+        mode={mode}
+        setMode={setMode}
+        clearCategory={clearCategory}
+      />
 
       {/* Category chips */}
       {showCategoryGrid && (

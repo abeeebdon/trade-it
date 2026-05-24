@@ -494,3 +494,10 @@ export type OnboardingStep = {
   label: string;
   done: boolean;
 };
+export interface BalanceCardProps {
+  label: string;
+  value: string;
+  sub: string;
+  va?: { account_number?: string; bank?: string };
+  accent?: boolean;
+}
