@@ -14,6 +14,7 @@ import {
   ShieldAlert,
   ArrowRight,
 } from 'lucide-react';
+import BalanceCard from '../components/BalanceCard';
 
 // ─── Mock Data ──────
 
@@ -186,7 +187,7 @@ export default function Dashboard() {
       )}
 
       {/* BALANCES */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <BalanceCard
           label="USD Balance"
           value={formatUSD(data?.usd_balance ?? 0)}
@@ -204,7 +205,7 @@ export default function Dashboard() {
           <div className="flex justify-between items-start">
             <div>
               <div className="helix-label">USD / NGN Rate</div>
-              <div className="font-mono text-3xl font-bold text-[#C9922A] mt-2 tracking-tight">
+              <div className="font-mono text-3xl font-bold text-primary mt-2 tracking-tight">
                 ₦{fx ? Number(fx.usd_to_ngn).toLocaleString() : '—'}
               </div>
             </div>
@@ -225,7 +226,7 @@ export default function Dashboard() {
             </Link>
           )}
         </div>
-      </div>
+      </section>
 
       {/* Row 2: orders + compliance */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
@@ -295,11 +296,11 @@ export default function Dashboard() {
           <div className="flex items-start justify-between">
             <div>
               <div className="helix-label">Compliance Score</div>
-              <div className="font-mono text-4xl font-bold text-[#F5F5F5] mt-2">
+              <div className="font-mono text-4xl font-bold text-muted mt-2">
                 {complianceScore
                   ? `${complianceScore.score}`
                   : (biz?.compliance_score ?? '—')}
-                <span className="text-[#9CA3AF] text-xl">/100</span>
+                <span className="text-muted text-xl">/100</span>
               </div>
             </div>
             <StatusPill
@@ -319,7 +320,7 @@ export default function Dashboard() {
                 {complianceScore!.missing.slice(0, 4).map((m) => (
                   <li
                     key={m}
-                    className="text-[13px] flex items-center gap-2 text-[#F5F5F5]"
+                    className="text-[13px] flex items-center gap-2 text-text"
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-[#C9922A]" />{' '}
                     {m}
@@ -338,14 +339,14 @@ export default function Dashboard() {
       </div>
 
       {/* Recent transactions */}
-      <div className="helix-card overflow-hidden">
+      <section className="helix-card overflow-hidden">
         <div className="flex items-center justify-between px-5 py-4 border-b border-[#1A7A6E]/20">
           <div>
             <div className="helix-label">Recent Transactions</div>
             <div className="helix-h3 mt-1">Ledger · last 10</div>
           </div>
           <Link
-            href="/finance"
+            href="/exporter/finance"
             className="text-[12px] text-[#C9922A] hover:underline"
           >
             View full ledger
@@ -407,57 +408,12 @@ export default function Dashboard() {
             No transactions yet.
           </div>
         )}
-      </div>
+      </section>
     </>
   );
 }
 
 // ─── Sub-components ─────────────────────────────────────────────────────────────
-
-interface BalanceCardProps {
-  label: string;
-  value: string;
-  sub: string;
-  va?: { account_number?: string; bank?: string };
-  accent?: boolean;
-}
-
-function BalanceCard({ label, value, sub, va, accent }: BalanceCardProps) {
-  return (
-    <div
-      className={`helix-card p-5 ${accent ? 'relative overflow-hidden' : ''}`}
-    >
-      {accent && (
-        <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-[#C9922A]/10 blur-2xl pointer-events-none" />
-      )}
-      <div className="flex justify-between items-start relative">
-        <div>
-          <div className="helix-label">{label}</div>
-          <div
-            className="font-mono text-4xl font-bold mt-2 tracking-tight text-[#F5F5F5]"
-            data-testid={`balance-${label.split(' ')[0].toLowerCase()}`}
-          >
-            {value}
-          </div>
-          <div className="text-[11px] text-[#9CA3AF] mt-1 font-mono uppercase tracking-wider">
-            {sub}
-          </div>
-        </div>
-      </div>
-      {va?.account_number && (
-        <div className="mt-5 pt-4 border-t border-[#1A7A6E]/15">
-          <div className="text-[10px] uppercase tracking-widest text-[#9CA3AF] mb-1">
-            Virtual Account
-          </div>
-          <div className="font-mono text-[13px] text-[#C9922A]">
-            {va.account_number}
-          </div>
-          <div className="text-[11px] text-[#9CA3AF]">{va.bank}</div>
-        </div>
-      )}
-    </div>
-  );
-}
 
 function Skeleton() {
   return (

@@ -205,13 +205,15 @@ export default function Finance() {
             filteredTransactions.map((tx) => (
               <div
                 key={tx.id}
-                className="rounded-2xl border border-[#1A7A6E]/15 p-4 bg-[#0F172A]"
+                className="rounded-2xl border border-secondary/15 p-4 bg-bg"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-sm font-medium">{tx.description}</p>
+                    <p className="text-sm text-text font-medium">
+                      {tx.description}
+                    </p>
 
-                    <p className="text-xs text-[#9CA3AF] mt-1 font-mono">
+                    <p className="text-xs text-muted mt-1 font-mono">
                       {formatDateTime(tx.timestamp)}
                     </p>
                   </div>

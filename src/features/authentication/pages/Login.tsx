@@ -1,6 +1,5 @@
 'use client';
 import { useAppDispatch } from '@/hooks/store/store';
-import jwt from 'jsonwebtoken';
 import { login } from '@/store/auth/auth.slice';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -10,9 +9,7 @@ import InputField from '@/components/form/InputFIeld';
 import { LoginFormValues, loginSchema } from '../components/validation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { cookiesStorage } from '@/lib/helpers/cookie';
 import Loader from '@/components/buttons/Loader';
-import { UserRole } from '@/types';
 
 export default function Login() {
   const router = useRouter();

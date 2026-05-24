@@ -11,7 +11,9 @@ import { useAppSelector } from '@/hooks/store/store';
 import UserComponent from './UserComponent';
 const Header = () => {
   const [showSidebar, setShowSidebar] = useState(false);
+
   const user = useAppSelector((state) => state.auth.user);
+
   return (
     <header className="fixed top-0 inset-x-0 z-30  dark:bg-[#0A1628]/85 bg-[#ffffffee] backdrop-blur border-b border-[#1A7A6E]/15">
       <div className="max-w-350 mx-auto px-6 lg:px-10 py-4 flex items-center justify-between">
@@ -45,6 +47,11 @@ const Header = () => {
               {link.label}
             </Link>
           ))}
+          {user?.role === 'consumer' && (
+            <Link href="/shop/orders" className="text-muted hover:text-text">
+              My Orders
+            </Link>
+          )}
         </nav>
         <div className="flex items-center gap-3">
           <ThemeToggle />

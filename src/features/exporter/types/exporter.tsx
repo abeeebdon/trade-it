@@ -1,4 +1,5 @@
 import { Icon } from '@phosphor-icons/react';
+import { AccountDetails } from './finance';
 
 export interface StatProps {
   label: string;
@@ -494,3 +495,10 @@ export type OnboardingStep = {
   label: string;
   done: boolean;
 };
+export interface BalanceCardProps {
+  label: string;
+  value: string;
+  sub: string;
+  va?: AccountDetails;
+  accent?: boolean;
+}

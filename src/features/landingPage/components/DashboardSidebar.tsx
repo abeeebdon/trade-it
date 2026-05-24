@@ -8,8 +8,7 @@ import LogoutModal from './LogoutModal';
 import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
 import { NAV } from './data';
 import { useState } from 'react';
-import { cookiesStorage } from '@/lib/helpers/cookie';
-import { logout, setAuthRole } from '@/store/auth/auth.slice';
+import { logout } from '@/store/auth/auth.slice';
 import { logoutAction } from '@/app/action/auth';
 interface Props {
   setOpenSideBar: (open: boolean) => void;
@@ -48,7 +47,7 @@ const DashboardSidebar = ({ setOpenSideBar, openSidebar }: Props) => {
       )}
       <article
         className={cn(
-          'fixed inset-y-0 right-0 z-50 w-2/3 max-w-64 bg-[#39414fe4] h-screen  justify-between p-4 flex flex-col  shadow-lg sm:hidden transform transition-transform duration-600  ease-in-out ',
+          'fixed inset-y-0 right-0 z-50 w-2/3 max-w-64 bg-bg h-screen  justify-between p-4 flex flex-col  shadow-lg sm:hidden transform transition-transform duration-600  ease-in-out ',
           !openSidebar ? 'translate-x-full' : 'translate-x-0',
         )}
       >
@@ -56,7 +55,7 @@ const DashboardSidebar = ({ setOpenSideBar, openSidebar }: Props) => {
           <div className="flex items-center justify-between">
             <ThemeToggle />
             <motion.button onClick={() => setOpenSideBar(false)}>
-              <X className="cursor-pointer" />
+              <X className="cursor-pointer text-text hover:text-text/20" />
             </motion.button>
           </div>
           <nav className="flex-1  py-4 overflow-y-auto">
@@ -67,11 +66,12 @@ const DashboardSidebar = ({ setOpenSideBar, openSidebar }: Props) => {
                 <Link
                   key={item.to}
                   href={item.to}
+                  onClick={() => setOpenSideBar(false)}
                   data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
                   className={`group flex items-center gap-3 px-4 lg:px-6 py-3 border-l-2 transition-colors ${
                     isActive
                       ? 'border-[#C9922A] bg-[#C9922A]/6 text-[#C9922A]'
-                      : 'border-transparent text-[#9CA3AF] hover:text-[#F5F5F5] hover:bg-[#1A7A6E]/8'
+                      : 'border-transparent text-muted hover:text-text hover:bg-[#1A7A6E]/8'
                   }`}
                 >
                   {<Icon size={18} />}
@@ -102,7 +102,7 @@ const DashboardSidebar = ({ setOpenSideBar, openSidebar }: Props) => {
             <button
               data-testid="logout-btn"
               onClick={() => setShowLogoutModal(true)}
-              className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded text-[#9CA3AF] hover:text-[#F5F5F5] hover:bg-[#1A7A6E]/10 text-[12px] transition-colors"
+              className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded text-muted hover:text-text hover:bg-[#1A7A6E]/10 text-[12px] transition-colors"
             >
               <LogOut size={16} />
               <span className="">Sign out</span>

@@ -135,7 +135,7 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
               </span>
             </div>
             <h1 className="helix-h2">{l.title}</h1>
-            <p className="text-[15px] text-[#F5F5F5] mt-4 leading-relaxed">
+            <p className="text-[15px] text-text mt-4 leading-relaxed">
               {l.description}
             </p>
 
@@ -150,7 +150,7 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
               </div>
               <div>
                 <p className="helix-label">Seller</p>
-                <p className="mt-1"></p>
+                <p className="mt-1">Jompshop</p>
               </div>
               {l.delivery_partner_of_record && (
                 <div>
@@ -192,7 +192,7 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
                 data-testid="mode-prepay"
                 className={`p-3 rounded border text-left text-[12px] ${mode === 'prepay' ? 'border-[#C9922A] bg-[#C9922A]/8' : 'border-[#1A7A6E]/30 hover:border-[#1A7A6E]'}`}
               >
-                <div className="font-semibold text-[#F5F5F5] inline-flex items-center gap-1">
+                <div className="font-semibold text-text inline-flex items-center gap-1">
                   <Lock size={12} /> Order & Prepay
                 </div>
                 <div className="text-[#9CA3AF] mt-0.5">
@@ -204,7 +204,7 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
                 data-testid="mode-quote"
                 className={`p-3 rounded border text-left text-[12px] ${mode === 'quote' ? 'border-[#C9922A] bg-[#C9922A]/8' : 'border-[#1A7A6E]/30 hover:border-[#1A7A6E]'}`}
               >
-                <div className="font-semibold text-[#F5F5F5] inline-flex items-center gap-1">
+                <div className="font-semibold text-text inline-flex items-center gap-1">
                   <MessageCircle size={12} /> Request Quote
                 </div>
                 <div className="text-[#9CA3AF] mt-0.5">
@@ -332,7 +332,7 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
         <div className="helix-card p-5">
           <div className="helix-label">How this ships</div>
           {isDtc ? (
-            <div className="mt-3 space-y-2 text-[13px] text-[#F5F5F5]">
+            <div className="mt-3 space-y-2 text-[13px] text-text">
               <div className="flex items-start gap-2">
                 <Truck size={16} className="text-[#C9922A] mt-0.5" />
                 {/* <div>
