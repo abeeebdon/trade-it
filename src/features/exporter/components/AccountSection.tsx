@@ -29,9 +29,9 @@ export default function AccountSection({
     <div className="helix-card p-5 mb-5" data-testid={testid}>
       {/* Section header */}
       <div className="flex items-center gap-2 mb-4">
-        <Icon size={16} className="text-[#C9922A]" />
+        <Icon size={16} className="text-primary" />
         <div className="helix-h3">{title}</div>
-        <span className="ml-auto text-[11px] font-mono uppercase tracking-wider text-[#9CA3AF]">
+        <span className="ml-auto text-[11px] font-mono uppercase tracking-wider text-muted">
           {items.length}
         </span>
       </div>
@@ -54,11 +54,11 @@ export default function AccountSection({
             <div
               key={a.id}
               data-testid={`acc-${a.id}`}
-              className="border border-[#1A7A6E]/25 rounded p-4 flex items-start justify-between gap-3 bg-[#0A1628]/40"
+              className="border border-[#1A7A6E]/25 rounded p-4 flex items-start justify-between gap-3 bg-bg/40"
             >
               {/* Account info */}
               <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex text-text items-center gap-2 flex-wrap">
                   <div className="font-semibold text-[14px] truncate">
                     {a.label}
                   </div>
@@ -78,15 +78,15 @@ export default function AccountSection({
                     </span>
                   )}
                 </div>
-                <div className="text-[12px] text-[#9CA3AF] mt-1 truncate">
+                <div className="text-[12px] text-muted mt-1 truncate">
                   {a.bank_name}
                 </div>
-                <div className="text-[12px] font-mono mt-1">
+                <div className="text-[12px] text-muted font-mono mt-1">
                   {a.account_number_masked}
                   {a.account_type ? ` · ${a.account_type}` : ''}
                   {a.routing_number ? ` · RTN ${a.routing_number}` : ''}
                 </div>
-                <div className="text-[11px] text-[#9CA3AF] mt-1">
+                <div className="text-[11px] text-muted mt-1">
                   Holder: {a.account_name}
                 </div>
               </div>

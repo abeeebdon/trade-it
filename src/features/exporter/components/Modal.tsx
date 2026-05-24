@@ -26,10 +26,13 @@ export default function Modal({
   }, []);
 
   return (
-    <div className="fixed inset-0 z-[9999]" data-testid={testid}>
+    <div
+      className="fixed inset-0  z-9999 w-full h-full left-0 right-0 top-0 bottom-0"
+      data-testid={testid}
+    >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        className="absolute inset-0  bg-black/20 backdrop-blur-sm"
         onClick={onClose}
       />
 
@@ -37,18 +40,7 @@ export default function Modal({
       <div className="absolute inset-0 overflow-y-auto">
         <div className="min-h-full flex items-start justify-center p-4 sm:p-6">
           <div
-            className="
-              relative
-              w-full
-              max-w-2xl
-              rounded-2xl
-              border
-              border-[#1A7A6E]/20
-              bg-[#0F172A]
-              shadow-2xl
-              mt-10
-              mb-10
-            "
+            className="relative w-full max-w-2xl rounded-2xl border border-secondary/20 bg-bg shadow-2xl mt-10 mb-10 "
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
@@ -57,7 +49,7 @@ export default function Modal({
 
               <button
                 onClick={onClose}
-                className="text-[#9CA3AF] hover:text-white transition-colors"
+                className="text-muted hover:text-text transition-colors"
               >
                 <X size={18} />
               </button>

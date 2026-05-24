@@ -1,4 +1,5 @@
 import { Icon } from '@phosphor-icons/react';
+import { AccountDetails } from './finance';
 
 export interface StatProps {
   label: string;
@@ -498,6 +499,6 @@ export interface BalanceCardProps {
   label: string;
   value: string;
   sub: string;
-  va?: { account_number?: string; bank?: string };
+  va?: AccountDetails;
   accent?: boolean;
 }

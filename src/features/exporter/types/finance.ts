@@ -1,17 +1,14 @@
+export interface AccountDetails {
+  bank: string;
+  account_number: string;
+}
 export interface FinanceDashboard {
   usd_balance: number;
   ngn_balance: number;
 
   virtual_accounts?: {
-    usd?: {
-      bank: string;
-      account_number: string;
-    };
-
-    ngn?: {
-      bank: string;
-      account_number: string;
-    };
+    usd?: AccountDetails;
+    ngn?: AccountDetails;
   };
 }
 
@@ -33,4 +30,20 @@ export interface WithdrawalAccount {
   bank_name: string;
   account_number_masked: string;
   is_default: boolean;
+}
+export interface BalanceBlockProps {
+  label: string;
+  balance: number;
+  currency: 'USD' | 'NGN';
+  count: number;
+  accent?: boolean;
+  va?: AccountDetails;
+  onCopy: (value: string) => void;
+}
+
+export interface WithdrawalProps {
+  currency: 'USD' | 'NGN';
+  accounts: WithdrawalAccount[];
+  balance: number;
+  onClose: () => void;
 }

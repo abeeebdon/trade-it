@@ -23,7 +23,7 @@ export default function BalanceCard({
           >
             {value}
           </div>
-          <div className="text-[11px] text-[#9CA3AF] mt-1 font-mono uppercase tracking-wider">
+          <div className="text-[11px] text-muted mt-1 font-mono uppercase tracking-wider">
             {sub}
           </div>
         </div>

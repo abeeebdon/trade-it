@@ -187,7 +187,7 @@ export default function Dashboard() {
       )}
 
       {/* BALANCES */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <BalanceCard
           label="USD Balance"
           value={formatUSD(data?.usd_balance ?? 0)}
@@ -226,7 +226,7 @@ export default function Dashboard() {
             </Link>
           )}
         </div>
-      </div>
+      </section>
 
       {/* Row 2: orders + compliance */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
@@ -339,14 +339,14 @@ export default function Dashboard() {
       </div>
 
       {/* Recent transactions */}
-      <div className="helix-card overflow-hidden">
+      <section className="helix-card overflow-hidden">
         <div className="flex items-center justify-between px-5 py-4 border-b border-[#1A7A6E]/20">
           <div>
             <div className="helix-label">Recent Transactions</div>
             <div className="helix-h3 mt-1">Ledger · last 10</div>
           </div>
           <Link
-            href="/finance"
+            href="/exporter/finance"
             className="text-[12px] text-[#C9922A] hover:underline"
           >
             View full ledger
@@ -408,7 +408,7 @@ export default function Dashboard() {
             No transactions yet.
           </div>
         )}
-      </div>
+      </section>
     </>
   );
 }

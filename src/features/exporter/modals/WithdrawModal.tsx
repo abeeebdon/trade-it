@@ -1,34 +1,19 @@
 'use client';
-
 import { useState } from 'react';
 import Link from 'next/link';
-
 import Modal from '../components/Modal';
-
 import { formatNGN, formatUSD } from '@/lib/func';
-
 import { toast } from 'sonner';
-
 import { Plus } from 'lucide-react';
-
-import { WithdrawalAccount } from '../types/finance';
-
-interface Props {
-  currency: 'USD' | 'NGN';
-
-  accounts: WithdrawalAccount[];
-
-  balance: number;
-
-  onClose: () => void;
-}
+import { WithdrawalProps } from '../types/finance';
+import PressableBtn from '@/components/buttons/PressableBtn';
 
 export default function WithdrawModal({
   currency,
   accounts,
   balance,
   onClose,
-}: Props) {
+}: WithdrawalProps) {
   const [busy, setBusy] = useState(false);
 
   const [amount, setAmount] = useState('');
@@ -65,7 +50,7 @@ export default function WithdrawModal({
 
         {accounts.length === 0 ? (
           <div className="border border-dashed border-[#C9922A]/30 rounded-xl p-6 text-center">
-            <p className="text-sm text-[#9CA3AF]">No approved accounts yet</p>
+            <p className="text-sm text-muted">No approved accounts yet</p>
 
             <Link
               href="/finance/accounts"
@@ -102,13 +87,11 @@ export default function WithdrawModal({
                 Cancel
               </button>
 
-              <button
-                onClick={submit}
-                disabled={busy}
-                className="helix-btn-primary flex-1"
-              >
-                {busy ? 'Processing...' : 'Withdraw'}
-              </button>
+              <PressableBtn
+                title={busy ? 'Processing...' : 'Withdraw'}
+                handleClick={submit}
+                className="helix-btn-primary text-center flex-1 justify-center"
+              />
             </div>
           </>
         )}
