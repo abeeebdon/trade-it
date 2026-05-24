@@ -67,7 +67,7 @@ const DashboardHeader = () => {
               whileTap={{ scale: 0.85 }}
               onClick={() => setShowSidebar(true)}
             >
-              <Menu className="cursor-pointer" />
+              <Menu className="cursor-pointer text-muted" />
             </motion.button>
           </div>
         </div>

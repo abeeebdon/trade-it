@@ -44,10 +44,10 @@ export default function Sidebar() {
           className="w-8 h-8 rounded-full"
         />
         <div className="hidden lg:flex flex-col leading-tight">
-          <span className="font-bold tracking-[0.2em] text-[13px]">
+          <span className="font-bold text-secondary tracking-[0.2em] text-[13px]">
             JOMP SHOP
           </span>
-          <span className="text-[9px] tracking-[0.3em] text-[#1A7A6E] font-mono">
+          <span className="text-[9px] tracking-[0.3em] dark:text-[#1A7A6E] text-[#4a2e8a]  font-mono">
             EXPORT OS v1.1
           </span>
         </div>
