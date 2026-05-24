@@ -1,5 +1,6 @@
 import { Icon } from '@phosphor-icons/react';
 import { AccountDetails } from './finance';
+import { LucideIcon } from 'lucide-react';
 
 export interface StatProps {
   label: string;
@@ -501,4 +502,18 @@ export interface BalanceCardProps {
   sub: string;
   va?: AccountDetails;
   accent?: boolean;
+}
+export interface AccountSectionProps {
+  title: string;
+  icon: LucideIcon;
+  items: WithdrawalAccount[];
+  loading: boolean;
+  empty: string;
+  onDefault: (id: string) => void;
+  onRemove: (id: string) => void;
+}
+export interface AccountSectionCardProps {
+  onDefault: (id: string) => void;
+  onRemove: (id: string) => void;
+  a: WithdrawalAccount;
 }

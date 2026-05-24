@@ -34,7 +34,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="fixed left-0 top-0 h-screen hidden sm:flex w-16 lg:w-60 bg-bg border-r border-[#1A7A6E]/20  flex-col z-40">
+    <aside className="fixed left-0 top-0 h-screen hidden sm:flex w-16 lg:w-60 bg-bg border-r border-secondary/20  flex-col z-40">
       <div className="px-4 lg:px-6 py-5 border-b border-[#1A7A6E]/15 flex items-center gap-2">
         <Image
           src="/jomp-icon.png"
