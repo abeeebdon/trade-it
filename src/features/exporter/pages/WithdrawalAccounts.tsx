@@ -24,7 +24,7 @@ export default function WithdrawalAccounts() {
       setAccounts(mockWithdrawalAccounts);
       setBanks(mockNgnBanks);
       setLoading(false);
-    }, 800);
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -66,10 +66,6 @@ export default function WithdrawalAccounts() {
 
   // Remove / deactivate
   const remove = (id: string) => {
-    const confirmed = window.confirm(
-      'Deactivate this account? Existing withdrawals to it stay in your history.',
-    );
-    if (!confirmed) return;
     setAccounts((prev) => prev.filter((a) => a.id !== id));
     toast.success('Account deactivated');
   };
@@ -94,9 +90,9 @@ export default function WithdrawalAccounts() {
   const ngnAccounts = accounts.filter((a) => a.currency === 'NGN');
 
   return (
-    <>
+    <main className="overflow-auto w-full h-full">
       {/* Intro text */}
-      <p className="text-[13px] text-[#9CA3AF] mb-6 max-w-2xl leading-relaxed">
+      <p className="text-[13px] text-muted mb-6 max-w-2xl leading-relaxed">
         Save your destination bank accounts once. Add multiple in NGN and USD,
         mark a default per currency, and then withdraw to them with a single
         click — no need to retype routing numbers each time.
@@ -109,7 +105,6 @@ export default function WithdrawalAccounts() {
         items={usdAccounts}
         loading={loading}
         empty="No USD accounts. Add one to receive USD payouts."
-        testid="usd-accounts"
         onDefault={setDefault}
         onRemove={remove}
       />
@@ -121,7 +116,6 @@ export default function WithdrawalAccounts() {
         items={ngnAccounts}
         loading={loading}
         empty="No NGN accounts. Add one to withdraw via NIP."
-        testid="ngn-accounts"
         onDefault={setDefault}
         onRemove={remove}
       />
@@ -147,6 +141,6 @@ export default function WithdrawalAccounts() {
           }}
         />
       )}
-    </>
+    </main>
   );
 }

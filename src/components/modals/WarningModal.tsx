@@ -8,39 +8,41 @@ type LogoutModalProps = {
   onClose: () => void;
   onConfirm: () => void;
   loading?: boolean;
-  label?: string;
-  btnText?: string;
-  text?: string;
+  label: string;
+  btnText: string;
+  text: string;
 };
 
-export default function LogoutModal({
+const WarningModal = ({
   open,
   onClose,
   onConfirm,
   loading = false,
-  btnText = 'Logout',
-  label = 'Confirm Logout',
-  text = 'Are you sure you want to log out of your account? You’ll need to sign  in again to continue.',
-}: LogoutModalProps) {
+  btnText,
+  label,
+  text,
+}: LogoutModalProps) => {
   if (!open) return null;
 
   return (
-    <div className="fixed w-full h-screen inset-0 z-50 flex items-center justify-center">
+    <section className="fixed  inset-0 z-50 flex items-center justify-center">
       <div
         onClick={onClose}
-        className="absolute  inset-0 bg-black/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
       />
 
-      <div
-        className=" w-[90%] max-w-md border helix-card z-9999  p-6 animate-fadeUp"
-        role="dialog"
+      <article
+        className=" w-[90%] max-w-md border border-border rounded bg-bg z-9999  p-6 "
+        role="dialog "
       >
-        <button
-          onClick={onClose}
-          className=" text-[#9CA3AF] hover:text-[#F5F5F5]"
-        >
-          <X size={18} />
-        </button>
+        <div className="flex justify-end my-2">
+          <button
+            onClick={onClose}
+            className=" text-muted hover:text-text cursor-pointer"
+          >
+            <X size={18} />
+          </button>
+        </div>
 
         <h2 className="helix-h2">{label}</h2>
 
@@ -64,7 +66,8 @@ export default function LogoutModal({
             {loading ? <Loader /> : btnText}
           </button>
         </div>
-      </div>
-    </div>
+      </article>
+    </section>
   );
-}
+};
+export default WarningModal;
