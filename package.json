@@ -25,6 +25,7 @@
     "@reduxjs/toolkit": "^2.11.2",
     "@tanstack/react-query": "^5.100.6",
     "aos": "^2.3.4",
+    "axios": "^1.16.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "jose": "^6.2.3",
