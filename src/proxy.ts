@@ -86,6 +86,7 @@ export const config = {
     '/dashboard/:path*',
     '/shop/orders/:path*',
     '/login',
+    '/user',
     '/register',
   ],
 };

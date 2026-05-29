@@ -3,13 +3,14 @@ import { useAppDispatch } from '@/hooks/store/store';
 import { login } from '@/store/auth/auth.slice';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import InputField from '@/components/form/InputFIeld';
 import { LoginFormValues, loginSchema } from '../components/validation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Loader from '@/components/buttons/Loader';
+import api from '@/configs/api-config';
 
 export default function Login() {
   const router = useRouter();
@@ -36,31 +37,40 @@ export default function Login() {
       });
 
       const result = await res.json();
+      console.log(result);
       const newData = { ...result, name: 'JompStart' };
 
       dispatch(login(newData));
 
-      // redirect based on role returned from server
-      switch (result.role) {
-        case 'admin':
-          router.push('/admin');
-          break;
-        case 'buyer':
-          router.push('/buyer');
-          break;
-        case 'consumer':
-          router.push('/');
-          break;
-        default:
-          router.push('/exporter');
-      }
+      // // redirect based on role returned from server
+      // switch (result.role) {
+      //   case 'admin':
+      //     router.push('/admin');
+      //     break;
+      //   case 'buyer':
+      //     router.push('/buyer');
+      //     break;
+      //   case 'consumer':
+      //     router.push('/');
+      //     break;
+      //   default:
+      //     router.push('/exporter');
+      // }
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await api.get('/authentication');
+      console.log(res);
+    };
+    fetchData();
+  }, []);
   return (
     <div className="w-full border max-w-md mx-auto helix-card p-8 fade-up">
-      <div className="helix-kicker mb-2">Jomp Trade · Sign in</div>
+      <h1 className="helix-kicker mb-2">Jomp Trade · Sign in</h1>
       <h1 className="helix-h2">Access your command center</h1>
       <p className="text-[#9CA3AF] text-sm mt-2">
         Exporter, buyer, consumer, or admin &mdash; one login.
