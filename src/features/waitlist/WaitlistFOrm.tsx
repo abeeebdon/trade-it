@@ -1,6 +1,6 @@
 import { useState } from 'react';
 interface WaitlistFormProps {
-  type: 'exporter' | 'buyer' | 'consumer';
+  type: string;
   testid: string;
   dark?: boolean;
   ctaLabel?: string;
