@@ -7,14 +7,13 @@ import DualCTA from './DualCTA';
 import WaitlistFooter from './WaitlistFooter';
 import ProductModal from './ProductModal';
 import { useRouter } from 'next/navigation';
-import { catWailtist } from './constants';
-import BrandStyles from './BrandStyles';
-import Nav from './WailtListNav';
+import { catWailtist, ProductType } from './constants';
 import './waitlist.css';
+import WaitlistNav from './WailtListNav';
 export default function ComingSoon() {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
-  const [modal, setModal] = useState(null); // active product or null
+  const [modal, setModal] = useState<ProductType | null>(null); // active product or null
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -39,7 +38,7 @@ export default function ComingSoon() {
   useEffect(() => {
     if (!modal) return;
     document.body.style.overflow = 'hidden';
-    const onKey = (e) => {
+    const onKey = (e: { key: string }) => {
       if (e.key === 'Escape') setModal(null);
     };
     window.addEventListener('keydown', onKey);
@@ -53,7 +52,7 @@ export default function ComingSoon() {
 
   return (
     <div className="js-root overflow-hidden">
-      <Nav
+      <WaitlistNav
         scrolled={scrolled}
         onCta={() =>
           document

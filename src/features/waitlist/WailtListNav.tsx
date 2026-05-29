@@ -1,6 +1,10 @@
 import JompShopLogo from '@/assets/JompShopIcon';
 
-export default function Nav({ scrolled, onCta }) {
+interface WaitlistNavProps {
+  scrolled: boolean;
+  onCta: () => void;
+}
+export default function WaitlistNav({ scrolled, onCta }: WaitlistNavProps) {
   return (
     <nav className={`js-nav ${scrolled ? 'scrolled' : ''}`}>
       <div className="js-container js-nav-inner">
