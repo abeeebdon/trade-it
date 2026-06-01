@@ -10,10 +10,16 @@ import { useRouter } from 'next/navigation';
 import { catWailtist, ProductType } from './constants';
 import './waitlist.css';
 import WaitlistNav from './WailtListNav';
+import WaitlistModal from './WaitlistModal';
 export default function ComingSoon() {
   const router = useRouter();
+  const [funcEmail, setFuncEmail] = useState('');
   const [scrolled, setScrolled] = useState(false);
   const [modal, setModal] = useState<ProductType | null>(null); // active product or null
+  const [showWaitlistModal, setShowWaitlistModal] = useState(false);
+  const [roleToSingFOr, setROleTOSIgnFOr] = useState<
+    'exporter' | 'buyer' | null
+  >(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -49,9 +55,8 @@ export default function ComingSoon() {
   }, [modal]);
   const text =
     '🇳🇬 Nigeria · Fashion & Textiles · 🇺🇸 United States · Agricultural Goods · Verified Suppliers · Staple Foods · 🌍 Africa → World · Secure Payments';
-
   return (
-    <div className="js-root overflow-hidden">
+    <section className="js-root overflow-hidden">
       <WaitlistNav
         scrolled={scrolled}
         onCta={() =>
@@ -67,7 +72,11 @@ export default function ComingSoon() {
           </span>
         </div>
       </div>
-      <Hero />
+      <Hero
+        funcEmail={funcEmail}
+        setFuncEmail={setFuncEmail}
+        setShowWaitlistModal={setShowWaitlistModal}
+      />
       <div className="js-cat-strip">
         <div className="js-cat-track">
           {[...catWailtist, ...catWailtist, ...catWailtist].map((c, i) => (
@@ -79,7 +88,12 @@ export default function ComingSoon() {
       </div>{' '}
       <Marketplace onOpen={setModal} />
       <HowItWorks />
-      <DualCTA />
+      <DualCTA
+        setRoleToSingFOr={setROleTOSIgnFOr}
+        funcEmail={funcEmail}
+        setFuncEmail={setFuncEmail}
+        setShowWaitlistModal={setShowWaitlistModal}
+      />
       <section className="js-powered">
         <div className="js-container js-powered-inner">
           <span className="js-powered-label">Powered by</span>
@@ -107,6 +121,15 @@ export default function ComingSoon() {
           }}
         />
       )}
+      {showWaitlistModal && (
+        <WaitlistModal
+          roleToSignFor={roleToSingFOr}
+          email={funcEmail}
+          setEmail={setFuncEmail}
+          show={showWaitlistModal}
+          onClose={() => setShowWaitlistModal(false)}
+        />
+      )}
       <button
         onClick={() => router.push('/login')}
         className="js-discreet-admin"
@@ -115,6 +138,6 @@ export default function ComingSoon() {
       >
         ·
       </button>
-    </div>
+    </section>
   );
 }

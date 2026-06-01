@@ -1,5 +1,6 @@
 'use client';
 
+import type React from 'react';
 import {
   CircleCheckIcon,
   InfoIcon,
@@ -16,6 +17,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <Sonner
       theme={theme as ToasterProps['theme']}
+      position="top-right"
       className="toaster group"
       icons={{
         success: <CircleCheckIcon className="size-4" />,
@@ -26,15 +28,16 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       style={
         {
-          '--normal-bg': 'var(--popover)',
-          '--normal-text': 'var(--popover-foreground)',
-          '--normal-border': 'var(--border)',
+          '--normal-bg': '#16A34A', // green background
+          '--normal-text': '#FFFFFF',
+          '--normal-border': '#15803D',
           '--border-radius': 'var(--radius)',
         } as React.CSSProperties
       }
       toastOptions={{
         classNames: {
-          toast: 'cn-toast',
+          toast: 'cn-toast text-white border-green-700 shadow-lg',
+          success: 'bg-green-600 text-white border border-green-700',
         },
       }}
       {...props}
