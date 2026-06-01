@@ -1,6 +1,14 @@
+import { HeroProps } from './Hero';
 import WaitlistForm from './WaitlistFOrm';
-
-export default function DualCTA() {
+type DualCTAProps = HeroProps & {
+  setRoleToSingFOr: (role: 'exporter' | 'buyer' | null) => void;
+};
+export default function DualCTA({
+  funcEmail,
+  setFuncEmail,
+  setShowWaitlistModal,
+  setRoleToSingFOr,
+}: DualCTAProps) {
   return (
     <section id="about" className="js-section">
       <div className="js-container">
@@ -16,9 +24,11 @@ export default function DualCTA() {
             </p>
             <WaitlistForm
               type="exporter"
-              testid="exporter-waitlist"
-              dark
+              setOpenModal={setShowWaitlistModal}
+              funcEMail={funcEmail}
+              setFuncEmail={setFuncEmail}
               ctaLabel="Join as Exporter"
+              setRoleToSingFOr={setRoleToSingFOr}
             />
           </div>
           <div className="js-dual-card js-dual-purple reveal">
@@ -31,8 +41,11 @@ export default function DualCTA() {
             </p>
             <WaitlistForm
               type="buyer"
-              testid="buyer-waitlist"
+              setOpenModal={setShowWaitlistModal}
+              funcEMail={funcEmail}
+              setFuncEmail={setFuncEmail}
               ctaLabel="Join as Buyer"
+              setRoleToSingFOr={setRoleToSingFOr}
             />
           </div>
         </div>

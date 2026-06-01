@@ -17,6 +17,7 @@ import {
   Currency,
   Lightbulb,
   HandHelping,
+  BookAIcon,
 } from 'lucide-react';
 
 export const helixCards = [
@@ -135,6 +136,7 @@ export const NAV: {
       icon: DollarSign,
     },
     { to: '/admin/catalog', label: 'Marketplace', icon: Store },
+    { to: '/admin/waitlist', label: 'Waitlist', icon: BookAIcon },
   ],
 
   super_admin: [

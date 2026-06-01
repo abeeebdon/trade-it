@@ -42,20 +42,20 @@ export default function Login() {
 
       dispatch(login(newData));
 
-      // // redirect based on role returned from server
-      // switch (result.role) {
-      //   case 'admin':
-      //     router.push('/admin');
-      //     break;
-      //   case 'buyer':
-      //     router.push('/buyer');
-      //     break;
-      //   case 'consumer':
-      //     router.push('/');
-      //     break;
-      //   default:
-      //     router.push('/exporter');
-      // }
+      // redirect based on role returned from server
+      switch (result.role) {
+        case 'admin':
+          router.push('/admin');
+          break;
+        case 'buyer':
+          router.push('/buyer');
+          break;
+        case 'consumer':
+          router.push('/');
+          break;
+        default:
+          router.push('/exporter');
+      }
     } finally {
       setLoading(false);
     }

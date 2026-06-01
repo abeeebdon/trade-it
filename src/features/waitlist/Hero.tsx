@@ -1,7 +1,17 @@
+import { Dispatch, SetStateAction } from 'react';
 import { waitListItems } from './constants';
 import WaitlistForm from './WaitlistFOrm';
+export interface HeroProps {
+  funcEmail: string;
+  setFuncEmail: (email: string) => void;
+  setShowWaitlistModal: Dispatch<SetStateAction<boolean>>;
+}
 
-export default function Hero() {
+export default function Hero({
+  funcEmail,
+  setFuncEmail,
+  setShowWaitlistModal,
+}: HeroProps) {
   return (
     <section id="waitlist" className="js-hero">
       <div className="js-hero-glow" />
@@ -20,7 +30,12 @@ export default function Hero() {
           built in.
         </p>
         <div className="fade-up-4">
-          <WaitlistForm type="hero" testid="hero-waitlist" />
+          <WaitlistForm
+            setOpenModal={setShowWaitlistModal}
+            funcEMail={funcEmail}
+            setFuncEmail={setFuncEmail}
+            type="hero"
+          />
           <div className="js-form-note">
             No spam. Just a heads-up when we go live.
           </div>

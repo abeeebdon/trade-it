@@ -1,4 +1,3 @@
-import api from '@/configs/api-config';
 import jwt from 'jsonwebtoken';
 import { NextResponse } from 'next/server';
 
@@ -6,7 +5,6 @@ const JWT_SECRET = 'jompTrade';
 
 export async function POST(req: Request) {
   const body = await req.json();
-  const resp = await api.get('/authentication');
 
   const { email } = body;
 
@@ -35,7 +33,6 @@ export async function POST(req: Request) {
   const response = NextResponse.json({
     role,
     email,
-    resp,
   });
 
   response.cookies.set('token', token, {

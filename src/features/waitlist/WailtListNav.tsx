@@ -1,4 +1,4 @@
-import JompShopLogo from '@/assets/JompShopIcon';
+import JompsShopLogoDark from '@/assets/JompshopLogoDark';
 
 interface WaitlistNavProps {
   scrolled: boolean;
@@ -6,20 +6,19 @@ interface WaitlistNavProps {
 }
 export default function WaitlistNav({ scrolled, onCta }: WaitlistNavProps) {
   return (
-    <nav className={`js-nav ${scrolled ? 'scrolled' : ''}`}>
+    <nav
+      className={`js-nav ${scrolled ? 'scrolled' : ''}`}
+      data-aos="fade-down"
+      data-aos-delay="500"
+    >
       <div className="js-container js-nav-inner">
         <a href="#top" className="js-logo block" data-testid="js-logo">
-          <div className="w-10 h-10">
+          {/* <div className="w-10 h-10">
             <JompShopLogo primaryColor="white" className="w-full h-full" />
           </div>
-          <span className="js-wordmark hidden min-[400px]:block">JompShop</span>
+          <span className="js-wordmark hidden min-[400px]:block">JompShop</span> */}
 
-          {/* <Image
-            src="/icons/jompshop_logo.svg"
-            alt="JompShop Logo"
-            width={100}
-            height={32}
-          /> */}
+          <JompsShopLogoDark width={140} />
         </a>
         <div className="js-nav-right">
           <a href="#how-it-works" className="js-nav-link">

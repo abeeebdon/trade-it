@@ -1,78 +1,72 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 interface WaitlistFormProps {
-  type: string;
-  testid: string;
   dark?: boolean;
+  setOpenModal: Dispatch<SetStateAction<boolean>>;
+  type: string;
   ctaLabel?: string;
+  funcEMail: string;
+  setFuncEmail: (email: string) => void;
+  setRoleToSingFOr?: (role: 'exporter' | 'buyer' | null) => void;
 }
 export default function WaitlistForm({
-  type,
-  testid,
   dark = false,
+  type,
   ctaLabel = 'Notify Me →',
+  setOpenModal,
+  funcEMail,
+  setFuncEmail,
+  setRoleToSingFOr,
 }: WaitlistFormProps) {
-  const [email, setEmail] = useState('');
-  const [busy, setBusy] = useState(false);
-
-  //   const submit = async (e) => {
-  //     e.preventDefault();
-  //     if (!email) return;
-  //     setBusy(true);
-  //     try {
-  //       const { data } = await api.post('/waitlist/signup', { email, type });
-  //       const title =
-  //         type === 'exporter'
-  //           ? '🇳🇬 Exporter Waitlist'
-  //           : type === 'buyer'
-  //             ? '🇺🇸 Buyer Waitlist'
-  //             : 'Waitlist';
-  //       if (data.status === 'already_on_list') {
-  //         toast(`Already on the list as ${email}.`, {
-  //           description: "We'll notify you when JompShop goes live.",
-  //           duration: 5000,
-  //         });
-  //       } else {
-  //         toast(title, {
-  //           description: `You're on the list. We'll notify you at ${email} when JompShop goes live.`,
-  //           duration: 5000,
-  //         });
-  //       }
-  //       setEmail('');
-  //     } catch (err) {
-  //       toast.error(
-  //         err.response?.data?.detail || "Couldn't subscribe — try again.",
-  //       );
-  //     } finally {
-  //       setBusy(false);
-  //     }
-  //   };
-  const submit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!email) return;
+  const [error, setError] = useState('');
+  const validateEmail = (email: string) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email.trim());
   };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setError('');
+    e.preventDefault();
+    if (!funcEMail.trim()) {
+      setError('Email is required');
+      return;
+    }
+    if (!validateEmail(funcEMail)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+    setOpenModal(true);
+    setFuncEmail(funcEMail.trim());
+    setRoleToSingFOr?.(type === 'exporter' ? 'exporter' : 'buyer');
+  };
+
   return (
-    <form
-      onSubmit={submit}
-      className={`js-form ${dark ? 'js-form-dark' : ''}`}
-      data-testid={testid}
-    >
-      <input
-        type="email"
-        placeholder="Enter your email address"
-        value={email}
-        required
-        onChange={(e) => setEmail(e.target.value)}
-        className="js-input"
-        data-testid={`${testid}-input`}
-      />
-      <button
-        type="submit"
-        disabled={busy}
-        className="js-btn js-btn-gold pulse-gold"
-        data-testid={`${testid}-submit`}
+    <main className="relative">
+      <form
+        onSubmit={handleSubmit}
+        className={`js-form-container relative ${type === 'hero' ? 'mx-auto' : ''}`}
       >
-        {busy ? 'Adding…' : ctaLabel}
-      </button>
-    </form>
+        <div className={`js-form ${dark ? 'js-form-dark' : ''}`}>
+          <input
+            type="text"
+            placeholder="Enter your email address"
+            value={funcEMail}
+            onChange={(e) => {
+              setFuncEmail(e.target.value);
+              if (error) setError('');
+            }}
+            className="js-input"
+          />
+          <button
+            type="submit"
+            className="js-btn w-full sm:w-fit text-center  js-btn-gold pulse-gold"
+          >
+            {ctaLabel}
+          </button>
+        </div>
+        {error && (
+          <p className="text-left text-[10px] ml-2 text-danger mt-1">{error}</p>
+        )}
+      </form>
+    </main>
   );
 }

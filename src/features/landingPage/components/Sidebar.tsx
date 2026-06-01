@@ -1,5 +1,4 @@
 'use client';
-import Image from 'next/image';
 import { NAV } from './data';
 import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
 import Link from 'next/link';
@@ -9,10 +8,13 @@ import { useState } from 'react';
 import LogoutModal from './LogoutModal';
 import { logoutAction } from '@/app/action/auth';
 import { logout } from '@/store/auth/auth.slice';
+import JompShopLogo from '@/assets/JompShopIcon';
+import useColorScheme from '@/hooks/useColorScheme';
 
 NAV.super_admin = NAV.admin;
 
 export default function Sidebar() {
+  const isDark = useColorScheme();
   const router = useRouter();
   const pathname = usePathname();
   const { user } = useAppSelector((state) => state.auth);
@@ -36,13 +38,14 @@ export default function Sidebar() {
   return (
     <aside className="fixed left-0 top-0 h-screen hidden sm:flex w-16 lg:w-60 bg-bg border-r border-secondary/20  flex-col z-40">
       <div className="px-4 lg:px-6 py-5 border-b border-[#1A7A6E]/15 flex items-center gap-2">
-        <Image
-          src="/jomp-icon.png"
-          alt="Jomp"
-          width={32}
-          height={32}
-          className="w-8 h-8 rounded-full"
-        />
+        <div className="">
+          <JompShopLogo
+            primaryColor={isDark ? 'white' : '#31005C'}
+            secondaryColor={isDark ? '#EFA005' : '#EFA005'}
+            width={40}
+            height={60}
+          />
+        </div>
         <div className="hidden lg:flex flex-col leading-tight">
           <span className="font-bold text-secondary tracking-[0.2em] text-[13px]">
             JOMP SHOP

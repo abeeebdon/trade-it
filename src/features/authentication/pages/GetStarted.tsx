@@ -1,11 +1,12 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ROLES } from '../components/data';
 import { CheckCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { authRoleType } from '@/types';
+import api from '@/configs/api-config';
 
 const GetStarted = () => {
   const router = useRouter();
@@ -18,6 +19,13 @@ const GetStarted = () => {
       return toast.message('You have not selected any type ');
     }
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await api.get('/authentication');
+      console.log(res);
+    };
+    fetchData();
+  }, []);
   return (
     <div className="w-full mx-auto p-6 my-6 max-w-4xl fade-up">
       <div className="text-center mb-8">
