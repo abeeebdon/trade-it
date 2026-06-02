@@ -11,6 +11,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Loader from '@/components/buttons/Loader';
 import api from '@/configs/api-config';
+import { toast } from 'sonner';
+import { loginApi } from '../api/auth';
+import { saveCookie } from '@/store/auth/cookies';
 
 export default function Login() {
   const router = useRouter();
@@ -28,34 +31,34 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-
-      const result = await res.json();
-      console.log(result);
-      const newData = { ...result, name: 'JompStart' };
-
-      dispatch(login(newData));
-
-      // redirect based on role returned from server
-      switch (result.role) {
-        case 'admin':
-          router.push('/admin');
-          break;
-        case 'buyer':
-          router.push('/buyer');
-          break;
-        case 'consumer':
-          router.push('/');
-          break;
-        default:
-          router.push('/exporter');
+      const result = await loginApi(data);
+      if (result.success) {
+        toast.success(result.message);
+        saveCookie('token', result.data.token);
+        switch (result.data.roles[0].toLowerCase()) {
+          case 'export admin':
+            router.push('/admin');
+            break;
+          case 'reseller':
+            router.push('/buyer');
+            break;
+          case 'direct customer':
+            router.push('/');
+            break;
+          case 'african exporter':
+            router.push('/exporter');
+            break;
+          default:
+            router.push('/');
+        }
+      } else {
+        toast.error(result.message);
       }
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      toast.error(
+        message ?? 'An error occurred during login. Please try again.',
+      );
     } finally {
       setLoading(false);
     }

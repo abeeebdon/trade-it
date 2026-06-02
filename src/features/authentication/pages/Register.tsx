@@ -10,7 +10,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { ROLES } from '../components/data';
 import Loader from '@/components/buttons/Loader';
 import { motion } from 'motion/react';
-import { authRoleType } from '@/types';
 
 export default function Register() {
   const [loading, setLoading] = useState(false);
