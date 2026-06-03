@@ -26,15 +26,6 @@ export type OverviewType = {
 };
 
 export type VerificationStatus = 'pending' | 'approved' | 'rejected';
-export type Verification = {
-  id: string;
-  business_name: string;
-  country: string;
-  sector: string;
-  kyc_status: VerificationStatus;
-  kyb_status: VerificationStatus;
-  updated_at: string;
-};
 
 export interface VerificationItem {
   id: string;
@@ -117,4 +108,54 @@ export interface Product {
 }
 export interface ProductCardPRops {
   p: Product;
+}
+
+// new guys
+
+export interface AdminDashboardData {
+  title: string;
+  subtitle: string;
+  totalUsers: number;
+  suspendedUsers: number;
+  totalListings: number;
+  activeListings: number;
+  pendingOrders: number;
+  processingWithdrawals: number;
+  pendingComplianceDocuments: number;
+  submittedCreditApplications: number;
+  totalWalletBalanceUsd: number;
+  totalWalletBalanceNgn: number;
+  businesses: number;
+  orders: number;
+  transactions: number;
+  feesCollectedUsd: number;
+  volumeByCurrency: VolumeByCurrency[];
+  sectorMix: SectorMix[];
+  pendingVerificationCount: number;
+  pendingVerifications: Verification[];
+}
+
+export interface VolumeByCurrency {
+  currency: string;
+  amount: number;
+}
+
+export interface SectorMix {
+  sector: string;
+  count: number;
+}
+
+export type Verification = {
+  id: string;
+  business_name: string;
+  country: string;
+  sector: string;
+  kyc_status: VerificationStatus;
+  kyb_status: VerificationStatus;
+  updated_at: string;
+};
+
+export interface DashboardPendingVerificationProps {
+  pendingVerifications: Verification[];
+  pendingVerificationCount: number;
 }

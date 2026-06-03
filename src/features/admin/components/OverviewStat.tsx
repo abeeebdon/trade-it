@@ -18,3 +18,21 @@ export default function Stat({ label, value, icon: Icon, accent }: StatProps) {
     </div>
   );
 }
+export const StatSkeleton = () => {
+  return (
+    <div className="helix-card p-5  ">
+      <div className="flex justify-between animate-pulse items-start relative">
+        <div className="flex-1">
+          {/* label */}
+          <div className="h-3 w-24  rounded animate-pulse bg-muted mb-3" />
+
+          {/* value */}
+          <div className="h-4 mt-4 w-20 animate-pulse rounded bg-muted" />
+        </div>
+
+        {/* icon */}
+        <div className="h-4 w-6 animate-pulse rounded-md bg-muted shrink-0" />
+      </div>
+    </div>
+  );
+};

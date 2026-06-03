@@ -1,59 +1,129 @@
+import { getSavedCookie, saveCookie } from '@/store/auth/cookies';
 import axios, { AxiosError, type AxiosRequestConfig } from 'axios';
+import { refreshAccessToken } from './refresh';
+
 interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   __isRetryRequest?: boolean;
   useTempToken?: boolean;
 }
 
-// logout function
-// const handleLogout = () => {
-//   store.dispatch(logout());
-//   cookiesStorage.clearAll(); // Clear all cookies
-//   window.location.href = '/welcome';
-// };
-
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
-  headers: { 'Content-Type': 'application/json' },
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
-// api.interceptors.request.use(
-//   (config) => {
-//     // const token = cookiesStorage.getItem('token');
-//     const useTempToken = (config as CustomAxiosRequestConfig).useTempToken;
-//     const token = useTempToken
-//       ? cookiesStorage.getItem('tempToken')
-//       : cookiesStorage.getItem('token');
+// prevents multiple refresh requests
+let isRefreshing = false;
+let failedQueue: {
+  resolve: (token: string) => void;
+  reject: (error: unknown) => void;
+}[] = [];
 
-//     if (token) {
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
+const processQueue = (error: unknown, token: string | null = null) => {
+  failedQueue.forEach((promise) => {
+    if (error) {
+      promise.reject(error);
+    } else {
+      promise.resolve(token!);
+    }
+  });
 
-//     return config;
-//   },
-//   (error) => {},
-// );
+  failedQueue = [];
+};
+
+// logout function
+const handleLogout = () => {
+  saveCookie('token', '');
+
+  window.location.href = '/login';
+};
+
+api.interceptors.request.use(
+  (config) => {
+    const token = getSavedCookie('token');
+
+    // optional temp token logic
+
+    if (token) {
+      config.headers = config.headers ?? {};
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+
+  (error) => Promise.reject(error),
+);
 
 api.interceptors.response.use(
   (response) => response,
+
   async (error: AxiosError) => {
     const config = error.config as CustomAxiosRequestConfig;
 
-    if (error.response?.status === 401 && config && !config.__isRetryRequest) {
-      try {
-        // mark the request as a retry attempt
-        config.__isRetryRequest = true;
+    // network error
+    if (!error.response) {
+      return Promise.reject(
+        new Error('Network error. Please check your internet connection.'),
+      );
+    }
 
-        // request new accesstoken using refreshtoken
-        // const accessToken = await refreshAccessToken();
-        // cookiesStorage.setItem('token', accessToken);
+    // unauthorized + retry
+    if (error.response.status === 401 && config && !config.__isRetryRequest) {
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({
+            resolve: (token) => {
+              config.headers = config.headers ?? {};
+              config.headers.Authorization = `Bearer ${token}`;
 
-        // error.config!.headers.Authorization = `Bearer ${accessToken}`;
-
-        // retry original request with new accesstoken
-        return api(error.config!);
-      } catch (refreshError) {
-        return Promise.reject(refreshError);
+              resolve(api(config));
+            },
+            reject,
+          });
+        });
       }
+
+      config.__isRetryRequest = true;
+      isRefreshing = true;
+
+      try {
+        const accessToken = await refreshAccessToken();
+
+        saveCookie('token', accessToken);
+
+        processQueue(null, accessToken);
+
+        config.headers = config.headers ?? {};
+        config.headers.Authorization = `Bearer ${accessToken}`;
+
+        return api(config);
+      } catch (refreshError) {
+        processQueue(refreshError, null);
+
+        handleLogout();
+
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
+    }
+
+    // optional central status handling
+    switch (error.response.status) {
+      case 403:
+        console.error('Forbidden');
+        break;
+
+      case 404:
+        console.error('Not found');
+        break;
+
+      case 500:
+        console.error('Server error');
+        break;
     }
 
     return Promise.reject(error);
@@ -61,48 +131,3 @@ api.interceptors.response.use(
 );
 
 export default api;
-
-// api.interceptors.response.use(
-//   (response) => response,
-//   (error) => {
-//     const status = error.response?.status;
-//     const message = error.response?.data?.message || 'Something went wrong';
-
-//     switch (status) {
-//       case 400:
-//         toast.error(message || 'Bad request');
-//         break;
-
-//       case 401:
-//         toast.error('Unauthorized. Please login again.');
-//         // optional redirect
-//         // window.location.href = '/login';
-//         break;
-
-//       case 403:
-//         toast.error('You do not have permission.');
-//         break;
-
-//       case 404:
-//         toast.error('Resource not found.');
-//         break;
-
-//       case 409:
-//         toast.error(message || 'Conflict occurred.');
-//         break;
-
-//       case 422:
-//         toast.error(message || 'Validation failed.');
-//         break;
-
-//       case 500:
-//         toast.error('Server error. Please try again later.');
-//         break;
-
-//       default:
-//         toast.error(message);
-//     }
-
-//     return Promise.reject(error);
-//   },
-// );

@@ -38,7 +38,8 @@ const WaitlistModal = ({
       const postData = {
         email: email.trim(),
         fullname: fullname,
-        role: roleToSignFor ?? '',
+        role: roleToSignFor ?? 'buyer',
+        CustomerType: roleToSignFor ?? 'buyer',
       };
       const res = await api.post('/Waitlist', postData);
       if (res.data?.success) {
@@ -55,13 +56,11 @@ const WaitlistModal = ({
         return;
       }
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else if (typeof err === 'string') {
-        setError(err);
-      } else {
-        setError('Failed to add email to waitlist. Please try again.');
-      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const message = (error as any)?.response?.data?.message;
+      toast.error(
+        message ?? 'An error occurred during registration. Please try again.',
+      );
     } finally {
       setLoading(false);
     }
