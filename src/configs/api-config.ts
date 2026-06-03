@@ -1,5 +1,4 @@
 import axios, { AxiosError, type AxiosRequestConfig } from 'axios';
-
 interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   __isRetryRequest?: boolean;
   useTempToken?: boolean;
@@ -62,3 +61,48 @@ api.interceptors.response.use(
 );
 
 export default api;
+
+// api.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     const status = error.response?.status;
+//     const message = error.response?.data?.message || 'Something went wrong';
+
+//     switch (status) {
+//       case 400:
+//         toast.error(message || 'Bad request');
+//         break;
+
+//       case 401:
+//         toast.error('Unauthorized. Please login again.');
+//         // optional redirect
+//         // window.location.href = '/login';
+//         break;
+
+//       case 403:
+//         toast.error('You do not have permission.');
+//         break;
+
+//       case 404:
+//         toast.error('Resource not found.');
+//         break;
+
+//       case 409:
+//         toast.error(message || 'Conflict occurred.');
+//         break;
+
+//       case 422:
+//         toast.error(message || 'Validation failed.');
+//         break;
+
+//       case 500:
+//         toast.error('Server error. Please try again later.');
+//         break;
+
+//       default:
+//         toast.error(message);
+//     }
+
+//     return Promise.reject(error);
+//   },
+// );

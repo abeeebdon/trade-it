@@ -1,31 +1,40 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { ROLES } from '../components/data';
-import { CheckCircle } from 'lucide-react';
+import { useState } from 'react';
+
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { authRoleType } from '@/types';
-import api from '@/configs/api-config';
+
+import useGetUserTypes from '../hooks/useGetUserTypes';
+import RoleCard from '../components/RoleCard';
+import { ROLE_VALUES } from '../components/helper';
+import RoleCardSkeleton from '../components/RoleCardKeleton';
+import { useAppDispatch } from '@/hooks/store/store';
+import { setUserRole } from '@/store/auth/auth.slice';
+import { AuthRole } from '@/types';
 
 const GetStarted = () => {
   const router = useRouter();
-  const [selected, setSelected] = useState<authRoleType | null>(null);
+  const dispatch = useAppDispatch();
+  const [selected, setSelected] = useState<AuthRole | null>(null);
   const handleProceed = () => {
     if (selected) {
-      router.push(`/register/?role=${selected}`);
+      dispatch(setUserRole(selected));
+      router.push(`/register/?role=${selected.value}`);
       return;
     } else {
       return toast.message('You have not selected any type ');
     }
   };
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await api.get('/authentication');
-      console.log(res);
-    };
-    fetchData();
-  }, []);
+
+  const { data, isLoading, isError } = useGetUserTypes();
+
+  const userTypes: AuthRole[] = data
+    ? data
+        .filter((d: AuthRole) => d.id <= 3)
+        .map((r: AuthRole) => ({ ...r, value: ROLE_VALUES[r.id - 1] }))
+    : [];
+
   return (
     <div className="w-full mx-auto p-6 my-6 max-w-4xl fade-up">
       <div className="text-center mb-8">
@@ -36,47 +45,26 @@ const GetStarted = () => {
         </p>
       </div>
       <div className="grid md:grid-cols-3 gap-4">
-        {ROLES.map((r) => {
-          const Icon = r.Icon;
-          const active = selected === r.value;
-          return (
-            <button
-              key={r.value}
-              onClick={() => setSelected(r.value)}
-              className={`helix-card p-6 text-left transition-all ${active ? 'border-[#C9922A] ring-2 ring-[#C9922A]/30' : 'hover:border-[#1A7A6E]/60'}`}
-              data-testid={`role-card-${r.value}`}
-            >
-              <div className="flex items-start justify-between">
-                <Icon
-                  size={30}
-                  className={active ? 'text-[#C9922A]' : 'text-[#1A7A6E]'}
+        {isLoading
+          ? Array.from({ length: 3 }).map((_, i) => (
+              <RoleCardSkeleton key={i} />
+            ))
+          : userTypes.map((r) => {
+              const active = selected?.id === r.id;
+              return (
+                <RoleCard
+                  key={r.id}
+                  r={r}
+                  active={active}
+                  setSelected={setSelected}
                 />
-                {active && <CheckCircle size={18} className="text-[#C9922A]" />}
-              </div>
-              <div className="mt-5">
-                <div className="helix-h3 text-[16px]">{r.title}</div>
-                <div className="text-[12px] text-[#1A7A6E] font-mono tracking-wider uppercase mt-1">
-                  {r.sub}
-                </div>
-              </div>
-              <p className="text-[13px] text-[#9CA3AF] mt-3 leading-relaxed">
-                {r.blurb}
-              </p>
-              <div className="mt-5 inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider text-[#C9922A]/80 border border-[#C9922A]/30 rounded-full px-2.5 py-1">
-                {r.pill}
-              </div>
-            </button>
-          );
-        })}
+              );
+            })}
       </div>
       <div className="mt-8 flex items-center justify-center gap-4">
-        <button
-          onClick={handleProceed}
-          className="helix-btn-primary px-8"
-          data-testid="role-continue-btn"
-        >
+        <button onClick={handleProceed} className="helix-btn-primary px-8">
           Continue as{' '}
-          {selected ? <span className="capitalize">{selected}</span> : '→'}
+          {selected ? <span className="capitalize">{selected.name}</span> : '→'}
         </button>
       </div>
       <div className="mt-8 text-center text-[13px] text-[#9CA3AF]">

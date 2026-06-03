@@ -43,7 +43,7 @@ export default function Orders() {
     return (
       <div className="helix-card p-12 text-center text-[#9CA3AF]">
         No orders yet.{' '}
-        {user?.role === 'buyer'
+        {user?.role === 'reseller'
           ? 'Browse the marketplace to submit an RFQ.'
           : 'Inbound RFQs and confirmed trades will appear here.'}
       </div>
@@ -81,7 +81,7 @@ export default function Orders() {
                     </Link>
                   </td>
                   <td className="text-[12px]">
-                    {o.buyer_user_id === user?.user_id ? 'Buyer' : 'Supplier'}
+                    {o.buyer_user_id === user?.role ? 'Buyer' : 'Supplier'}
                   </td>
                   <td className="max-w-[220px] truncate">{o.product_name}</td>{' '}
                   {/* ← was broken */}

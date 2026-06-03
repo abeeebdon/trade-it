@@ -1,6 +1,5 @@
 'use client';
 
-import type React from 'react';
 import {
   CircleCheckIcon,
   InfoIcon,
@@ -13,12 +12,11 @@ import { Toaster as Sonner, type ToasterProps } from 'sonner';
 
 const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = 'system' } = useTheme();
-
   return (
     <Sonner
       theme={theme as ToasterProps['theme']}
-      position="top-right"
       className="toaster group"
+      position="top-right"
       icons={{
         success: <CircleCheckIcon className="size-4" />,
         info: <InfoIcon className="size-4" />,
@@ -28,16 +26,22 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       style={
         {
-          '--normal-bg': '#16A34A', // green background
-          '--normal-text': '#FFFFFF',
-          '--normal-border': '#15803D',
+          '--normal-bg': 'var(--popover)',
+          '--normal-text': 'var(--popover-foreground)',
+          '--normal-border': 'var(--border)',
           '--border-radius': 'var(--radius)',
         } as React.CSSProperties
       }
       toastOptions={{
         classNames: {
-          toast: 'cn-toast text-white border-green-700 shadow-lg',
-          success: 'bg-green-600 text-white border border-green-700',
+          toast: 'cn-toast',
+
+          success: '!bg-green-600 !text-white !border-green-700',
+          error: '!bg-red-600 !text-white !border-red-700',
+          warning: 'bg-yellow-500 text-black border border-yellow-600',
+          info: 'bg-blue-600 text-white border border-blue-700',
+
+          loading: 'bg-gray-700 text-white border border-gray-600',
         },
       }}
       {...props}

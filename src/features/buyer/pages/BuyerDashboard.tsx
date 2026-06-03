@@ -128,7 +128,7 @@ const BuyerDashboard = () => {
           ) : (
             <div className="p-10 text-center text-[#9CA3AF] text-sm">
               <Package size={34} className="mx-auto mb-3 text-[#1A7A6E]" />
-              {user?.role === 'buyer'
+              {user?.role === 'reseller'
                 ? 'Browse the marketplace to submit your first RFQ.'
                 : 'Orders you receive or place will appear here.'}
             </div>
