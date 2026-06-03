@@ -32,7 +32,7 @@ export async function proxy(req: NextRequest) {
 
   // Logged in user → auth page
   if (token && isAuthRoute) {
-    return NextResponse.redirect(new URL('/user', req.url));
+    return NextResponse.redirect(new URL('/', req.url));
   }
 
   // Protected route role check

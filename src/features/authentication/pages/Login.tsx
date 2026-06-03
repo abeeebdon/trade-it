@@ -35,6 +35,8 @@ export default function Login() {
       if (result.success) {
         toast.success(result.message);
         saveCookie('token', result.data.token);
+        console.log(result.data.refreshToken);
+        saveCookie('refreshToken', result.data.refreshToken);
         const userDetails = {
           email: result.data.email,
           fullName: result.data.fullName,
