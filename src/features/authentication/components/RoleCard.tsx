@@ -1,7 +1,7 @@
 import { CheckCircle } from 'lucide-react';
 import { cloneElement } from 'react';
-import { AuthRole } from '../types/auth';
 import { getIcon, getRoleBlurb, getRolePill } from './helper';
+import { AuthRole } from '@/types';
 
 const RoleCard = ({
   r,

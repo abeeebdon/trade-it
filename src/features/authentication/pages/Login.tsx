@@ -14,7 +14,6 @@ import api from '@/configs/api-config';
 import { toast } from 'sonner';
 import { loginApi } from '../api/auth';
 import { saveCookie } from '@/store/auth/cookies';
-import { ROLE_VALUES } from '../components/helper';
 
 export default function Login() {
   const router = useRouter();

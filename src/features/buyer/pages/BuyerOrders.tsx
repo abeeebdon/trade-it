@@ -59,7 +59,7 @@ export default function BUyerOrders() {
       ) : orders.length === 0 ? (
         <div className="helix-card p-12 text-center text-[#9CA3AF]">
           No orders yet.{' '}
-          {user?.role === 'buyer'
+          {user?.role === 'reseller'
             ? 'Browse the marketplace to submit an RFQ.'
             : 'Inbound RFQs and confirmed trades will appear here.'}
         </div>

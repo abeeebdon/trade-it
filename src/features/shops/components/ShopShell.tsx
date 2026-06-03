@@ -77,9 +77,9 @@ export default function ShopShell({ setMode }: ShopShellProps) {
             {user ? (
               <>
                 <span className="hidden sm:inline text-[12px] text-[#9CA3AF]">
-                  Hi, {user.name.split(' ')[0]}
+                  Hi, {user.fullName.split(' ')[0]}
                 </span>
-                {(user.role === 'exporter' || user.role === 'buyer') && (
+                {(user.role === 'exporter' || user.role === 'reseller') && (
                   <Link
                     href="/dashboard"
                     className="text-[12px] text-[#C9922A] hover:underline"

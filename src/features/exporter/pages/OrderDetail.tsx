@@ -163,8 +163,8 @@ export default function OrderDetail() {
   }
 
   const o = data.order;
-  const isSupplier = o.supplier_user_id === user?.user_id;
-  const isBuyer = o.buyer_user_id === user?.user_id;
+  const isSupplier = o.supplier_user_id === user?.role;
+  const isBuyer = o.buyer_user_id === user?.role;
   const currentIdx = LIFECYCLE.indexOf(o.status);
 
   return (
