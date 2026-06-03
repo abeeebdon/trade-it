@@ -10,10 +10,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { ROLES } from '../components/data';
 import Loader from '@/components/buttons/Loader';
 import { motion } from 'motion/react';
+import { registerApi } from '../api/auth';
+import { useAppSelector } from '@/hooks/store/store';
+import { toast } from 'sonner';
 
 export default function Register() {
   const [loading, setLoading] = useState(false);
-
+  const userRole = useAppSelector((state) => state.auth.userRole);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -39,13 +42,31 @@ export default function Register() {
   });
 
   const onSubmit = async (data: RegisterFormValues) => {
+    const postData = {
+      fullName: data.name,
+      email: data.email,
+      password: data.password,
+      customerTypeIds: [userRole?.id ?? 1],
+      countryId: 1,
+    };
     setLoading(true);
-
-    setTimeout(() => {
-      console.log('REGISTER DATA:', data);
+    try {
+      const result = await registerApi(postData);
+      if (result.success) {
+        toast.success(result.message);
+        router.push('/login');
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const message = (error as any)?.response?.data?.message;
+      toast.error(
+        message ?? 'An error occurred during registration. Please try again.',
+      );
+    } finally {
       setLoading(false);
-      router.push('/login');
-    }, 3000);
+    }
   };
 
   return (

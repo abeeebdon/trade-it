@@ -1,6 +1,6 @@
 'use client';
 import { useAppDispatch } from '@/hooks/store/store';
-import { login } from '@/store/auth/auth.slice';
+import { login, setAuthRole } from '@/store/auth/auth.slice';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -14,6 +14,7 @@ import api from '@/configs/api-config';
 import { toast } from 'sonner';
 import { loginApi } from '../api/auth';
 import { saveCookie } from '@/store/auth/cookies';
+import { ROLE_VALUES } from '../components/helper';
 
 export default function Login() {
   const router = useRouter();
@@ -35,17 +36,27 @@ export default function Login() {
       if (result.success) {
         toast.success(result.message);
         saveCookie('token', result.data.token);
+        const userDetails = {
+          email: result.data.email,
+          fullName: result.data.fullName,
+        };
+        console.log('User Details:', userDetails);
+        dispatch(login(userDetails));
         switch (result.data.roles[0].toLowerCase()) {
           case 'export admin':
+            dispatch(setAuthRole('admin'));
             router.push('/admin');
             break;
           case 'reseller':
+            dispatch(setAuthRole('reseller'));
             router.push('/buyer');
             break;
           case 'direct customer':
+            dispatch(setAuthRole('customer'));
             router.push('/');
             break;
           case 'african exporter':
+            dispatch(setAuthRole('exporter'));
             router.push('/exporter');
             break;
           default:
@@ -54,10 +65,11 @@ export default function Login() {
       } else {
         toast.error(result.message);
       }
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : String(error);
+    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const message = (error as any)?.response?.data?.message;
       toast.error(
-        message ?? 'An error occurred during login. Please try again.',
+        message ?? 'An error occurred during registration. Please try again.',
       );
     } finally {
       setLoading(false);

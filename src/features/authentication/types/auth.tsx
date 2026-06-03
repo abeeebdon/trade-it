@@ -1,6 +1,7 @@
-export interface AuthRole {
-  id: number;
-  name: string;
-  description: string;
-  value: string;
+export interface RegisterPostData {
+  fullName: string;
+  email: string;
+  password: string;
+  customerTypeIds: number[];
+  countryId: number;
 }

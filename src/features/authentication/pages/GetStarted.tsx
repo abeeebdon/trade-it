@@ -6,16 +6,20 @@ import Link from 'next/link';
 import { toast } from 'sonner';
 
 import useGetUserTypes from '../hooks/useGetUserTypes';
-import { AuthRole } from '../types/auth';
 import RoleCard from '../components/RoleCard';
 import { ROLE_VALUES } from '../components/helper';
 import RoleCardSkeleton from '../components/RoleCardKeleton';
+import { useAppDispatch } from '@/hooks/store/store';
+import { setUserRole } from '@/store/auth/auth.slice';
+import { AuthRole } from '@/types';
 
 const GetStarted = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [selected, setSelected] = useState<AuthRole | null>(null);
   const handleProceed = () => {
     if (selected) {
+      dispatch(setUserRole(selected));
       router.push(`/register/?role=${selected.value}`);
       return;
     } else {
@@ -58,11 +62,7 @@ const GetStarted = () => {
             })}
       </div>
       <div className="mt-8 flex items-center justify-center gap-4">
-        <button
-          onClick={handleProceed}
-          className="helix-btn-primary px-8"
-          data-testid="role-continue-btn"
-        >
+        <button onClick={handleProceed} className="helix-btn-primary px-8">
           Continue as{' '}
           {selected ? <span className="capitalize">{selected.name}</span> : '→'}
         </button>

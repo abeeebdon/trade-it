@@ -1,34 +1,16 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { jwtVerify } from 'jose';
 
-type UserRole = 'admin' | 'super_admin' | 'buyer' | 'exporter' | 'consumer';
+type UserRole = 'admin' | 'super_admin' | 'reseller' | 'exporter' | 'consumer';
 
-const AUTH_ROUTES = ['/login', '/register'];
+const AUTH_ROUTES = ['/login', '/register', '/getstarted'];
 
 const ROLE_ROUTES: Record<string, UserRole[]> = {
   '/admin': ['admin', 'super_admin'],
-  '/buyer': ['buyer'],
+  '/buyer': ['reseller'],
   '/exporter': ['exporter'],
   '/shop/orders': ['consumer'],
 };
-const JWT_SECRET = 'jompTrade';
-
-const secret = new TextEncoder().encode(JWT_SECRET);
-
-async function verifyToken(token: string) {
-  try {
-    const { payload } = await jwtVerify(token, secret);
-
-    return payload as {
-      id: string;
-      email: string;
-      role: UserRole;
-    };
-  } catch {
-    return null;
-  }
-}
 
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -55,10 +37,11 @@ export async function proxy(req: NextRequest) {
 
   // Protected route role check
   if (token && matchedRoute) {
-    const user = await verifyToken(token);
+    const role = req.cookies.get('role')?.value as UserRole | undefined;
 
     // Invalid/expired token
-    if (!user) {
+
+    if (!role) {
       const response = NextResponse.redirect(new URL('/login', req.url));
 
       response.cookies.delete('token');
@@ -68,7 +51,7 @@ export async function proxy(req: NextRequest) {
 
     const allowedRoles = ROLE_ROUTES[matchedRoute];
 
-    const hasAccess = allowedRoles.includes(user.role);
+    const hasAccess = allowedRoles.includes(role);
 
     if (!hasAccess) {
       return NextResponse.redirect(new URL('/unauthorized', req.url));
@@ -88,5 +71,6 @@ export const config = {
     '/login',
     '/user',
     '/register',
+    '/getstarted',
   ],
 };

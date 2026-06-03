@@ -1,12 +1,11 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
-import { cookiesStorage } from '@/lib/helpers/cookie';
 import { logout } from '@/store/auth/auth.slice';
 import { ChevronDown, LogOut, UserCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import LogoutModal from './LogoutModal';
-import { logoutAction } from '@/app/action/auth';
 import { useRouter } from 'next/navigation';
+import { logoutAction } from '@/features/authentication/components/helper';
 
 const UserComponent = () => {
   const router = useRouter();
@@ -36,7 +35,7 @@ const UserComponent = () => {
         data-testid="user-menu-trigger"
       >
         <UserCircle size={14} />{' '}
-        <p className="hidden md:block">{user?.name.split(' ')[0]} </p>
+        <p className="hidden md:block">{user?.fullName.split(' ')[0]} </p>
         <ChevronDown size={10} />
       </button>
       {menuOpen && (
@@ -46,7 +45,7 @@ const UserComponent = () => {
         >
           <div className="px-3 py-2 border-b border-[#1A7A6E]/20 mb-1">
             <div className="text-[12px] font-semibold truncate">
-              {user?.name}
+              {user?.fullName}
             </div>
             <div className="text-[10px] font-mono uppercase tracking-wider text-[#1A7A6E]">
               {user?.role.replace('_', ' ')}
@@ -60,7 +59,7 @@ const UserComponent = () => {
               {user?.role === 'consumer' ? 'My Orders' : 'Dashboard'}
             </Link>
           )}
-          {(user?.role === 'exporter' || user?.role === 'buyer') && (
+          {(user?.role === 'exporter' || user?.role === 'reseller') && (
             <Link
               href={`/${user?.role}`}
               className="block px-3 py-2 text-[12px] hover:bg-[#1A7A6E]/10 rounded"
