@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { AxiosError } from 'axios';
 import { Download, Folder, ToggleLeft, ToggleRight } from 'lucide-react';
@@ -10,8 +10,11 @@ import Pagination from '@/components/ui/Pagination';
 import api from '@/configs/api-config';
 import { paginate } from '@/lib/utils';
 import StatCard from './StatCard';
+import { useGetWaitlist } from '../admin/hooks/useGetAdminDashboard';
+import { PaginationType, WaitlistTypeData } from './types';
+import { formatDateToMM } from '@/lib/func';
 
-const PER_PAGE = 20;
+const PER_PAGE = 10;
 
 type WaitlistType = 'hero' | 'exporter' | 'buyer';
 
@@ -55,39 +58,25 @@ export default function AdminWaitlist() {
   const [mode, setMode] = useState<ModeType>('coming_soon');
   const [filter, setFilter] = useState<FilterType>('');
   const [page, setPage] = useState<number>(1);
-  const [loading, setLoading] = useState<boolean>(true);
 
-  const load = async (): Promise<void> => {
-    try {
-      setLoading(true);
-
-      const params = filter ? { type: filter } : {};
-
-      const [waitlistRes, modeRes] = await Promise.all([
-        api.get<WaitlistResponse>('/admin/waitlist', {
-          params,
-        }),
-        api.get<PlatformModeResponse>('/platform/mode'),
-      ]);
-
-      setData(waitlistRes.data);
-      setMode(modeRes.data.mode);
-    } catch (error) {
-      const err = error as AxiosError<ErrorResponse>;
-
-      toast.error(err.response?.data?.detail || 'Failed to load waitlist data');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // useEffect(() => {
-  //   load();
-  // }, [filter]);
-
-  // useEffect(() => {
-  //   setPage(1);
-  // }, [filter]);
+  const { data: waitlist, isPending } = useGetWaitlist({
+    filter,
+    pageNumber: page,
+    pageSize: 10,
+  });
+  const waitlists: WaitlistTypeData[] = useMemo(() => {
+    return waitlist ? waitlist.data : [];
+  }, [waitlist]);
+  const metrics: PaginationType = useMemo(() => {
+    return waitlist
+      ? {
+          pageNumber: waitlist.pageNumber,
+          pageSize: waitlist.pageSize,
+          totalRecords: waitlist.totalRecords,
+          totalPages: waitlist.totalPages,
+        }
+      : ({} as PaginationType);
+  }, [waitlist]);
 
   const toggleMode = async (): Promise<void> => {
     const next: ModeType = mode === 'live' ? 'coming_soon' : 'live';
@@ -143,11 +132,8 @@ export default function AdminWaitlist() {
       });
   };
 
-  const paginatedData = paginate(data.items, page, PER_PAGE);
-
   const filters: [FilterType, string][] = [
     ['', 'All'],
-    ['hero', 'Hero'],
     ['exporter', 'Exporters'],
     ['buyer', 'Buyers'],
   ];
@@ -238,7 +224,10 @@ export default function AdminWaitlist() {
             {filters.map(([value, label]) => (
               <button
                 key={value}
-                onClick={() => setFilter(value)}
+                onClick={() => {
+                  setPage(1);
+                  setFilter(value);
+                }}
                 className={`px-3 py-1.5 rounded-full text-[12px] border ${
                   filter === value
                     ? 'bg-[#C9922A] text-[#0A1628] border-[#C9922A]'
@@ -252,47 +241,43 @@ export default function AdminWaitlist() {
           </div>
 
           <div className="text-[12px] text-[#9CA3AF] font-mono">
-            {data.items.length} shown
+            {waitlists.length} shown
           </div>
         </div>
 
-        {loading ? (
+        {isPending ? (
           <div className="p-10 text-[#9CA3AF] text-center">Loading…</div>
-        ) : data.items.length === 0 ? (
+        ) : waitlists.length === 0 ? (
           <div className="p-10 text-[#9CA3AF] text-center">No signups yet.</div>
         ) : (
           <>
             <table className="helix-table">
               <thead>
                 <tr>
+                  <th>Full Name</th>
                   <th>Email</th>
                   <th>Type</th>
-                  <th>Signed up</th>
-                  <th>Referer</th>
+                  <th>Date</th>
+                  <th>Source</th>
                 </tr>
               </thead>
 
               <tbody>
-                {paginatedData.items.map((row) => (
+                {waitlists.map((row) => (
                   <tr key={row.id} data-testid={`row-${row.id}`}>
-                    <td className="font-mono text-[13px]">
-                      <Folder
-                        size={12}
-                        className="inline mr-1.5 text-[#1A7A6E]"
-                      />
-                      {row.email}
-                    </td>
+                    <td className="font-mono text-[13px]">{row.fullName}</td>
+                    <td className="font-mono text-[13px]">{row.email}</td>
 
                     <td className="uppercase text-[11px] font-mono tracking-wider">
-                      {row.type}
+                      {row.customerType ?? '-'}
                     </td>
 
                     <td className="text-[11px] text-[#9CA3AF] font-mono">
-                      {row.created_at?.replace('T', ' ').slice(0, 19)}
+                      {formatDateToMM(row.createdAt)}
                     </td>
 
-                    <td className="text-[11px] text-[#9CA3AF] truncate max-w-[280px]">
-                      {row.referer || '—'}
+                    <td className="text-[11px] text-[#9CA3AF] truncate max-w-70">
+                      {row.source || '—'}
                     </td>
                   </tr>
                 ))}
@@ -300,8 +285,8 @@ export default function AdminWaitlist() {
             </table>
 
             <Pagination
-              page={paginatedData.page}
-              totalPages={paginatedData.totalPages}
+              page={metrics.pageNumber}
+              totalPages={metrics.totalPages}
               onChange={setPage}
             />
           </>

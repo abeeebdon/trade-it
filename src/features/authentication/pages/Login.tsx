@@ -44,7 +44,7 @@ export default function Login() {
         console.log('User Details:', userDetails);
         dispatch(login(userDetails));
         switch (result.data.roles[0].toLowerCase()) {
-          case 'export admin':
+          case 'admin':
             dispatch(setAuthRole('admin'));
             router.push('/admin');
             break;
@@ -53,7 +53,7 @@ export default function Login() {
             router.push('/buyer');
             break;
           case 'direct customer':
-            dispatch(setAuthRole('customer'));
+            dispatch(setAuthRole('consumer'));
             router.push('/');
             break;
           case 'african exporter':
