@@ -35,13 +35,11 @@ export default function Login() {
       if (result.success) {
         toast.success(result.message);
         saveCookie('token', result.data.token);
-        console.log(result.data.refreshToken);
         saveCookie('refreshToken', result.data.refreshToken);
         const userDetails = {
           email: result.data.email,
           fullName: result.data.fullName,
         };
-        console.log('User Details:', userDetails);
         dispatch(login(userDetails));
         switch (result.data.roles[0].toLowerCase()) {
           case 'admin':
@@ -77,13 +75,6 @@ export default function Login() {
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await api.get('/authentication');
-      console.log(res);
-    };
-    fetchData();
-  }, []);
   return (
     <div className="w-full border max-w-md mx-auto helix-card p-8 fade-up">
       <h1 className="helix-kicker mb-2">Jomp Trade · Sign in</h1>

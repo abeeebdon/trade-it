@@ -1,5 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
-import { getAdminDdashboard, getWaitlist } from '../api/adminApi';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import {
+  getAdminDdashboard,
+  getWaitlist,
+  getWaitlistCommand,
+  getWaitlistCSV,
+} from '../api/adminApi';
 export interface useGetWaitlistType {
   filter?: string;
   pageNumber?: number;
@@ -20,5 +25,16 @@ export const useGetWaitlist = ({
   return useQuery({
     queryKey: ['admin-waittlist', filter, pageSize, pageNumber],
     queryFn: () => getWaitlist({ filter, pageSize, pageNumber }),
+  });
+};
+export const useGetWaitlistCommand = () => {
+  return useQuery({
+    queryKey: ['admin-waitlist-command'],
+    queryFn: getWaitlistCommand,
+  });
+};
+export const useGetWaitlistCSV = () => {
+  return useMutation({
+    mutationFn: (filter: string) => getWaitlistCSV({ filter }),
   });
 };
