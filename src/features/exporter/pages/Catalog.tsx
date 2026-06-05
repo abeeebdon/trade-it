@@ -1,14 +1,12 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Search } from 'lucide-react';
 import Pagination from '../components/pagination';
 import ProductCard from '../components/ProductCard';
-import { products as mockProducts } from '../components/data';
-import type { Product } from '../types/exporter';
-import { paginate } from '@/lib/utils';
+import { useGetCatalogProducts } from '../hooks/useGetCatalogProducts';
 
-// ─── Constants ──────────────────────────────────────────────────────────────────
+// Constants
 
 const PER_PAGE = 12;
 
@@ -20,58 +18,59 @@ const CATEGORIES = [
   { value: 'general-goods', label: 'General Goods' },
 ];
 
-// Catalog Page
+// Catalog
+
 export default function Catalog() {
-  const [items, setItems] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState('');
   const [country, setCountry] = useState('');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
 
-  // Simulated fetch
-  useEffect(() => {
-    setTimeout(() => {
-      setItems(mockProducts);
-      setLoading(false);
-    }, 500);
-  }, []);
+  const { data, isPending, isError } = useGetCatalogProducts({
+    pageNumber: page,
+    pageSize: PER_PAGE,
+    category: category || undefined,
+    country: country || undefined,
+  });
 
-  // Reset page on filter change
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setPage(1);
-    }, 0);
-    return () => clearTimeout(timer);
-  }, [category, country, search]);
+  const products = data?.data ?? [];
+  const totalPages = data?.totalPages ?? 1;
 
-  // Filtering
-  const filtered = useMemo(() => {
-    return items.filter((p) => {
-      const matchCat = category ? p.category === category : true;
+  // Reset to page 1 when filters change
+  const handleCategoryChange = (value: string) => {
+    setCategory(value);
+    setPage(1);
+  };
 
-      const matchCountry = country ? p.country === country : true;
-      const matchSearch = search
-        ? p.name.toLowerCase().includes(search.toLowerCase()) ||
-          p.description.toLowerCase().includes(search.toLowerCase())
-        : true;
+  const handleCountryChange = (value: string) => {
+    setCountry(value);
+    setPage(1);
+  };
 
-      return matchCat && matchCountry && matchSearch;
-    });
-  }, [items, category, country, search]);
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(1);
+  };
 
-  const paginated = paginate(filtered, page, PER_PAGE);
+  // Client-side search filter against the current page results
+  const filtered = search
+    ? products.filter(
+        (p) =>
+          p.name.toLowerCase().includes(search.toLowerCase()) ||
+          p.description.toLowerCase().includes(search.toLowerCase()),
+      )
+    : products;
 
   return (
     <>
       <div className="mb-8 space-y-4">
         <div className="flex items-center justify-between flex-wrap gap-3">
-          {/* Buttons (LEFT) */}
+          {/* Category filters  */}
           <div className="flex flex-wrap gap-2">
             {CATEGORIES.map((c) => (
               <button
                 key={c.value}
-                onClick={() => setCategory(c.value)}
+                onClick={() => handleCategoryChange(c.value)}
                 className={`px-4 py-2 rounded-full text-[12px] font-medium border transition ${
                   category === c.value
                     ? 'bg-[#C9922A] text-[#0A1628] border-[#C9922A]'
@@ -83,7 +82,7 @@ export default function Catalog() {
             ))}
           </div>
 
-          {/* Search (RIGHT) */}
+          {/* Search */}
           <div className="relative">
             <Search
               size={14}
@@ -92,18 +91,18 @@ export default function Catalog() {
             <input
               placeholder="Search products..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="helix-input pl-9 w-64"
             />
           </div>
         </div>
 
-        {/* Row 2: Select (below) */}
+        {/* Country filter */}
         <div>
           <select
             className="helix-input w-40"
             value={country}
-            onChange={(e) => setCountry(e.target.value)}
+            onChange={(e) => handleCountryChange(e.target.value)}
           >
             <option value="">All Countries</option>
             <option value="Nigeria">Nigeria</option>
@@ -113,8 +112,8 @@ export default function Catalog() {
         </div>
       </div>
 
-      {/* Grid */}
-      {loading ? (
+      {/* Loading skeleton */}
+      {isPending && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {Array.from({ length: 6 }).map((_, i) => (
             <div
@@ -130,11 +129,21 @@ export default function Catalog() {
             </div>
           ))}
         </div>
-      ) : (
+      )}
+
+      {/* Error */}
+      {isError && (
+        <div className="text-center text-[#9CA3AF] py-20">
+          Failed to load products. Please refresh.
+        </div>
+      )}
+
+      {/* Grid */}
+      {!isPending && !isError && (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {paginated.items.map((it) => (
-              <ProductCard key={it.id} p={it} />
+            {filtered.map((p) => (
+              <ProductCard key={p.id} p={p} />
             ))}
 
             {filtered.length === 0 && (
@@ -145,8 +154,8 @@ export default function Catalog() {
           </div>
 
           <Pagination
-            page={paginated.page}
-            totalPages={paginated.totalPages}
+            page={page}
+            totalPages={totalPages}
             onChange={(np) => {
               setPage(np);
               window.scrollTo({ top: 0, behavior: 'smooth' });

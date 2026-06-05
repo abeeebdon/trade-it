@@ -1,6 +1,6 @@
-import { Icon } from '@phosphor-icons/react';
 import { AccountDetails } from './finance';
 import { LucideIcon } from 'lucide-react';
+import { Icon } from '@phosphor-icons/react';
 
 export interface StatProps {
   label: string;
@@ -8,7 +8,8 @@ export interface StatProps {
   icon: Icon;
   accent?: boolean;
 }
-// types.ts
+
+// ─── Currency & Sector ────────────────────────────────────────────────────────
 
 export type CurrencyCode = 'USD' | 'NGN' | 'EUR' | string;
 
@@ -22,16 +23,18 @@ export type OverviewType = {
   order_count: number;
   transaction_count: number;
   fees_collected_usd: number;
-
   total_volume_by_currency: Record<CurrencyCode, number>;
   by_sector: Record<string, SectorStat>;
 };
+
+// ─── Verification ─────────────────────────────────────────────────────────────
 
 export type VerificationStatus =
   | 'pending'
   | 'approved'
   | 'rejected'
   | 'under_review';
+
 export type Verification = {
   id: string;
   business_name: string;
@@ -48,19 +51,18 @@ export interface VerificationItem {
   registration_type: string;
   country: string;
   sector: string;
-
   anchor_customer_id?: string;
-
   cac_number?: string;
   bvn?: string;
   tin?: string;
   ein?: string;
-
   director_name?: string;
-
   kyc_status: VerificationStatus;
   kyb_status: VerificationStatus;
 }
+
+// ─── Credit (Admin-facing) ────────────────────────────────────────────────────
+
 type CreditStatus =
   | 'submitted'
   | 'under_review'
@@ -90,6 +92,9 @@ export interface OfferState {
   offered_term_months: string;
   decision_note: string;
 }
+
+// ─── Disputes ─────────────────────────────────────────────────────────────────
+
 export type DisputeStatus = 'open' | 'resolved' | 'rejected' | 'under_review';
 
 export interface Dispute {
@@ -100,10 +105,12 @@ export interface Dispute {
   status: DisputeStatus;
   created_at: string;
 }
+
 export interface DisputeCardPRops {
   d: Dispute;
 }
-export type ProductStatus = 'active' | 'inactive' | 'draft';
+
+export type ProductStatus = 'active' | 'inactive' | 'draft' | 'archived';
 
 export interface Product {
   id: string;
@@ -127,7 +134,59 @@ export interface ProductCardPRops {
   p: Product;
 }
 
-//supplier
+export type ProductUnitOption = {
+  id: number;
+  label: string;
+};
+
+export type ProductStatusOption = {
+  id: number;
+  label: string;
+  value: string;
+};
+
+export type CreateProductPayload = {
+  UserId?: number;
+  Name: string;
+  Category: string;
+  Unit: number;
+  PriceUsd: number;
+  Moq: number;
+  Description: string;
+  CurrencyId: number;
+  StatusId: number;
+  ThumbnailImage: File | null;
+  Images: File[];
+};
+
+// Internal form state — maps to CreateProductPayload before submit
+export type ProductFormState = {
+  name: string;
+  category: string;
+  unitId: number;
+  price_usd: number;
+  moq: number;
+  description: string;
+  currencyId: number;
+  statusId: number;
+  thumbnail: File | null;
+  images: File[];
+};
+
+export type ProductListParams = {
+  pageNumber: number;
+  pageSize: number;
+};
+
+export type ProductListResponse = {
+  data: Product[];
+  pageNumber: number;
+  pageSize: number;
+  totalRecords: number;
+  totalPages: number;
+};
+
+// Supplier
 export type Supplier = {
   business_name: string;
   country: string;
@@ -142,8 +201,8 @@ export type ProductData = {
   product: Product;
   supplier: Supplier;
 };
+// ─── Orders ───────────────────────────────────────────────────────────────────
 
-//order types
 export type OrderStatus =
   | 'pending'
   | 'confirmed'
@@ -173,7 +232,6 @@ export type Order = {
   payment_status: PaymentStatus;
 };
 
-// Order Details
 export type TimelineEvent = {
   event: string;
   at: string;
@@ -202,6 +260,8 @@ export type OrderDetailData = {
   buyer: { business_name: string; country: string };
 };
 
+// ─── Listings ─────────────────────────────────────────────────────────────────
+
 export type FulfillmentMode = 'riby_dtc' | 'buyer_local';
 
 export type ListingStatus = 'active' | 'out_of_stock' | 'archived';
@@ -221,7 +281,7 @@ export type Listing = {
 
 export type ListingFormData = Omit<Listing, 'id' | 'fulfillment_mode'>;
 
-// Fulfillment Types
+// ─── Fulfillment ──────────────────────────────────────────────────────────────
 
 export type QuoteStatus =
   | 'pending'
@@ -229,12 +289,15 @@ export type QuoteStatus =
   | 'accepted'
   | 'rejected'
   | 'expired';
+
 export type EscrowStatus = 'held' | 'released' | 'refunded';
+
 export type FulfillmentOrderStatus =
   | 'paid'
   | 'shipped'
   | 'delivered'
   | 'cancelled';
+
 export type CheckoutMode = 'quote_prepay' | 'listed';
 
 export type SellerQuote = {
@@ -276,7 +339,7 @@ export type RespondForm = {
   valid_days: number;
 };
 
-// Compliance Types
+// ─── Compliance ───────────────────────────────────────────────────────────────
 
 export type DocStatus = 'active' | 'expired' | 'expiring_soon' | 'pending';
 
@@ -315,7 +378,8 @@ export type AddDocForm = {
   original_filename: string;
 };
 
-// Withdrawal Account Types
+// ─── Withdrawal Accounts ──────────────────────────────────────────────────────
+
 export type AccountCurrency = 'USD' | 'NGN';
 export type AccountType = 'checking' | 'savings';
 export type ApprovalStatus = 'approved' | 'pending' | 'rejected';
@@ -351,7 +415,7 @@ export type WithdrawalAccountForm = {
   swift_code: string;
 };
 
-// Credit Types
+// ─── Credit ───────────────────────────────────────────────────────────────────
 
 export type CreditApplicationStatus =
   | 'submitted'
@@ -401,7 +465,7 @@ export type CreditApplication = {
   snapshot_sales?: CreditSales;
 };
 
-// Repayment Types
+// ─── Repayments ───────────────────────────────────────────────────────────────
 
 export type InstallmentStatus = 'paid' | 'pending' | 'overdue' | 'upcoming';
 
@@ -440,7 +504,7 @@ export type RepaymentData = {
   applications: RepaymentApplication[];
 };
 
-// Onboarding Types
+// ─── Onboarding ───────────────────────────────────────────────────────────────
 
 export type RegistrationType = 'business' | 'individual';
 
@@ -496,6 +560,30 @@ export type OnboardingStep = {
   label: string;
   done: boolean;
 };
+
+// ─── Finance / Transactions ───────────────────────────────────────────────────
+
+export type TransactionType = 'credit' | 'debit' | 'fee';
+
+export type Transaction = {
+  id: string;
+  timestamp: string;
+  type: TransactionType;
+  description: string;
+  anchor_transaction_ref: string;
+  currency: string;
+  amount: number;
+};
+
+export type FxRate = {
+  pair: string;
+  rate: number;
+  source: string;
+  updatedAt: string;
+};
+
+// ─── Component Props ──────────────────────────────────────────────────────────
+
 export interface BalanceCardProps {
   label: string;
   value: string;
@@ -503,6 +591,7 @@ export interface BalanceCardProps {
   va?: AccountDetails;
   accent?: boolean;
 }
+
 export interface AccountSectionProps {
   title: string;
   icon: LucideIcon;
@@ -512,6 +601,7 @@ export interface AccountSectionProps {
   onDefault: (id: string) => void;
   onRemove: (id: string) => void;
 }
+
 export interface AccountSectionCardProps {
   onDefault: (id: string) => void;
   onRemove: (id: string) => void;

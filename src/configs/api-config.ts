@@ -9,10 +9,12 @@ interface CustomAxiosRequestConfig extends AxiosRequestConfig {
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
+
+// Setting default header safely for standard data formats without locking FormData requests
+api.defaults.headers.post['Content-Type'] = 'application/json';
+api.defaults.headers.put['Content-Type'] = 'application/json';
+api.defaults.headers.patch['Content-Type'] = 'application/json';
 
 // prevents multiple refresh requests
 let isRefreshing = false;
@@ -36,15 +38,12 @@ const processQueue = (error: unknown, token: string | null = null) => {
 // logout function
 const handleLogout = () => {
   saveCookie('token', '');
-
   window.location.href = '/login';
 };
 
 api.interceptors.request.use(
   (config) => {
     const token = getSavedCookie('token');
-
-    // optional temp token logic
 
     if (token) {
       config.headers = config.headers ?? {};
@@ -53,7 +52,6 @@ api.interceptors.request.use(
 
     return config;
   },
-
   (error) => Promise.reject(error),
 );
 
@@ -78,7 +76,6 @@ api.interceptors.response.use(
             resolve: (token) => {
               config.headers = config.headers ?? {};
               config.headers.Authorization = `Bearer ${token}`;
-
               resolve(api(config));
             },
             reject,
@@ -102,9 +99,7 @@ api.interceptors.response.use(
         return api(config);
       } catch (refreshError) {
         processQueue(refreshError, null);
-
         handleLogout();
-
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
@@ -116,11 +111,9 @@ api.interceptors.response.use(
       case 403:
         console.error('Forbidden');
         break;
-
       case 404:
         console.error('Not found');
         break;
-
       case 500:
         console.error('Server error');
         break;
