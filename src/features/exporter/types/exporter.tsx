@@ -378,7 +378,7 @@ export type AddDocForm = {
   original_filename: string;
 };
 
-// ─── Withdrawal Accounts ──────────────────────────────────────────────────────
+//Withdrawal Accounts
 
 export type AccountCurrency = 'USD' | 'NGN';
 export type AccountType = 'checking' | 'savings';
@@ -415,7 +415,7 @@ export type WithdrawalAccountForm = {
   swift_code: string;
 };
 
-// ─── Credit ───────────────────────────────────────────────────────────────────
+// Credit
 
 export type CreditApplicationStatus =
   | 'submitted'
@@ -465,7 +465,7 @@ export type CreditApplication = {
   snapshot_sales?: CreditSales;
 };
 
-// ─── Repayments ───────────────────────────────────────────────────────────────
+// Repayments
 
 export type InstallmentStatus = 'paid' | 'pending' | 'overdue' | 'upcoming';
 
@@ -504,7 +504,7 @@ export type RepaymentData = {
   applications: RepaymentApplication[];
 };
 
-// ─── Onboarding ───────────────────────────────────────────────────────────────
+// Onboarding
 
 export type RegistrationType = 'business' | 'individual';
 
@@ -561,7 +561,7 @@ export type OnboardingStep = {
   done: boolean;
 };
 
-// ─── Finance / Transactions ───────────────────────────────────────────────────
+//  Finance / Transactions
 
 export type TransactionType = 'credit' | 'debit' | 'fee';
 
@@ -582,7 +582,7 @@ export type FxRate = {
   updatedAt: string;
 };
 
-// ─── Component Props ──────────────────────────────────────────────────────────
+// Component Props
 
 export interface BalanceCardProps {
   label: string;

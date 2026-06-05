@@ -118,7 +118,7 @@ export default function Dashboard() {
         <div className="helix-card p-5">
           <div className="flex justify-between items-start">
             <div>
-              <div className="helix-label">USD / NGN Rate</div>
+              <span className="helix-label">USD / NGN Rate</span>
               <div className="font-mono text-3xl font-bold text-primary mt-2 tracking-tight">
                 ₦{fxRate ? Number(fxRate.rate).toLocaleString() : '—'}
               </div>
@@ -229,7 +229,7 @@ export default function Dashboard() {
                 Missing documents
               </div>
               <ul className="space-y-1">
-                {compliance!.missingDocuments.slice(0, 4).map((doc) => (
+                {compliance!.missingDocuments.slice(0, 4).map((doc: string) => (
                   <li
                     key={doc}
                     className="text-[13px] flex items-center gap-2 text-text"
