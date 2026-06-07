@@ -19,3 +19,10 @@ export const STATUSES = [
 ];
 
 export const DEFAULT_CURRENCY_ID = 1;
+
+export const CATS = [
+  { value: 'fashion', label: 'Fashion' },
+  { value: 'agriculture', label: 'Agriculture' },
+  { value: 'staple-foods', label: 'Staple Foods' },
+  { value: 'general-goods', label: 'General Goods' },
+];
