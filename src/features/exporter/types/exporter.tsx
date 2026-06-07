@@ -1,15 +1,14 @@
 import { AccountDetails } from './finance';
 import { LucideIcon } from 'lucide-react';
-import { Icon } from '@phosphor-icons/react';
 
 export interface StatProps {
   label: string;
   value: string | number;
-  icon: Icon;
+  icon: LucideIcon;
   accent?: boolean;
 }
 
-// ─── Currency & Sector ────────────────────────────────────────────────────────
+// Currency & Sector
 
 export type CurrencyCode = 'USD' | 'NGN' | 'EUR' | string;
 
@@ -27,7 +26,7 @@ export type OverviewType = {
   by_sector: Record<string, SectorStat>;
 };
 
-// ─── Verification ─────────────────────────────────────────────────────────────
+//  Verification
 
 export type VerificationStatus =
   | 'pending'
@@ -61,7 +60,7 @@ export interface VerificationItem {
   kyb_status: VerificationStatus;
 }
 
-// ─── Credit (Admin-facing) ────────────────────────────────────────────────────
+// Credit (Admin-facing)
 
 type CreditStatus =
   | 'submitted'
@@ -93,7 +92,7 @@ export interface OfferState {
   decision_note: string;
 }
 
-// ─── Disputes ─────────────────────────────────────────────────────────────────
+//  Disputes
 
 export type DisputeStatus = 'open' | 'resolved' | 'rejected' | 'under_review';
 
@@ -201,7 +200,7 @@ export type ProductData = {
   product: Product;
   supplier: Supplier;
 };
-// ─── Orders ───────────────────────────────────────────────────────────────────
+//  Orders
 
 export type OrderStatus =
   | 'pending'
@@ -260,7 +259,7 @@ export type OrderDetailData = {
   buyer: { business_name: string; country: string };
 };
 
-// ─── Listings ─────────────────────────────────────────────────────────────────
+//  Listings
 
 export type FulfillmentMode = 'riby_dtc' | 'buyer_local';
 
@@ -281,7 +280,7 @@ export type Listing = {
 
 export type ListingFormData = Omit<Listing, 'id' | 'fulfillment_mode'>;
 
-// ─── Fulfillment ──────────────────────────────────────────────────────────────
+// Fulfillment
 
 export type QuoteStatus =
   | 'pending'
@@ -607,3 +606,38 @@ export interface AccountSectionCardProps {
   onRemove: (id: string) => void;
   a: WithdrawalAccount;
 }
+
+// Categories
+
+export type ProductCategory = {
+  id: number;
+  name: string;
+  description: string;
+};
+
+export type ProductCategoryListParams = {
+  pageNumber: number;
+  pageSize: number;
+};
+
+export type ProductCategoryListResponse = {
+  pageNumber: number;
+  pageSize: number;
+  totalRecords: number;
+  totalPages: number;
+  data: ProductCategory[];
+};
+
+// Product country
+export type ProductCountry = {
+  id: number;
+  name: string;
+};
+
+export type ProductCountryListResponse = {
+  pageNumber: number;
+  pageSize: number;
+  totalRecords: number;
+  totalPages: number;
+  data: ProductCountry[];
+};

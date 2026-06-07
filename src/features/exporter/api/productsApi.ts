@@ -3,6 +3,11 @@ import {
   CreateProductPayload,
   ProductListParams,
   ProductListResponse,
+  ProductData,
+  ProductCategory,
+  ProductCategoryListParams,
+  ProductCategoryListResponse,
+  ProductCountryListResponse,
 } from '../types/exporter';
 
 export const getProducts = async ({
@@ -13,6 +18,15 @@ export const getProducts = async ({
     const response = await api.get(
       `/Product?pageNumber=${pageNumber}&pageSize=${pageSize}`,
     );
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getProductById = async (id: string): Promise<ProductData> => {
+  try {
+    const response = await api.get(`/Product/${id}`);
     return response.data.data;
   } catch (error) {
     throw error;
@@ -51,3 +65,42 @@ export const createProduct = async (
     throw error;
   }
 };
+
+//product category
+export const getProductCategories = async ({
+  pageNumber,
+  pageSize,
+}: ProductCategoryListParams): Promise<ProductCategoryListResponse> => {
+  try {
+    const response = await api.get(
+      `/ProductCategory?PageNumber=${pageNumber}&PageSize=${pageSize}`,
+    );
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getProductCategoryById = async (
+  id: number,
+): Promise<ProductCategory> => {
+  try {
+    const response = await api.get(`/ProductCategory/${id}`);
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getProductCountries =
+  async (): Promise<ProductCountryListResponse> => {
+    try {
+      // Fetch all 193 countries in one shot
+      const response = await api.get(
+        `/Product/countries?PageNumber=1&PageSize=250`,
+      );
+      return response.data.data;
+    } catch (error) {
+      throw error;
+    }
+  };

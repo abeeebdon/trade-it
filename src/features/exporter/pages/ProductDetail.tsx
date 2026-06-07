@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { CheckCircle2, Warehouse, MapPin } from 'lucide-react';
 import { useHeader } from '@/context/HeaderContext';
-import { useGetProductById } from '../hooks/useGetProductById';
+import { useGetProductById } from '../hooks/useProducts';
 
 // Types
 

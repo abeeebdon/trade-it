@@ -1,40 +1,29 @@
 'use client';
 
-import { useState } from 'react';
-import { Product, ProductFormState } from '../types/exporter';
-import { useCreateProduct } from '../hooks/useProducts';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+import { useEffect, useMemo } from 'react';
+import { useForm, useWatch, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
+import { useSelector } from 'react-redux';
 
-const CATEGORIES = [
-  { value: 'fashion', label: 'Fashion & Textiles' },
-  { value: 'agriculture', label: 'Agriculture' },
-  { value: 'staple-foods', label: 'Staple Foods' },
-  { value: 'general-goods', label: 'General Goods' },
-];
+import {
+  productSchema,
+  ProductFormValues,
+} from '@/features/authentication/components/validation';
+import { Product } from '../types/exporter';
+import {
+  useCreateProduct,
+  useGetProductCategories,
+} from '../hooks/useProducts';
+import { RootState } from '@/store/store';
+import InputField from '@/components/form/InputFIeld';
+import { UNITS, STATUSES, DEFAULT_CURRENCY_ID } from '@/lib/constants';
 
-const UNITS = [
-  { id: 1, label: 'Piece' },
-  { id: 2, label: 'Kg' },
-  { id: 3, label: 'Bag' },
-  { id: 4, label: 'Roll' },
-  { id: 5, label: 'Set' },
-  { id: 6, label: 'Litre' },
-  { id: 7, label: 'Carton' },
-];
+// Helpers
 
-const STATUSES = [
-  { id: 1, label: 'Draft', value: 'draft' },
-  { id: 2, label: 'Active (published)', value: 'active' },
-  { id: 3, label: 'Archived', value: 'archived' },
-];
-
-const DEFAULT_CURRENCY_ID = 1;
-
-const defaultForm = (): ProductFormState => ({
+const defaultValues = (): ProductFormValues => ({
   name: '',
-  category: 'fashion',
+  category: '',
   unitId: 1,
   price_usd: 50,
   moq: 10,
@@ -43,9 +32,11 @@ const defaultForm = (): ProductFormState => ({
   statusId: 1,
   thumbnail: null,
   images: [],
+  thumbnailPreview: null,
+  imagePreviews: [],
 });
 
-const formFromProduct = (p: Product): ProductFormState => ({
+const valuesFromProduct = (p: Product): ProductFormValues => ({
   name: p.name,
   category: p.category,
   unitId:
@@ -57,13 +48,18 @@ const formFromProduct = (p: Product): ProductFormState => ({
   statusId: STATUSES.find((s) => s.value === p.status)?.id ?? 1,
   thumbnail: null,
   images: [],
+  thumbnailPreview: p.photos?.[0] ?? null,
+  imagePreviews: p.photos?.slice(1) ?? [],
 });
 
+//  Props
 interface ProductFormProps {
   onClose: () => void;
   editing: Product | null;
   fxRate?: number;
 }
+
+//  Component
 
 export default function ProductForm({
   onClose,
@@ -71,72 +67,104 @@ export default function ProductForm({
   fxRate,
 }: ProductFormProps) {
   const user = useSelector((state: RootState) => state.auth.user);
-  const [form, setForm] = useState<ProductFormState>(
-    editing ? formFromProduct(editing) : defaultForm(),
-  );
 
-  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(
-    editing?.photos?.[0] ?? null,
-  );
-  const [imagePreviews, setImagePreviews] = useState<string[]>(
-    editing?.photos?.slice(1) ?? [],
-  );
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useForm<ProductFormValues>({
+    resolver: zodResolver(productSchema),
+    defaultValues: editing ? valuesFromProduct(editing) : defaultValues(),
+  });
 
   const { mutate: submitProduct, isPending } = useCreateProduct(onClose);
+
+  const { data: categoryData, isPending: categoriesLoading } =
+    useGetProductCategories({ pageNumber: 1, pageSize: 100 });
+
+  const categories = useMemo(
+    () => categoryData?.data ?? [],
+    [categoryData?.data],
+  );
+
+  // Seed first category once API responds, but only in create mode
+  useEffect(() => {
+    if (editing || !categories.length) return;
+    const current = getValues('category');
+    if (!current) {
+      setValue('category', categories[0].name);
+    }
+  }, [categories, editing, getValues, setValue]);
+
+  // Watched values for live UI updates
+  const priceUsd = useWatch({ control, name: 'price_usd' });
+  const thumbnailPreview =
+    useWatch({ control, name: 'thumbnailPreview' }) ?? null;
+  const imagePreviews = useWatch({ control, name: 'imagePreviews' }) ?? [];
+
+  const ngnEstimate = useMemo(
+    () =>
+      fxRate && priceUsd ? `₦${(priceUsd * fxRate).toLocaleString()}` : null,
+    [fxRate, priceUsd],
+  );
+
+  // File handlers
 
   const handleThumbnail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setForm((prev) => ({ ...prev, thumbnail: file }));
-    setThumbnailPreview(URL.createObjectURL(file));
+    setValue('thumbnail', file, { shouldValidate: true });
+    setValue('thumbnailPreview', URL.createObjectURL(file));
   };
 
   const handleImages = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
     if (!files.length) return;
-    setForm((prev) => ({ ...prev, images: [...prev.images, ...files] }));
-    setImagePreviews((prev) => [
-      ...prev,
+
+    const currentImages = getValues('images') ?? [];
+    const currentPreviews = getValues('imagePreviews') ?? [];
+
+    setValue('images', [...currentImages, ...files], { shouldValidate: true });
+    setValue('imagePreviews', [
+      ...currentPreviews,
       ...files.map((f) => URL.createObjectURL(f)),
     ]);
   };
 
   const removeImage = (index: number) => {
-    setForm((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index),
-    }));
-    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+    const currentImages = getValues('images') ?? [];
+    const currentPreviews = getValues('imagePreviews') ?? [];
+
+    setValue(
+      'images',
+      currentImages.filter((_, i) => i !== index),
+      { shouldValidate: true },
+    );
+    setValue(
+      'imagePreviews',
+      currentPreviews.filter((_, i) => i !== index),
+    );
   };
 
-  const handleSave = () => {
-    // Enforcing required backend properties validation explicitly
-    if (
-      !form.name.trim() ||
-      !form.description.trim() ||
-      form.images.length === 0
-    ) {
-      return;
-    }
-
+  // Submit
+  const onSubmit = (values: ProductFormValues) => {
     submitProduct({
       UserId: user?.id ? Number(user.id) : undefined,
-      Name: form.name,
-      Category: form.category,
-      Unit: form.unitId,
-      PriceUsd: form.price_usd,
-      Moq: form.moq,
-      Description: form.description,
-      CurrencyId: form.currencyId,
-      StatusId: form.statusId,
-      ThumbnailImage: form.thumbnail,
-      Images: form.images,
+      Name: values.name,
+      Category: values.category,
+      Unit: values.unitId,
+      PriceUsd: values.price_usd,
+      Moq: values.moq,
+      Description: values.description,
+      CurrencyId: values.currencyId,
+      StatusId: values.statusId,
+      ThumbnailImage: values.thumbnail ?? null,
+      Images: values.images,
     });
   };
-
-  const ngnEstimate = fxRate
-    ? `₦${(form.price_usd * fxRate).toLocaleString()}`
-    : null;
 
   return (
     <div
@@ -152,107 +180,150 @@ export default function ProductForm({
           {editing ? 'Edit product' : 'Create product'}
         </h2>
 
-        <div className="mt-5 grid md:grid-cols-2 gap-4">
-          <Field label="Name" full>
-            <input
-              className="helix-input"
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="mt-5 grid md:grid-cols-2 gap-4"
+          noValidate
+        >
+          {/* Name */}
+          <div className="md:col-span-2">
+            <InputField
+              label="Name"
               placeholder="e.g. Premium Sesame Seeds"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              error={errors.name?.message}
               data-testid="pf-name"
+              {...register('name')}
             />
-          </Field>
+          </div>
 
-          <Field label="Category">
-            <select
-              className="helix-input"
-              value={form.category}
-              onChange={(e) => setForm({ ...form, category: e.target.value })}
-              data-testid="pf-cat"
-            >
-              {CATEGORIES.map((c) => (
-                <option key={c.value} value={c.value}>
-                  {c.label}
-                </option>
-              ))}
-            </select>
-          </Field>
+          {/* Category */}
+          <div>
+            <label className="helix-label">Category</label>
+            {categoriesLoading ? (
+              <div className="helix-input h-10 animate-pulse opacity-40" />
+            ) : (
+              <Controller
+                name="category"
+                control={control}
+                render={({ field }) => (
+                  <select
+                    {...field}
+                    className="helix-input"
+                    data-testid="pf-cat"
+                  >
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.name}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              />
+            )}
+            {errors.category && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.category.message}
+              </p>
+            )}
+          </div>
 
-          <Field label="Unit">
-            <select
-              className="helix-input"
-              value={form.unitId}
-              onChange={(e) =>
-                setForm({ ...form, unitId: Number(e.target.value) })
-              }
-            >
-              {UNITS.map((u) => (
-                <option key={u.id} value={u.id}>
-                  {u.label}
-                </option>
-              ))}
-            </select>
-          </Field>
+          {/* Unit */}
+          <div>
+            <label className="helix-label">Unit</label>
+            <Controller
+              name="unitId"
+              control={control}
+              render={({ field }) => (
+                <select
+                  {...field}
+                  onChange={(e) => field.onChange(Number(e.target.value))}
+                  className="helix-input"
+                >
+                  {UNITS.map((u) => (
+                    <option key={u.id} value={u.id}>
+                      {u.label}
+                    </option>
+                  ))}
+                </select>
+              )}
+            />
+            {errors.unitId && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.unitId.message}
+              </p>
+            )}
+          </div>
 
-          <Field label="Price (USD)">
-            <input
+          {/* Price */}
+          <div>
+            <InputField
+              label="Price (USD)"
               type="number"
-              step="0.01"
-              min="0"
-              className="helix-input"
-              value={form.price_usd}
-              onChange={(e) =>
-                setForm({ ...form, price_usd: Number(e.target.value) })
-              }
+              placeholder="0.00"
+              error={errors.price_usd?.message}
               data-testid="pf-price"
+              {...register('price_usd', { valueAsNumber: true })}
             />
             {ngnEstimate && (
               <p className="text-[11px] text-[#9CA3AF] font-mono mt-1">
                 ≈ {ngnEstimate} at current rate
               </p>
             )}
-          </Field>
+          </div>
 
-          <Field label="Minimum Order Quantity (MOQ)">
-            <input
+          {/* MOQ */}
+          <div>
+            <InputField
+              label="Minimum Order Quantity (MOQ)"
               type="number"
-              min="1"
-              className="helix-input"
-              value={form.moq}
-              onChange={(e) =>
-                setForm({ ...form, moq: Number(e.target.value) })
-              }
+              placeholder="10"
+              error={errors.moq?.message}
+              {...register('moq', { valueAsNumber: true })}
             />
-          </Field>
+          </div>
 
-          <Field label="Status">
-            <select
-              className="helix-input"
-              value={form.statusId}
-              onChange={(e) =>
-                setForm({ ...form, statusId: Number(e.target.value) })
-              }
-            >
-              {STATUSES.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.label}
-                </option>
-              ))}
-            </select>
-          </Field>
+          {/* Status */}
+          <div>
+            <label className="helix-label">Status</label>
+            <Controller
+              name="statusId"
+              control={control}
+              render={({ field }) => (
+                <select
+                  {...field}
+                  onChange={(e) => field.onChange(Number(e.target.value))}
+                  className="helix-input"
+                >
+                  {STATUSES.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.label}
+                    </option>
+                  ))}
+                </select>
+              )}
+            />
+          </div>
 
-          <Field label="Description" full>
+          {/* Description */}
+          <div className="md:col-span-2">
+            <label className="helix-label">Description</label>
             <textarea
-              className="helix-input h-24"
+              className={`helix-input h-24 ${
+                errors.description ? 'border-red-500' : ''
+              }`}
               placeholder="Describe your product for international buyers..."
-              value={form.description}
-              onChange={(e) =>
-                setForm({ ...form, description: e.target.value })
-              }
+              {...register('description')}
             />
-          </Field>
+            {errors.description && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.description.message}
+              </p>
+            )}
+          </div>
 
-          <Field label="Thumbnail Image" full>
+          {/* Thumbnail */}
+          <div className="md:col-span-2">
+            <label className="helix-label">Thumbnail Image</label>
             <input
               type="file"
               accept="image/*"
@@ -261,17 +332,22 @@ export default function ProductForm({
               data-testid="pf-thumbnail"
             />
             {thumbnailPreview && (
-              <Image
-                src={thumbnailPreview}
-                alt="Thumbnail preview"
-                className="mt-2 w-20 h-20 rounded object-cover"
-                width={12}
-                height={12}
-              />
+              <div className="mt-2">
+                <Image
+                  src={thumbnailPreview}
+                  alt="Thumbnail preview"
+                  width={80}
+                  height={80}
+                  className="w-20 h-20 rounded object-cover"
+                  unoptimized
+                />
+              </div>
             )}
-          </Field>
+          </div>
 
-          <Field label="Additional Images" full>
+          {/* Additional Images */}
+          <div className="md:col-span-2">
+            <label className="helix-label">Additional Images</label>
             <input
               type="file"
               multiple
@@ -280,16 +356,22 @@ export default function ProductForm({
               className="helix-input"
               data-testid="pf-images"
             />
+            {errors.images && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.images.message}
+              </p>
+            )}
             {imagePreviews.length > 0 && (
               <div className="flex gap-2 mt-2 flex-wrap">
                 {imagePreviews.map((src, i) => (
                   <div key={i} className="relative">
                     <Image
                       src={src}
-                      alt=""
+                      alt={`Product image ${i + 1}`}
+                      width={64}
+                      height={64}
                       className="w-16 h-16 rounded object-cover"
-                      width={12}
-                      height={12}
+                      unoptimized
                     />
                     <button
                       type="button"
@@ -302,52 +384,32 @@ export default function ProductForm({
                 ))}
               </div>
             )}
-          </Field>
-        </div>
+          </div>
 
-        <div className="flex gap-3 mt-6">
-          <button
-            type="button"
-            onClick={onClose}
-            className="helix-btn-secondary flex-1"
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            onClick={handleSave}
-            disabled={
-              isPending ||
-              !form.name.trim() ||
-              !form.description.trim() ||
-              form.images.length === 0
-            }
-            className="helix-btn-primary flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
-            data-testid="pf-save"
-          >
-            {isPending
-              ? 'Saving…'
-              : editing
-                ? 'Save changes'
-                : 'Create product'}
-          </button>
-        </div>
+          {/* Actions */}
+          <div className="md:col-span-2 flex gap-3 mt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="helix-btn-secondary flex-1"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isPending}
+              className="helix-btn-primary flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
+              data-testid="pf-save"
+            >
+              {isPending
+                ? 'Saving…'
+                : editing
+                  ? 'Save changes'
+                  : 'Create product'}
+            </button>
+          </div>
+        </form>
       </div>
-    </div>
-  );
-}
-
-interface FieldProps {
-  label: string;
-  children: React.ReactNode;
-  full?: boolean;
-}
-
-function Field({ label, children, full }: FieldProps) {
-  return (
-    <div className={full ? 'md:col-span-2' : ''}>
-      <label className="helix-label">{label}</label>
-      {children}
     </div>
   );
 }

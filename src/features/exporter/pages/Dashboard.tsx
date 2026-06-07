@@ -91,7 +91,7 @@ export default function Dashboard() {
             </p>
           </div>
           <Link
-            href="/onboarding"
+            href="/exporter/onboarding"
             className="helix-btn-primary text-sm whitespace-nowrap"
           >
             Continue onboarding{' '}

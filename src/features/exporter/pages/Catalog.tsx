@@ -5,18 +5,14 @@ import { Search } from 'lucide-react';
 import Pagination from '../components/pagination';
 import ProductCard from '../components/ProductCard';
 import { useGetCatalogProducts } from '../hooks/useGetCatalogProducts';
+import {
+  useGetProductCategories,
+  useGetProductCountries,
+} from '../hooks/useProducts';
 
-// Constants
+// ─── Constants ────────────────────────────────────────────────────────────────
 
 const PER_PAGE = 12;
-
-const CATEGORIES = [
-  { value: '', label: 'All Sectors' },
-  { value: 'fashion', label: 'Fashion & Textiles' },
-  { value: 'agriculture', label: 'Agriculture' },
-  { value: 'staple-foods', label: 'Staple Foods' },
-  { value: 'general-goods', label: 'General Goods' },
-];
 
 // Catalog
 
@@ -26,6 +22,17 @@ export default function Catalog() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
 
+  // API-driven filter options
+  const { data: categoryData, isPending: categoriesLoading } =
+    useGetProductCategories({ pageNumber: 1, pageSize: 100 });
+
+  const { data: countryData, isPending: countriesLoading } =
+    useGetProductCountries();
+
+  const categoryOptions = categoryData?.data ?? [];
+  const countryOptions = countryData?.data ?? [];
+
+  // Products
   const { data, isPending, isError } = useGetCatalogProducts({
     pageNumber: page,
     pageSize: PER_PAGE,
@@ -36,7 +43,7 @@ export default function Catalog() {
   const products = data?.data ?? [];
   const totalPages = data?.totalPages ?? 1;
 
-  // Reset to page 1 when filters change
+  // Reset to page 1 on filter change
   const handleCategoryChange = (value: string) => {
     setCategory(value);
     setPage(1);
@@ -52,7 +59,7 @@ export default function Catalog() {
     setPage(1);
   };
 
-  // Client-side search filter against the current page results
+  // Client-side search against current page — API has no search param
   const filtered = search
     ? products.filter(
         (p) =>
@@ -65,21 +72,41 @@ export default function Catalog() {
     <>
       <div className="mb-8 space-y-4">
         <div className="flex items-center justify-between flex-wrap gap-3">
-          {/* Category filters  */}
+          {/* Category filter buttons */}
           <div className="flex flex-wrap gap-2">
-            {CATEGORIES.map((c) => (
-              <button
-                key={c.value}
-                onClick={() => handleCategoryChange(c.value)}
-                className={`px-4 py-2 rounded-full text-[12px] font-medium border transition ${
-                  category === c.value
-                    ? 'bg-[#C9922A] text-[#0A1628] border-[#C9922A]'
-                    : 'bg-transparent text-[#9CA3AF] border-[#1A7A6E]/40 hover:border-[#1A7A6E]'
-                }`}
-              >
-                {c.label}
-              </button>
-            ))}
+            {/* All button always present */}
+            <button
+              onClick={() => handleCategoryChange('')}
+              className={`px-4 py-2 rounded-full text-[12px] font-medium border transition ${
+                category === ''
+                  ? 'bg-[#C9922A] text-[#0A1628] border-[#C9922A]'
+                  : 'bg-transparent text-[#9CA3AF] border-[#1A7A6E]/40 hover:border-[#1A7A6E]'
+              }`}
+            >
+              All Sectors
+            </button>
+
+            {/* Skeleton while loading */}
+            {categoriesLoading
+              ? Array.from({ length: 4 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="h-8 w-24 rounded-full bg-[#1A7A6E]/10 animate-pulse opacity-40"
+                  />
+                ))
+              : categoryOptions.map((c) => (
+                  <button
+                    key={c.id}
+                    onClick={() => handleCategoryChange(c.name)}
+                    className={`px-4 py-2 rounded-full text-[12px] font-medium border transition ${
+                      category === c.name
+                        ? 'bg-[#C9922A] text-[#0A1628] border-[#C9922A]'
+                        : 'bg-transparent text-[#9CA3AF] border-[#1A7A6E]/40 hover:border-[#1A7A6E]'
+                    }`}
+                  >
+                    {c.name}
+                  </button>
+                ))}
           </div>
 
           {/* Search */}
@@ -99,16 +126,22 @@ export default function Catalog() {
 
         {/* Country filter */}
         <div>
-          <select
-            className="helix-input w-40"
-            value={country}
-            onChange={(e) => handleCountryChange(e.target.value)}
-          >
-            <option value="">All Countries</option>
-            <option value="Nigeria">Nigeria</option>
-            <option value="Ghana">Ghana</option>
-            <option value="Kenya">Kenya</option>
-          </select>
+          {countriesLoading ? (
+            <div className="helix-input w-40 h-10 animate-pulse opacity-40" />
+          ) : (
+            <select
+              className="helix-input w-40"
+              value={country}
+              onChange={(e) => handleCountryChange(e.target.value)}
+            >
+              <option value="">All Countries</option>
+              {countryOptions.map((c) => (
+                <option key={c.id} value={c.name}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
       </div>
 

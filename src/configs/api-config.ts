@@ -11,11 +11,6 @@ const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
 });
 
-// Setting default header safely for standard data formats without locking FormData requests
-api.defaults.headers.post['Content-Type'] = 'application/json';
-api.defaults.headers.put['Content-Type'] = 'application/json';
-api.defaults.headers.patch['Content-Type'] = 'application/json';
-
 // prevents multiple refresh requests
 let isRefreshing = false;
 let failedQueue: {
