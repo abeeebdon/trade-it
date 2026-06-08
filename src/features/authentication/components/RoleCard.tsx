@@ -12,7 +12,8 @@ const RoleCard = ({
   active: boolean;
   setSelected: (value: AuthRole) => void;
 }) => {
-  const icon = getIcon(r.id);
+  const icon = getIcon(r.id - 1);
+  console.log(r.id);
 
   return (
     <button

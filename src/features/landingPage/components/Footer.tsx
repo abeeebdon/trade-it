@@ -1,20 +1,23 @@
-import Image from 'next/image';
+'use client';
+import JompShopLogo from '@/assets/JompShopIcon';
+import useColorScheme from '@/hooks/useColorScheme';
 import Link from 'next/link';
 
 const Footer = () => {
+  const isDark: boolean = useColorScheme();
+
   return (
     <footer className="border-t border-[#1A7A6E]/15 py-10 mt-16">
       <div className="max-w-350 mx-auto px-6 lg:px-10 grid md:grid-cols-4 gap-8">
         <div>
-          <div className="flex items-center gap-2 mb-3">
-            <Image
-              src="/jomp-icon.png"
-              alt="Jomp Shop logo"
-              width={28}
-              height={28}
-              className="rounded-full"
+          <div className="flex items-end gap-2 mb-3">
+            <JompShopLogo
+              primaryColor={isDark ? 'white' : '#31005C'}
+              secondaryColor={isDark ? '#EFA005' : '#EFA005'}
+              width={40}
+              height={40}
             />
-            <span className="font-bold tracking-[0.22em] text-sm">
+            <span className="font-bold tracking-[0.22em] text-lg">
               JOMP SHOP
             </span>
           </div>
@@ -158,7 +161,7 @@ const Footer = () => {
         </div>
 
         <div className="text-[10px] text-[#9CA3AF] mt-2">
-          © 2026 Jomp Shop. Africa to the world.
+          © {new Date().getFullYear()} Jomp Shop. Africa to the world.
         </div>
       </div>
     </footer>

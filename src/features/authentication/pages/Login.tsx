@@ -3,14 +3,13 @@ import { useAppDispatch } from '@/hooks/store/store';
 import { login, setAuthRole } from '@/store/auth/auth.slice';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import InputField from '@/components/form/InputFIeld';
 import { LoginFormValues, loginSchema } from '../components/validation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Loader from '@/components/buttons/Loader';
-import api from '@/configs/api-config';
 import { toast } from 'sonner';
 import { loginApi } from '../api/auth';
 import { saveCookie } from '@/store/auth/cookies';
@@ -41,20 +40,21 @@ export default function Login() {
           fullName: result.data.fullName,
         };
         dispatch(login(userDetails));
+        console.log(result.data.roles[0].toLowerCase());
         switch (result.data.roles[0].toLowerCase()) {
           case 'admin':
             dispatch(setAuthRole('admin'));
             router.push('/admin');
             break;
-          case 'reseller':
-            dispatch(setAuthRole('reseller'));
+          case 'retailer':
+            dispatch(setAuthRole('retailer'));
             router.push('/buyer');
             break;
-          case 'direct customer':
+          case 'consumer':
             dispatch(setAuthRole('consumer'));
             router.push('/');
             break;
-          case 'african exporter':
+          case 'exporter':
             dispatch(setAuthRole('exporter'));
             router.push('/exporter');
             break;
@@ -68,7 +68,7 @@ export default function Login() {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const message = (error as any)?.response?.data?.message;
       toast.error(
-        message ?? 'An error occurred during registration. Please try again.',
+        message ?? 'An error occurred during login. Please try again.',
       );
     } finally {
       setLoading(false);

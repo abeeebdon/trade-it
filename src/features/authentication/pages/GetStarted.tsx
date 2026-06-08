@@ -20,14 +20,14 @@ const GetStarted = () => {
   const handleProceed = () => {
     if (selected) {
       dispatch(setUserRole(selected));
-      router.push(`/register/?role=${selected.value}`);
+      router.push(`/register/?role=${selected.name}`);
       return;
     } else {
       return toast.message('You have not selected any type ');
     }
   };
 
-  const { data, isLoading, isError } = useGetUserTypes();
+  const { data, isLoading } = useGetUserTypes();
 
   const userTypes: AuthRole[] = data
     ? data
@@ -49,17 +49,19 @@ const GetStarted = () => {
           ? Array.from({ length: 3 }).map((_, i) => (
               <RoleCardSkeleton key={i} />
             ))
-          : userTypes.map((r) => {
-              const active = selected?.id === r.id;
-              return (
-                <RoleCard
-                  key={r.id}
-                  r={r}
-                  active={active}
-                  setSelected={setSelected}
-                />
-              );
-            })}
+          : userTypes
+              ?.sort((a, b) => a.id - b.id)
+              .map((r) => {
+                const active = selected?.id === r.id;
+                return (
+                  <RoleCard
+                    key={r.id}
+                    r={r}
+                    active={active}
+                    setSelected={setSelected}
+                  />
+                );
+              })}
       </div>
       <div className="mt-8 flex items-center justify-center gap-4">
         <button onClick={handleProceed} className="helix-btn-primary px-8">

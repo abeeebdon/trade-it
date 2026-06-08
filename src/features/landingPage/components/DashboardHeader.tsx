@@ -33,7 +33,7 @@ const DashboardHeader = () => {
 
   // ANCHOR badge only when on exporter pages with no dynamic badge or action
   const showAnchorBadge = isExporter && !badge && !action; // ← also suppress when action present
-  const isDark = useColorScheme();
+  const isDark: boolean = useColorScheme();
   return (
     <>
       <header className="sticky top-0 z-30 w-full border bg-bg backdrop-blur border-b border-[#1A7A6E]/15">

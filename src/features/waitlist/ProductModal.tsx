@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { ProductType } from './constants';
 
 export default function ProductModal({
@@ -26,7 +27,13 @@ export default function ProductModal({
         </button>
         <div className="js-modal-grid">
           <div className="js-modal-left" style={{ background: product.grad }}>
-            <span className="js-modal-emoji">{product.emoji}</span>
+            <Image
+              src={`/images/${product.image}`}
+              alt={product.name}
+              width={200}
+              height={200}
+              className="w-full h-full object-center"
+            />
           </div>
           <div className="js-modal-right">
             <span className="js-cat-badge">{product.category}</span>

@@ -14,7 +14,6 @@
   --muted-2: #b8aec8;
   background: var(--purple-deep);
   color: var(--ivory);
-  font-family: 'Outfit', system-ui, sans-serif;
   font-weight: 400;
   min-height: 100vh;
 }
@@ -64,7 +63,6 @@
   color: var(--ivory);
 }
 .js-wordmark {
-  font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
   font-size: 22px;
   letter-spacing: 0.5px;
@@ -91,7 +89,6 @@
 
 /* Buttons */
 .js-btn {
-  font-family: 'Outfit';
   font-weight: 500;
   padding: 11px 24px;
   border-radius: 100px;
@@ -143,7 +140,6 @@
   animation: scrollTicker 28s linear infinite;
 }
 .js-ticker-content {
-  font-family: 'DM Mono', monospace;
   font-size: 12px;
   color: var(--purple-deep);
   text-transform: uppercase;
@@ -182,7 +178,6 @@
   background: var(--gold-dim);
   border: 1px solid rgba(239, 160, 5, 0.3);
   color: var(--gold);
-  font-family: 'DM Mono';
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -199,7 +194,6 @@
   background: var(--gold);
 }
 .js-h1 {
-  font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
   font-size: clamp(40px, 8vw, 84px);
   line-height: 1.02;
@@ -211,7 +205,6 @@
   font-style: italic;
 }
 .js-sub {
-  font-family: 'Outfit';
   font-weight: 300;
   font-size: 18px;
   line-height: 1.65;
@@ -238,7 +231,6 @@
   color: var(--ivory);
   padding: 12px 22px;
   border-radius: 30px;
-  font-family: 'Outfit';
   font-size: 14px;
   outline: none;
   transition: border-color 0.15s;
@@ -253,7 +245,6 @@
   background: rgba(0, 0, 0, 0.12);
 }
 .js-form-note {
-  font-family: 'DM Mono';
   font-size: 11px;
   color: var(--muted);
   margin-top: 16px;
@@ -271,14 +262,12 @@
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 .js-stat-num {
-  font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
   font-size: 36px;
   color: var(--gold);
   line-height: 1;
 }
 .js-stat-label {
-  font-family: 'DM Mono';
   font-size: 11px;
   color: var(--muted-2);
   text-transform: uppercase;
@@ -305,7 +294,6 @@
   width: max-content;
 }
 .js-cat-pill {
-  font-family: 'DM Mono';
   font-size: 13px;
   color: var(--muted-2);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -323,7 +311,6 @@
   margin-bottom: 64px;
 }
 .js-eyebrow {
-  font-family: 'DM Mono';
   font-size: 12px;
   color: var(--gold);
   text-transform: uppercase;
@@ -331,7 +318,6 @@
   margin-bottom: 16px;
 }
 .js-eyebrow-dark {
-  font-family: 'DM Mono';
   font-size: 12px;
   color: var(--purple-deep);
   text-transform: uppercase;
@@ -340,7 +326,6 @@
   font-weight: 500;
 }
 .js-h2 {
-  font-family: 'Cormorant Garamond', serif;
   font-weight: 500;
   font-size: clamp(32px, 5vw, 56px);
   margin: 0;
@@ -348,7 +333,6 @@
   line-height: 1.15;
 }
 .js-preview-note {
-  font-family: 'DM Mono';
   font-size: 12px;
   color: var(--muted);
   margin-top: 18px;
@@ -402,7 +386,9 @@
 .js-product-emoji {
   font-size: 96px;
   filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
-  animation: float 4s ease infinite;
+}
+.js-product-emoji:hover {
+  animation: zoom 1s ease-in-out;
 }
 .js-soon-badge {
   position: absolute;
@@ -412,7 +398,6 @@
   color: var(--gold);
   padding: 5px 14px;
   border-radius: 100px;
-  font-family: 'DM Mono';
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -426,7 +411,6 @@
   color: var(--purple-deep);
   padding: 5px 12px;
   border-radius: 100px;
-  font-family: 'DM Mono';
   font-size: 10px;
 }
 .js-card-body {
@@ -438,14 +422,12 @@
   color: var(--purple-deep);
 }
 .js-card-title {
-  font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
   font-size: 17px;
   margin: 0;
   line-height: 1.25;
 }
 .js-card-seller {
-  font-family: 'DM Mono';
   font-size: 11px;
   color: var(--muted);
 }
@@ -456,18 +438,15 @@
   margin-top: 6px;
 }
 .js-card-price {
-  font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
   font-size: 22px;
   color: var(--purple);
 }
 .js-card-unit {
-  font-family: 'DM Mono';
   font-size: 11px;
   color: var(--muted);
 }
 .js-card-moq {
-  font-family: 'DM Mono';
   font-size: 11px;
   color: var(--muted);
 }
@@ -478,7 +457,6 @@
   color: var(--purple);
   padding: 9px 16px;
   border-radius: 100px;
-  font-family: 'Outfit';
   font-weight: 500;
   font-size: 13px;
   cursor: pointer;
@@ -561,14 +539,12 @@
   color: var(--purple);
   padding: 5px 14px;
   border-radius: 100px;
-  font-family: 'DM Mono';
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 12px;
 }
 .js-modal-title {
-  font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
   font-size: 28px;
   margin: 0 0 6px;
@@ -589,7 +565,6 @@
   justify-content: space-between;
   padding: 12px 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  font-family: 'DM Mono';
   font-size: 12px;
 }
 .js-spec-row span:first-child {
@@ -602,7 +577,6 @@
   font-weight: 500;
 }
 .js-modal-price {
-  font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
   font-size: 28px;
   color: var(--purple);
@@ -632,7 +606,6 @@
   position: absolute;
   top: 16px;
   right: 22px;
-  font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
   font-size: 72px;
   color: rgba(239, 160, 5, 0.15);
@@ -643,7 +616,6 @@
   margin-bottom: 18px;
 }
 .js-step-title {
-  font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
   font-size: 22px;
   margin: 0 0 12px;
@@ -679,7 +651,6 @@
   border: 1px solid rgba(239, 160, 5, 0.25);
 }
 .js-dual-title {
-  font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
   font-size: 32px;
   margin: 0 0 14px;
@@ -741,14 +712,12 @@
   flex-wrap: wrap;
 }
 .js-powered-label {
-  font-family: 'DM Mono';
   font-size: 11px;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
 .js-powered-name {
-  font-family: 'Outfit';
   font-weight: 500;
   color: rgba(255, 255, 255, 0.35);
   font-size: 14px;
@@ -795,7 +764,6 @@
   }
 }
 .js-footer-h {
-  font-family: 'DM Mono';
   font-size: 11px;
   color: var(--gold);
   text-transform: uppercase;
@@ -828,6 +796,24 @@
 }
 .js-footer-bottom a:hover {
   color: var(--ivory);
+}
+.js-beta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border: 1px solid rgba(239, 160, 5, 0.35);
+  border-radius: 100px;
+  color: var(--gold) !important;
+  font-family: 'DM Mono';
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: all 0.2s;
+}
+.js-beta-link:hover {
+  background: var(--gold-dim);
+  border-color: var(--gold);
 }
 
 /* Reveal */
@@ -895,6 +881,17 @@
     transform: translateY(-8px);
   }
 }
+@keyframes zoom {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+}
+
 @keyframes pulse-gold {
   0%,
   100% {
