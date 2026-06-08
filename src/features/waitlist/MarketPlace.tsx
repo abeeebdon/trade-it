@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { PRODUCTS, ProductType } from './constants';
 import { Dispatch, SetStateAction } from 'react';
 
@@ -28,7 +29,14 @@ export default function Marketplace({
               <div className="js-card-thumb" style={{ background: p.grad }}>
                 <span className="js-soon-badge">Coming Soon</span>
                 <span className="js-city-badge">{p.city}</span>
-                <span className="js-product-emoji">{p.emoji}</span>
+                {/* <span className="js-product-emoji">{p.emoji}</span> */}
+                <Image
+                  src={`/images/${p.image}`}
+                  alt={p.name}
+                  width={200}
+                  height={200}
+                  className="w-full js-product-emoji h-full"
+                />
               </div>
               <div className="js-card-body">
                 <h3 className="js-card-title">{p.name}</h3>

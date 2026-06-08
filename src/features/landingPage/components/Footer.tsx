@@ -158,7 +158,7 @@ const Footer = () => {
         </div>
 
         <div className="text-[10px] text-[#9CA3AF] mt-2">
-          © 2026 Jomp Shop. Africa to the world.
+          © {new Date().getFullYear()} Jomp Shop. Africa to the world.
         </div>
       </div>
     </footer>

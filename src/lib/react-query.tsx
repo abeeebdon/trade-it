@@ -1,6 +1,10 @@
-"use client";
+'use client';
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider,
+  QueryKey,
+} from '@tanstack/react-query';
 
 // Create a client
 export const queryClient = new QueryClient();
@@ -12,4 +16,8 @@ export const ReactQueryProvider = ({
   return (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
+};
+
+export const invalidateQueries = async (queryKey: QueryKey) => {
+  return queryClient.invalidateQueries({ queryKey });
 };
