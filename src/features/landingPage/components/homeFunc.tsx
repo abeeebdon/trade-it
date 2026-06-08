@@ -81,7 +81,7 @@ export const getTitle = (path: string, product?: ProductMeta): string => {
 
     // Exporter
     case '/exporter':
-      return 'Welcome back, Callistus';
+      return 'Welcome back';
     case '/exporter/orders':
       return 'Orders';
     case '/exporter/finance':

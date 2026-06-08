@@ -13,6 +13,7 @@ export interface AuthRole {
   value: string;
 }
 export interface UserType {
+  id: string | number;
   fullName: string;
   email: string;
   role: UserRole;

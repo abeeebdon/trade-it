@@ -23,3 +23,34 @@ export const registerSchema = z.object({
 });
 
 export type RegisterFormValues = z.infer<typeof registerSchema>;
+
+// Product validation schema
+
+export const productSchema = z.object({
+  name: z.string().min(2, 'Product name is required'),
+  category: z.string().min(1, 'Please select a category'),
+
+  unitId: z.number({ error: 'Please select a unit' }),
+
+  price_usd: z
+    .number({ error: 'Price is required' })
+    .positive('Price must be greater than 0'),
+
+  moq: z
+    .number({ error: 'MOQ is required' })
+    .int()
+    .positive('MOQ must be at least 1'),
+
+  description: z.string().min(10, 'Description must be at least 10 characters'),
+
+  currencyId: z.number(),
+  statusId: z.number(),
+  thumbnail: z.instanceof(File).nullable().optional(),
+  images: z
+    .array(z.instanceof(File))
+    .min(1, 'At least one product image is required'),
+  thumbnailPreview: z.string().nullable().optional(),
+  imagePreviews: z.array(z.string()).optional(),
+});
+
+export type ProductFormValues = z.infer<typeof productSchema>;
