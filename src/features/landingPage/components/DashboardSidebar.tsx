@@ -47,9 +47,10 @@ const DashboardSidebar = ({ setOpenSideBar, openSidebar }: Props) => {
       )}
       <article
         className={cn(
-          'fixed inset-y-0 right-0 z-50 w-2/3 max-w-64 bg-bg h-screen  justify-between p-4 flex flex-col  shadow-lg sm:hidden transform transition-transform duration-600  ease-in-out ',
-          !openSidebar ? 'translate-x-full' : 'translate-x-0',
+          'fixed top-0 right-0 z-50 hide-scrollbar h-dvh w-2/3 max-w-64 bg-bg p-4 flex flex-col overflow-y-auto justify-between shadow-lg sm:hidden transition-transform duration-300 ease-in-out',
+          openSidebar ? 'translate-x-0' : 'translate-x-full',
         )}
+        // className="fixed top-0 bottom-0"
       >
         <article>
           <div className="flex items-center justify-between">
@@ -58,7 +59,7 @@ const DashboardSidebar = ({ setOpenSideBar, openSidebar }: Props) => {
               <X className="cursor-pointer text-text hover:text-text/20" />
             </motion.button>
           </div>
-          <nav className="flex-1  py-4 overflow-y-auto">
+          <nav className="py-4">
             {items.map((item) => {
               const Icon = item.icon;
               const isActive = item.to === pathname;
