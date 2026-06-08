@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-type UserRole = 'admin' | 'super_admin' | 'reseller' | 'exporter' | 'consumer';
+type UserRole = 'admin' | 'super_admin' | 'retailer' | 'exporter' | 'consumer';
 
 const AUTH_ROUTES = ['/login', '/register', '/getstarted'];
 
 const ROLE_ROUTES: Record<string, UserRole[]> = {
   '/admin': ['admin', 'super_admin'],
-  '/buyer': ['reseller'],
+  '/buyer': ['retailer'],
   '/exporter': ['exporter'],
   '/shop/orders': ['consumer'],
 };

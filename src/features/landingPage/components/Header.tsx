@@ -11,11 +11,14 @@ import { useAppSelector } from '@/hooks/store/store';
 import UserComponent from './UserComponent';
 import { getSavedCookie } from '@/store/auth/cookies';
 import { cn } from '@/lib/cn';
+import JompShopLogo from '@/assets/JompShopIcon';
+import useColorScheme from '@/hooks/useColorScheme';
 const Header = ({ className }: { className?: string }) => {
   const [showSidebar, setShowSidebar] = useState(false);
 
   const user = useAppSelector((state) => state.auth.user);
   const token = getSavedCookie('token');
+  const isDark: boolean = useColorScheme();
   return (
     <header
       className={
@@ -27,12 +30,11 @@ const Header = ({ className }: { className?: string }) => {
     >
       <div className="max-w-350 mx-auto px-6 lg:px-10 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
-          <Image
-            src="/appLogo.png"
-            alt="Jomp"
-            width={36}
-            height={36}
-            className="w-9 h-9 rounded-full"
+          <JompShopLogo
+            primaryColor={isDark ? 'white' : '#31005C'}
+            secondaryColor={isDark ? '#EFA005' : '#EFA005'}
+            width={40}
+            height={40}
           />
           <div className="leading-tight">
             <div className="font-bold tracking-[0.22em] text-sm">JOMP SHOP</div>
@@ -48,7 +50,7 @@ const Header = ({ className }: { className?: string }) => {
               <>
                 {!token && (
                   <Link
-                    key={link.href}
+                    key={i}
                     href={link.href}
                     className="text-muted hover:text-text"
                   >
@@ -58,7 +60,7 @@ const Header = ({ className }: { className?: string }) => {
               </>
             ) : (
               <Link
-                key={link.href}
+                key={i}
                 href={link.href}
                 className="text-muted hover:text-text"
               >

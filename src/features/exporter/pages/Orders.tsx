@@ -43,7 +43,7 @@ export default function Orders() {
     return (
       <div className="helix-card p-12 text-center text-[#9CA3AF]">
         No orders yet.{' '}
-        {user?.role === 'reseller'
+        {user?.role === 'retailer'
           ? 'Browse the marketplace to submit an RFQ.'
           : 'Inbound RFQs and confirmed trades will appear here.'}
       </div>

@@ -128,7 +128,7 @@ export default function Register() {
           disabled={loading}
           className="helix-btn-primary w-full"
         >
-          {loading ? <Loader /> : `Create my ${role?.title} account`}
+          {loading ? <Loader /> : `Create my ${roleFromQuery} account`}
         </motion.button>
       </form>
       <div className="mt-8 text-center text-[13px] text-[#9CA3AF]">
