@@ -1,6 +1,6 @@
+'use client';
 import JompShopLogo from '@/assets/JompShopIcon';
 import useColorScheme from '@/hooks/useColorScheme';
-import Image from 'next/image';
 import Link from 'next/link';
 
 const Footer = () => {
