@@ -1,21 +1,37 @@
-import { getSavedCookie, saveCookie } from '@/store/auth/cookies';
-import axios, { AxiosError, type AxiosRequestConfig } from 'axios';
-import { refreshAccessToken } from './refresh';
+import axios, {
+  AxiosError,
+  AxiosRequestConfig,
+  InternalAxiosRequestConfig,
+} from 'axios';
+import {
+  getSavedCookie,
+  handleLogoutFn,
+  saveCookie,
+} from '@/store/auth/cookies';
 
 interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   __isRetryRequest?: boolean;
-  useTempToken?: boolean;
 }
 
+// Main API instance
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
-   headers: {
+  headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// prevents multiple refresh requests
+// Separate instance for refresh requests
+const refreshApi = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// Prevent multiple refresh requests
 let isRefreshing = false;
+
 let failedQueue: {
   resolve: (token: string) => void;
   reject: (error: unknown) => void;
@@ -33,18 +49,36 @@ const processQueue = (error: unknown, token: string | null = null) => {
   failedQueue = [];
 };
 
-// logout function
+// Logout function
 const handleLogout = () => {
-  saveCookie('token', '');
-  window.location.href = '/login';
+  handleLogoutFn();
+
+  if (typeof window !== 'undefined') {
+    window.location.replace('/login');
+  }
 };
 
+// Refresh access token
+const refreshAccessToken = async () => {
+  const refreshToken = getSavedCookie('refreshToken');
+
+  if (!refreshToken) {
+    throw new Error('No refresh token found');
+  }
+
+  const response = await refreshApi.post('/auth/refresh', {
+    refreshToken,
+  });
+
+  return response.data.accessToken;
+};
+
+// Request interceptor
 api.interceptors.request.use(
-  (config) => {
+  (config: InternalAxiosRequestConfig) => {
     const token = getSavedCookie('token');
 
     if (token) {
-      config.headers = config.headers ?? {};
       config.headers.Authorization = `Bearer ${token}`;
     }
 
@@ -53,27 +87,36 @@ api.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
+// Response interceptor
 api.interceptors.response.use(
   (response) => response,
 
   async (error: AxiosError) => {
     const config = error.config as CustomAxiosRequestConfig;
 
-    // network error
+    // Network error
     if (!error.response) {
       return Promise.reject(
         new Error('Network error. Please check your internet connection.'),
       );
     }
 
-    // unauthorized + retry
+    // Refresh endpoint failed → logout immediately
+    if (config?.url?.includes('/auth/refresh')) {
+      handleLogout();
+      return Promise.reject(error);
+    }
+
+    // Unauthorized
     if (error.response.status === 401 && config && !config.__isRetryRequest) {
+      // Queue requests while refreshing
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({
             resolve: (token) => {
               config.headers = config.headers ?? {};
               config.headers.Authorization = `Bearer ${token}`;
+
               resolve(api(config));
             },
             reject,
@@ -87,31 +130,38 @@ api.interceptors.response.use(
       try {
         const accessToken = await refreshAccessToken();
 
+        // Save new token
         saveCookie('token', accessToken);
 
+        // Retry queued requests
         processQueue(null, accessToken);
 
+        // Retry original request
         config.headers = config.headers ?? {};
         config.headers.Authorization = `Bearer ${accessToken}`;
 
         return api(config);
       } catch (refreshError) {
         processQueue(refreshError, null);
+
         handleLogout();
+
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
       }
     }
 
-    // optional central status handling
+    // Optional central error handling
     switch (error.response.status) {
       case 403:
         console.error('Forbidden');
         break;
+
       case 404:
         console.error('Not found');
         break;
+
       case 500:
         console.error('Server error');
         break;

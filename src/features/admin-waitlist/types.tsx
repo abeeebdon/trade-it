@@ -20,3 +20,22 @@ export interface PaginationType {
   totalRecords: number;
   totalPages: number;
 }
+
+interface CustomerType {
+  customerType: string;
+  count: number;
+}
+
+export interface WaitlistOverview {
+  previewSiteUrl: string;
+  siteModeLabel: string;
+  siteMode: string;
+  siteModeDescription: string;
+  totalSignups: number;
+  activeFilter: string;
+  customerTypes: CustomerType[];
+  exporters: number;
+  heroGeneral: number;
+  shown: number;
+  usBuyers: number;
+}

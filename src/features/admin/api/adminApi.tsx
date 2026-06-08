@@ -23,6 +23,25 @@ export const getWaitlist = async ({
     throw error;
   }
 };
+export const getWaitlistCommand = async () => {
+  try {
+    const response = await api.get(`/Admin/waitlist-command`);
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getWaitlistCSV = async ({ filter }: { filter: string }) => {
+  try {
+    const response = await api.get(
+      `/Admin/waitlist/export-csv?filter=${filter}`,
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 // export const loginApi = async (data: LoginFormValues) => {
 //     try {
 //         const response = await api.post('/authentication/login', data);

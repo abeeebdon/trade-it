@@ -1,7 +1,7 @@
 import { authRoleType } from '@/types';
 import { Globe, ShoppingBag, Store } from 'lucide-react';
 import { ROLES } from './data';
-import { handleLogout } from '@/store/auth/cookies';
+import { handleLogoutFn } from '@/store/auth/cookies';
 
 const icons = [Store, ShoppingBag, Globe];
 
@@ -24,5 +24,5 @@ export const getRolePill = (id: number) => {
   return ROLE_PILL[id - 1] || '';
 };
 export const logoutAction = async () => {
-  handleLogout();
+  handleLogoutFn();
 };
