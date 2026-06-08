@@ -1,4 +1,4 @@
-import Catalog from '@/features/admin/pages/Catalog';
+import Catalog from '@/features/exporter/pages/Catalog';
 const page = () => {
   return <Catalog />;
 };
