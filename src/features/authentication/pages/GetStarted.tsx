@@ -27,7 +27,7 @@ const GetStarted = () => {
     }
   };
 
-  const { data, isLoading, isError } = useGetUserTypes();
+  const { data, isLoading } = useGetUserTypes();
 
   const userTypes: AuthRole[] = data
     ? data

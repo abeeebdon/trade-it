@@ -1,7 +1,6 @@
 import api from '@/configs/api-config';
 import { ApproveVerificationPayload } from '../types/verifications';
 import { toast } from 'sonner';
-import { invalidateQueries } from '@/lib/react-query';
 
 export const getVerificationQueue = async () => {
   try {

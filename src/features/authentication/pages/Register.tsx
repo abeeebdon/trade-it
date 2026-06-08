@@ -6,7 +6,7 @@ import { RegisterFormValues, registerSchema } from '../components/validation';
 import InputField from '@/components/form/InputFIeld';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ROLES } from '../components/data';
 import Loader from '@/components/buttons/Loader';
 import { motion } from 'motion/react';

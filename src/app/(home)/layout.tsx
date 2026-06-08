@@ -1,3 +1,4 @@
+'use client';
 import Footer from '@/features/landingPage/components/Footer';
 import Header from '@/features/landingPage/components/Header';
 
