@@ -1,5 +1,7 @@
+import ProfileManagement from '@/features/buyer/pages/ProfileManagement';
+
 const page = () => {
-  return <div>page</div>;
+  return <ProfileManagement />;
 };
 
 export default page;

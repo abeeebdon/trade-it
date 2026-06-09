@@ -25,7 +25,7 @@ export default function Onboarding() {
   const { setHeader } = useHeader();
 
   const [biz, setBiz] = useState<Business | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
 
   const [form, setForm] = useState<BusinessForm>({
@@ -66,23 +66,23 @@ export default function Onboarding() {
   }, [setHeader]);
 
   //  Load existing business
-  useEffect(() => {
-    setTimeout(() => {
-      if (mockBusiness) {
-        setBiz(mockBusiness);
-        setStep(2);
-        setKycForm({
-          bvn: mockBusiness.bvn ?? '',
-          nin: mockBusiness.nin ?? '',
-          cac_number: mockBusiness.cac_number ?? '',
-          tin: mockBusiness.tin ?? '',
-          director_name: mockBusiness.director_name ?? '',
-          docs: [],
-        });
-      }
-      setLoading(false);
-    }, 800);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (mockBusiness) {
+  //       setBiz(mockBusiness);
+  //       setStep(2);
+  //       setKycForm({
+  //         bvn: mockBusiness.bvn ?? '',
+  //         nin: mockBusiness.nin ?? '',
+  //         cac_number: mockBusiness.cac_number ?? '',
+  //         tin: mockBusiness.tin ?? '',
+  //         director_name: mockBusiness.director_name ?? '',
+  //         docs: [],
+  //       });
+  //     }
+  //     setLoading(false);
+  //   }, 800);
+  // }, []);
 
   //  Create business profile
   const createBiz = async (e: React.FormEvent) => {
