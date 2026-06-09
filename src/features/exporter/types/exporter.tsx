@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { AccountDetails } from './finance';
 import { LucideIcon } from 'lucide-react';
 
@@ -27,6 +28,11 @@ export type OverviewType = {
 };
 
 //  Verification
+export interface FieldProps {
+  label?: string;
+  children: ReactNode;
+  full?: string;
+}
 
 export type VerificationStatus =
   | 'pending'
@@ -641,3 +647,8 @@ export type ProductCountryListResponse = {
   totalPages: number;
   data: ProductCountry[];
 };
+export interface FieldProps {
+  label?: string;
+  children: ReactNode;
+  full?: string;
+}

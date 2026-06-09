@@ -1,0 +1,56 @@
+import { formatNGN, formatUSD } from '@/lib/func';
+import { Copy } from 'lucide-react';
+import Link from 'next/link';
+import { BalanceBlockProps } from '../types/buyers';
+
+function BalanceBlock({
+  label,
+  balance,
+  va,
+  onCopy,
+  accent,
+  currency,
+  count,
+}: BalanceBlockProps) {
+  return (
+    <div
+      className={`helix-card p-6 ${accent ? 'relative overflow-hidden' : ''}`}
+    >
+      {accent && (
+        <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-[#C9922A]/10 blur-2xl pointer-events-none" />
+      )}
+      <div className="flex items-center justify-between">
+        <div className="helix-label">{label}</div>
+        <Link
+          href="/finance/accounts"
+          className="text-[10px] font-mono uppercase tracking-wider text-[#1A7A6E] hover:text-[#C9922A]"
+        >
+          {count} saved {currency} acct{count === 1 ? '' : 's'}
+        </Link>
+      </div>
+      <div className="font-mono text-4xl font-bold mt-2 tracking-tight">
+        {currency === 'USD' ? formatUSD(balance) : formatNGN(balance)}
+      </div>
+      {va?.account_number && (
+        <div className="mt-5 pt-4 border-t border-[#1A7A6E]/15">
+          <div className="text-[10px] uppercase tracking-widest text-[#9CA3AF] mb-1">
+            Virtual Account · {va.bank}
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="font-mono text-[15px] text-[#C9922A]">
+              {va.account_number}
+            </div>
+            <button
+              onClick={() => onCopy(va.account_number)}
+              className="text-[#9CA3AF] hover:text-[#C9922A]"
+              data-testid={`copy-${currency}`}
+            >
+              <Copy size={14} />
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+export default BalanceBlock;

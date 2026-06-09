@@ -1,7 +1,7 @@
-import Onboarding from '@/features/exporter/pages/Onboarding';
+import ProfileManagement from '@/features/buyer/pages/ProfileManagement';
 
 const page = () => {
-  return <Onboarding />;
+  return <ProfileManagement />;
 };
 
 export default page;
