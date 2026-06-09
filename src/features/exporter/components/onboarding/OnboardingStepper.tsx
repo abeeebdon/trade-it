@@ -20,23 +20,21 @@ export default function OnboardingStepper({
           <div
             className={`w-8 h-8 rounded-full flex items-center justify-center font-mono text-sm shrink-0 ${
               s.done
-                ? 'bg-[#C9922A] text-[#0A1628]'
+                ? 'bg-primary text-bg'
                 : currentStep === s.n
-                  ? 'bg-[#1A7A6E] text-white'
-                  : 'bg-[#0F2040] border border-[#1A7A6E]/30 text-[#9CA3AF]'
+                  ? 'bg-secondary text-white'
+                  : 'bg-surface border border-secondary/30 text-muted'
             }`}
           >
             {s.done ? <CheckCircle2 size={16} /> : s.n}
           </div>
 
           {/* Label */}
-          <div className="text-[13px] font-medium text-[#F5F5F5]">
-            {s.label}
-          </div>
+          <div className="text-[13px] font-medium text-text">{s.label}</div>
 
           {/* Connector line */}
           {i < steps.length - 1 && (
-            <div className="w-10 h-px bg-[#1A7A6E]/30" />
+            <div className="w-10 h-px bg-secondary/30" />
           )}
         </div>
       ))}

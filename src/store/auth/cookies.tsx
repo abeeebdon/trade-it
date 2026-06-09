@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 
-export const handleLogout = () => {
+export const handleLogoutFn = () => {
   // implement logout by remove token from cookie
   Cookies.remove('token');
   Cookies.remove('refreshToken');

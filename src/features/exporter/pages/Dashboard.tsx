@@ -80,16 +80,20 @@ export default function Dashboard() {
     <>
       {/* Verification banner */}
       {!isVerified && (
-        <div className="helix-card p-5 mb-6 border-[#C9922A]/40 bg-[#C9922A]/6 flex items-start gap-4">
-          <ShieldAlert size={22} className="text-[#C9922A] mt-0.5" />
-          <div className="flex-1">
-            <div className="font-semibold">
-              Complete verification to unlock trading
+        <div className="helix-card p-5 mb-6 border-[#C9922A]/40 justify-between bg-[#C9922A]/6 flex flex-col sm:flex-row items-start gap-4">
+          <div className="sm:flex-row flex flex-col gap-4">
+            <ShieldAlert size={22} className="text-[#C9922A] mt-0.5" />
+            <div className="flex-1">
+              <div className="font-semibold">
+                Complete verification to unlock trading
+              </div>
+              <p className="text-[13px] text-[#9CA3AF] mt-1">
+                Submit your KYB documents to provision your NGN and USD
+                accounts.
+              </p>
             </div>
-            <p className="text-[13px] text-[#9CA3AF] mt-1">
-              Submit your KYB documents to provision your NGN and USD accounts.
-            </p>
           </div>
+
           <Link
             href="/exporter/onboarding"
             className="helix-btn-primary text-sm whitespace-nowrap"
@@ -200,7 +204,7 @@ export default function Dashboard() {
           ) : (
             <div className="p-10 text-center text-[#9CA3AF] text-sm">
               <Package size={34} className="mx-auto mb-3 text-[#1A7A6E]" />
-              {user?.role === 'reseller'
+              {user?.role === 'retailer'
                 ? 'Browse the marketplace to submit your first RFQ.'
                 : 'Orders you receive or place will appear here.'}
             </div>

@@ -25,9 +25,5 @@ export function StatusPill({ status }: StatusPillProps) {
   };
   const cls = map[val] || 'helix-status-neutral';
   const label = val.replace(/_/g, ' ');
-  return (
-    <span className={`helix-status ${cls}`} data-testid={`status-${val}`}>
-      {label}
-    </span>
-  );
+  return <span className={`helix-status ${cls}`}>{label}</span>;
 }

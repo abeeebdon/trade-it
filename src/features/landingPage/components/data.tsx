@@ -89,7 +89,7 @@ export const catData = [
 ];
 export const NAV: {
   exporter: NavItems[];
-  reseller: NavItems[];
+  retailer: NavItems[];
   super_admin: NavItems[];
   admin: NavItems[];
   consumer: NavItems[];
@@ -113,7 +113,7 @@ export const NAV: {
     { to: '/exporter/onboarding', label: 'Business Profile', icon: FileText },
   ],
 
-  reseller: [
+  retailer: [
     { to: '/buyer', label: 'Command Center', icon: LayoutDashboard },
     { to: '/buyer/catalog', label: 'Marketplace', icon: Store },
     { to: '/buyer/orders', label: 'My Orders', icon: Receipt },

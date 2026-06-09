@@ -6,7 +6,7 @@ import { RegisterFormValues, registerSchema } from '../components/validation';
 import InputField from '@/components/form/InputFIeld';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ROLES } from '../components/data';
 import Loader from '@/components/buttons/Loader';
 import { motion } from 'motion/react';
@@ -128,7 +128,7 @@ export default function Register() {
           disabled={loading}
           className="helix-btn-primary w-full"
         >
-          {loading ? <Loader /> : `Create my ${role?.title} account`}
+          {loading ? <Loader /> : `Create my ${roleFromQuery} account`}
         </motion.button>
       </form>
       <div className="mt-8 text-center text-[13px] text-[#9CA3AF]">

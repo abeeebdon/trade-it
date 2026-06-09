@@ -3,14 +3,13 @@ import { useAppDispatch } from '@/hooks/store/store';
 import { login, setAuthRole } from '@/store/auth/auth.slice';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import InputField from '@/components/form/InputFIeld';
 import { LoginFormValues, loginSchema } from '../components/validation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Loader from '@/components/buttons/Loader';
-import api from '@/configs/api-config';
 import { toast } from 'sonner';
 import { loginApi } from '../api/auth';
 import { saveCookie } from '@/store/auth/cookies';
@@ -35,28 +34,27 @@ export default function Login() {
       if (result.success) {
         toast.success(result.message);
         saveCookie('token', result.data.token);
-        console.log(result.data.refreshToken);
         saveCookie('refreshToken', result.data.refreshToken);
         const userDetails = {
           email: result.data.email,
           fullName: result.data.fullName,
         };
-        console.log('User Details:', userDetails);
         dispatch(login(userDetails));
+        console.log(result.data.roles[0].toLowerCase());
         switch (result.data.roles[0].toLowerCase()) {
           case 'admin':
             dispatch(setAuthRole('admin'));
             router.push('/admin');
             break;
-          case 'reseller':
-            dispatch(setAuthRole('reseller'));
+          case 'retailer':
+            dispatch(setAuthRole('retailer'));
             router.push('/buyer');
             break;
-          case 'direct customer':
+          case 'consumer':
             dispatch(setAuthRole('consumer'));
             router.push('/');
             break;
-          case 'african exporter':
+          case 'exporter':
             dispatch(setAuthRole('exporter'));
             router.push('/exporter');
             break;
@@ -70,20 +68,13 @@ export default function Login() {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const message = (error as any)?.response?.data?.message;
       toast.error(
-        message ?? 'An error occurred during registration. Please try again.',
+        message ?? 'An error occurred during login. Please try again.',
       );
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await api.get('/authentication');
-      console.log(res);
-    };
-    fetchData();
-  }, []);
   return (
     <div className="w-full border max-w-md mx-auto helix-card p-8 fade-up">
       <h1 className="helix-kicker mb-2">Jomp Trade · Sign in</h1>

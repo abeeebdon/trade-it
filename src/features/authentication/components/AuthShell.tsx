@@ -1,7 +1,11 @@
-import Image from 'next/image';
+'use client';
+import JompShopLogo from '@/assets/JompShopIcon';
+import useColorScheme from '@/hooks/useColorScheme';
 import Link from 'next/link';
 
 export function AuthShell() {
+  const isDark: boolean = useColorScheme();
+
   return (
     <div className="hidden md:flex md:w-1/2 relative overflow-hidden border-r border-secondary/20">
       <div className="absolute inset-0 helix-dot-bg" />
@@ -11,12 +15,11 @@ export function AuthShell() {
           className="flex items-center gap-3"
           data-testid="brand-auth"
         >
-          <Image
-            width={36}
-            height={36}
-            src="/jomp-icon.png"
-            alt="Jomp"
-            className="w-9 h-9 rounded-full"
+          <JompShopLogo
+            primaryColor={isDark ? 'white' : '#31005C'}
+            secondaryColor={isDark ? '#EFA005' : '#EFA005'}
+            width={40}
+            height={40}
           />
           <div className="leading-tight">
             <div className="font-bold text-text tracking-[0.22em] text-sm">

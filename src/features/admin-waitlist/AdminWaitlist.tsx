@@ -10,8 +10,12 @@ import Pagination from '@/components/ui/Pagination';
 import api from '@/configs/api-config';
 import { paginate } from '@/lib/utils';
 import StatCard from './StatCard';
-import { useGetWaitlist } from '../admin/hooks/useGetAdminDashboard';
-import { PaginationType, WaitlistTypeData } from './types';
+import {
+  useGetWaitlist,
+  useGetWaitlistCommand,
+  useGetWaitlistCSV,
+} from '../admin/hooks/useGetAdminDashboard';
+import { PaginationType, WaitlistOverview, WaitlistTypeData } from './types';
 import { formatDateToMM } from '@/lib/func';
 
 const PER_PAGE = 10;
@@ -58,7 +62,12 @@ export default function AdminWaitlist() {
   const [mode, setMode] = useState<ModeType>('coming_soon');
   const [filter, setFilter] = useState<FilterType>('');
   const [page, setPage] = useState<number>(1);
-
+  const [getCSV, setGetCSV] = useState(false);
+  const { data: waitlistCommand, isPending: waitlistCommandPending } =
+    useGetWaitlistCommand();
+  const waitlistOverview: WaitlistOverview = useMemo(() => {
+    return waitlistCommand ? waitlistCommand : ({} as WaitlistOverview);
+  }, [waitlistCommand]);
   const { data: waitlist, isPending } = useGetWaitlist({
     filter,
     pageNumber: page,
@@ -108,28 +117,34 @@ export default function AdminWaitlist() {
       toast.error(err.response?.data?.detail || 'Failed');
     }
   };
+  const { mutate, isPending: isMutating } = useGetWaitlistCSV();
 
-  const exportCsv = (): void => {
-    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/waitlist/export.csv`;
+  // const handleExport = async () => {
+  //   const response = await refetch();
 
-    const token = localStorage.getItem('auth_token');
+  //   console.log(response.data);
+  // };
 
-    fetch(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+  const handleExport = () => {
+    mutate(filter, {
+      onSuccess: (csvData) => {
+        const blob = new Blob([csvData], {
+          type: 'text/csv;charset=utf-8;',
+        });
+
+        const url = window.URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'waitlist.csv';
+
+        document.body.appendChild(link);
+        link.click();
+
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
       },
-    })
-      .then((response) => response.blob())
-      .then((blob) => {
-        const anchor = document.createElement('a');
-
-        anchor.href = URL.createObjectURL(blob);
-        anchor.download = 'jompshop_waitlist.csv';
-        anchor.click();
-      })
-      .catch(() => {
-        toast.error('Failed to export CSV');
-      });
+    });
   };
 
   const filters: [FilterType, string][] = [
@@ -137,7 +152,6 @@ export default function AdminWaitlist() {
     ['exporter', 'Exporters'],
     ['buyer', 'Buyers'],
   ];
-
   return (
     <main>
       <header className="flex mb-4 justify-end">
@@ -147,7 +161,7 @@ export default function AdminWaitlist() {
           </Link>
 
           <button
-            onClick={exportCsv}
+            onClick={handleExport}
             className="helix-btn-secondary inline-flex items-center gap-1.5"
             data-testid="export-csv"
           >
@@ -211,14 +225,20 @@ export default function AdminWaitlist() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total signups" n={data.total} />
-        <StatCard label="Hero · general" n={data.by_type.hero || 0} />
-        <StatCard label="Exporters" n={data.by_type.exporter || 0} />
-        <StatCard label="US Buyers" n={data.by_type.buyer || 0} />
+        <StatCard
+          label="Total signups"
+          n={waitlistOverview.totalSignups ?? ''}
+        />
+        <StatCard
+          label="Hero · general"
+          n={waitlistOverview.heroGeneral ?? ''}
+        />
+        <StatCard label="Exporters" n={waitlistOverview.exporters ?? ''} />
+        <StatCard label="US Buyers" n={waitlistOverview.usBuyers ?? ''} />
       </div>
 
       {/* Filters + Table */}
-      <div className="helix-card overflow-hidden">
+      <div className="helix-card">
         <div className="px-5 py-4 border-b border-[#1A7A6E]/20 flex flex-wrap gap-3 items-center justify-between">
           <div className="flex gap-2">
             {filters.map(([value, label]) => (
@@ -250,8 +270,8 @@ export default function AdminWaitlist() {
         ) : waitlists.length === 0 ? (
           <div className="p-10 text-[#9CA3AF] text-center">No signups yet.</div>
         ) : (
-          <>
-            <table className="helix-table">
+          <section className=" overflow-auto">
+            <table className="helix-table w-full">
               <thead>
                 <tr>
                   <th>Full Name</th>
@@ -289,7 +309,7 @@ export default function AdminWaitlist() {
               totalPages={metrics.totalPages}
               onChange={setPage}
             />
-          </>
+          </section>
         )}
       </div>
     </main>
