@@ -22,16 +22,16 @@ import {
 
 export const helixCards = [
   {
-    title: 'RIBY INC',
-    subtitle: 'US & GLOBAL',
-    description:
-      'US & Global operations and transaction management. Payment collection entity, escrow custodian, and Delivery Partner of Record for direct-to-consumer shipments.',
-  },
-  {
     title: 'JOMPSTART DIGITAL',
     subtitle: 'NIGERIA & AFRICA · TECH · CREDIT',
     description:
       'Nigeria & Africa ground operations. Builds and maintains the platform and technology integrations. Underwrites and manages Business Credit to suppliers.',
+  },
+  {
+    title: 'RIBY INC',
+    subtitle: 'US & GLOBAL',
+    description:
+      'US & Global operations and transaction management. Payment collection entity, escrow custodian, and Delivery Partner of Record for direct-to-consumer shipments.',
   },
   {
     title: 'ANCHOR',
