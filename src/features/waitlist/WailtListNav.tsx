@@ -27,6 +27,9 @@ export default function WaitlistNav({ scrolled, onCta }: WaitlistNavProps) {
           <a href="#marketplace" className="js-nav-link">
             Marketplace
           </a>
+          <a href="#faq" className="js-nav-link">
+            FAQs
+          </a>
 
           <button
             onClick={onCta}

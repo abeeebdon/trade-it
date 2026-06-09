@@ -11,6 +11,7 @@ import { catWailtist, ProductType } from './constants';
 import './waitlist.css';
 import WaitlistNav from './WailtListNav';
 import WaitlistModal from './WaitlistModal';
+import FAQSection from './FAQs';
 
 export default function ComingSoon() {
   const router = useRouter();
@@ -95,6 +96,7 @@ export default function ComingSoon() {
         setFuncEmail={setFuncEmail}
         setShowWaitlistModal={setShowWaitlistModal}
       />
+      <FAQSection />
       <section className="js-powered">
         <div className="js-container js-powered-inner">
           <span className="js-powered-label">Powered by</span>

@@ -36,8 +36,8 @@ export default function DualCTA({
             <h3 className="js-dual-title">Source direct from Africa.</h3>
             <p className="js-dual-desc">
               Discover verified African suppliers, browse products with
-              compliance badges, and import with confidence — supported by Riby
-              Inc on the US side.
+              compliance badges, and import with confidence. Payment managed by
+              Riby Inc and Anchor.
             </p>
             <WaitlistForm
               type="buyer"

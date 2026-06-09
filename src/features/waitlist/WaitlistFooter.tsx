@@ -46,7 +46,9 @@ export default function WaitlistFooter() {
               <a href="https://www.instagram.com/jompshop_/" target="blank">
                 IG@Jompshop
               </a>
-              <span>LinkedIn</span>
+              <a href="https://www.instagram.com/jompshop_/" target="blank">
+                Facebook
+              </a>
             </div>
           </div>
         </div>

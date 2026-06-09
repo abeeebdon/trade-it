@@ -44,7 +44,7 @@ const Header = ({ className }: { className?: string }) => {
           </div>
         </Link>
         <nav className="hidden md:flex items-center lg:gap-8 gap-2 text-[13px] text-[#9CA3AF]">
-          {NAV_LINKS.splice(0, 4).map((link, i) => (
+          {NAV_LINKS.map((link, i) => (
             <Link
               key={i}
               href={link.href}

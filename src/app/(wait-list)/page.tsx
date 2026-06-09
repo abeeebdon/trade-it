@@ -37,7 +37,7 @@ const Homepage = () => {
         </div>
       )}
       <Header className="relative!" />
-      <div className="pt-36 px-6 lg:px-10 pb-24">
+      <div className="pt-6 px-6 lg:px-10 pb-24">
         <HomePage />
       </div>
       <Footer />

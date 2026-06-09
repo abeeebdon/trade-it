@@ -79,9 +79,6 @@ export default function Login() {
     <div className="w-full border max-w-md mx-auto helix-card p-8 fade-up">
       <h1 className="helix-kicker mb-2">Jomp Trade · Sign in</h1>
       <h1 className="helix-h2">Access your command center</h1>
-      <p className="text-[#9CA3AF] text-sm mt-2">
-        Exporter, buyer, consumer, or admin &mdash; one login.
-      </p>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -135,7 +132,7 @@ export default function Login() {
       </button>
 
       <div className="mt-8 text-center text-[13px] text-[#9CA3AF]">
-        New to Helix?{' '}
+        New to Jompshop?{' '}
         <Link href="/getstarted" className="text-[#C9922A] font-semibold">
           Create an account
         </Link>

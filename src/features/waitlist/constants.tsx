@@ -165,13 +165,13 @@ export const steps = [
     n: '01',
     icon: '🛂',
     title: 'Get Verified',
-    desc: 'Exporters complete CAC/KYB verification. US buyers confirm their business identity. Every seller on JompShop is authenticated before they can list.',
+    desc: 'Exporters complete CAC/KYB verification. Retailers confirm their business identity. Every seller on JompShop is authenticated and verified before they can list.',
   },
   {
     n: '02',
     icon: '🔍',
     title: 'Discover & Order',
-    desc: 'US buyers browse verified African products with real pricing, compliance badges, and supplier profiles. Submit an RFQ or order directly from the marketplace.',
+    desc: 'US Buyers browse verified African products with real pricing, compliance badges, and supplier profiles. Submit an RFQ or order directly from the marketplace.',
   },
   {
     n: '03',

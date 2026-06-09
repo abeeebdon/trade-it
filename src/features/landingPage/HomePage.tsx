@@ -86,16 +86,16 @@ export default function HomePage() {
   return (
     <main className="min-h-screen  bg-white text-[] dark:bg-[#0A1628] w-full max-w-350 mx-auto dark:text-[#F5F5F5]">
       {/* Hero */}
-      <section className="mb-10 relative">
-        <div className="helix-card p-6 sm:p-8 md:p-12 relative overflow-hidden">
+      <section className="mb-4 relative">
+        <div className="helix-card p-6  md:px-12 relative overflow-hidden">
           <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-[#C9922A]/15 blur-3xl pointer-events-none" />
-          <p className="helix-kicker mb-3">
+          <p className="helix-kicker mb-3" data-aos="fade-down">
             Africa&apos;s marketplace · From maker to your door
           </p>
-          <h1 className="helix-h1 max-w-4xl">
+          <h1 className="helix-h2 max-w-4xl">
             Shop authentic African goods. Direct from makers.
           </h1>
-          <p className="text-[15px] text-[#9CA3AF] mt-5 max-w-2xl leading-relaxed">
+          <p className="text-sm text-[#9CA3AF] mt-1 max-w-2xl leading-relaxed">
             Fashion, food, beauty, art &amp; home — sourced direct from verified
             African makers. Buy from US warehouses for 48-hour delivery, or
             order direct with <span className="font-bold">Riby Inc</span> as
@@ -104,10 +104,10 @@ export default function HomePage() {
           </p>
           <form
             onSubmit={submitSearch}
-            className="mt-7 flex sm:flex-row flex-col gap-2 max-w-2xl"
+            className="mt-4 flex sm:flex-row flex-col gap-2 max-w-2xl"
             data-testid="hero-search-form"
           >
-            <div className="flex-1 flex items-center h-14 gap-2  helix-input">
+            <div className="flex-1 flex items-center h-12 gap-2  helix-input">
               <label htmlFor="hero-search border">
                 <Search size={18} className="  text-[#9CA3AF]" />
               </label>
@@ -121,7 +121,7 @@ export default function HomePage() {
             </div>
             <button
               type="submit"
-              className="helix-btn-primary px-7"
+              className="helix-btn-primary py-2! px-7"
               data-testid="hero-search-submit"
             >
               Search
@@ -141,22 +141,23 @@ export default function HomePage() {
 
       {/* Category chips */}
       {showCategoryGrid && (
-        <section className="mb-10">
+        <section className="mb-4">
           <div className="flex items-end justify-between mb-5">
             <h2 className="helix-h3">Shop by category</h2>
           </div>
-          <article className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 justify-around">
+          <article className="flex py-1 w-[90vw] hide-scrollbar overflow-x-scroll gap-4">
             {CATS.map((c) => (
               <button
                 key={c.value}
                 onClick={() => setCategory(c.value)}
-                className="helix-card cursor-pointer space-y-1 p-4 text-left hover:border-[#C9922A]/60 transition-colors group"
-                // className={`px-3 py-1.5 rounded-full text-[11px] font-mono tracking-wider uppercase border ${category === c.value ? 'bg-[#1A7A6E]/20 text-[#1A7A6E] border-[#1A7A6E]' : 'border-[#1A7A6E]/30 text-[#9CA3AF] hover:border-[#1A7A6E]/60'}`}
+                className="helix-card min-w-45 flex-1 cursor-pointer space-y-1 p-4 py-3 text-left hover:border-[#C9922A]/60 transition-colors group"
               >
-                {c.icon}
-                <p className="text-[13px] font-semibold leading-tight">
-                  {c.label}
-                </p>
+                <div className="flex items-center gap-3">
+                  {c.icon}
+                  <p className="text-[12px] font-semibold leading-tight">
+                    {c.label}
+                  </p>
+                </div>
                 <p className="text-[10.5px] text-[#9CA3AF] mt-1.5 line-clamp-2">
                   {c.hint}
                 </p>
