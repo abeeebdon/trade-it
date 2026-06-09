@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { formatUSD, formatDateTime } from '@/lib/func';
 import { StatusPill } from '@/features/shops/components/StatusPill';
@@ -8,20 +8,9 @@ import { toast } from 'sonner';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { FileText, Package, Truck, CheckCircle2, Download } from 'lucide-react';
-import type { OrderDetailData } from '../types/exporter';
-import { mockOrderDetails } from '../components/data';
-import { useHeader } from '@/context/HeaderContext'; // ← added
-
-// ─── Constants ───────────────────────────────────────────────────────────────────
-
-const LIFECYCLE = [
-  'draft',
-  'confirmed',
-  'in_production',
-  'ready_to_ship',
-  'shipped',
-  'delivered',
-];
+import { useGetOrderById } from '../hooks/useOrders';
+import { useHeader } from '@/context/HeaderContext';
+import { LIFECYCLE } from '@/lib/constants';
 
 const LABELS: Record<string, string> = {
   draft: 'Draft (RFQ)',
@@ -33,34 +22,21 @@ const LABELS: Record<string, string> = {
   disputed: 'Disputed',
 };
 
-// ─── OrderDetail ─────────────────────────────────────────────────────────────────
-
 export default function OrderDetail() {
   const params = useParams();
   const id = params?.id as string;
   const user = useSelector((state: RootState) => state.auth.user);
   const { setHeader } = useHeader();
 
-  const [data, setData] = useState<OrderDetailData | null>(null);
   const [disputeOpen, setDisputeOpen] = useState(false);
   const [dispute, setDispute] = useState({ reason: '', description: '' });
   const [busy, setBusy] = useState(false);
 
-  const load = useCallback(() => {
-    setTimeout(() => {
-      const found = mockOrderDetails[id] ?? Object.values(mockOrderDetails)[0];
-      setData(found);
-    }, 600);
-  }, [id]);
+  const { data, isLoading, refetch } = useGetOrderById(id);
 
+  // Set header dynamically once data is loaded
   useEffect(() => {
-    if (!id) return;
-    load();
-  }, [id, load]);
-
-  // ── Set header dynamically once data is loaded ── added
-  useEffect(() => {
-    if (!data) return;
+    if (!data || !data.order) return;
 
     const o = data.order;
 
@@ -81,14 +57,12 @@ export default function OrderDetail() {
     };
   }, [data, setHeader]);
 
-  // ── Mock action handlers — replace with real api calls when backend is ready
-
   const issueProforma = async () => {
     setBusy(true);
     try {
       await new Promise((res) => setTimeout(res, 600));
       toast.success('Proforma issued — buyer notified');
-      load();
+      refetch();
     } catch {
       toast.error('Failed');
     } finally {
@@ -103,7 +77,7 @@ export default function OrderDetail() {
       toast.success(
         `Payment received: ${formatUSD(data?.order.agreed_price_usd ?? 0)}`,
       );
-      load();
+      refetch();
     } catch {
       toast.error('Failed');
     } finally {
@@ -116,7 +90,7 @@ export default function OrderDetail() {
     try {
       await new Promise((res) => setTimeout(res, 600));
       toast.success(`Status → ${status}`);
-      load();
+      refetch();
     } catch {
       toast.error('Failed');
     } finally {
@@ -135,7 +109,7 @@ export default function OrderDetail() {
       await new Promise((res) => setTimeout(res, 600));
       toast.success('Dispute raised');
       setDisputeOpen(false);
-      load();
+      refetch();
     } catch {
       toast.error('Failed');
     } finally {
@@ -143,8 +117,8 @@ export default function OrderDetail() {
     }
   };
 
-  // ── Loading skeleton
-  if (!data) {
+  // Loading skeleton
+  if (isLoading) {
     return (
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
@@ -162,9 +136,17 @@ export default function OrderDetail() {
     );
   }
 
+  if (!data || !data.order) {
+    return (
+      <div className="helix-card p-12 text-center text-[#9CA3AF]">
+        Order details could not be found. Please check your tracking ID link.
+      </div>
+    );
+  }
+
   const o = data.order;
-  const isSupplier = o.supplier_user_id === user?.role;
-  const isBuyer = o.buyer_user_id === user?.role;
+  const isSupplier = o.supplier_user_id === user?.id;
+  const isBuyer = o.buyer_user_id === user?.id;
   const currentIdx = LIFECYCLE.indexOf(o.status);
 
   return (
@@ -177,7 +159,7 @@ export default function OrderDetail() {
 
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          {/* ── Trade Lifecycle ── */}
+          {/* Trade Lifecycle */}
           <div className="helix-card p-6">
             <div className="helix-label mb-4">Trade Lifecycle</div>
             <div className="flex items-center gap-2 overflow-x-auto pb-2">
@@ -214,7 +196,7 @@ export default function OrderDetail() {
             </div>
           </div>
 
-          {/* ── Actions ── */}
+          {/* Actions */}
           {(isSupplier || isBuyer) && (
             <div className="helix-card p-6">
               <div className="helix-label mb-3">Actions</div>
@@ -258,7 +240,7 @@ export default function OrderDetail() {
                   ))}
                 <button
                   onClick={() => setDisputeOpen(true)}
-                  className="helix-btn-secondary !border-[#E74C3C]/60 !text-[#E74C3C]"
+                  className="helix-btn-secondary border-[#E74C3C]/60! text-[#E74C3C]!"
                   data-testid="raise-dispute"
                 >
                   Raise dispute
@@ -300,7 +282,7 @@ export default function OrderDetail() {
             </div>
           </div>
 
-          {/* ── Timeline ── */}
+          {/* Timeline */}
           <div className="helix-card p-6">
             <div className="helix-label mb-3">Timeline</div>
             <div className="space-y-3">
@@ -309,7 +291,7 @@ export default function OrderDetail() {
                 .reverse()
                 .map((t, i) => (
                   <div key={i} className="flex gap-3">
-                    <div className="w-2 h-2 rounded-full bg-[#1A7A6E] mt-2 flex-shrink-0" />
+                    <div className="w-2 h-2 rounded-full bg-[#1A7A6E] mt-2 shrink-0" />
                     <div>
                       <div className="text-[13px]">
                         {t.event.replace(/_/g, ' ').replace(/status:/, '→ ')}
@@ -395,7 +377,7 @@ export default function OrderDetail() {
         </div>
       </div>
 
-      {/* ── Dispute Modal ── */}
+      {/* Dispute Modal */}
       {disputeOpen && (
         <div
           className="fixed inset-0 bg-[#0A1628]/80 flex items-start justify-center pt-16 pb-10 overflow-y-auto z-50 p-4"

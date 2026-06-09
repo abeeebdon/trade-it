@@ -26,3 +26,12 @@ export const CATS = [
   { value: 'staple-foods', label: 'Staple Foods' },
   { value: 'general-goods', label: 'General Goods' },
 ];
+
+export const LIFECYCLE = [
+  'draft',
+  'confirmed',
+  'in_production',
+  'ready_to_ship',
+  'shipped',
+  'delivered',
+];
