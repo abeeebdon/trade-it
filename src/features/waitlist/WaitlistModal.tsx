@@ -3,6 +3,8 @@ import { Loader2, X } from 'lucide-react';
 import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { ROLES, RoleType } from '../authentication/components/data';
+import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
+import { setWaitlistModalDetails } from '@/store/waitlist/waitlist.slice';
 
 interface WaitlistModalProps {
   show: boolean;
@@ -11,16 +13,13 @@ interface WaitlistModalProps {
   setEmail: Dispatch<SetStateAction<string>>;
   roleToSignFor: 'exporter' | 'buyer' | null;
 }
-const WaitlistModal = ({
-  show,
-  onClose,
-  roleToSignFor,
-  email,
-  setEmail,
-}: WaitlistModalProps) => {
+const WaitlistModal = ({ show, onClose }: WaitlistModalProps) => {
+  const modalDetails = useAppSelector((state) => state.wait.modalDetails);
+  const dispatch = useAppDispatch();
   const [fullname, setFullname] = useState('');
   const [loading, setLoading] = useState(false);
-  const [roleValue, setRoleValue] = useState('');
+  const [email, setEmail] = useState(modalDetails.email ?? '');
+  const [roleValue, setRoleValue] = useState(modalDetails.role ?? '');
   const [error, setError] = useState('');
   const handleClose = () => {
     setTimeout(() => {
@@ -55,6 +54,8 @@ const WaitlistModal = ({
           res.data?.message ||
             'You have been added to the waitlist! We will notify you when we launch.',
         );
+        const details = { email: '', role: '' };
+        dispatch(setWaitlistModalDetails(details));
         handleClose();
         return;
       } else {
@@ -85,9 +86,8 @@ const WaitlistModal = ({
       ? ROLES.find((r) => r.value === roleValue)
       : ({} as RoleType);
   }, [roleValue]);
-
   return (
-    <div className="fixed inset-0 z-9999 w-full bg-black/20 left-0 top-0 right-0 bottom-0 flex items-center justify-center">
+    <div className="fixed inset-0 z-9999 w-full bg-black/40 left-0 top-0 right-0 bottom-0 flex items-center justify-center">
       <div className="bg-[#50045a] w-[90%] max-w-lg p-6 rounded-lg shadow-lg">
         <div className="flex items-center justify-between ">
           <h2 className="text-lg font-bold mb-4">Join the Waitlist</h2>

@@ -29,7 +29,7 @@ const FAQSection: FC = () => {
         <h2
           data-aos="fade-down"
           data-aos-easing="linear"
-          data-aos-duration="1500"
+          data-aos-duration="1000"
           className="mb-8 text-xl font-bold text-primary md:text-3xl"
         >
           Frequently Asked Question
@@ -40,7 +40,7 @@ const FAQSection: FC = () => {
             <div
               key={index}
               data-aos="fade-up"
-              data-aos-duration="3000"
+              data-aos-duration="1000"
               className="overflow-hidden rounded-lg border border-purple"
             >
               <button

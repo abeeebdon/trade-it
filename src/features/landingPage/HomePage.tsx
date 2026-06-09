@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import ListingCard from '../shops/components/ListingCard';
 import { CATS, goodslistings, Listing } from '../shops/components/data';
-import { Search, Store, Truck } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { ListingCardSkeleton } from '../shops/components/ListingCardSkeleton';
 import { useRouter, useSearchParams } from 'next/navigation';
 import HomePageFIlter from './components/HomePageFIlter';

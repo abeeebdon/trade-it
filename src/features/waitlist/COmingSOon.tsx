@@ -107,20 +107,14 @@ export default function ComingSoon() {
           <span className="js-powered-name">Anchor </span>
         </div>
       </section>
-      <WaitlistFooter />
+      <WaitlistFooter setShowWaitlistModal={setShowWaitlistModal} />
       {modal && (
         <ProductModal
           product={modal}
           onClose={() => setModal(null)}
           onCta={() => {
             setModal(null);
-            setTimeout(
-              () =>
-                document
-                  .getElementById('waitlist')
-                  ?.scrollIntoView({ behavior: 'smooth' }),
-              100,
-            );
+            setShowWaitlistModal(true);
           }}
         />
       )}

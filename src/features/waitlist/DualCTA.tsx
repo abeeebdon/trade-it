@@ -1,14 +1,13 @@
+import { useState } from 'react';
 import { HeroProps } from './Hero';
 import WaitlistForm from './WaitlistFOrm';
 type DualCTAProps = HeroProps & {
   setRoleToSingFOr: (role: 'exporter' | 'buyer' | null) => void;
 };
-export default function DualCTA({
-  funcEmail,
-  setFuncEmail,
-  setShowWaitlistModal,
-  setRoleToSingFOr,
-}: DualCTAProps) {
+export default function DualCTA({ setShowWaitlistModal }: DualCTAProps) {
+  const [exporterEmail, setExporterEmail] = useState('');
+  const [buyerEmail, setBuyerEmail] = useState('');
+
   return (
     <section id="about" className="js-section">
       <div className="js-container">
@@ -25,10 +24,9 @@ export default function DualCTA({
             <WaitlistForm
               type="exporter"
               setOpenModal={setShowWaitlistModal}
-              funcEMail={funcEmail}
-              setFuncEmail={setFuncEmail}
+              funcEMail={exporterEmail}
+              setFuncEmail={setExporterEmail}
               ctaLabel="Join as Exporter"
-              setRoleToSingFOr={setRoleToSingFOr}
             />
           </div>
           <div className="js-dual-card js-dual-purple reveal">
@@ -42,10 +40,9 @@ export default function DualCTA({
             <WaitlistForm
               type="buyer"
               setOpenModal={setShowWaitlistModal}
-              funcEMail={funcEmail}
-              setFuncEmail={setFuncEmail}
+              funcEMail={buyerEmail}
+              setFuncEmail={setBuyerEmail}
               ctaLabel="Join as Buyer"
-              setRoleToSingFOr={setRoleToSingFOr}
             />
           </div>
         </div>
