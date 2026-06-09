@@ -44,28 +44,22 @@ const Header = ({ className }: { className?: string }) => {
           </div>
         </Link>
         <nav className="hidden md:flex items-center lg:gap-8 gap-2 text-[13px] text-[#9CA3AF]">
-          {NAV_LINKS.map((link, i) =>
-            i === 4 ? (
-              <>
-                {!token && (
-                  <Link
-                    key={i}
-                    href={link.href}
-                    className="text-muted hover:text-text"
-                  >
-                    {link.label}
-                  </Link>
-                )}
-              </>
-            ) : (
-              <Link
-                key={i}
-                href={link.href}
-                className="text-muted hover:text-text"
-              >
-                {link.label}
-              </Link>
-            ),
+          {NAV_LINKS.splice(0, 4).map((link, i) => (
+            <Link
+              key={i}
+              href={link.href}
+              className="text-muted hover:text-text"
+            >
+              {link.label}
+            </Link>
+          ))}
+          {!user && (
+            <Link
+              href={NAV_LINKS[4]?.href ?? ''}
+              className="text-muted hover:text-text"
+            >
+              {NAV_LINKS[4]?.label}
+            </Link>
           )}
           {user?.role === 'consumer' && (
             <Link href="/shop/orders" className="text-muted hover:text-text">

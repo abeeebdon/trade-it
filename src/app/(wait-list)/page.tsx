@@ -6,15 +6,18 @@ import Footer from '@/features/landingPage/components/Footer';
 import Header from '@/features/landingPage/components/Header';
 import { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
+import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
+import { setBeta } from '@/store/waitlist/waitlist.slice';
 
 const Homepage = () => {
   const modeLive = false;
   const token = getSavedCookie('token');
-  const [isBetaPreview, setIsBetaPreview] = useState(false);
+  const dispatch = useAppDispatch();
+
+  const isBetaPreview = useAppSelector((state) => state.wait.beta);
   const exitBeta = () => {
-    setIsBetaPreview(false);
+    dispatch(setBeta(false));
   };
-  console.log(isBetaPreview);
   return modeLive || token || isBetaPreview ? (
     <main>
       {isBetaPreview && (
@@ -40,7 +43,7 @@ const Homepage = () => {
       <Footer />
     </main>
   ) : (
-    <ComingSoon setIsBetaPreview={setIsBetaPreview} />
+    <ComingSoon />
   );
 };
 

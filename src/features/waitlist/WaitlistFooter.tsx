@@ -1,11 +1,17 @@
 import JompShopLogo from '@/assets/JompShopIcon';
-import { Props } from './COmingSOon';
-export default function WaitlistFooter({ setIsBetaPreview }: Props) {
+import { useAppDispatch } from '@/hooks/store/store';
+import { setBeta } from '@/store/waitlist/waitlist.slice';
+export default function WaitlistFooter() {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
     });
+  };
+  const dispatch = useAppDispatch();
+  const handleToggleBeta = () => {
+    dispatch(setBeta(true));
+    scrollToTop();
   };
   return (
     <footer className="js-footer">
@@ -49,13 +55,7 @@ export default function WaitlistFooter({ setIsBetaPreview }: Props) {
             © {new Date().getFullYear()} JompShop. A product of JompStart
             Digital &amp; Riby Inc.
           </p>
-          <button
-            onClick={() => {
-              setIsBetaPreview(true);
-              scrollToTop();
-            }}
-            className="js-beta-link"
-          >
+          <button onClick={handleToggleBeta} className="js-beta-link">
             🔒 Beta Access
           </button>
         </div>
