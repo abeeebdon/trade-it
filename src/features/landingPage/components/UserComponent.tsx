@@ -48,7 +48,7 @@ const UserComponent = () => {
               {user?.fullName}
             </div>
             <div className="text-[10px] font-mono uppercase tracking-wider text-[#1A7A6E]">
-              {user?.role.replace('_', ' ')}
+              {user?.role?.replace('_', ' ')}
             </div>
           </div>
           {dashHome && (
@@ -59,7 +59,7 @@ const UserComponent = () => {
               {user?.role === 'consumer' ? 'My Orders' : 'Dashboard'}
             </Link>
           )}
-          {(user?.role === 'exporter' || user?.role === 'reseller') && (
+          {(user?.role === 'exporter' || user?.role === 'retailer') && (
             <Link
               href={`/${user?.role}`}
               className="block px-3 py-2 text-[12px] hover:bg-[#1A7A6E]/10 rounded"

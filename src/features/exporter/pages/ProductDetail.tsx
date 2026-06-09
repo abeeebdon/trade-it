@@ -108,7 +108,7 @@ export default function ProductDetail() {
   const p = data.product;
   const s = data.supplier;
   const canRfq =
-    user?.role === 'reseller' && user?.fullName !== s.business_name;
+    user?.role === 'retailer' && user?.fullName !== s.business_name;
 
   return (
     <>

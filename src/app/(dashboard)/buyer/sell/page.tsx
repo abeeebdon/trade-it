@@ -1,5 +1,7 @@
+import BuyerInventorySell from '@/features/buyer/pages/BuyerInventorySell';
+
 const page = () => {
-  return <div>page</div>;
+  return <BuyerInventorySell />;
 };
 
 export default page;

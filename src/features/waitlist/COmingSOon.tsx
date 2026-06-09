@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Hero from './Hero';
 import Marketplace from './MarketPlace';
 import HowItWorks from './HowItWorks';
@@ -11,7 +11,11 @@ import { catWailtist, ProductType } from './constants';
 import './waitlist.css';
 import WaitlistNav from './WailtListNav';
 import WaitlistModal from './WaitlistModal';
-export default function ComingSoon() {
+export interface Props {
+  setIsBetaPreview: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function ComingSoon({ setIsBetaPreview }: Props) {
   const router = useRouter();
   const [funcEmail, setFuncEmail] = useState('');
   const [scrolled, setScrolled] = useState(false);
@@ -104,7 +108,7 @@ export default function ComingSoon() {
           <span className="js-powered-name">Anchor </span>
         </div>
       </section>
-      <WaitlistFooter />
+      <WaitlistFooter setIsBetaPreview={setIsBetaPreview} />
       {modal && (
         <ProductModal
           product={modal}

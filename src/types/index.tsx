@@ -1,7 +1,7 @@
 import { LucideIcon } from 'lucide-react';
 export type UserRole =
   | 'exporter'
-  | 'reseller'
+  | 'retailer'
   | 'consumer'
   | 'super_admin'
   | 'admin';

@@ -1,6 +1,6 @@
-import MyProducts from '@/features/exporter/pages/MyProducts';
+import Finance from '@/features/buyer/pages/Finance';
 const page = () => {
-  return <MyProducts />;
+  return <Finance />;
 };
 
 export default page;

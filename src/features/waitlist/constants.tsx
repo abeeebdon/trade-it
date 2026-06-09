@@ -6,7 +6,7 @@ export interface ProductType {
   price: string;
   unit: string;
   moq: string;
-  emoji: string;
+  image: string;
   category: string;
   desc: string;
   specs: {
@@ -23,7 +23,7 @@ export const PRODUCTS: ProductType[] = [
     price: '$42.00',
     unit: '/unit',
     moq: '50 units',
-    emoji: '👗',
+    image: 'ankara2.jpg',
     category: 'Fashion & Textiles',
     desc: 'Bespoke ready-to-wear Ankara designs by Lagos-based artisans. Sized XS–XXL. Fabric sourced from licensed Nigerian textile mills, sewn in-house.',
     specs: {
@@ -41,7 +41,7 @@ export const PRODUCTS: ProductType[] = [
     price: '$2,400',
     unit: '/MT',
     moq: '1 MT',
-    emoji: '🌿',
+    image: 'sesame.jpg',
     category: 'Agricultural Products',
     desc: 'Pure white hulled sesame from Benue cooperatives. Export-grade, vacuum-sealed.',
     specs: {
@@ -59,7 +59,7 @@ export const PRODUCTS: ProductType[] = [
     price: '$7.56',
     unit: '/kg',
     moq: '100 kg',
-    emoji: '🌺',
+    image: 'hibiscus.jpg',
     category: 'Botanicals & Herbs',
     desc: 'Sun-dried Sudanese hibiscus calyces — vibrant red, aromatic. For teas, syrups, juice.',
     specs: {
@@ -77,7 +77,7 @@ export const PRODUCTS: ProductType[] = [
     price: '$3.80',
     unit: '/kg',
     moq: '50 kg',
-    emoji: '🧴',
+    image: 'shea-butter.jpg',
     category: 'Beauty & Wellness',
     desc: "Grade A unrefined shea butter, hand-whipped by women's cooperatives in Northern Nigeria.",
     specs: {
@@ -95,7 +95,7 @@ export const PRODUCTS: ProductType[] = [
     price: '$18.00',
     unit: '/piece',
     moq: '30 pieces',
-    emoji: '🧣',
+    image: 'kente.webp',
     category: 'Fashion & Textiles',
     desc: 'Hand-loomed Kente-inspired table runners. 200x35cm. Fade-resistant cotton.',
     specs: {
@@ -113,7 +113,7 @@ export const PRODUCTS: ProductType[] = [
     price: '$12.50',
     unit: '/kg',
     moq: '20 kg',
-    emoji: '🌶️',
+    image: 'uzaza2.jpg',
     category: 'Staple Foods',
     desc: 'Stone-ground West African Uziza pepper. Organic, aromatic, slightly bitter.',
     specs: {
@@ -131,7 +131,7 @@ export const PRODUCTS: ProductType[] = [
     price: '$65.00',
     unit: '/piece',
     moq: '10 pieces',
-    emoji: '🏺',
+    image: 'mask.jfif',
     category: 'Arts & Crafts',
     desc: 'Hand-carved iroko wood Igbo masks — each piece individually signed and unique.',
     specs: {
@@ -149,7 +149,7 @@ export const PRODUCTS: ProductType[] = [
     price: '$22.00',
     unit: '/L',
     moq: '10 L',
-    emoji: '🫚',
+    image: 'seed_oil.png',
     category: 'Beauty & Wellness',
     desc: 'Cold-pressed Nigella sativa oil. Therapeutic grade, glass-bottled.',
     specs: {

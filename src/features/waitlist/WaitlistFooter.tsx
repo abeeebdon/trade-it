@@ -1,6 +1,6 @@
 import JompShopLogo from '@/assets/JompShopIcon';
-
-export default function WaitlistFooter() {
+import { Props } from './COmingSOon';
+export default function WaitlistFooter({ setIsBetaPreview }: Props) {
   return (
     <footer className="js-footer">
       <div className="js-container">
@@ -30,16 +30,25 @@ export default function WaitlistFooter() {
             </div>
             <div>
               <div className="js-footer-h">Connect</div>
-              <a href="mailto:hello@jompshop.co">hello@jompshop.com</a>
-              <span>ig@JompShop</span>
+              <a href="mailto:hello@jompshop.com">hello@jompshop.com</a>
+              <a href="https://www.instagram.com/jompshop_/" target="blank">
+                IG@Jompshop
+              </a>
               <span>LinkedIn</span>
             </div>
           </div>
         </div>
         <div className="js-footer-bottom">
-          <span>
-            © 2025 JompShop. A product of JompStart Digital &amp; Riby Inc.
-          </span>
+          <p className="text-center ">
+            © {new Date().getFullYear()} JompShop. A product of JompStart
+            Digital &amp; Riby Inc.
+          </p>
+          <button
+            onClick={() => setIsBetaPreview(true)}
+            className="js-beta-link"
+          >
+            🔒 Beta Access
+          </button>
         </div>
       </div>
     </footer>

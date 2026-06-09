@@ -42,7 +42,7 @@ const HeroComponent = () => {
               className="helix-btn-primary"
             />
             <Link
-              href="/catalog"
+              href="/shop"
               data-testid="hero-cta-browse"
               className="helix-btn-secondary inline-flex items-center gap-2"
             >

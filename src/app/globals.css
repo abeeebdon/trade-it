@@ -195,6 +195,14 @@ body {
   background: rgba(201, 146, 42, 0.1);
   border-color: rgba(201, 146, 42, 0.45);
 }
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
 @keyframes fadeUp {
   from {
     opacity: 0;
