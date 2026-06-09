@@ -1,10 +1,13 @@
 'use client';
 import { toast } from 'sonner';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import BalanceBlock from '../components/BalanceBlock';
 import WithdrawModal from '../components/WithdrawalModal';
 import { Currency, DashboardData } from '../types/buyers';
 import TransactionLedger from '../components/TransactionLedger';
+import { useHeader } from '@/context/HeaderContext';
+import Link from 'next/link';
+import { PiggyBank, Wallet } from 'lucide-react';
 
 interface WithdrawalAccount {
   id: string;
@@ -16,6 +19,7 @@ interface WithdrawalAccount {
 }
 
 export default function Finance() {
+  const { setHeader } = useHeader();
   const [dash, setDash] = useState<DashboardData>({
     usd_balance: 12450,
     ngn_balance: 1850000,
@@ -35,6 +39,40 @@ export default function Finance() {
 
   const [accounts, setAccounts] = useState<WithdrawalAccount[]>([]);
   const [open, setOpen] = useState<Currency | null>(null);
+
+  useEffect(() => {
+    setHeader({
+      title: 'Financial Command',
+      kicker: 'NGN · USD · Anchor',
+      action: (
+        <div className="flex items-center gap-2 flex-wrap">
+          <Link
+            href="/buyer/finance/accounts"
+            className="helix-btn-secondary text-[12px] inline-flex items-center gap-1.5"
+            data-testid="manage-accounts-link"
+          >
+            <Wallet size={13} /> Accounts
+          </Link>
+          <button
+            onClick={() => setOpen('ngn')}
+            className="helix-btn-secondary inline-flex items-center gap-2"
+            data-testid="withdraw-ngn-btn"
+          >
+            <PiggyBank size={14} /> Withdraw NGN
+          </button>
+          <button
+            onClick={() => setOpen('usd')}
+            className="helix-btn-primary inline-flex items-center gap-2"
+            data-testid="withdraw-usd-btn"
+          >
+            <PiggyBank size={14} /> Withdraw USD
+          </button>
+        </div>
+      ),
+    });
+
+    return () => setHeader(null);
+  }, [setHeader]);
 
   const load = () => {
     console.log('reload finance data');

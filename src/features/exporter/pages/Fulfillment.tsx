@@ -14,8 +14,6 @@ import QuoteCard from '../components/QuoteCard';
 import FulfillmentOrderCard from '../components/FulfillmentOrderCard';
 import RespondQuoteModal from '../components/RespondQuoteModal';
 
-// Fulfillment
-
 export default function Fulfillment() {
   const [orders, setOrders] = useState<FulfillmentOrder[]>([]);
   const [quotes, setQuotes] = useState<SellerQuote[]>([]);

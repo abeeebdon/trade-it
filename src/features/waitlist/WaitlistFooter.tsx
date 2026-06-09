@@ -1,6 +1,12 @@
 import JompShopLogo from '@/assets/JompShopIcon';
 import { Props } from './COmingSOon';
 export default function WaitlistFooter({ setIsBetaPreview }: Props) {
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
   return (
     <footer className="js-footer">
       <div className="js-container">
@@ -44,7 +50,10 @@ export default function WaitlistFooter({ setIsBetaPreview }: Props) {
             Digital &amp; Riby Inc.
           </p>
           <button
-            onClick={() => setIsBetaPreview(true)}
+            onClick={() => {
+              setIsBetaPreview(true);
+              scrollToTop();
+            }}
             className="js-beta-link"
           >
             🔒 Beta Access

@@ -43,7 +43,7 @@ export default function Modal({
       aria-labelledby="modal-title"
     >
       {/* Modal positioning wrapper */}
-      <div className="min-h-full flex items-start justify-center pt-16 pb-10 px-4">
+      <div className="min-h-full flex items-center justify-center pt-16 pb-10 px-4">
         <section
           onClick={(e) => e.stopPropagation()}
           className={`helix-card w-full ${maxWidth} fade-up shadow-2xl`}
