@@ -6,6 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 
 import { authReducer } from './auth/auth.slice';
+import { waitlistReducer } from './waitlist/waitlist.slice';
 import {
   FLUSH,
   PAUSE,
@@ -26,6 +27,7 @@ const persistConfig = {
 
 const appReducer = combineReducers({
   auth: authReducer,
+  wait: waitlistReducer,
 });
 
 const rootReducer = (
