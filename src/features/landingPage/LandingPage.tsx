@@ -1,7 +1,6 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useAppSelector } from '@/hooks/store/store';
 import Image from 'next/image';
 import PartnerComponents from './components/PartnerComponents';
 import { ArrowRight } from 'lucide-react';
@@ -15,14 +14,7 @@ const AGRO_IMG =
   'https://images.unsplash.com/photo-1622676566956-b42b50c84c31?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTJ8MHwxfHNlYXJjaHwzfHxhZ3JpY3VsdHVyZSUyMGZhcm1lciUyMGFmcmljYW58ZW58MHx8fHwxNzc2ODI0NTYxfDA&ixlib=rb-4.1.0&q=85';
 
 export default function Landing() {
-  const user = useAppSelector((state) => state.auth.user);
   const router = useRouter();
-  // useEffect(() => {
-  //   if (!user) return;
-  //   if (user.role === 'buyer') router.push('/shop');
-  //   else if (user.role === 'super_admin') router.push('/admin/credit');
-  //   else router.push('/dashboard');
-  // }, [user, router]);
 
   return (
     <main className="min-h-screen bg-white text-[] dark:bg-[#0A1628] dark:text-[#F5F5F5]">

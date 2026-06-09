@@ -1,5 +1,6 @@
 'use client';
-import JompShopLogo from '@/assets/JompShopIcon';
+import JompsShopLogo from '@/assets/jompshop_logo';
+import JompsShopLogoDark from '@/assets/JompshopLogoDark';
 import useColorScheme from '@/hooks/useColorScheme';
 import Link from 'next/link';
 
@@ -11,15 +12,11 @@ const Footer = () => {
       <div className="max-w-350 mx-auto px-6 lg:px-10 grid md:grid-cols-4 gap-8">
         <div>
           <div className="flex items-end gap-2 mb-3">
-            <JompShopLogo
-              primaryColor={isDark ? 'white' : '#31005C'}
-              secondaryColor={isDark ? '#EFA005' : '#EFA005'}
-              width={40}
-              height={40}
-            />
-            <span className="font-bold tracking-[0.22em] text-lg">
-              JOMP SHOP
-            </span>
+            {isDark ? (
+              <JompsShopLogoDark width={120} />
+            ) : (
+              <JompsShopLogo width={120} />
+            )}
           </div>
 
           <p className="text-[12px] text-[#9CA3AF] leading-relaxed">
@@ -94,10 +91,10 @@ const Footer = () => {
 
             <li>
               <Link
-                href="/register?role=buyer"
+                href="/register?role=retailer"
                 className="hover:text-[#F5F5F5]"
               >
-                Become a reseller / importer
+                Become a retailer / importer
               </Link>
             </li>
 
