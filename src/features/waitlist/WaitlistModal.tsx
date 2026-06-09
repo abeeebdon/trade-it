@@ -1,7 +1,8 @@
 import api from '@/configs/api-config';
 import { Loader2, X } from 'lucide-react';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import { toast } from 'sonner';
+import { ROLES, RoleType } from '../authentication/components/data';
 
 interface WaitlistModalProps {
   show: boolean;
@@ -19,6 +20,7 @@ const WaitlistModal = ({
 }: WaitlistModalProps) => {
   const [fullname, setFullname] = useState('');
   const [loading, setLoading] = useState(false);
+  const [roleValue, setRoleValue] = useState('');
   const [error, setError] = useState('');
   const handleClose = () => {
     setTimeout(() => {
@@ -33,13 +35,17 @@ const WaitlistModal = ({
       setError('Please enter a full name');
       return;
     }
+    if (!roleValue.trim()) {
+      toast.error('Please select the role u will love to sign up for');
+      return;
+    }
     try {
       setLoading(true);
       const postData = {
         email: email.trim(),
         fullname: fullname,
-        role: roleToSignFor ?? 'buyer',
-        CustomerType: roleToSignFor ?? 'buyer',
+        role: roleValue,
+        CustomerType: roleValue,
       };
       const res = await api.post('/Waitlist', postData);
       if (res.data?.success) {
@@ -52,7 +58,6 @@ const WaitlistModal = ({
         handleClose();
         return;
       } else {
-        console.log('Waitlist response:', res);
         return;
       }
     } catch (err: unknown) {
@@ -65,6 +70,22 @@ const WaitlistModal = ({
       setLoading(false);
     }
   };
+  type SelectOption = {
+    label: string;
+    value: 'exporter' | 'retailer' | 'consumer';
+  };
+
+  const roles: SelectOption[] = [
+    { label: 'Exporter', value: 'exporter' },
+    { label: 'Retailer', value: 'retailer' },
+    { label: 'Consumer', value: 'consumer' },
+  ];
+  const roleBlurb: RoleType | undefined = useMemo(() => {
+    return roleValue !== ''
+      ? ROLES.find((r) => r.value === roleValue)
+      : ({} as RoleType);
+  }, [roleValue]);
+
   return (
     <div className="fixed inset-0 z-9999 w-full bg-black/20 left-0 top-0 right-0 bottom-0 flex items-center justify-center">
       <div className="bg-[#50045a] w-[90%] max-w-lg p-6 rounded-lg shadow-lg">
@@ -99,6 +120,24 @@ const WaitlistModal = ({
             {error && (
               <p className="ml-1 mt-1 text-[10px] text-danger">{error}</p>
             )}
+          </div>
+          <div className="flex flex-col">
+            <select
+              className=" js-select border text-sm p-2"
+              value={roleValue}
+              onChange={(e) => setRoleValue(e.target.value)}
+            >
+              <option value="">Select the role you want to signup for</option>
+              {roles.map(({ label, value }, i) => {
+                return (
+                  <option key={i} className="" value={value}>
+                    {label}
+                  </option>
+                );
+              })}
+            </select>
+
+            <p className="ml-3  mt-1 text-[#828ada]">{roleBlurb?.sub ?? ''}</p>
           </div>
           <div className="mt-4 flex justify-end items-center">
             <button
