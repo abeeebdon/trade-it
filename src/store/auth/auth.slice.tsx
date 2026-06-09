@@ -1,10 +1,12 @@
 import { InitialAuthStateType } from '@/types';
 import { createSlice } from '@reduxjs/toolkit';
+import { saveCookie } from './cookies';
 
 const initialAuthState: InitialAuthStateType = {
   isAuth: false,
   user: null,
   authRole: null,
+  userRole: null,
 };
 
 const authSlice = createSlice({
@@ -23,10 +25,19 @@ const authSlice = createSlice({
       state.user = action.payload;
     },
     setAuthRole(state, action) {
+      if (state.user) {
+        state.user.role = action.payload;
+      }
       state.authRole = action.payload;
+      saveCookie('role', action.payload);
+    },
+    // This is a new reducer to set the user role in the register and getstarted pages
+    setUserRole(state, action) {
+      state.userRole = action.payload;
     },
   },
 });
 
-export const { login, logout, setUser, setAuthRole } = authSlice.actions;
+export const { login, logout, setUser, setAuthRole, setUserRole } =
+  authSlice.actions;
 export const authReducer = authSlice.reducer;

@@ -1,5 +1,6 @@
-const page = () => {
-  return <div>page</div>;
+import Orders from '@/features/exporter/pages/Orders';
+const Page = () => {
+  return <Orders />;
 };
 
-export default page;
+export default Page;

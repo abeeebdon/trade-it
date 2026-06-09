@@ -20,7 +20,7 @@ export const ROLES: RoleType[] = [
     pill: 'Free · most popular',
   },
   {
-    value: 'buyer',
+    value: 'reseller',
     title: 'Reseller / Bulk Buyer',
     sub: 'I import & resell at scale',
     blurb:

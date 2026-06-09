@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -10,11 +10,10 @@ import { toast } from 'sonner';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { CheckCircle2, Warehouse, MapPin } from 'lucide-react';
-import { products as mockProducts } from '../components/data';
-import type { Supplier, ProductData } from '../types/exporter';
 import { useHeader } from '@/context/HeaderContext';
+import { useGetProductById } from '../hooks/useProducts';
 
-// ─── Types ───────────────────────────────────────────────────────────────────────
+// Types
 
 type RfqForm = {
   quantity: number;
@@ -23,99 +22,31 @@ type RfqForm = {
   message: string;
 };
 
-// ─── Mock Suppliers (keyed by product id) ────────────────────────────────────────
+//  Component
 
-const mockSuppliers: Record<string, Supplier> = {
-  '3b58c1c6-164c-407c-906a-c940fcc3ce75': {
-    business_name: 'Eko Leather Works Ltd',
-    country: 'Nigeria',
-    address: '14 Apapa Industrial Estate, Lagos',
-    compliance_score: 88,
-    kyb_status: 'approved',
-    kyc_status: 'approved',
-    anchor_customer_id: 'ANC-BIZ-00124',
-  },
-  'c1a7e5b2-9914-4f3c-8a9d-1d7d3d8caa21': {
-    business_name: 'Abeokuta Artisan Collective',
-    country: 'Nigeria',
-    address: 'Itoku Market, Abeokuta, Ogun State',
-    compliance_score: 82,
-    kyb_status: 'approved',
-    kyc_status: 'approved',
-    anchor_customer_id: 'ANC-BIZ-00209',
-  },
-  '7d2f4b0c-5c77-4f0d-9c21-6a32c44b0b12': {
-    business_name: 'Savannah Naturals Export Co.',
-    country: 'Nigeria',
-    address: 'Kaduna Export Processing Zone, Kaduna State',
-    compliance_score: 91,
-    kyb_status: 'approved',
-    kyc_status: 'approved',
-    anchor_customer_id: 'ANC-BIZ-00517',
-  },
-  'a8b9d1e2-2f4b-4e1a-9a5c-33c4b2f6d981': {
-    business_name: 'NorthGrain Agro Exports',
-    country: 'Nigeria',
-    address: 'Kano Free Trade Zone, Kano State',
-    compliance_score: 94,
-    kyb_status: 'approved',
-    kyc_status: 'approved',
-    anchor_customer_id: 'ANC-BIZ-00341',
-  },
-  'f4c3e2b1-6d77-4a88-bb1d-55c9d3f2a111': {
-    business_name: 'Lagos Crafts Export Hub',
-    country: 'Nigeria',
-    address: 'Lekki Free Zone, Lagos State',
-    compliance_score: 76,
-    kyb_status: 'approved',
-    kyc_status: 'approved',
-    anchor_customer_id: null,
-  },
-};
-
-const fallbackSupplier: Supplier = {
-  business_name: 'Demo Supplier Ltd',
-  country: 'Nigeria',
-  address: 'Lagos Export Zone',
-  compliance_score: 75,
-  kyb_status: 'approved',
-  kyc_status: 'approved',
-  anchor_customer_id: null,
-};
-
-// ProductDetail
 export default function ProductDetail() {
-  //hooks
   const params = useParams();
   const id = params?.id as string;
   const router = useRouter();
 
   const user = useSelector((state: RootState) => state.auth.user);
   const { setHeader } = useHeader();
-  const [data, setData] = useState<ProductData | null>(null);
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
+  const { data, isPending, isError } = useGetProductById(id);
+
+  const defaultMOQ = data?.product?.min_order_qty ?? 10;
+
   const [rfq, setRfq] = useState<RfqForm>({
-    quantity: 10,
+    quantity: defaultMOQ,
     delivery_address: '',
     target_delivery_date: '',
     message: '',
   });
 
-  // ── Fetch product data
+  // Update page header dynamically once data is ready
   useEffect(() => {
-    if (!id) return;
-    setTimeout(() => {
-      const found = mockProducts.find((p) => p.id === id) ?? mockProducts[0];
-      const supplier = mockSuppliers[found.id] ?? fallbackSupplier;
-      setData({ product: found, supplier });
-      setRfq((r) => ({ ...r, quantity: found.min_order_qty || 10 }));
-    }, 600);
-  }, [id]);
-
-  // ── Update header once data is loaded
-  useEffect(() => {
-    if (!data) return;
+    if (!data?.product) return;
 
     const p = data.product;
 
@@ -124,13 +55,12 @@ export default function ProductDetail() {
       kicker: `${p.category.replace('-', ' ').toUpperCase()} · ${p.country ?? 'Nigeria'}`,
     });
 
-    // Restore static header when navigating away
     return () => {
       setHeader(null);
     };
   }, [data, setHeader]);
 
-  // ── RFQ submit
+  //  RFQ submit
   const submitRfq = async () => {
     setBusy(true);
     try {
@@ -146,8 +76,8 @@ export default function ProductDetail() {
     }
   };
 
-  // ── Loading skeleton
-  if (!data) {
+  //  Loading skeleton
+  if (isPending) {
     return (
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 helix-card overflow-hidden animate-pulse opacity-40">
@@ -166,14 +96,24 @@ export default function ProductDetail() {
     );
   }
 
+  // Error state
+  if (isError || !data) {
+    return (
+      <div className="helix-card p-10 text-center text-[#9CA3AF] text-sm">
+        Failed to load product. Please go back and try again.
+      </div>
+    );
+  }
+
   const p = data.product;
   const s = data.supplier;
-  const canRfq = user?.role === 'buyer' && user?.name !== s.business_name;
+  const canRfq =
+    user?.role === 'reseller' && user?.fullName !== s.business_name;
 
   return (
     <>
       <div className="grid lg:grid-cols-3 gap-6">
-        {/* ── Left col: image + details ── */}
+        {/*  Left col: image + details  */}
         <div className="lg:col-span-2 helix-card overflow-hidden">
           <div className="aspect-[16/9] bg-[#0A1628] relative">
             {p.photos?.[0] ? (
@@ -225,7 +165,7 @@ export default function ProductDetail() {
           </div>
         </div>
 
-        {/* ── Right col: pricing + supplier ── */}
+        {/*  Right col: pricing + supplier */}
         <div className="space-y-4">
           {/* Pricing card */}
           <div className="helix-card p-6">
@@ -288,7 +228,7 @@ export default function ProductDetail() {
         </div>
       </div>
 
-      {/* ── RFQ Modal ── */}
+      {/* RFQ Modal */}
       {open && (
         <div
           className="fixed inset-0 bg-[#0A1628]/80 backdrop-blur flex items-start justify-center pt-16 pb-10 overflow-y-auto z-50 p-4"
@@ -375,7 +315,7 @@ export default function ProductDetail() {
   );
 }
 
-// ─── Meta ─────────────────────────────────────────────────────────────────────────
+// Meta
 
 interface MetaProps {
   label: string;

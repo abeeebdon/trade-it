@@ -1,3 +1,5 @@
+import { LucideIcon } from 'lucide-react';
+
 type QuoteStatus = 'pending' | 'quoted' | 'accepted' | 'declined';
 
 export interface Quote {
@@ -40,4 +42,17 @@ export type Order = {
 
   shipping_name: string;
   shipping_address: string;
+};
+export type FilterButton = {
+  label: string;
+  onClick: () => void;
+  active: boolean;
+  icon?: LucideIcon;
+};
+export type HomePageFilterProps = {
+  mode: string;
+  category: string;
+  clearCategory: () => void;
+  clearMode: () => void;
+  setMode: (mode: string) => void;
 };

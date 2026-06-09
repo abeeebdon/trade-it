@@ -1,5 +1,7 @@
-const page = () => {
-  return <div>page</div>;
+import Compliance from '@/features/exporter/pages/Compliance';
+
+const Page = () => {
+  return <Compliance />;
 };
 
-export default page;
+export default Page;

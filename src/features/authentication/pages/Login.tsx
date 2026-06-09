@@ -1,16 +1,19 @@
 'use client';
 import { useAppDispatch } from '@/hooks/store/store';
-import { login } from '@/store/auth/auth.slice';
+import { login, setAuthRole } from '@/store/auth/auth.slice';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import InputField from '@/components/form/InputFIeld';
 import { LoginFormValues, loginSchema } from '../components/validation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { cookiesStorage } from '@/lib/helpers/cookie';
 import Loader from '@/components/buttons/Loader';
+import api from '@/configs/api-config';
+import { toast } from 'sonner';
+import { loginApi } from '../api/auth';
+import { saveCookie } from '@/store/auth/cookies';
 
 export default function Login() {
   const router = useRouter();
@@ -25,38 +28,65 @@ export default function Login() {
   });
 
   const onSubmit = async (data: LoginFormValues) => {
-    console.log('LOGIN DATA:', data);
     setLoading(true);
-    cookiesStorage.setItem('token', new Date());
-    const proceed = () => {
-      setLoading(false);
-      const newUser = {
-        name: 'JompStart',
-        email: data.email,
-        role: 'admin',
-      };
-      if (data.email == 'admin@jomptrade.com') {
-        dispatch(login({ ...newUser, role: 'exporter' }));
-        router.push('/admin');
-        return;
-      } else if (data.email === 'buyer@jomptrade.com') {
-        dispatch(login({ ...newUser, role: 'buyer' }));
-        router.push('/buyer');
-        return;
+
+    try {
+      const result = await loginApi(data);
+      if (result.success) {
+        toast.success(result.message);
+        saveCookie('token', result.data.token);
+        console.log(result.data.refreshToken);
+        saveCookie('refreshToken', result.data.refreshToken);
+        const userDetails = {
+          email: result.data.email,
+          fullName: result.data.fullName,
+        };
+        console.log('User Details:', userDetails);
+        dispatch(login(userDetails));
+        switch (result.data.roles[0].toLowerCase()) {
+          case 'admin':
+            dispatch(setAuthRole('admin'));
+            router.push('/admin');
+            break;
+          case 'reseller':
+            dispatch(setAuthRole('reseller'));
+            router.push('/buyer');
+            break;
+          case 'direct customer':
+            dispatch(setAuthRole('consumer'));
+            router.push('/');
+            break;
+          case 'african exporter':
+            dispatch(setAuthRole('exporter'));
+            router.push('/exporter');
+            break;
+          default:
+            router.push('/');
+        }
       } else {
-        dispatch(login({ ...newUser, role: 'exporter' }));
-        router.push('/exporter');
-        return;
+        toast.error(result.message);
       }
-    };
-    setTimeout(() => {
-      proceed();
-    }, 3000);
+    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const message = (error as any)?.response?.data?.message;
+      toast.error(
+        message ?? 'An error occurred during registration. Please try again.',
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await api.get('/authentication');
+      console.log(res);
+    };
+    fetchData();
+  }, []);
   return (
     <div className="w-full border max-w-md mx-auto helix-card p-8 fade-up">
-      <div className="helix-kicker mb-2">Jomp Trade · Sign in</div>
+      <h1 className="helix-kicker mb-2">Jomp Trade · Sign in</h1>
       <h1 className="helix-h2">Access your command center</h1>
       <p className="text-[#9CA3AF] text-sm mt-2">
         Exporter, buyer, consumer, or admin &mdash; one login.
@@ -102,7 +132,7 @@ export default function Login() {
 
       <button
         data-testid="google-login-btn"
-        className="w-full flex items-center justify-center gap-3 border border-[#1A7A6E]/40 rounded px-4 py-3 text-sm font-medium hover:bg-[#1A7A6E]/10 transition"
+        className="w-full cursor-pointer flex items-center justify-center gap-3 border border-secondary/40 rounded px-4 py-3 text-sm text-text font-medium hover:bg-secondary/10 transition"
       >
         <Image
           src="/icons/googleicon.png"

@@ -2,18 +2,23 @@
 
 import { useAppSelector } from '@/hooks/store/store';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 const RedirectUser = () => {
   const router = useRouter();
   const { user } = useAppSelector((state) => state.auth);
-  if (user?.role == 'admin') {
+
+  if (!user) return;
+
+  if (user.role === 'admin') {
     return router.push('/admin');
-  } else if (user?.role == 'exporter') {
+  } else if (user.role === 'exporter') {
     return router.push('/exporter');
-  } else if (user?.role == 'buyer') {
-    return router.push('/buyer');
+  } else {
+    toast.error('You are logged in');
+    router.push('/');
+    return;
   }
-  return router.push('/');
 };
 
 export default RedirectUser;

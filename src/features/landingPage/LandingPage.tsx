@@ -1,5 +1,4 @@
 'use client';
-import { useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 import { useAppSelector } from '@/hooks/store/store';
@@ -9,7 +8,6 @@ import { ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import HeroComponent from './components/HeroComponent';
 import { catData, moduleArr } from './components/data';
-import Footer from './components/Footer';
 
 const TEXTILE_IMG =
   'https://images.unsplash.com/photo-1768212566108-4ce4f329e4d2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODB8MHwxfHNlYXJjaHwxfHxmYXNoaW9uJTIwdGV4dGlsZXMlMjBhZnJpY2FufGVufDB8fHx8MTc3NjgyNDU2MHww&ixlib=rb-4.1.0&q=85';
@@ -127,7 +125,7 @@ export default function Landing() {
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.85 }}
-              onClick={() => router.push('/register')}
+              onClick={() => router.push('/getstarted')}
               className="helix-btn-primary inline-flex items-center gap-2"
             >
               Start free <ArrowRight size={16} />
@@ -143,8 +141,6 @@ export default function Landing() {
           </div>
         </article>
       </section>
-
-      <Footer />
     </main>
   );
 }

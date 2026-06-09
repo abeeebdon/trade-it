@@ -1,39 +1,65 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-const PROTECTED_ROUTES = [
-  '/admin',
-  '/dashboard',
-  '/buyer',
-  '/exporter',
-  '/shop/orders',
-];
-const AUTH_ROUTES = ['/login', '/register'];
-// This function can be marked `async` if using `await` inside
-export function proxy(req: NextRequest) {
+
+type UserRole = 'admin' | 'super_admin' | 'reseller' | 'exporter' | 'consumer';
+
+const AUTH_ROUTES = ['/login', '/register', '/getstarted'];
+
+const ROLE_ROUTES: Record<string, UserRole[]> = {
+  '/admin': ['admin', 'super_admin'],
+  '/buyer': ['reseller'],
+  '/exporter': ['exporter'],
+  '/shop/orders': ['consumer'],
+};
+
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // 🔐 get token (set this after login)
-  const token = req.cookies.get('token');
+  const token = req.cookies.get('token')?.value;
 
-  const isProtected = PROTECTED_ROUTES.some((route) =>
+  const matchedRoute = Object.keys(ROLE_ROUTES).find((route) =>
     pathname.startsWith(route),
   );
 
+  const isProtected = !!matchedRoute;
+
   const isAuthRoute = AUTH_ROUTES.includes(pathname);
 
+  // No token → protected route
   if (!token && isProtected) {
     return NextResponse.redirect(new URL('/login', req.url));
   }
 
+  // Logged in user → auth page
   if (token && isAuthRoute) {
-    return NextResponse.redirect(new URL('/user', req.url));
+    return NextResponse.redirect(new URL('/', req.url));
+  }
+
+  // Protected route role check
+  if (token && matchedRoute) {
+    const role = req.cookies.get('role')?.value as UserRole | undefined;
+
+    // Invalid/expired token
+
+    if (!role) {
+      const response = NextResponse.redirect(new URL('/login', req.url));
+
+      response.cookies.delete('token');
+
+      return response;
+    }
+
+    const allowedRoles = ROLE_ROUTES[matchedRoute];
+
+    const hasAccess = allowedRoles.includes(role);
+
+    if (!hasAccess) {
+      return NextResponse.redirect(new URL('/unauthorized', req.url));
+    }
   }
 
   return NextResponse.next();
 }
-
-// Alternatively, you can use a default export:
-// export default function proxy(request: NextRequest) { ... }
 
 export const config = {
   matcher: [
@@ -43,6 +69,8 @@ export const config = {
     '/dashboard/:path*',
     '/shop/orders/:path*',
     '/login',
+    '/user',
     '/register',
+    '/getstarted',
   ],
 };

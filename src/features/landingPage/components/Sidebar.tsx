@@ -1,47 +1,56 @@
 'use client';
-import Image from 'next/image';
 import { NAV } from './data';
-import { useAppSelector } from '@/hooks/store/store';
+import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
 import Link from 'next/link';
 import { LogOut } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import LogoutModal from './LogoutModal';
-import { cookiesStorage } from '@/lib/helpers/cookie';
+import { logout } from '@/store/auth/auth.slice';
+import JompShopLogo from '@/assets/JompShopIcon';
+import useColorScheme from '@/hooks/useColorScheme';
+import { logoutAction } from '@/features/authentication/components/helper';
 
 NAV.super_admin = NAV.admin;
 
 export default function Sidebar() {
+  const isDark = useColorScheme();
   const router = useRouter();
   const pathname = usePathname();
   const { user } = useAppSelector((state) => state.auth);
   const items = NAV[user?.role ?? 'admin'] || NAV.exporter;
   const [loading, setLoading] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const logout = () => {
+  const dispatch = useAppDispatch();
+  const handlelogout = () => {
     setLoading(true);
     setTimeout(() => {
-      cookiesStorage.clearAll();
+      logoutFn();
       setLoading(false);
-      router.push('/login');
-    }, 3000);
+    }, 2000);
+  };
+  const logoutFn = async () => {
+    await logoutAction();
+    dispatch(logout());
+    router.push('/login');
   };
 
   return (
-    <aside className="fixed left-0 top-0 h-screen hidden sm:flex w-16 lg:w-60 bg-bg border-r border-[#1A7A6E]/20  flex-col z-40">
+    <aside className="fixed left-0 top-0 h-screen hidden sm:flex w-16 lg:w-60 bg-bg border-r border-secondary/20  flex-col z-40">
       <div className="px-4 lg:px-6 py-5 border-b border-[#1A7A6E]/15 flex items-center gap-2">
-        <Image
-          src="/jomp-icon.png"
-          alt="Jomp"
-          width={32}
-          height={32}
-          className="w-8 h-8 rounded-full"
-        />
+        <div className="">
+          <JompShopLogo
+            primaryColor={isDark ? 'white' : '#31005C'}
+            secondaryColor={isDark ? '#EFA005' : '#EFA005'}
+            width={40}
+            height={60}
+          />
+        </div>
         <div className="hidden lg:flex flex-col leading-tight">
-          <span className="font-bold tracking-[0.2em] text-[13px]">
+          <span className="font-bold text-secondary tracking-[0.2em] text-[13px]">
             JOMP SHOP
           </span>
-          <span className="text-[9px] tracking-[0.3em] text-[#1A7A6E] font-mono">
+          <span className="text-[9px] tracking-[0.3em] dark:text-[#1A7A6E] text-[#4a2e8a]  font-mono">
             EXPORT OS v1.1
           </span>
         </div>
@@ -73,11 +82,11 @@ export default function Sidebar() {
       <div className="border-t border-[#1A7A6E]/15 px-3 lg:px-4 py-3">
         <div className="hidden lg:flex items-center gap-2 mb-3 px-2">
           <p className="w-8 h-8 rounded-full bg-[#C9922A]/20 border border-[#C9922A]/40 flex items-center justify-center text-[#C9922A] font-bold text-xs">
-            {user?.name?.[0] || 'H'}
+            {user?.fullName[0] || 'H'}
           </p>
           <div className="flex-1 min-w-0">
             <p className="text-[12px] font-medium text-muted truncate">
-              {user?.name}
+              {user?.fullName}
             </p>
             <p className="text-[10px] font-mono uppercase tracking-wider text-[#1A7A6E]">
               {user?.role}
@@ -95,7 +104,7 @@ export default function Sidebar() {
       </div>
       <LogoutModal
         open={showLogoutModal}
-        onConfirm={logout}
+        onConfirm={handlelogout}
         onClose={() => setShowLogoutModal(false)}
         loading={loading}
       />

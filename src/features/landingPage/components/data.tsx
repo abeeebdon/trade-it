@@ -17,6 +17,7 @@ import {
   Currency,
   Lightbulb,
   HandHelping,
+  BookAIcon,
 } from 'lucide-react';
 
 export const helixCards = [
@@ -88,9 +89,10 @@ export const catData = [
 ];
 export const NAV: {
   exporter: NavItems[];
-  buyer: NavItems[];
+  reseller: NavItems[];
   super_admin: NavItems[];
   admin: NavItems[];
+  consumer: NavItems[];
 } = {
   exporter: [
     { to: '/exporter', label: 'Command Center', icon: LayoutDashboard },
@@ -111,7 +113,7 @@ export const NAV: {
     { to: '/exporter/onboarding', label: 'Business Profile', icon: FileText },
   ],
 
-  buyer: [
+  reseller: [
     { to: '/buyer', label: 'Command Center', icon: LayoutDashboard },
     { to: '/buyer/catalog', label: 'Marketplace', icon: Store },
     { to: '/buyer/orders', label: 'My Orders', icon: Receipt },
@@ -125,6 +127,7 @@ export const NAV: {
     },
     { to: '/buyer/onboarding', label: 'Business Profile', icon: FileText },
   ],
+  consumer: [{ to: '/shop/orders', label: 'My Orders', icon: LayoutDashboard }],
 
   admin: [
     { to: '/admin', label: 'Admin Overview', icon: LayoutDashboard },
@@ -137,9 +140,33 @@ export const NAV: {
       icon: DollarSign,
     },
     { to: '/admin/catalog', label: 'Marketplace', icon: Store },
+    { to: '/admin/waitlist', label: 'Waitlist', icon: BookAIcon },
   ],
 
   super_admin: [
     { to: '/admin/credit', label: 'JompStart Credit', icon: HandCoins },
   ],
 };
+
+export const NAV_LINKS = [
+  {
+    label: 'Shops',
+    href: '/',
+  },
+  {
+    label: 'Direct from Africa',
+    href: '/?mode=buyer_local',
+  },
+  {
+    label: 'US In-Stock',
+    href: '/?mode=riby_dtc',
+  },
+  {
+    label: 'About',
+    href: '/about',
+  },
+  {
+    label: 'Become a Seller',
+    href: '/register?role=exporter',
+  },
+];

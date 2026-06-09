@@ -1,11 +1,6 @@
 'use client';
-
-import { useEffect, useState } from 'react';
-import { formatUSD, formatNGN, formatDateTime } from '@/lib/func';
-import { StatusPill } from '@/features/shops/components/StatusPill';
+import { useEffect } from 'react';
 import Link from 'next/link';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
 import {
   ArrowUpRight,
   Coins,
@@ -14,207 +9,125 @@ import {
   ShieldAlert,
   ArrowRight,
 } from 'lucide-react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
-// ─── Mock Data ──────
+import { formatUSD, formatNGN, formatDateTime } from '@/lib/func';
+import { StatusPill } from '@/features/shops/components/StatusPill';
+import BalanceCard from '../components/BalanceCard';
+import { useGetCommandCenter } from '../hooks/useGetCommandCenter';
+import { CommandCenterWallet } from '../types/command-center';
+import { useHeader } from '@/context/HeaderContext';
+import { Order, Transaction } from '../types/exporter';
 
-const mockFinance = {
-  usd_balance: 12450.0,
-  ngn_balance: 19800000,
-  virtual_accounts: {
-    usd: { account_number: '9900012345', bank: 'Anchor Bank (USD)' },
-    ngn: { account_number: '0123456789', bank: 'Anchor Bank (NGN)' },
-  },
-  recent_transactions: [
-    {
-      id: 'txn-001',
-      timestamp: '2025-04-28T10:22:00Z',
-      type: 'credit',
-      description: 'Payment received for Order #ORD-0041',
-      anchor_transaction_ref: 'ANC-REF-88123',
-      currency: 'USD',
-      amount: 3200.0,
-    },
-    {
-      id: 'txn-002',
-      timestamp: '2025-04-27T08:15:00Z',
-      type: 'debit',
-      description: 'Platform fee — Order #ORD-0039',
-      anchor_transaction_ref: 'ANC-REF-88100',
-      currency: 'USD',
-      amount: 48.0,
-    },
-    {
-      id: 'txn-003',
-      timestamp: '2025-04-25T14:44:00Z',
-      type: 'fee',
-      description: 'FX conversion NGN → USD',
-      anchor_transaction_ref: 'ANC-REF-88088',
-      currency: 'NGN',
-      amount: 150000,
-    },
-  ],
-};
+// Helpers
 
-const mockOrders = [
-  {
-    id: 'ord-001',
-    order_number: 'ORD-0041',
-    product_name: 'Premium Sesame Seeds (50kg bags)',
-    quantity: 200,
-    agreed_price_usd: 3200,
-    status: 'in_progress',
-    payment_status: 'paid',
-  },
-  {
-    id: 'ord-002',
-    order_number: 'ORD-0039',
-    product_name: 'Refined Shea Butter — Grade A',
-    quantity: 80,
-    agreed_price_usd: 1600,
-    status: 'pending',
-    payment_status: 'awaiting',
-  },
-  {
-    id: 'ord-003',
-    order_number: 'ORD-0035',
-    product_name: 'Hibiscus Flower (Dried, Export Grade)',
-    quantity: 500,
-    agreed_price_usd: 5500,
-    status: 'completed',
-    payment_status: 'paid',
-  },
-];
+function walletToVa(wallet: CommandCenterWallet | undefined) {
+  if (!wallet) return undefined;
+  return {
+    account_number: wallet.accountNumber,
+    bank: wallet.bankName,
+  };
+}
 
-const mockFx = {
-  usd_to_ngn: 1590.5,
-  source: 'CBN',
-  fetched_at: Math.floor(Date.now() / 1000),
-};
-
-const mockBiz = {
-  kyc_status: 'approved',
-  kyb_status: 'approved',
-  registration_type: 'business',
-  compliance_score: 82,
-};
-
-const mockComplianceScore = {
-  score: 82,
-  missing: ['Utility Bill (last 3 months)', 'Board Resolution Letter'],
-};
-
-// ─── Types ─────────────────────
-
-type Finance = typeof mockFinance;
-type Order = (typeof mockOrders)[number];
-type Fx = typeof mockFx;
-type Biz = typeof mockBiz;
-type ComplianceScore = typeof mockComplianceScore;
-
-// ─── Dashboard ────────
+// Dashboard
 
 export default function Dashboard() {
   const user = useSelector((state: RootState) => state.auth.user);
+  const { setHeader } = useHeader();
 
-  const [data, setData] = useState<Finance | null>(null);
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [fx, setFx] = useState<Fx | null>(null);
-  const [biz, setBiz] = useState<Biz | null>(null);
-  const [complianceScore, setComplianceScore] =
-    useState<ComplianceScore | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data, isPending, isError } = useGetCommandCenter();
 
   useEffect(() => {
-    setTimeout(() => {
-      setData(mockFinance);
-      setOrders(mockOrders);
-      setFx(mockFx);
-      setBiz(mockBiz);
-      setComplianceScore(mockComplianceScore); // always set for mock
-      setLoading(false);
-    }, 800);
-  }, []);
+    const welcomeMessage = user?.fullName
+      ? `Welcome back, ${user.fullName}`
+      : user?.email
+        ? `Welcome back, ${user.email}`
+        : 'Welcome back';
 
-  if (loading) return <Skeleton />;
+    setHeader({
+      title: welcomeMessage,
+      kicker: 'Exporter · Command Center',
+    });
+
+    return () => setHeader(null);
+  }, [user, setHeader]);
+
+  if (isPending) return <Skeleton />;
+
+  if (isError) {
+    return (
+      <div className="helix-card p-8 text-center text-[#9CA3AF] text-sm">
+        Failed to load dashboard. Please refresh.
+      </div>
+    );
+  }
+
+  const usdWallet = data?.wallets.find(
+    (w: CommandCenterWallet) => w.currency === 'USD',
+  );
+  const ngnWallet = data?.wallets.find(
+    (w: CommandCenterWallet) => w.currency === 'NGN',
+  );
+  const compliance = data?.compliance;
+  const fxRate = data?.fxRate;
+  const orders = data?.recentOrders?.items ?? [];
+  const transactions = data?.recentTransactions ?? [];
+
+  const isVerified = compliance?.status === 'approved';
 
   return (
     <>
-      {/* Status banner when not approved */}
-      {biz &&
-        biz.kyc_status !== 'approved' &&
-        biz.kyb_status !== 'approved' && (
-          <div className="helix-card p-5 mb-6 border-[#C9922A]/40 bg-[#C9922A]/6 flex items-start gap-4">
-            <ShieldAlert size={22} className="text-[#C9922A] mt-0.5" />
-            <div className="flex-1">
-              <div className="font-semibold">
-                Complete verification to unlock trading
-              </div>
-              <p className="text-[13px] text-[#9CA3AF] mt-1">
-                Submit your{' '}
-                {biz.registration_type === 'business' ? 'KYB' : 'KYC'} documents
-                to provision your NGN and USD accounts.
-              </p>
-            </div>
-            <Link
-              href="/onboarding"
-              className="helix-btn-primary text-sm whitespace-nowrap"
-            >
-              Continue onboarding{' '}
-              <ArrowRight size={14} className="inline ml-1 font-bold" />
-            </Link>
-          </div>
-        )}
-
-      {!biz && (
+      {/* Verification banner */}
+      {!isVerified && (
         <div className="helix-card p-5 mb-6 border-[#C9922A]/40 bg-[#C9922A]/6 flex items-start gap-4">
           <ShieldAlert size={22} className="text-[#C9922A] mt-0.5" />
           <div className="flex-1">
-            <div className="font-semibold">Set up your business profile</div>
+            <div className="font-semibold">
+              Complete verification to unlock trading
+            </div>
             <p className="text-[13px] text-[#9CA3AF] mt-1">
-              Before you can list products or receive payments, create your
-              business profile.
+              Submit your KYB documents to provision your NGN and USD accounts.
             </p>
           </div>
           <Link
-            href="/onboarding"
+            href="/exporter/onboarding"
             className="helix-btn-primary text-sm whitespace-nowrap"
           >
-            Start onboarding{' '}
+            Continue onboarding{' '}
             <ArrowRight size={14} className="inline ml-1 font-bold" />
           </Link>
         </div>
       )}
 
-      {/* BALANCES */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      {/* Balances  */}
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <BalanceCard
           label="USD Balance"
-          value={formatUSD(data?.usd_balance ?? 0)}
+          value={formatUSD(usdWallet?.availableBalance ?? 0)}
           sub="Available · USD"
-          va={data?.virtual_accounts?.usd}
+          va={walletToVa(usdWallet)}
           accent
         />
         <BalanceCard
           label="NGN Balance"
-          value={formatNGN(data?.ngn_balance ?? 0)}
+          value={formatNGN(ngnWallet?.availableBalance ?? 0)}
           sub="Available · NGN"
-          va={data?.virtual_accounts?.ngn}
+          va={walletToVa(ngnWallet)}
         />
         <div className="helix-card p-5">
           <div className="flex justify-between items-start">
             <div>
-              <div className="helix-label">USD / NGN Rate</div>
-              <div className="font-mono text-3xl font-bold text-[#C9922A] mt-2 tracking-tight">
-                ₦{fx ? Number(fx.usd_to_ngn).toLocaleString() : '—'}
+              <span className="helix-label">USD / NGN Rate</span>
+              <div className="font-mono text-3xl font-bold text-primary mt-2 tracking-tight">
+                ₦{fxRate ? Number(fxRate.rate).toLocaleString() : '—'}
               </div>
             </div>
             <Coins size={22} className="text-[#1A7A6E]" />
           </div>
           <div className="mt-4 text-[11px] font-mono text-[#9CA3AF] tracking-wider">
-            {fx?.source?.toUpperCase()} ·{' '}
-            {fx
-              ? formatDateTime(new Date(fx.fetched_at * 1000).toISOString())
-              : ''}
+            {fxRate?.source?.toUpperCase()} ·{' '}
+            {fxRate ? formatDateTime(fxRate.updatedAt) : ''}
           </div>
           {user?.role === 'exporter' && (
             <Link
@@ -225,16 +138,18 @@ export default function Dashboard() {
             </Link>
           )}
         </div>
-      </div>
+      </section>
 
-      {/* Row 2: orders + compliance */}
+      {/* Orders + Compliance */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
         <div className="helix-card lg:col-span-2 overflow-hidden">
           <div className="flex items-center justify-between px-5 py-4 border-b border-[#1A7A6E]/20">
             <div>
               <div className="helix-label">Recent Orders</div>
               <div className="helix-h3 mt-1">
-                {orders.length ? `${orders.length} active` : 'No orders yet'}
+                {data?.recentOrders?.activeCount
+                  ? `${data.recentOrders.activeCount} active`
+                  : 'No orders yet'}
               </div>
             </div>
             <Link
@@ -244,6 +159,7 @@ export default function Dashboard() {
               View all
             </Link>
           </div>
+
           {orders.length ? (
             <div className="overflow-x-auto">
               <table className="helix-table">
@@ -258,7 +174,7 @@ export default function Dashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {orders.slice(0, 6).map((o) => (
+                  {orders.slice(0, 6).map((o: Order) => (
                     <tr key={o.id}>
                       <td className="font-mono text-[#C9922A]">
                         <Link href={`/orders/${o.id}`}>{o.order_number}</Link>
@@ -284,7 +200,7 @@ export default function Dashboard() {
           ) : (
             <div className="p-10 text-center text-[#9CA3AF] text-sm">
               <Package size={34} className="mx-auto mb-3 text-[#1A7A6E]" />
-              {user?.role === 'buyer'
+              {user?.role === 'reseller'
                 ? 'Browse the marketplace to submit your first RFQ.'
                 : 'Orders you receive or place will appear here.'}
             </div>
@@ -295,39 +211,37 @@ export default function Dashboard() {
           <div className="flex items-start justify-between">
             <div>
               <div className="helix-label">Compliance Score</div>
-              <div className="font-mono text-4xl font-bold text-[#F5F5F5] mt-2">
-                {complianceScore
-                  ? `${complianceScore.score}`
-                  : (biz?.compliance_score ?? '—')}
-                <span className="text-[#9CA3AF] text-xl">/100</span>
+              <div className="font-mono text-4xl font-bold text-muted mt-2">
+                {compliance?.score ?? '—'}
+                <span className="text-muted text-xl">/100</span>
               </div>
             </div>
             <StatusPill
               status={
-                (complianceScore?.score ?? biz?.compliance_score ?? 0) >= 80
-                  ? 'active'
-                  : 'expiring_soon'
+                (compliance?.score ?? 0) >= 80 ? 'active' : 'expiring_soon'
               }
             />
           </div>
-          {(complianceScore?.missing?.length ?? 0) > 0 && (
+
+          {(compliance?.missingDocuments?.length ?? 0) > 0 && (
             <div className="mt-5">
               <div className="text-[11px] uppercase tracking-wider text-[#9CA3AF] mb-2">
                 Missing documents
               </div>
               <ul className="space-y-1">
-                {complianceScore!.missing.slice(0, 4).map((m) => (
+                {compliance!.missingDocuments.slice(0, 4).map((doc: string) => (
                   <li
-                    key={m}
-                    className="text-[13px] flex items-center gap-2 text-[#F5F5F5]"
+                    key={doc}
+                    className="text-[13px] flex items-center gap-2 text-text"
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#C9922A]" />{' '}
-                    {m}
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#C9922A]" />
+                    {doc}
                   </li>
                 ))}
               </ul>
             </div>
           )}
+
           <Link
             href="/compliance"
             className="mt-5 inline-flex items-center gap-1 text-[#C9922A] text-[12px] hover:gap-2 transition-all"
@@ -337,21 +251,22 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Recent transactions */}
-      <div className="helix-card overflow-hidden">
+      {/* Recent Transactions */}
+      <section className="helix-card overflow-hidden">
         <div className="flex items-center justify-between px-5 py-4 border-b border-[#1A7A6E]/20">
           <div>
             <div className="helix-label">Recent Transactions</div>
             <div className="helix-h3 mt-1">Ledger · last 10</div>
           </div>
           <Link
-            href="/finance"
+            href="/exporter/finance"
             className="text-[12px] text-[#C9922A] hover:underline"
           >
             View full ledger
           </Link>
         </div>
-        {data?.recent_transactions?.length ? (
+
+        {transactions.length ? (
           <div className="overflow-x-auto">
             <table className="helix-table">
               <thead>
@@ -364,7 +279,7 @@ export default function Dashboard() {
                 </tr>
               </thead>
               <tbody>
-                {data.recent_transactions.map((t) => (
+                {transactions.map((t: Transaction) => (
                   <tr key={t.id}>
                     <td className="font-mono text-[12px] text-[#9CA3AF]">
                       {formatDateTime(t.timestamp)}
@@ -385,11 +300,7 @@ export default function Dashboard() {
                       {t.anchor_transaction_ref}
                     </td>
                     <td
-                      className={`font-mono text-right ${
-                        t.type === 'credit'
-                          ? 'text-[#C9922A]'
-                          : 'text-[#F5F5F5]'
-                      }`}
+                      className={`font-mono text-right ${t.type === 'credit' ? 'text-[#C9922A]' : 'text-[#F5F5F5]'}`}
                     >
                       {t.type === 'credit' ? '+' : '-'}
                       {t.currency === 'USD'
@@ -407,64 +318,28 @@ export default function Dashboard() {
             No transactions yet.
           </div>
         )}
-      </div>
+      </section>
     </>
   );
 }
 
-// ─── Sub-components ─────────────────────────────────────────────────────────────
-
-interface BalanceCardProps {
-  label: string;
-  value: string;
-  sub: string;
-  va?: { account_number?: string; bank?: string };
-  accent?: boolean;
-}
-
-function BalanceCard({ label, value, sub, va, accent }: BalanceCardProps) {
-  return (
-    <div
-      className={`helix-card p-5 ${accent ? 'relative overflow-hidden' : ''}`}
-    >
-      {accent && (
-        <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-[#C9922A]/10 blur-2xl pointer-events-none" />
-      )}
-      <div className="flex justify-between items-start relative">
-        <div>
-          <div className="helix-label">{label}</div>
-          <div
-            className="font-mono text-4xl font-bold mt-2 tracking-tight text-[#F5F5F5]"
-            data-testid={`balance-${label.split(' ')[0].toLowerCase()}`}
-          >
-            {value}
-          </div>
-          <div className="text-[11px] text-[#9CA3AF] mt-1 font-mono uppercase tracking-wider">
-            {sub}
-          </div>
-        </div>
-      </div>
-      {va?.account_number && (
-        <div className="mt-5 pt-4 border-t border-[#1A7A6E]/15">
-          <div className="text-[10px] uppercase tracking-widest text-[#9CA3AF] mb-1">
-            Virtual Account
-          </div>
-          <div className="font-mono text-[13px] text-[#C9922A]">
-            {va.account_number}
-          </div>
-          <div className="text-[11px] text-[#9CA3AF]">{va.bank}</div>
-        </div>
-      )}
-    </div>
-  );
-}
-
+// Skeleton
 function Skeleton() {
   return (
-    <div className="grid grid-cols-3 gap-4">
-      {[0, 1, 2].map((i) => (
-        <div key={i} className="helix-card p-5 h-32 animate-pulse opacity-40" />
-      ))}
+    <div className="space-y-4">
+      <div className="grid grid-cols-3 gap-4">
+        {[0, 1, 2].map((i) => (
+          <div
+            key={i}
+            className="helix-card p-5 h-32 animate-pulse opacity-40"
+          />
+        ))}
+      </div>
+      <div className="grid grid-cols-3 gap-4">
+        <div className="helix-card col-span-2 h-64 animate-pulse opacity-40" />
+        <div className="helix-card h-64 animate-pulse opacity-40" />
+      </div>
+      <div className="helix-card h-48 animate-pulse opacity-40" />
     </div>
   );
 }

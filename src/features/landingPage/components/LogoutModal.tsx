@@ -8,6 +8,9 @@ type LogoutModalProps = {
   onClose: () => void;
   onConfirm: () => void;
   loading?: boolean;
+  label?: string;
+  btnText?: string;
+  text?: string;
 };
 
 export default function LogoutModal({
@@ -15,6 +18,9 @@ export default function LogoutModal({
   onClose,
   onConfirm,
   loading = false,
+  btnText = 'Logout',
+  label = 'Confirm Logout',
+  text = 'Are you sure you want to log out of your account? You’ll need to sign  in again to continue.',
 }: LogoutModalProps) {
   if (!open) return null;
 
@@ -36,12 +42,9 @@ export default function LogoutModal({
           <X size={18} />
         </button>
 
-        <h2 className="helix-h2">Confirm Logout</h2>
+        <h2 className="helix-h2">{label}</h2>
 
-        <p className="text-sm text-[#9CA3AF] mt-2">
-          Are you sure you want to log out of your account? You’ll need to sign
-          in again to continue.
-        </p>
+        <p className="text-sm text-[#9CA3AF] mt-2">{text}</p>
 
         {/* actions */}
         <div className="flex flex-wrap sm:flex-nowrap gap-3 mt-6">
@@ -58,7 +61,7 @@ export default function LogoutModal({
             className="helix-btn-primary flex-1 "
             disabled={loading}
           >
-            {loading ? <Loader /> : 'Logout'}
+            {loading ? <Loader /> : btnText}
           </button>
         </div>
       </div>

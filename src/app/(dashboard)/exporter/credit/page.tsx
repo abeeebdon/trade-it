@@ -1,5 +1,7 @@
-const page = () => {
-  return <div>page</div>;
+import Credit from '@/features/exporter/pages/Credit';
+
+const Page = () => {
+  return <Credit />;
 };
 
-export default page;
+export default Page;

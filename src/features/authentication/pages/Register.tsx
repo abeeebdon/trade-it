@@ -4,40 +4,32 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { RegisterFormValues, registerSchema } from '../components/validation';
 import InputField from '@/components/form/InputFIeld';
-import { useRouter } from 'next/navigation';
-import { useAppSelector } from '@/hooks/store/store';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ROLES } from '../components/data';
 import Loader from '@/components/buttons/Loader';
 import { motion } from 'motion/react';
+import { registerApi } from '../api/auth';
+import { useAppSelector } from '@/hooks/store/store';
+import { toast } from 'sonner';
+
 export default function Register() {
   const [loading, setLoading] = useState(false);
-  // const upd = (k) => (e) => setForm({ ...form, [k]: e.target.value });
-
-  // const submit = async (e) => {
-  //   e.preventDefault();
-  //   setBusy(true);
-  //   try {
-  //     const user = await register(form);
-  //     toast.success(`Welcome to Jomp Trade, ${user.name.split(' ')[0]}`);
-  //     if (user.role === 'consumer') nav('/shop');
-  //     else nav('/onboarding');
-  //   } catch (err) {
-  //     toast.error(err.response?.data?.detail || 'Register failed');
-  //   } finally {
-  //     setBusy(false);
-  //   }
-  // };
+  const userRole = useAppSelector((state) => state.auth.userRole);
   const router = useRouter();
-  const { authRole } = useAppSelector((state) => state.auth);
-  console.log(authRole);
-  const role = useMemo(() => {
-    if (!authRole) {
-      return router.push('/getstarted');
+  const searchParams = useSearchParams();
+
+  const roleFromQuery = searchParams.get('role');
+
+  const role =
+    ROLES.find((r) => r.value.toLowerCase() === roleFromQuery?.toLowerCase()) ??
+    null;
+  useEffect(() => {
+    if (!roleFromQuery || !role) {
+      router.replace('/getstarted');
     }
-    return ROLES.find((r, i) => r.value == authRole);
-  }, [authRole]);
+  }, [roleFromQuery, role, router]);
   const {
     register,
     handleSubmit,
@@ -45,18 +37,36 @@ export default function Register() {
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      role: authRole ?? 'buyer',
+      role: role?.value,
     },
   });
 
   const onSubmit = async (data: RegisterFormValues) => {
+    const postData = {
+      fullName: data.name,
+      email: data.email,
+      password: data.password,
+      customerTypeIds: [userRole?.id ?? 1],
+      countryId: 1,
+    };
     setLoading(true);
-
-    setTimeout(() => {
-      console.log('REGISTER DATA:', data);
+    try {
+      const result = await registerApi(postData);
+      if (result.success) {
+        toast.success(result.message);
+        router.push('/login');
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const message = (error as any)?.response?.data?.message;
+      toast.error(
+        message ?? 'An error occurred during registration. Please try again.',
+      );
+    } finally {
       setLoading(false);
-      router.push('/login');
-    }, 3000);
+    }
   };
 
   return (

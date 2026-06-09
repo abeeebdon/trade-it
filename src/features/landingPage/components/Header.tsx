@@ -6,10 +6,16 @@ import Link from 'next/link';
 import { motion } from 'motion/react';
 import { useState } from 'react';
 import SidebarComp from './SidebarComp';
+import { NAV_LINKS } from './data';
+import { useAppSelector } from '@/hooks/store/store';
+import UserComponent from './UserComponent';
 const Header = () => {
   const [showSidebar, setShowSidebar] = useState(false);
+
+  const user = useAppSelector((state) => state.auth.user);
+
   return (
-    <header className="fixed top-0 inset-x-0 z-30 bg-[#0A1628]/85 backdrop-blur border-b border-[#1A7A6E]/15">
+    <header className="fixed top-0 inset-x-0 z-30  dark:bg-[#0A1628]/85 bg-[#ffffffee] backdrop-blur border-b border-[#1A7A6E]/15">
       <div className="max-w-350 mx-auto px-6 lg:px-10 py-4 flex items-center justify-between">
         <Link
           href="/"
@@ -25,47 +31,51 @@ const Header = () => {
           />
           <div className="leading-tight">
             <div className="font-bold tracking-[0.22em] text-sm">JOMP SHOP</div>
-            <div className="text-[10px] tracking-[0.3em] text-[#1A7A6E] font-mono">
-              EXPORT OS
-            </div>
+
+            <p className="text-[10px] tracking-[0.3em] dark:text-[#1A7A6E] text-[#4a2e8a] font-mono">
+              DIRECT · FROM AFRICA
+            </p>
           </div>
         </Link>
-        <nav className="hidden md:flex items-center gap-8 text-[13px] text-[#9CA3AF]">
-          <a href="#solutions" className="hover:text-[#F5F5F5]">
-            Solutions
-          </a>
-          <a href="#modules" className="hover:text-[#F5F5F5]">
-            Modules
-          </a>
-          <Link
-            href="/shop"
-            className="hover:text-[#F5F5F5]"
-            data-testid="shop-nav-link"
-          >
-            Shop
-          </Link>
-          <a href="#partners" className="hover:text-[#F5F5F5]">
-            Partners
-          </a>
+        <nav className="hidden md:flex items-center lg:gap-8 gap-2 text-[13px] text-[#9CA3AF]">
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-muted hover:text-text"
+            >
+              {link.label}
+            </Link>
+          ))}
+          {user?.role === 'consumer' && (
+            <Link href="/shop/orders" className="text-muted hover:text-text">
+              My Orders
+            </Link>
+          )}
         </nav>
         <div className="flex items-center gap-3">
           <ThemeToggle />
-          <div className="md:flex gap-3 hidden items-center">
-            <Link
-              href="/login"
-              data-testid="login-link"
-              className="text-[13px] text-[#9CA3AF] hover:text-[#F5F5F5]"
-            >
-              Sign in
-            </Link>
-            <Link
-              href="/register"
-              data-testid="register-cta"
-              className="helix-btn-primary text-sm"
-            >
-              Get Started
-            </Link>
-          </div>
+
+          {user ? (
+            <UserComponent />
+          ) : (
+            <div className="md:flex gap-3 hidden items-center">
+              <Link
+                href="/login"
+                className="text-[13px] hidden lg:inline-block text-muted hover:text-text"
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/getstarted"
+                data-testid="register-cta"
+                className="helix-btn-primary text-sm"
+              >
+                Get Started
+              </Link>
+            </div>
+          )}
+
           <div className="md:hidden items-center flex ">
             <motion.button
               whileHover={{ scale: 1.05 }}

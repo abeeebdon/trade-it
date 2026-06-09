@@ -19,6 +19,10 @@ export const formatDateTime = (iso: Date | string) => {
   }
 };
 
+export const formatDateToMM = (date: string) => {
+  return new Date(date).toLocaleDateString('en-GB');
+};
+
 export const formatNGN = (n: number) =>
   new Intl.NumberFormat('en-NG', {
     style: 'currency',

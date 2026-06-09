@@ -38,6 +38,10 @@ export const getKicker = (path: string, product?: ProductMeta): string => {
       return 'Exporter · Catalog Management';
     case '/exporter/catalog':
       return 'Verified African Suppliers';
+    case '/exporter/fulfillment':
+      return 'Consumer Orders · Quotes · Escrow';
+    case '/exporter/repayments':
+      return 'Auto-debit · Schedule';
 
     // Buyer
     case '/buyer':
@@ -77,7 +81,7 @@ export const getTitle = (path: string, product?: ProductMeta): string => {
 
     // Exporter
     case '/exporter':
-      return 'Welcome back, Callistus';
+      return 'Welcome back';
     case '/exporter/orders':
       return 'Orders';
     case '/exporter/finance':
@@ -90,6 +94,10 @@ export const getTitle = (path: string, product?: ProductMeta): string => {
       return 'Marketplace';
     case '/exporter/my-products':
       return 'My Products';
+    case '/exporter/fulfillment':
+      return 'Fulfillment Queue';
+    case '/exporter/repayments':
+      return 'JompStart Repayments';
 
     // Buyer
     case '/buyer':
