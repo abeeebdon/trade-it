@@ -647,3 +647,8 @@ export type ProductCountryListResponse = {
   totalPages: number;
   data: ProductCountry[];
 };
+export interface FieldProps {
+  label?: string;
+  children: ReactNode;
+  full?: string;
+}
