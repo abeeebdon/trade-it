@@ -7,12 +7,14 @@ import { StatusPill } from '@/features/shops/components/StatusPill';
 import { CreditApplication, OfferState } from '../types/admin';
 import { creditApplications } from '../components/data';
 import DisputeCardSkeleton from '../components/DisputeCardSkeleton';
+import { useGetCreditQueue } from '../hooks/useGetCreditQueue';
 
 export default function AdminCredit() {
   const [apps, setApps] = useState<CreditApplication[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<CreditApplication | null>(null);
-
+  const { data, isPending } = useGetCreditQueue();
+  console.log(data);
   const [offer, setOffer] = useState<OfferState>({
     offered_amount_usd: '',
     offered_apr: '',

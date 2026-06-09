@@ -1,5 +1,7 @@
+import Onboarding from '@/features/exporter/pages/Onboarding';
+
 const page = () => {
-  return <div>page</div>;
+  return <Onboarding />;
 };
 
 export default page;
