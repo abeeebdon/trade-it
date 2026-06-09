@@ -23,7 +23,7 @@ export const PRODUCTS: ProductType[] = [
     price: '$42.00',
     unit: '/unit',
     moq: '50 units',
-    image: 'ankara.avif',
+    image: 'ankara2.jpg',
     category: 'Fashion & Textiles',
     desc: 'Bespoke ready-to-wear Ankara designs by Lagos-based artisans. Sized XS–XXL. Fabric sourced from licensed Nigerian textile mills, sewn in-house.',
     specs: {
@@ -113,7 +113,7 @@ export const PRODUCTS: ProductType[] = [
     price: '$12.50',
     unit: '/kg',
     moq: '20 kg',
-    image: 'uzaza.jfif',
+    image: 'uzaza2.jpg',
     category: 'Staple Foods',
     desc: 'Stone-ground West African Uziza pepper. Organic, aromatic, slightly bitter.',
     specs: {

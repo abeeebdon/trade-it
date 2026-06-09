@@ -1,22 +1,14 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAppSelector } from '@/hooks/store/store';
 import ProfileStep1 from '../components/ProfileStep1';
 import ProfileStep2 from '../components/ProfileStep2';
 import { Business, KYCForm } from '../types/buyers';
 import Steppers from '../components/Steppers';
 
-const SECTORS = [
-  { value: 'fashion', label: 'Fashion & Textiles' },
-  { value: 'agriculture', label: 'Agriculture' },
-  { value: 'staple-foods', label: 'Staple Foods' },
-  { value: 'general-goods', label: 'General Goods' },
-];
-
 export default function ProfileManagement() {
   const { user } = useAppSelector((state) => state.auth);
   const [biz, setBiz] = useState<Business>({} as Business);
-  const [loading, setLoading] = useState(true);
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
     business_name: '',
@@ -112,7 +104,6 @@ export default function ProfileManagement() {
   const createBiz = (biz: Business) => {
     setBiz(biz);
   };
-  console.log(biz);
   return (
     <main>
       <div className="max-w-4xl">

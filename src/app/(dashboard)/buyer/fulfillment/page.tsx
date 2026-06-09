@@ -1,5 +1,7 @@
+import Fulfillment from '@/features/exporter/pages/Fulfillment';
+
 const page = () => {
-  return <div>page</div>;
+  return <Fulfillment />;
 };
 
 export default page;
