@@ -11,6 +11,7 @@ import { catWailtist, ProductType } from './constants';
 import './waitlist.css';
 import WaitlistNav from './WailtListNav';
 import WaitlistModal from './WaitlistModal';
+import FAQSection from './FAQs';
 
 export default function ComingSoon() {
   const router = useRouter();
@@ -95,6 +96,7 @@ export default function ComingSoon() {
         setFuncEmail={setFuncEmail}
         setShowWaitlistModal={setShowWaitlistModal}
       />
+      <FAQSection />
       <section className="js-powered">
         <div className="js-container js-powered-inner">
           <span className="js-powered-label">Powered by</span>
@@ -105,20 +107,14 @@ export default function ComingSoon() {
           <span className="js-powered-name">Anchor </span>
         </div>
       </section>
-      <WaitlistFooter />
+      <WaitlistFooter setShowWaitlistModal={setShowWaitlistModal} />
       {modal && (
         <ProductModal
           product={modal}
           onClose={() => setModal(null)}
           onCta={() => {
             setModal(null);
-            setTimeout(
-              () =>
-                document
-                  .getElementById('waitlist')
-                  ?.scrollIntoView({ behavior: 'smooth' }),
-              100,
-            );
+            setShowWaitlistModal(true);
           }}
         />
       )}

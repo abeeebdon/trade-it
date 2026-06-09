@@ -1,7 +1,11 @@
 import JompShopLogo from '@/assets/JompShopIcon';
 import { useAppDispatch } from '@/hooks/store/store';
 import { setBeta } from '@/store/waitlist/waitlist.slice';
-export default function WaitlistFooter() {
+import { Dispatch, SetStateAction } from 'react';
+interface Props {
+  setShowWaitlistModal: Dispatch<SetStateAction<boolean>>;
+}
+export default function WaitlistFooter({ setShowWaitlistModal }: Props) {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -32,7 +36,12 @@ export default function WaitlistFooter() {
               <div className="js-footer-h">Platform</div>
               <a href="#how-it-works">How It Works</a>
               <a href="#marketplace">Marketplace Preview</a>
-              <a href="#waitlist">Join Waitlist</a>
+              <button
+                className="text-xs text-[#b8aec8] hover:text-white"
+                onClick={() => setShowWaitlistModal(true)}
+              >
+                Join Waitlist
+              </button>
             </div>
             <div>
               <div className="js-footer-h">Partners</div>
@@ -46,7 +55,9 @@ export default function WaitlistFooter() {
               <a href="https://www.instagram.com/jompshop_/" target="blank">
                 IG@Jompshop
               </a>
-              <span>LinkedIn</span>
+              <a href="https://www.instagram.com/jompshop_/" target="blank">
+                Facebook
+              </a>
             </div>
           </div>
         </div>

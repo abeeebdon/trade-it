@@ -36,7 +36,7 @@ const HomePageFIlter = ({
     },
   ];
   return (
-    <article className="flex flex-wrap gap-3 mb-8 items-center">
+    <article className="flex flex-wrap gap-3 mb-4 items-center">
       {filterButtons.map((button) => {
         const Icon = button.icon;
 
@@ -50,7 +50,7 @@ const HomePageFIlter = ({
                 : 'border-[#1A7A6E]/40 text-[#9CA3AF] hover:border-[#1A7A6E]'
             }`}
           >
-            {Icon && <Icon size={14} />}
+            {Icon && <Icon size={10} />}
             {button.label}
           </button>
         );

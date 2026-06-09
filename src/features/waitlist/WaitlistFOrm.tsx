@@ -1,3 +1,5 @@
+import { useAppDispatch } from '@/hooks/store/store';
+import { setWaitlistModalDetails } from '@/store/waitlist/waitlist.slice';
 import { Dispatch, SetStateAction, useState } from 'react';
 interface WaitlistFormProps {
   dark?: boolean;
@@ -6,7 +8,6 @@ interface WaitlistFormProps {
   ctaLabel?: string;
   funcEMail: string;
   setFuncEmail: (email: string) => void;
-  setRoleToSingFOr?: (role: 'exporter' | 'buyer' | null) => void;
 }
 export default function WaitlistForm({
   dark = false,
@@ -15,9 +16,9 @@ export default function WaitlistForm({
   setOpenModal,
   funcEMail,
   setFuncEmail,
-  setRoleToSingFOr,
 }: WaitlistFormProps) {
   const [error, setError] = useState('');
+  const dispatch = useAppDispatch();
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email.trim());
@@ -36,7 +37,11 @@ export default function WaitlistForm({
     }
     setOpenModal(true);
     setFuncEmail(funcEMail.trim());
-    setRoleToSingFOr?.(type === 'exporter' ? 'exporter' : 'buyer');
+    const details = {
+      email: funcEMail,
+      role: type === 'exporter' ? 'exporter' : type == 'hero' ? '' : 'consumer',
+    };
+    dispatch(setWaitlistModalDetails(details));
   };
 
   return (

@@ -678,10 +678,12 @@
   font-size: 14px;
   line-height: 1.65;
   color: var(--muted-2);
+  min-height: 80px;
   margin: 0 0 24px;
 }
 .js-dual-desc-dark {
   font-size: 14px;
+  min-height: 80px;
   line-height: 1.65;
   color: rgba(30, 0, 56, 0.7);
   margin: 0 0 24px;
