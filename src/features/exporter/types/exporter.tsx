@@ -286,6 +286,19 @@ export type Listing = {
 
 export type ListingFormData = Omit<Listing, 'id' | 'fulfillment_mode'>;
 
+export type CreateListingPayload = {
+  UserId: number;
+  Title: string;
+  ThumbnailImage: File | null;
+  Category: string;
+  RetailPriceUsd: number;
+  StockQty: number;
+  ShipsFrom: string;
+  Description: string;
+  ProductStatusId: number;
+  FulfillmentMode: string;
+  Photos: File[];
+};
 // Fulfillment
 
 export type QuoteStatus =
