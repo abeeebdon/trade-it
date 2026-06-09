@@ -1,17 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import Image from 'next/image';
 import { toast } from 'sonner';
+
+import { RootState } from '@/store/store';
+import { CATS } from '@/lib/constants';
+import { useCreateListing } from '../hooks/useListings';
+
 import type {
   FulfillmentMode,
   Listing,
   ListingFormData,
   ListingStatus,
+  CreateListingPayload,
 } from '../types/exporter';
-import { CATS } from '@/lib/constants';
-import Image from 'next/image';
-
-// Props
 
 interface ListingFormProps {
   open: boolean;
@@ -21,8 +25,6 @@ interface ListingFormProps {
   onSave: (listing: Listing) => void;
 }
 
-// ─── ListingForm ─────────────────────────────────────────────────────────────────
-
 export default function ListingForm({
   open,
   isExporter,
@@ -30,9 +32,14 @@ export default function ListingForm({
   onClose,
   onSave,
 }: ListingFormProps) {
+  // Safe extraction fallbacks
+  const user = useSelector((state: RootState) => state.auth.user);
   const mode: FulfillmentMode = isExporter ? 'riby_dtc' : 'buyer_local';
 
-  const [form, setForm] = useState<ListingFormData>( // ← setForm was missing
+  // Pass close handler directly into mutation lifecycle hook options if preferred
+  const { mutateAsync: createListingMutation } = useCreateListing();
+
+  const [form, setForm] = useState<ListingFormData>(
     editing
       ? {
           title: editing.title,
@@ -58,19 +65,41 @@ export default function ListingForm({
         },
   );
 
+  const [files, setFiles] = useState<File[]>([]);
+  const [previews, setPreviews] = useState<string[]>(editing?.photos || []);
   const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      previews.forEach((url) => {
+        if (url.startsWith('blob:')) {
+          URL.revokeObjectURL(url);
+        }
+      });
+    };
+  }, [previews]);
 
   if (!open) return null;
 
-  const upload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    for (const f of files) {
-      try {
-        const mockUrl = URL.createObjectURL(f);
-        setForm((x) => ({ ...x, photos: [...x.photos, mockUrl] }));
-      } catch {
-        toast.error('Upload failed');
-      }
+  const upload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = Array.from(e.target.files || []);
+    if (!selectedFiles.length) return;
+
+    setFiles((prev) => [...prev, ...selectedFiles]);
+    const urls = selectedFiles.map((file) => URL.createObjectURL(file));
+    setPreviews((prev) => [...prev, ...urls]);
+  };
+
+  const getProductStatusId = (status: ListingStatus) => {
+    switch (status) {
+      case 'active':
+        return 1;
+      case 'out_of_stock':
+        return 2;
+      case 'archived':
+        return 3;
+      default:
+        return 1;
     }
   };
 
@@ -79,19 +108,61 @@ export default function ListingForm({
       toast.error('Title is required');
       return;
     }
+    if (!form.description.trim()) {
+      toast.error('Description is required');
+      return;
+    }
+    if (!form.ships_from.trim()) {
+      toast.error('Ships from is required');
+      return;
+    }
+    if (form.retail_price_usd <= 0) {
+      toast.error('Retail price must be greater than zero');
+      return;
+    }
+    if (!files.length && !editing) {
+      toast.error('Please upload at least one image');
+      return;
+    }
+
     setBusy(true);
+
     try {
-      await new Promise((res) => setTimeout(res, 500));
-      const saved: Listing = {
-        id: editing?.id ?? `lst-${Date.now()}`,
-        fulfillment_mode: mode,
-        ...form,
+      const payload: CreateListingPayload = {
+        UserId: Number(user?.id),
+        Title: form.title,
+        ThumbnailImage: files[0] ?? null,
+        Category: form.category,
+        RetailPriceUsd: form.retail_price_usd,
+        StockQty: form.stock_qty,
+        ShipsFrom: form.ships_from,
+        Description: form.description,
+        ProductStatusId: getProductStatusId(form.status),
+        FulfillmentMode: mode,
+        Photos: files,
       };
+
+      const response = await createListingMutation(payload);
+
+      const saved: Listing = {
+        id:
+          response?.data?.id ?? response?.id ?? editing?.id ?? `${Date.now()}`,
+        title: form.title,
+        description: form.description,
+        category: form.category,
+        retail_price_usd: form.retail_price_usd,
+        stock_qty: form.stock_qty,
+        ships_from: form.ships_from,
+        status: form.status,
+        fulfillment_mode: mode,
+        photos: previews.length > 0 ? previews : editing?.photos || [],
+      };
+
       onSave(saved);
-      toast.success(editing ? 'Listing updated' : 'Listing created');
       onClose();
-    } catch {
-      toast.error('Failed');
+    } catch (error) {
+      // Caught cleanly here to avoid breaking application loop thread
+      console.error('Error within submission component scope:', error);
     } finally {
       setBusy(false);
     }
@@ -110,12 +181,12 @@ export default function ListingForm({
         <h2 className="helix-h3">
           {editing
             ? 'Edit listing'
-            : `New ${mode === 'riby_dtc' ? 'direct-from-Africa' : 'US in-stock'} listing`}
+            : `New ${
+                mode === 'riby_dtc' ? 'direct-from-Africa' : 'US in-stock'
+              } listing`}
         </h2>
 
-        {/* ── Form fields ── */}
         <div className="mt-5 grid md:grid-cols-2 gap-4">
-          {/* Title */}
           <div className="md:col-span-2">
             <label className="helix-label">Title</label>
             <input
@@ -123,11 +194,9 @@ export default function ListingForm({
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
               placeholder="e.g. Hand-Dyed Adire Fabric Set"
-              data-testid="lf-title"
             />
           </div>
 
-          {/* Category */}
           <div>
             <label className="helix-label">Category</label>
             <select
@@ -143,28 +212,22 @@ export default function ListingForm({
             </select>
           </div>
 
-          {/* Retail price */}
           <div>
             <label className="helix-label">Retail price (USD)</label>
             <input
               type="number"
-              step="0.01"
-              min={0}
               className="helix-input"
               value={form.retail_price_usd}
               onChange={(e) =>
                 setForm({ ...form, retail_price_usd: Number(e.target.value) })
               }
-              data-testid="lf-price"
             />
           </div>
 
-          {/* Stock qty */}
           <div>
             <label className="helix-label">Stock qty</label>
             <input
               type="number"
-              min={0}
               className="helix-input"
               value={form.stock_qty}
               onChange={(e) =>
@@ -173,20 +236,15 @@ export default function ListingForm({
             />
           </div>
 
-          {/* Ships from */}
           <div>
             <label className="helix-label">Ships from</label>
             <input
               className="helix-input"
               value={form.ships_from}
               onChange={(e) => setForm({ ...form, ships_from: e.target.value })}
-              placeholder={
-                isExporter ? 'Lagos → Riby US fulfillment' : 'Brooklyn, NY'
-              }
             />
           </div>
 
-          {/* Description */}
           <div className="md:col-span-2">
             <label className="helix-label">Description</label>
             <textarea
@@ -195,11 +253,9 @@ export default function ListingForm({
               onChange={(e) =>
                 setForm({ ...form, description: e.target.value })
               }
-              placeholder="Describe the product for consumers…"
             />
           </div>
 
-          {/* Photos */}
           <div className="md:col-span-2">
             <label className="helix-label">Photos</label>
             <input
@@ -208,23 +264,25 @@ export default function ListingForm({
               accept="image/*"
               onChange={upload}
               className="helix-input"
-              data-testid="lf-photos"
             />
-            {form.photos.length > 0 && (
-              <div className="flex gap-2 mt-2 flex-wrap">
-                {form.photos.map((ph, i) => (
+
+            {previews.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-3">
+                {previews.map((photo, index) => (
                   <Image
-                    key={i}
-                    src={ph}
-                    alt=""
+                    key={index}
+                    src={photo}
+                    alt={`preview-${index}`}
+                    width={64}
+                    height={64}
                     className="w-16 h-16 rounded object-cover"
+                    unoptimized
                   />
                 ))}
               </div>
             )}
           </div>
 
-          {/* Status */}
           <div>
             <label className="helix-label">Status</label>
             <select
@@ -240,7 +298,6 @@ export default function ListingForm({
             </select>
           </div>
 
-          {/* Fulfillment mode — read-only info */}
           <div>
             <label className="helix-label">Fulfillment mode</label>
             <div className="helix-input bg-[#0A1628]/60 text-[#9CA3AF] cursor-default select-none">
@@ -251,7 +308,6 @@ export default function ListingForm({
           </div>
         </div>
 
-        {/* ── Actions ── */}
         <div className="mt-6 flex gap-3">
           <button onClick={onClose} className="helix-btn-secondary flex-1">
             Cancel
@@ -260,9 +316,8 @@ export default function ListingForm({
             onClick={save}
             disabled={busy}
             className="helix-btn-primary flex-1"
-            data-testid="lf-save"
           >
-            {busy ? 'Saving…' : 'Save listing'}
+            {busy ? 'Saving...' : 'Save listing'}
           </button>
         </div>
       </div>
