@@ -8,15 +8,14 @@ import SidebarComp from './SidebarComp';
 import { NAV_LINKS } from './data';
 import { useAppSelector } from '@/hooks/store/store';
 import UserComponent from './UserComponent';
-import { getSavedCookie } from '@/store/auth/cookies';
 import { cn } from '@/lib/cn';
-import JompShopLogo from '@/assets/JompShopIcon';
 import useColorScheme from '@/hooks/useColorScheme';
+import JompsShopLogoDark from '@/assets/JompshopLogoDark';
+import JompsShopLogo from '@/assets/jompshop_logo';
 const Header = ({ className }: { className?: string }) => {
   const [showSidebar, setShowSidebar] = useState(false);
 
   const user = useAppSelector((state) => state.auth.user);
-  const token = getSavedCookie('token');
   const isDark: boolean = useColorScheme();
   return (
     <header
@@ -27,21 +26,13 @@ const Header = ({ className }: { className?: string }) => {
         className)
       }
     >
-      <div className="max-w-350 mx-auto px-6 lg:px-10 py-4 flex items-center justify-between">
+      <div className="max-w-350 mx-auto px-6 lg:px-10 py-2 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
-          <JompShopLogo
-            primaryColor={isDark ? 'white' : '#31005C'}
-            secondaryColor={isDark ? '#EFA005' : '#EFA005'}
-            width={40}
-            height={40}
-          />
-          <div className="leading-tight">
-            <div className="font-bold tracking-[0.22em] text-sm">JOMP SHOP</div>
-
-            <p className="text-[10px] tracking-[0.3em] dark:text-[#1A7A6E] text-[#4a2e8a] font-mono">
-              DIRECT · FROM AFRICA
-            </p>
-          </div>
+          {isDark ? (
+            <JompsShopLogoDark width={120} />
+          ) : (
+            <JompsShopLogo width={120} />
+          )}
         </Link>
         <nav className="hidden md:flex items-center lg:gap-8 gap-2 text-[13px] text-[#9CA3AF]">
           {NAV_LINKS.map((link, i) => (
@@ -53,14 +44,7 @@ const Header = ({ className }: { className?: string }) => {
               {link.label}
             </Link>
           ))}
-          {!user && (
-            <Link
-              href={NAV_LINKS[4]?.href ?? ''}
-              className="text-muted hover:text-text"
-            >
-              {NAV_LINKS[4]?.label}
-            </Link>
-          )}
+
           {user?.role === 'consumer' && (
             <Link href="/shop/orders" className="text-muted hover:text-text">
               My Orders

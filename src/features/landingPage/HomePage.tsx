@@ -84,7 +84,7 @@ export default function HomePage() {
     e.preventDefault();
   };
   return (
-    <main className="min-h-screen  bg-white text-[] dark:bg-[#0A1628] w-full max-w-350 mx-auto dark:text-[#F5F5F5]">
+    <main className="min-h-screen bg-white  dark:bg-[#0A1628] w-full max-w-350 mx-auto dark:text-[#F5F5F5]">
       {/* Hero */}
       <section className="mb-4 relative">
         <div className="helix-card p-6  md:px-12 relative overflow-hidden">
@@ -141,16 +141,16 @@ export default function HomePage() {
 
       {/* Category chips */}
       {showCategoryGrid && (
-        <section className="mb-4">
+        <section className="mb-4 ">
           <div className="flex items-end justify-between mb-5">
             <h2 className="helix-h3">Shop by category</h2>
           </div>
-          <article className="flex py-1 w-[90vw] hide-scrollbar overflow-x-scroll gap-4">
+          <article className="flex py-1 max-w-[90vw] hide-scrollbar overflow-x-scroll gap-4">
             {CATS.map((c) => (
               <button
                 key={c.value}
                 onClick={() => setCategory(c.value)}
-                className="helix-card min-w-45 flex-1 cursor-pointer space-y-1 p-4 py-3 text-left hover:border-[#C9922A]/60 transition-colors group"
+                className="helix-card min-w-42 shrink-0 cursor-pointer space-y-1 p-4 py-3 text-left"
               >
                 <div className="flex items-center gap-3">
                   {c.icon}
@@ -158,9 +158,7 @@ export default function HomePage() {
                     {c.label}
                   </p>
                 </div>
-                <p className="text-[10.5px] text-[#9CA3AF] mt-1.5 line-clamp-2">
-                  {c.hint}
-                </p>
+                <p className="text-[10.5px] text-[#9CA3AF] mt-1.5 ">{c.hint}</p>
               </button>
             ))}
           </article>
