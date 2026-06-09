@@ -14,14 +14,38 @@ import {
   Order,
 } from '../types/buyers';
 import { useAppSelector } from '@/hooks/store/store';
-
+import { useHeader } from '@/context/HeaderContext';
+export const dummyFXRate: FXRate = {
+  usd_to_ngn: 1585.75,
+  fetched_at: Date.now(),
+  source: 'CBN',
+};
 const BuyerDashboard = () => {
   const { user } = useAppSelector((state) => state.auth);
-  const [fx, setFx] = useState<FXRate | null>(null);
+  const { setHeader } = useHeader();
+
+  const [fx, setFx] = useState<FXRate | null>(dummyFXRate);
   const [orders, setOrders] = useState<Order[]>([]);
   const [complianceScore, setComplianceScore] =
     useState<ComplianceScore | null>(null);
   const [biz, setBiz] = useState<Business | null>(null);
+  const title = `Welcome back, ${user?.fullName?.split(' ')[0]}`;
+  const anchor_env = 'SANDBOX · MOCK';
+
+  useEffect(() => {
+    setHeader({
+      title: title,
+      kicker: 'Buyer · Trade Desk',
+      action: (
+        <div className="flex items-center gap-3 text-[11px] font-mono tracking-widest text-[#1A7A6E]">
+          ANCHOR · {anchor_env}
+          <span className="w-2 h-2 rounded-full bg-[#1A7A6E] inline-block animate-pulse" />
+        </div>
+      ),
+    });
+
+    return () => setHeader(null);
+  }, [setHeader]);
 
   const [data, setData] = useState<BuyerDashboardData | null>(null);
   useEffect(() => {
@@ -49,27 +73,19 @@ const BuyerDashboard = () => {
         <div className="helix-card p-5">
           <div className="flex justify-between items-start">
             <div>
-              <div className="helix-label">USD / NGN Rate</div>
-              <div className="font-mono text-3xl font-bold text-[#C9922A] mt-2 tracking-tight">
+              <p className="helix-label">USD / NGN Rate</p>
+              <p className="font-mono text-3xl font-bold text-primary mt-2 tracking-tight">
                 ₦{fx ? Number(fx.usd_to_ngn).toLocaleString() : '—'}
-              </div>
+              </p>
             </div>
-            <Coins size={22} className="text-[#1A7A6E]" />
+            <Coins size={22} className="text-secondary" />
           </div>
-          <div className="mt-4 text-[11px] font-mono text-[#9CA3AF] tracking-wider">
+          <div className="mt-4 text-[11px] font-mono text-muted tracking-wider">
             {fx?.source?.toUpperCase()} ·{' '}
             {fx
               ? formatDateTime(new Date(fx.fetched_at * 1000).toISOString())
               : ''}
           </div>
-          {user?.role === 'exporter' && (
-            <Link
-              href="/finance"
-              className="mt-4 inline-flex items-center gap-1 text-[#C9922A] text-[12px] hover:gap-2 transition-all"
-            >
-              Manage funds <ArrowUpRight size={14} />
-            </Link>
-          )}
         </div>
       </div>
 
