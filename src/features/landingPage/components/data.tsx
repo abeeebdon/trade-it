@@ -18,6 +18,7 @@ import {
   Lightbulb,
   HandHelping,
   BookAIcon,
+  User,
 } from 'lucide-react';
 
 export const helixCards = [
@@ -141,6 +142,7 @@ export const NAV: {
     },
     { to: '/admin/catalog', label: 'Marketplace', icon: Store },
     { to: '/admin/waitlist', label: 'Waitlist', icon: BookAIcon },
+    { to: '/admin/users', label: 'Users', icon: User },
   ],
 
   super_admin: [

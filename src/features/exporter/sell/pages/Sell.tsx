@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import {
@@ -10,15 +10,18 @@ import {
   Pencil,
   ChevronLeft,
   ChevronRight,
+  Eye,
 } from 'lucide-react';
 
 import { formatUSD } from '@/lib/func';
 import { RootState } from '@/store/store';
 import { useHeader } from '@/context/HeaderContext';
 import { StatusPill } from '@/features/shops/components/StatusPill';
-import ListingForm from '../components/ListingForm';
-import { useGetListings } from '../hooks/useListings';
+import { useGetListings } from '../../hooks/useListings';
 import { PER_PAGE } from '@/lib/constants';
+import ListingformCard from '../components/ListingformCard';
+import { ProductListingTypes } from '../types/sellType';
+import ListingForm from '../components/ListingForm';
 
 // Component
 
@@ -37,7 +40,9 @@ export default function Sell() {
     pageSize: PER_PAGE,
   });
 
-  const listings = data?.listings.data ?? [];
+  const listings: ProductListingTypes[] = useMemo(() => {
+    return data?.listings.data ?? [];
+  }, [data]);
   const totalPages = data?.listings.totalPages ?? 1;
 
   // Notice text — prefer API value, fall back to static copy
@@ -46,8 +51,6 @@ export default function Sell() {
     (isExporter
       ? 'Riby Inc is Delivery Partner of Record for all listings you create here. Consumers pay Helix; you receive USD net of fees; Riby handles US customs & last-mile delivery.'
       : 'Listings here sell your US-stocked inventory to consumers with 48-hour delivery.');
-
-  const editingListing = listings.find((l) => l.id === editing) ?? null;
 
   //  Header
   useEffect(() => {
@@ -105,6 +108,7 @@ export default function Sell() {
       </div>
     );
   }
+  const handleCreate = () => {};
 
   return (
     <>
@@ -168,12 +172,12 @@ export default function Sell() {
         <>
           {/* MOBILE */}
           <div className="grid gap-4 lg:hidden">
-            {listings.map((l) => (
-              <div key={l.id} className="helix-card p-4 space-y-4">
+            {listings.map((l, i) => (
+              <div key={i} className="helix-card p-4 space-y-4">
                 <div className="flex gap-4">
                   {l.photos?.[0] ? (
                     <Image
-                      src={l.photos[0]}
+                      src={l.photos[0].imageUrl}
                       alt={l.title}
                       width={80}
                       height={80}
@@ -195,12 +199,12 @@ export default function Sell() {
                       <StatusPill status={l.status} />
                       <span
                         className={`helix-status ${
-                          l.fulfillment_mode === 'riby_dtc'
+                          l.deliveryPartnerOfRecord === 'riby_dtc'
                             ? 'helix-status-gold'
                             : 'helix-status-ok'
                         }`}
                       >
-                        {l.fulfillment_mode === 'riby_dtc'
+                        {l.deliveryPartnerOfRecord === 'riby_dtc'
                           ? 'DTC · RIBY'
                           : 'LOCAL · 48HR'}
                       </span>
@@ -212,18 +216,18 @@ export default function Sell() {
                   <div>
                     <p className="text-xs text-[#9CA3AF]">Price</p>
                     <p className="font-semibold font-mono">
-                      {formatUSD(l.retail_price_usd)}
+                      {formatUSD(l.retailPriceUsd)}
                     </p>
                   </div>
                   <div className="text-right">
                     <p className="text-xs text-[#9CA3AF]">Stock</p>
-                    <p className="font-semibold font-mono">{l.stock_qty}</p>
+                    <p className="font-semibold font-mono">{l.stockQty}</p>
                   </div>
                 </div>
 
                 <button
                   onClick={() => {
-                    setEditing(l.id);
+                    setEditing(String(l.id));
                     setOpen(true);
                   }}
                   className="helix-btn-secondary w-full inline-flex items-center justify-center gap-2"
@@ -236,7 +240,7 @@ export default function Sell() {
           </div>
 
           {/* DESKTOP */}
-          <div className="hidden lg:block helix-card overflow-hidden">
+          <div className="hidden lg:block  overflow-hidden">
             <div className="overflow-x-auto">
               <table className="helix-table min-w-full">
                 <thead>
@@ -252,60 +256,15 @@ export default function Sell() {
                   </tr>
                 </thead>
                 <tbody>
-                  {listings.map((l) => (
-                    <tr key={l.id}>
-                      <td>
-                        {l.photos?.[0] ? (
-                          <Image
-                            src={l.photos[0]}
-                            alt={l.title}
-                            width={56}
-                            height={56}
-                            className="w-14 h-14 rounded object-cover"
-                            unoptimized
-                          />
-                        ) : (
-                          <div className="w-14 h-14 rounded bg-[#1A7A6E]/10 flex items-center justify-center text-[10px] font-mono">
-                            NO IMG
-                          </div>
-                        )}
-                      </td>
-                      <td className="max-w-[200px] truncate">{l.title}</td>
-                      <td className="text-[13px] text-[#9CA3AF]">
-                        {l.category}
-                      </td>
-                      <td className="font-mono">
-                        {formatUSD(l.retail_price_usd)}
-                      </td>
-                      <td className="font-mono">{l.stock_qty}</td>
-                      <td>
-                        <span
-                          className={`helix-status ${
-                            l.fulfillment_mode === 'riby_dtc'
-                              ? 'helix-status-gold'
-                              : 'helix-status-ok'
-                          }`}
-                        >
-                          {l.fulfillment_mode === 'riby_dtc'
-                            ? 'DTC · RIBY'
-                            : 'LOCAL · 48HR'}
-                        </span>
-                      </td>
-                      <td>
-                        <StatusPill status={l.status} />
-                      </td>
-                      <td>
-                        <button
-                          onClick={() => {
-                            setEditing(l.id);
-                            setOpen(true);
-                          }}
-                          className="text-[#1A7A6E] hover:text-[#C9922A] transition"
-                        >
-                          <Pencil size={16} />
-                        </button>
-                      </td>
-                    </tr>
+                  {listings.map((l, i) => (
+                    <ListingformCard
+                      key={i}
+                      l={l}
+                      handleEdit={() => {
+                        setEditing(String(l.id));
+                        setOpen(true);
+                      }}
+                    />
                   ))}
                 </tbody>
               </table>
@@ -355,17 +314,13 @@ export default function Sell() {
 
       {/* MODAL */}
       <ListingForm
+        editing={null}
         open={open}
-        isExporter={isExporter}
-        editing={editingListing}
+        isExporter={true}
         onClose={() => {
           setOpen(false);
-          setEditing(null);
         }}
-        onSave={() => {
-          setOpen(false);
-          setEditing(null);
-        }}
+        onSave={handleCreate}
       />
     </>
   );

@@ -69,7 +69,7 @@ export default function ConsumerOrders() {
   return (
     <main>
       <div className="helix-kicker mb-2">My orders & quotes</div>
-      <h1 className="helix-h2 mb-6">Jomp Shop · Order history</h1>
+      <h1 className="helix-h2 mb-6">Jompshop · Order history</h1>
 
       {/* Quotes */}
       {quotes.as_consumer.length > 0 && (

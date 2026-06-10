@@ -1,4 +1,4 @@
-import Sell from '@/features/exporter/pages/Sell';
+import Sell from '@/features/exporter/sell/pages/Sell';
 const Page = () => {
   return <Sell />;
 };

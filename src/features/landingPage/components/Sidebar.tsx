@@ -49,7 +49,7 @@ export default function Sidebar() {
         </div>
         <div className="hidden lg:flex flex-col ">
           <span className="font-bold text-secondary tracking-widest text-lg">
-            JOMP SHOP
+            JOMPSHOP
           </span>
           <span className="text-xs ml-0.5  dark:text-[#1A7A6E] text-[#4a2e8a]  font-mono">
             EXPORT OS v1.1
