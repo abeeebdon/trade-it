@@ -39,9 +39,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Jomp Shop',
-  description:
-    'Jomp Shop — Connecting Africa to the World, One Trade at a Time',
+  title: 'Jompshop',
+  description: 'Jompshop — Connecting Africa to the World, One Trade at a Time',
 };
 
 export default function RootLayout({

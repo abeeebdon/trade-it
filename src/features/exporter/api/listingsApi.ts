@@ -1,27 +1,6 @@
 import api from '@/configs/api-config';
-import { Listing, CreateListingPayload } from '../types/exporter';
-
-export type ListingsParams = {
-  pageNumber: number;
-  pageSize: number;
-};
-
-export type ListingsPageData = {
-  title: string;
-  sectionTitle: string;
-  deliveryPartnerOfRecord: string;
-  notice: string;
-  totalListings: number;
-  activeListings: number;
-  outOfStockListings: number;
-  listings: {
-    pageNumber: number;
-    pageSize: number;
-    totalRecords: number;
-    totalPages: number;
-    data: Listing[];
-  };
-};
+import { CreateListingPayload } from '../types/exporter';
+import { ListingsPageData, ListingsParams } from '../sell/types/sellType';
 
 export const getListings = async ({
   pageNumber,
@@ -37,12 +16,21 @@ export const getListings = async ({
   }
 };
 
+export const getListingById = async ({ id }: { id: string }) => {
+  try {
+    const response = await api.get(`/Direct-to-Consumer/listings/${id}`);
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // Create new listing
 
 export const createListing = async (payload: CreateListingPayload) => {
   const formData = new FormData();
 
-  formData.append('UserId', String(payload.UserId));
+  formData.append('UserId', '9');
   formData.append('Title', payload.Title);
   formData.append('Category', payload.Category);
   formData.append('RetailPriceUsd', String(payload.RetailPriceUsd));
@@ -57,9 +45,8 @@ export const createListing = async (payload: CreateListingPayload) => {
   }
 
   payload.Photos.forEach((photo) => {
-    formData.append('Photos[]', photo);
+    formData.append('Photos', photo);
   });
-
   const response = await api.post('/Direct-to-Consumer/listings', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',

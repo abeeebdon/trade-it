@@ -15,9 +15,7 @@ function WithdrawModal({
     accounts.find((a) => a.is_default)?.id || accounts[0]?.id || '',
   );
   const [amount, setAmount] = useState('');
-  const [narration, setNarration] = useState(
-    `Jomp Shop ${currency} withdrawal`,
-  );
+  const [narration, setNarration] = useState(`JompShop ${currency} withdrawal`);
   const [busy, setBusy] = useState(false);
   const fmt = currency.toUpperCase() === 'USD' ? formatUSD : formatNGN;
 
