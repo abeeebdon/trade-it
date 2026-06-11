@@ -96,7 +96,7 @@ export default function ComingSoon() {
         setFuncEmail={setFuncEmail}
         setShowWaitlistModal={setShowWaitlistModal}
       />
-      <FAQSection />
+      {/* <FAQSection /> */}
       <section className="js-powered">
         <div className="js-container js-powered-inner">
           <span className="js-powered-label">Powered by</span>

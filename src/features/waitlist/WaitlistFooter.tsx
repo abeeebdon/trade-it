@@ -53,7 +53,7 @@ export default function WaitlistFooter({ setShowWaitlistModal }: Props) {
               <div className="js-footer-h">Connect</div>
               <a href="mailto:hello@jompshop.com">hello@jompshop.com</a>
               <a href="https://www.instagram.com/jompshop_/" target="blank">
-                IG@Jompshop
+                Instagram
               </a>
               <a href="https://www.instagram.com/jompshop_/" target="blank">
                 Facebook

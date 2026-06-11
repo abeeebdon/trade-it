@@ -22,7 +22,7 @@ export const ROLES: RoleType[] = [
   {
     value: 'retailer',
     title: 'Retailer / Bulk Buyer',
-    sub: 'I import & resell at scale',
+    sub: 'I am based in United States. I import & resell at scale',
     blurb:
       'Source bulk inventory from verified African suppliers. RFQs, custom quotes, US-bonded warehousing.',
     Icon: Store,
@@ -31,7 +31,7 @@ export const ROLES: RoleType[] = [
   {
     value: 'exporter',
     title: 'African Exporter',
-    sub: "I'm a maker / supplier from Africa",
+    sub: "I'm a producer / supplier from Africa",
     blurb:
       'List products, sell direct-to-consumer (Riby of record) or wholesale, access JompStart credit.',
     Icon: Globe,

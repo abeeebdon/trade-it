@@ -29,7 +29,6 @@ export default function Marketplace({
               <div className="js-card-thumb" style={{ background: p.grad }}>
                 <span className="js-soon-badge">Coming Soon</span>
                 <span className="js-city-badge">{p.city}</span>
-                {/* <span className="js-product-emoji">{p.emoji}</span> */}
                 <Image
                   src={`/images/${p.image}`}
                   alt={p.name}
@@ -39,7 +38,7 @@ export default function Marketplace({
                 />
               </div>
               <div className="js-card-body">
-                <h3 className="js-card-title">{p.name}</h3>
+                <h3 className="js-card-title min-h-10">{p.name}</h3>
                 <div className="js-card-seller">
                   {p.seller} · Verified Exporter
                 </div>
