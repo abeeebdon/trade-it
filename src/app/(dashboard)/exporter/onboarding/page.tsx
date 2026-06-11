@@ -1,4 +1,4 @@
-import Onboarding from '@/features/exporter/pages/Onboarding';
+import Onboarding from '@/features/exporter/onboarding/pages/Onboarding';
 
 const Page = () => {
   return <Onboarding />;

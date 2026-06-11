@@ -6,11 +6,18 @@ import { useRouter } from 'next/navigation';
 import { ListingFormCardProps } from '../types/sellType';
 import ListingForm from './ListingForm';
 import { useState } from 'react';
+import { useEditListing } from '../../hooks/useListings';
+import { CreateListingPayload } from '../../types/exporter';
 
 const ListingformCard = ({ l, handleEdit }: ListingFormCardProps) => {
   const [open, setOpen] = useState<boolean>(false);
+  const { mutateAsync: editListingMutation } = useEditListing();
   const router = useRouter();
-  const handleSave = () => {
+  const handleSave = async (payload: CreateListingPayload) => {
+    await editListingMutation({
+      id: l.id,
+      payload,
+    });
     setOpen(false);
   };
   return (

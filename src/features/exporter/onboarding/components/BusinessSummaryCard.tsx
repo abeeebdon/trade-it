@@ -1,10 +1,10 @@
 'use client';
 
 import { StatusPill } from '@/features/shops/components/StatusPill';
-import type { Business } from '../../types/exporter';
+import { OnboardingRespType } from '../types/exporterOnboardingtypes';
 
 interface BusinessSummaryCardProps {
-  biz: Business;
+  biz: OnboardingRespType;
 }
 
 export default function BusinessSummaryCard({ biz }: BusinessSummaryCardProps) {
@@ -12,12 +12,13 @@ export default function BusinessSummaryCard({ biz }: BusinessSummaryCardProps) {
     <div className="helix-card p-6">
       <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <div className="helix-label">{biz.business_name}</div>
+          <div className="helix-label">{biz.businessProfile.businessName}</div>
           <div className="helix-h3 mt-1">
-            {biz.sector.replace('-', ' ')} · {biz.country}
+            {biz.businessProfile.sector.replace('-', ' ')} ·{' '}
+            {biz.businessProfile.country}
           </div>
           <div className="text-[12px] text-[#9CA3AF] font-mono mt-1">
-            Anchor customer · {biz.anchor_customer_id}
+            Anchor customer ·{/* {biz.businessProfile.} */}
           </div>
         </div>
 
@@ -26,13 +27,13 @@ export default function BusinessSummaryCard({ biz }: BusinessSummaryCardProps) {
             <div className="text-[10px] tracking-widest text-[#9CA3AF] mb-1">
               KYC
             </div>
-            <StatusPill status={biz.kyc_status} />
+            <StatusPill status={biz.verification.kycStatus} />
           </div>
           <div>
             <div className="text-[10px] tracking-widest text-[#9CA3AF] mb-1">
               KYB
             </div>
-            <StatusPill status={biz.kyb_status} />
+            <StatusPill status={biz.verification.kybStatus} />
           </div>
         </div>
       </div>

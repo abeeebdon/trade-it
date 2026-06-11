@@ -3,9 +3,13 @@
 import { ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Business, KycForm } from '../../types/exporter';
+import {
+  BusinessProfile,
+  OnboardingRespType,
+} from '../types/exporterOnboardingtypes';
 
 interface KycKybFormProps {
-  biz: Business;
+  biz: OnboardingRespType;
   kycForm: KycForm;
   onChange: (form: KycForm) => void;
   onSubmit: () => void;
@@ -32,7 +36,7 @@ export default function KycKybForm({
   onChange,
   onSubmit,
 }: KycKybFormProps) {
-  const isBusiness = biz.registration_type === 'business';
+  const isBusiness = biz.businessProfile.businessType === 'business';
 
   const uploadDoc = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);

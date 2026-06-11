@@ -1,14 +1,10 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { AxiosError } from 'axios';
-import { Download, Folder, ToggleLeft, ToggleRight } from 'lucide-react';
-import { toast } from 'sonner';
+import { Download, ToggleLeft, ToggleRight } from 'lucide-react';
 
 import Pagination from '@/components/ui/Pagination';
-import api from '@/configs/api-config';
-import { paginate } from '@/lib/utils';
 import StatCard from './StatCard';
 import {
   useGetWaitlist,
@@ -17,8 +13,6 @@ import {
 } from '../admin/hooks/useGetAdminDashboard';
 import { PaginationType, WaitlistOverview, WaitlistTypeData } from './types';
 import { formatDateToMM } from '@/lib/func';
-
-const PER_PAGE = 10;
 
 type WaitlistType = 'hero' | 'exporter' | 'buyer';
 
@@ -41,28 +35,22 @@ interface WaitlistResponse {
   };
 }
 
-interface PlatformModeResponse {
-  mode: 'live' | 'coming_soon';
-}
-
-interface ErrorResponse {
-  detail?: string;
-}
-
-type FilterType = '' | 'hero' | 'exporter' | 'buyer';
+type FilterType = '' | 'hero' | 'exporter' | 'retailer' | 'consumer';
 type ModeType = 'live' | 'coming_soon';
 
+const filters: [FilterType, string][] = [
+  ['', 'All'],
+  ['exporter', 'Exporters'],
+  ['retailer', 'Retailers'],
+  ['consumer', 'Consumers'],
+];
 export default function AdminWaitlist() {
-  const [data, setData] = useState<WaitlistResponse>({
-    items: [],
-    total: 0,
-    by_type: {},
-  });
+  const [pageNumValue, setPAgeNumValue] = useState<number>(10);
+  const pageNumberOptions = [5, 10, 20, 50];
 
   const [mode, setMode] = useState<ModeType>('coming_soon');
   const [filter, setFilter] = useState<FilterType>('');
   const [page, setPage] = useState<number>(1);
-  const [getCSV, setGetCSV] = useState(false);
   const { data: waitlistCommand, isPending: waitlistCommandPending } =
     useGetWaitlistCommand();
   const waitlistOverview: WaitlistOverview = useMemo(() => {
@@ -71,7 +59,7 @@ export default function AdminWaitlist() {
   const { data: waitlist, isPending } = useGetWaitlist({
     filter,
     pageNumber: page,
-    pageSize: 10,
+    pageSize: pageNumValue,
   });
   const waitlists: WaitlistTypeData[] = useMemo(() => {
     return waitlist ? waitlist.data : [];
@@ -87,36 +75,36 @@ export default function AdminWaitlist() {
       : ({} as PaginationType);
   }, [waitlist]);
 
-  const toggleMode = async (): Promise<void> => {
-    const next: ModeType = mode === 'live' ? 'coming_soon' : 'live';
+  // const toggleMode = async (): Promise<void> => {
+  //   const next: ModeType = mode === 'live' ? 'coming_soon' : 'live';
 
-    const confirmed = window.confirm(
-      `Switch site to ${
-        next === 'live' ? 'LIVE marketplace' : 'COMING SOON landing page'
-      }?\n\nThis affects what the public sees on /`,
-    );
+  //   const confirmed = window.confirm(
+  //     `Switch site to ${
+  //       next === 'live' ? 'LIVE marketplace' : 'COMING SOON landing page'
+  //     }?\n\nThis affects what the public sees on /`,
+  //   );
 
-    if (!confirmed) return;
+  //   if (!confirmed) return;
 
-    try {
-      const { data } = await api.patch<PlatformModeResponse>(
-        '/admin/platform/mode',
-        { mode: next },
-      );
+  //   try {
+  //     const { data } = await api.patch<PlatformModeResponse>(
+  //       '/admin/platform/mode',
+  //       { mode: next },
+  //     );
 
-      setMode(data.mode);
+  //     setMode(data.mode);
 
-      toast.success(
-        `Site mode → ${
-          data.mode === 'live' ? 'LIVE marketplace' : 'COMING SOON'
-        }`,
-      );
-    } catch (error) {
-      const err = error as AxiosError<ErrorResponse>;
+  //     toast.success(
+  //       `Site mode → ${
+  //         data.mode === 'live' ? 'LIVE marketplace' : 'COMING SOON'
+  //       }`,
+  //     );
+  //   } catch (error) {
+  //     const err = error as AxiosError<ErrorResponse>;
 
-      toast.error(err.response?.data?.detail || 'Failed');
-    }
-  };
+  //     toast.error(err.response?.data?.detail || 'Failed');
+  //   }
+  // };
   const { mutate, isPending: isMutating } = useGetWaitlistCSV();
 
   // const handleExport = async () => {
@@ -146,12 +134,6 @@ export default function AdminWaitlist() {
       },
     });
   };
-
-  const filters: [FilterType, string][] = [
-    ['', 'All'],
-    ['exporter', 'Exporters'],
-    ['buyer', 'Buyers'],
-  ];
   return (
     <main>
       <header className="flex mb-4 justify-end">
@@ -204,7 +186,7 @@ export default function AdminWaitlist() {
           </div>
 
           <button
-            onClick={toggleMode}
+            // onClick={toggleMode}
             className="helix-btn-primary inline-flex items-center gap-2 text-sm"
             data-testid="toggle-mode"
           >
@@ -230,8 +212,16 @@ export default function AdminWaitlist() {
           n={waitlistOverview.totalSignups ?? ''}
         />
         <StatCard
-          label="Hero · general"
-          n={waitlistOverview.heroGeneral ?? ''}
+          label={
+            waitlistOverview.customerTypes.find(
+              (d) => d.customerType.toLowerCase() === 'retailer',
+            )?.customerType ?? ''
+          }
+          n={
+            waitlistOverview.customerTypes.find(
+              (d) => d.customerType.toLowerCase() === 'retailer',
+            )?.count ?? 0
+          }
         />
         <StatCard label="Exporters" n={waitlistOverview.exporters ?? ''} />
         <StatCard label="US Buyers" n={waitlistOverview.usBuyers ?? ''} />
@@ -303,12 +293,24 @@ export default function AdminWaitlist() {
                 ))}
               </tbody>
             </table>
-
-            <Pagination
-              page={metrics.pageNumber}
-              totalPages={metrics.totalPages}
-              onChange={setPage}
-            />
+            <article className="flex justify-between gap-4 px-4 md:px-6 items-end pb-3 ">
+              <Pagination
+                page={metrics.pageNumber}
+                totalPages={metrics.totalPages}
+                onChange={setPage}
+              />
+              <select
+                value={pageNumValue}
+                onChange={(e) => setPAgeNumValue(Number(e.target.value))}
+                className="border border-gray-300 mb-2 rounded-md px-3 py-1 outline-none"
+              >
+                {pageNumberOptions.map((num) => (
+                  <option key={num} value={num}>
+                    {num}
+                  </option>
+                ))}
+              </select>
+            </article>
           </section>
         )}
       </div>

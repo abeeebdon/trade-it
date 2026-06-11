@@ -7,12 +7,9 @@ import { toast } from 'sonner';
 
 import { RootState } from '@/store/store';
 import { CATS } from '@/lib/constants';
-import { useCreateListing } from '../../hooks/useListings';
 
 import type {
   FulfillmentMode,
-  Listing,
-  ListingFormData,
   ListingStatus,
   CreateListingPayload,
 } from '../../types/exporter';
@@ -27,7 +24,7 @@ interface ListingFormProps {
   isExporter: boolean;
   editing: ProductListingTypes | null;
   onClose: () => void;
-  onSave: (listing: Listing) => void;
+  onSave: (listing: CreateListingPayload) => void;
 }
 
 export default function ListingForm({
@@ -42,8 +39,8 @@ export default function ListingForm({
   const mode: FulfillmentMode = isExporter ? 'riby_dtc' : 'buyer_local';
   const [thumbNailPhotos, setThumbNailPhotos] = useState<File | null>(null);
   const [thumbNailPreview, setThumbNailPreview] = useState<string>();
-  const { mutateAsync: createListingMutation } = useCreateListing();
   // const [previews, setPreviews] = useState<string[]>(editing?.photos[0].imageUrl || []);
+  console.log(editing);
   const {
     register,
     handleSubmit,
@@ -64,7 +61,7 @@ export default function ListingForm({
     editing?.photos.map((l) => l.imageUrl) || [],
   );
   const [busy, setBusy] = useState(false);
-
+  console.log(previews);
   useEffect(() => {
     return () => {
       previews.forEach((url) => {
@@ -129,9 +126,9 @@ export default function ListingForm({
       Photos: files,
     };
 
-    await createListingMutation(payload);
+    onSave(payload);
   };
-
+  console.log(files);
   return (
     <div
       className="fixed inset-0 z-50 bg-[#0A1628]/80 backdrop-blur flex items-start justify-center overflow-y-auto p-4 pt-10 pb-10"

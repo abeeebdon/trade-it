@@ -300,7 +300,10 @@ export type CreateListingPayload = {
   Photos: File[];
 };
 // Fulfillment
-
+export type EditListingPayload = {
+  payload: CreateListingPayload;
+  id: string | number;
+};
 export type QuoteStatus =
   | 'pending'
   | 'quoted'
