@@ -1,7 +1,7 @@
 'use client';
 import { useAppSelector } from '@/hooks/store/store';
 import { Pencil, Plus, Store, Trash, Truck } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ListingForm from '../components/ListingForm';
 import { StatusPill } from '@/features/shops/components/StatusPill';
 import { formatUSD } from '@/lib/func';
@@ -9,9 +9,11 @@ import Image from 'next/image';
 import { ListingItem } from '../types/buyers';
 import { dummyItems } from '../components/data';
 import PressableBtn from '@/components/buttons/PressableBtn';
+import { useHeader } from '@/context/HeaderContext';
 
 const BuyerInventorySell = () => {
   const { user } = useAppSelector((state) => state.auth);
+  const { setHeader } = useHeader();
 
   const [items, setItems] = useState<ListingItem[]>([]);
 
@@ -24,40 +26,44 @@ const BuyerInventorySell = () => {
   const del = (id: number) => {
     setItems((prev) => prev.filter((item) => item.id !== id));
   };
+  useEffect(() => {
+    setHeader({
+      title: 'Direct-to-Consumer Listings',
+      kicker: 'Buyer · Sell from local inventory',
+      action: (
+        <button
+          onClick={() => {
+            setEditing(null);
+            setOpen(true);
+          }}
+          className="helix-btn-primary inline-flex items-center gap-2"
+          data-testid="create-listing-btn"
+        >
+          <Plus size={14} /> New listing
+        </button>
+      ),
+    });
 
-  const isExporter = user?.role === 'exporter';
+    return () => setHeader(null);
+  }, [setHeader]);
 
   return (
     <>
       <main className="">
-        <div className="helix-card p-5 mb-6 border-[#C9922A]/30 bg-[#C9922A]/5">
+        <div className="helix-card p-5 mb-6 border-primary/30 bg-primary/5">
           <div className="flex items-start gap-3">
-            {isExporter ? (
-              <Truck size={22} className="text-[#C9922A]" />
-            ) : (
-              <Store size={22} className="text-[#1A7A6E]" />
-            )}
-            <div className="text-[13px] text-[#F5F5F5]">
-              {isExporter ? (
-                <>
-                  <b>Riby Inc is Delivery Partner of Record</b> for all listings
-                  you create here. Consumers pay Helix; you receive USD net of
-                  fees; Riby handles US customs &amp; last-mile delivery.
-                </>
-              ) : (
-                <>
-                  Listings here sell your <b>US-stocked inventory</b> to
-                  consumers with 48-hour delivery. Helix keeps a 2% marketplace
-                  fee; Anchor credits the remainder to your USD wallet
-                  instantly.
-                </>
-              )}
-            </div>
+            <Store size={22} className="text-secondary" />
+
+            <p className="text-[13px] text-text">
+              Listings here sell your <b>US-stocked inventory</b> to consumers
+              with 48-hour delivery. Helix keeps a 2% marketplace fee; Anchor
+              credits the remainder to your USD wallet instantly.
+            </p>
           </div>
         </div>
 
         {items.length === 0 ? (
-          <div className="helix-card flex justify-center flex-col items-center gap-6 p-10 text-center text-[#9CA3AF]">
+          <div className="helix-card flex justify-center flex-col items-center gap-6 p-10 text-center text-muted">
             No listings yet.
             <PressableBtn
               handleClick={() => {
@@ -97,7 +103,7 @@ const BuyerInventorySell = () => {
                       />
                     </td>
                     <td className="max-w-xs truncate">{l.title}</td>
-                    <td className="text-[12px] text-[#9CA3AF]">{l.category}</td>
+                    <td className="text-[12px] text-muted">{l.category}</td>
                     <td className="font-mono">
                       {formatUSD(l.retail_price_usd)}
                     </td>
@@ -121,13 +127,13 @@ const BuyerInventorySell = () => {
                             setEditing(l);
                             setOpen(true);
                           }}
-                          className="text-[#1A7A6E] hover:text-[#C9922A]"
+                          className="text-secondary hover:text-primary"
                         >
                           <Pencil size={16} />
                         </button>
                         <button
                           onClick={() => del(l.id ?? 0)}
-                          className="text-[#E74C3C] hover:text-[#ff8e82]"
+                          className="text-danger hover:text-shadow-danger"
                         >
                           <Trash size={16} />
                         </button>
@@ -142,7 +148,7 @@ const BuyerInventorySell = () => {
       </main>
       {open && (
         <ListingForm
-          isExporter={isExporter}
+          isExporter={false}
           editing={editing}
           onClose={() => {
             setOpen(false);

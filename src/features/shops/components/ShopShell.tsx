@@ -39,7 +39,7 @@ export default function ShopShell({ setMode }: ShopShellProps) {
               height={36}
             />
             <div className="leading-tight">
-              <h2 className="font-bold tracking-[0.22em] text-sm">JOMP SHOP</h2>
+              <h2 className="font-bold tracking-[0.22em] text-sm">JOMPSHOP</h2>
               <p className="text-[9px] tracking-[0.3em] text-[#1A7A6E] font-mono">
                 DIRECT · FROM AFRICA
               </p>

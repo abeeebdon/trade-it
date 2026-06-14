@@ -1,6 +1,22 @@
 import JompShopLogo from '@/assets/JompShopIcon';
-import { Props } from './COmingSOon';
-export default function WaitlistFooter({ setIsBetaPreview }: Props) {
+import { useAppDispatch } from '@/hooks/store/store';
+import { setBeta } from '@/store/waitlist/waitlist.slice';
+import { Dispatch, SetStateAction } from 'react';
+interface Props {
+  setShowWaitlistModal: Dispatch<SetStateAction<boolean>>;
+}
+export default function WaitlistFooter({ setShowWaitlistModal }: Props) {
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+  const dispatch = useAppDispatch();
+  const handleToggleBeta = () => {
+    dispatch(setBeta(true));
+    scrollToTop();
+  };
   return (
     <footer className="js-footer">
       <div className="js-container">
@@ -20,7 +36,12 @@ export default function WaitlistFooter({ setIsBetaPreview }: Props) {
               <div className="js-footer-h">Platform</div>
               <a href="#how-it-works">How It Works</a>
               <a href="#marketplace">Marketplace Preview</a>
-              <a href="#waitlist">Join Waitlist</a>
+              <button
+                className="text-xs text-[#b8aec8] hover:text-white"
+                onClick={() => setShowWaitlistModal(true)}
+              >
+                Join Waitlist
+              </button>
             </div>
             <div>
               <div className="js-footer-h">Partners</div>
@@ -34,7 +55,9 @@ export default function WaitlistFooter({ setIsBetaPreview }: Props) {
               <a href="https://www.instagram.com/jompshop_/" target="blank">
                 IG@Jompshop
               </a>
-              <span>LinkedIn</span>
+              <a href="https://www.instagram.com/jompshop_/" target="blank">
+                Facebook
+              </a>
             </div>
           </div>
         </div>
@@ -43,10 +66,7 @@ export default function WaitlistFooter({ setIsBetaPreview }: Props) {
             © {new Date().getFullYear()} JompShop. A product of JompStart
             Digital &amp; Riby Inc.
           </p>
-          <button
-            onClick={() => setIsBetaPreview(true)}
-            className="js-beta-link"
-          >
+          <button onClick={handleToggleBeta} className="js-beta-link">
             🔒 Beta Access
           </button>
         </div>

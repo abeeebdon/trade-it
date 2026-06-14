@@ -9,7 +9,9 @@ export default function MainLayout({
   return (
     <main>
       <Header />
-      <div className="pt-36 px-6 lg:px-10 pb-24">{children}</div>
+      <div className="sm:pt-10 pt-5 px-4 sm:px-6 lg:px-10 pb-24">
+        {children}
+      </div>
       <Footer />
     </main>
   );
