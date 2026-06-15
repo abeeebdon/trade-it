@@ -80,11 +80,7 @@ export default function Login() {
       <h1 className="helix-kicker mb-2">Jomp Trade · Sign in</h1>
       <h1 className="helix-h2">Access your command center</h1>
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="mt-7 space-y-4"
-        data-testid="login-form"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-7 space-y-4">
         {/* EMAIL */}
         <InputField
           label="Email"
@@ -103,7 +99,14 @@ export default function Login() {
           error={errors.password?.message}
           name="password"
         />
-
+        <div className="flex items-center py-2 justify-end">
+          <Link
+            href="/forgot-password "
+            className="font-semibold text-sm hover:underline"
+          >
+            Forgot Password?
+          </Link>
+        </div>
         {/* SUBMIT */}
         <button
           disabled={loading}

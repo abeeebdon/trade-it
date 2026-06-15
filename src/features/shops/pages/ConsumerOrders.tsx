@@ -1,10 +1,9 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Truck, LockKey } from '@phosphor-icons/react';
 import { StatusPill } from '../components/StatusPill';
 import { formatDateTime, formatUSD } from '@/lib/func';
 import Link from 'next/link';
-import { CheckCircle2, Lock } from 'lucide-react';
+import { CheckCircle2, Key, Lock, Truck } from 'lucide-react';
 import { Order, Quote } from '../types/shops';
 import { testOrders, testQuotes } from '../components/data';
 import { useAppSelector } from '@/hooks/store/store';
@@ -20,35 +19,6 @@ export default function ConsumerOrders() {
     as_seller: [],
   });
   const [loading, setLoading] = useState(false);
-  // const load = async () => {
-  //   const [o, q] = await Promise.all([
-  //     api.get('/shop/orders/mine'),
-  //     api.get('/shop/quotes/mine'),
-  //   ]);
-  //   setOrders(o.data);
-  //   setQuotes(q.data);
-  // };
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       await load();
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   })();
-  // }, []);
-
-  // const confirmDelivery = async (oid) => {
-  //   try {
-  //     await api.post(`/shop/orders/${oid}/confirm-delivery`);
-  //     toast.success("Delivery confirmed — escrow released to seller");
-  //     load();
-  //   } catch (err) { toast.error(err.response?.data?.detail || "Failed"); }
-  // };
-  // const declineQuote = async (qid) => {
-  //   try { await api.post(`/shop/quotes/${qid}/decline`); toast.success("Quote declined"); load(); }
-  //   catch (err) { toast.error(err.response?.data?.detail || "Failed"); }
-  // };
   const router = useRouter();
   const user = useAppSelector((state) => state.auth.user);
 
@@ -205,8 +175,7 @@ export default function ConsumerOrders() {
                     <span
                       className={`helix-status ${o.escrow_status === 'held' ? 'helix-status-gold' : 'helix-status-ok'}`}
                     >
-                      <LockKey size={10} /> ESCROW ·{' '}
-                      {o.escrow_status.toUpperCase()}
+                      <Key size={10} /> ESCROW · {o.escrow_status.toUpperCase()}
                     </span>
                   </div>
                   <div className="text-[11px] text-[#9CA3AF] font-mono mt-2">
@@ -220,7 +189,7 @@ export default function ConsumerOrders() {
               {o.escrow_status === 'held' && (
                 <div className="mt-3 flex items-center justify-between flex-wrap gap-2">
                   <div className="text-[11px] text-[#9CA3AF] inline-flex items-center gap-1">
-                    <LockKey size={12} className="text-[#C9922A]" /> Funds (
+                    <Key size={12} className="text-[#C9922A]" /> Funds (
                     {formatUSD(o.total_usd)}) held by{' '}
                     <b className="text-[#C9922A]">
                       {o.escrow_held_by || 'Riby Inc'}

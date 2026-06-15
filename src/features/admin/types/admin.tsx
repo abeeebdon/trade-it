@@ -1,9 +1,8 @@
-import { Icon } from '@phosphor-icons/react';
-
 export interface StatProps {
   label: string;
   value: string | number;
-  icon: Icon;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  icon: any;
   accent?: boolean;
 }
 // types.ts
