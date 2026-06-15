@@ -5,9 +5,9 @@ import { Plus, Pencil } from 'lucide-react';
 
 import { formatUSD, formatNGN } from '@/lib/func';
 import { StatusPill } from '@/features/shops/components/StatusPill';
-import { Product } from '../types/exporter';
-import { useGetProducts } from '../hooks/useProducts';
-import ProductForm from '../modals/CreateProduct';
+import { Product } from '../../types/exporter';
+import { useGetProducts } from '../../hooks/useProducts';
+import ProductForm from '../../modals/CreateProduct';
 import Image from 'next/image';
 
 const PAGE_SIZE = 10;

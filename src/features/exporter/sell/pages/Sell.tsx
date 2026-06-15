@@ -30,7 +30,10 @@ import MobileListingCard from '../components/MobileListingCard';
 export default function Sell() {
   const user = useSelector((state: RootState) => state.auth.user);
   const { setHeader } = useHeader();
-  const { mutateAsync: createListingMutation } = useCreateListing();
+  const {
+    mutateAsync: createListingMutation,
+    isPending: createListingPending,
+  } = useCreateListing();
 
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
@@ -111,7 +114,9 @@ export default function Sell() {
     );
   }
   const handleCreate = async (payload: CreateListingPayload) => {
-    await createListingMutation(payload);
+    await createListingMutation(payload, {
+      onSuccess: () => setOpen(false),
+    });
   };
 
   return (
@@ -263,6 +268,7 @@ export default function Sell() {
           setOpen(false);
         }}
         onSave={handleCreate}
+        isLoading={createListingPending}
       />
     </>
   );

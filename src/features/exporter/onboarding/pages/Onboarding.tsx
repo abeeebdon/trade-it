@@ -123,6 +123,7 @@ export default function Onboarding() {
     );
   }
   //Loading skeleton
+  console.log(onboardingDetails);
   return (
     <div className="max-w-4xl">
       {/* Stepper */}

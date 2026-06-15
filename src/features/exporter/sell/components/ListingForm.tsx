@@ -18,6 +18,8 @@ import { useForm, type Resolver } from 'react-hook-form';
 import { ListingFormValues, listingSchema } from './validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import InputField from '@/components/form/InputFIeld';
+import PressableBtn from '@/components/buttons/PressableBtn';
+import { Loader2 } from 'lucide-react';
 
 interface ListingFormProps {
   open: boolean;
@@ -25,6 +27,7 @@ interface ListingFormProps {
   editing: ProductListingTypes | null;
   onClose: () => void;
   onSave: (listing: CreateListingPayload) => void;
+  isLoading?: boolean;
 }
 
 export default function ListingForm({
@@ -33,14 +36,12 @@ export default function ListingForm({
   editing,
   onClose,
   onSave,
+  isLoading = false,
 }: ListingFormProps) {
-  // Safe extraction fallbacks
   const user = useSelector((state: RootState) => state.auth.user);
   const mode: FulfillmentMode = isExporter ? 'riby_dtc' : 'buyer_local';
   const [thumbNailPhotos, setThumbNailPhotos] = useState<File | null>(null);
   const [thumbNailPreview, setThumbNailPreview] = useState<string>();
-  // const [previews, setPreviews] = useState<string[]>(editing?.photos[0].imageUrl || []);
-  console.log(editing);
   const {
     register,
     handleSubmit,
@@ -56,31 +57,21 @@ export default function ListingForm({
       ships_from: editing?.shipsFrom ?? '',
     },
   });
-  const [files, setFiles] = useState<File[]>([]);
-  const [previews, setPreviews] = useState<string[]>(
-    editing?.photos.map((l) => l.imageUrl) || [],
-  );
-  const [busy, setBusy] = useState(false);
-  console.log(previews);
-  useEffect(() => {
-    return () => {
-      previews.forEach((url) => {
-        if (url.startsWith('blob:')) {
-          URL.revokeObjectURL(url);
-        }
-      });
-    };
-  }, [previews]);
+  const [photos, setPhotos] = useState<{ file: File; preview: string }[]>([]);
 
   if (!open) return null;
 
   const upload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = Array.from(e.target.files || []);
+
     if (!selectedFiles.length) return;
 
-    setFiles((prev) => [...prev, ...selectedFiles]);
-    const urls = selectedFiles.map((file) => URL.createObjectURL(file));
-    setPreviews((prev) => [...prev, ...urls]);
+    const newPhotos = selectedFiles.map((file) => ({
+      file,
+      preview: URL.createObjectURL(file),
+    }));
+
+    setPhotos((prev) => [...prev, ...newPhotos]);
   };
   const uploadThumbNail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -92,7 +83,8 @@ export default function ListingForm({
     const previewUrl = URL.createObjectURL(selectedFile);
     setThumbNailPreview(previewUrl);
   };
-
+  const existingPhotos = editing?.photos?.map((p) => p.imageUrl) ?? [];
+  console.log(existingPhotos);
   const getProductStatusId = (status: ListingStatus) => {
     switch (status) {
       case 'active':
@@ -107,11 +99,10 @@ export default function ListingForm({
   };
 
   const onSubmit = async (data: ListingFormValues) => {
-    if (!files.length && !editing) {
+    if (!photos.length && !editing) {
       toast.error('Please upload at least one image');
       return;
     }
-
     const payload: CreateListingPayload = {
       UserId: Number(user?.id),
       Title: data.title,
@@ -123,12 +114,11 @@ export default function ListingForm({
       Description: data.description,
       ProductStatusId: getProductStatusId(data.status),
       FulfillmentMode: mode,
-      Photos: files,
+      Photos: photos.map((p) => p.file),
     };
 
     onSave(payload);
   };
-  console.log(files);
   return (
     <div
       className="fixed inset-0 z-50 bg-[#0A1628]/80 backdrop-blur flex items-start justify-center overflow-y-auto p-4 pt-10 pb-10"
@@ -228,12 +218,23 @@ export default function ListingForm({
                 className="helix-input"
               />
 
-              {previews.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {previews.map((photo, index) => (
+              <div className="flex flex-wrap gap-2 mt-3">
+                {existingPhotos.map((photo, index) => (
+                  <Image
+                    key={`existing-${index}`}
+                    src={photo}
+                    alt={`existing-${index}`}
+                    width={64}
+                    height={64}
+                    className="w-16 h-16 rounded object-cover"
+                    unoptimized
+                  />
+                ))}
+                {photos.length > 0 &&
+                  photos.map((photo, index) => (
                     <Image
                       key={index}
-                      src={photo}
+                      src={photo.preview}
                       alt={`preview-${index}`}
                       width={64}
                       height={64}
@@ -241,8 +242,7 @@ export default function ListingForm({
                       unoptimized
                     />
                   ))}
-                </div>
-              )}
+              </div>
             </div>
 
             <select className="helix-input" {...register('status')}>
@@ -262,15 +262,23 @@ export default function ListingForm({
           </div>
 
           <div className="mt-6 flex gap-3">
-            <button onClick={onClose} className="helix-btn-secondary flex-1">
+            <button
+              type="button"
+              onClick={onClose}
+              className="helix-btn-secondary flex-1"
+            >
               Cancel
             </button>
             <button
               type="submit"
-              disabled={busy}
+              disabled={isLoading}
               className="helix-btn-primary flex-1"
             >
-              {busy ? 'Saving...' : 'Save listing'}
+              {isLoading ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                'Save listing'
+              )}
             </button>
           </div>
         </form>

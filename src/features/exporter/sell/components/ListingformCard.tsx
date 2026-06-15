@@ -9,9 +9,9 @@ import { useState } from 'react';
 import { useEditListing } from '../../hooks/useListings';
 import { CreateListingPayload } from '../../types/exporter';
 
-const ListingformCard = ({ l, handleEdit }: ListingFormCardProps) => {
+const ListingformCard = ({ l }: ListingFormCardProps) => {
   const [open, setOpen] = useState<boolean>(false);
-  const { mutateAsync: editListingMutation } = useEditListing();
+  const { mutateAsync: editListingMutation, isPending } = useEditListing();
   const router = useRouter();
   const handleSave = async (payload: CreateListingPayload) => {
     await editListingMutation({
@@ -81,6 +81,7 @@ const ListingformCard = ({ l, handleEdit }: ListingFormCardProps) => {
         onClose={() => {
           setOpen(false);
         }}
+        isLoading={isPending}
         onSave={handleSave}
       />
     </>

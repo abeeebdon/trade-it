@@ -2,19 +2,35 @@
 
 import Image from 'next/image';
 import { Edit, Trash2, Package, MapPin, Truck } from 'lucide-react';
-import { useGetListingById } from '../../hooks/useListings';
-import { useMemo } from 'react';
+import { useEditListing, useGetListingById } from '../../hooks/useListings';
+import { useMemo, useState } from 'react';
 import { ProductListingTypes, ProductPhoto } from '../types/sellType';
+import DTCProductDetailsSkeleton from '../components/DetailsSkeleton';
+import ListingForm from '../components/ListingForm';
+import { CreateListingPayload } from '../../types/exporter';
 
 const DTCDetails = ({ id }: { id: string }) => {
   const { data, isPending } = useGetListingById({ id });
+  const [editOpen, setEditOoen] = useState(false);
+  const { mutateAsync: editListingMutation, isPending: isEditing } =
+    useEditListing();
+
   const product: ProductListingTypes = useMemo(() => {
     return data ? data : [];
   }, [data]);
   const productPhotos: ProductPhoto[] = useMemo(() => {
     return data ? data.photos : [];
   }, [data]);
-  return (
+  const handleSave = async (payload: CreateListingPayload) => {
+    await editListingMutation({
+      id: id,
+      payload,
+    });
+    setEditOoen(false);
+  };
+  return isPending ? (
+    <DTCProductDetailsSkeleton />
+  ) : (
     <section className="mx-auto max-w-6xl">
       <div className="overflow-hidden rounded-2xl  shadow-sm ">
         <div className="grid gap-8 lg:grid-cols-2">
@@ -69,7 +85,7 @@ const DTCDetails = ({ id }: { id: string }) => {
 
               <div className="flex gap-2">
                 <button
-                  // onClick={() => onEdit(product)}
+                  onClick={() => setEditOoen(true)}
                   className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-white transition hover:opacity-90"
                 >
                   <Edit size={16} />
@@ -149,6 +165,16 @@ const DTCDetails = ({ id }: { id: string }) => {
           </div>
         </div>
       </div>
+      <ListingForm
+        editing={product}
+        open={editOpen}
+        isExporter={true}
+        onClose={() => {
+          setEditOoen(false);
+        }}
+        onSave={handleSave}
+        isLoading={isEditing}
+      />
     </section>
   );
 };

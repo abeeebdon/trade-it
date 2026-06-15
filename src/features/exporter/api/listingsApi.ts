@@ -1,6 +1,8 @@
 import api from '@/configs/api-config';
 import { CreateListingPayload, EditListingPayload } from '../types/exporter';
 import { ListingsPageData, ListingsParams } from '../sell/types/sellType';
+import { getUserId } from '@/lib/helpers/TokenDetails';
+import { toast } from 'sonner';
 
 export const getListings = async ({
   pageNumber,
@@ -28,9 +30,13 @@ export const getListingById = async ({ id }: { id: string }) => {
 // Create new listing
 
 export const createListing = async (payload: CreateListingPayload) => {
+  const id = getUserId();
+  if (!id) {
+    toast.error('Please login and logout again');
+    return;
+  }
   const formData = new FormData();
-
-  formData.append('UserId', '9');
+  formData.append('UserId', String(id));
   formData.append('Title', payload.Title);
   formData.append('Category', payload.Category);
   formData.append('RetailPriceUsd', String(payload.RetailPriceUsd));
@@ -57,7 +63,8 @@ export const createListing = async (payload: CreateListingPayload) => {
 };
 export const editListing = async ({ id, payload }: EditListingPayload) => {
   const formData = new FormData();
-
+  console.log(payload.ThumbnailImage);
+  console.log(payload.Photos);
   formData.append('UserId', '9');
   formData.append('Title', payload.Title);
   formData.append('Category', payload.Category);
