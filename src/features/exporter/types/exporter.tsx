@@ -137,7 +137,7 @@ export interface Product {
 }
 
 export interface ProductCardPRops {
-  p: Product;
+  p: ProductResponseType;
 }
 
 export type ProductUnitOption = {

@@ -63,7 +63,7 @@ export default function Catalog() {
   const filtered = search
     ? products.filter(
         (p) =>
-          p.name.toLowerCase().includes(search.toLowerCase()) ||
+          p.productName.toLowerCase().includes(search.toLowerCase()) ||
           p.description.toLowerCase().includes(search.toLowerCase()),
       )
     : products;
