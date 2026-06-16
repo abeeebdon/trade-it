@@ -21,7 +21,7 @@ const FAQSection: FC = () => {
         <h2
           data-aos="fade-down"
           data-aos-easing="linear"
-          data-aos-duration="1000"
+          data-aos-duration="600"
           className="mb-8 text-xl font-bold text-primary md:text-3xl"
         >
           Frequently Asked Question
@@ -32,14 +32,16 @@ const FAQSection: FC = () => {
             <div
               key={index}
               data-aos="fade-up"
-              data-aos-duration="1000"
+              data-aos-duration="600"
               className="overflow-hidden rounded-lg border border-purple"
             >
               <button
                 onClick={() => toggleFAQ(index)}
                 className="flex w-full items-center justify-between p-4 text-left font-medium transition"
               >
-                <span className="text-base font-semibold ">{faq.question}</span>
+                <span className="text-base font-semibold text-purple-50 ">
+                  {faq.question}
+                </span>
                 {openIndex !== index ? (
                   <ChevronUp className="text-lg" />
                 ) : (
@@ -47,7 +49,9 @@ const FAQSection: FC = () => {
                 )}
               </button>
               {openIndex === index && (
-                <div className=" px-4 py-3 text-sm ">{faq.answer}</div>
+                <p className=" px-4 py-3 text-sm text-purple-100/90">
+                  {faq.answer}
+                </p>
               )}
             </div>
           ))}
