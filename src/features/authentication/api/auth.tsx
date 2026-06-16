@@ -1,6 +1,7 @@
 import api from '@/configs/api-config';
 import { LoginFormValues } from '../components/validation';
 import { RegisterPostData } from '../types/auth';
+import { toast } from 'sonner';
 
 export const fetchUserTypes = async () => {
   try {

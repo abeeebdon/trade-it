@@ -9,12 +9,15 @@ import {
 import { useForgotPassword } from '../hooks/useGetUserTypes';
 import { Loader } from 'lucide-react';
 import Link from 'next/link';
+import useColorScheme from '@/hooks/useColorScheme';
 
 const ForgotPassword = () => {
+  const isDark = useColorScheme();
   const { mutateAsync: forgotPassword, isPending } = useForgotPassword();
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<forgotPasswordValues>({
     resolver: zodResolver(forgotPasswordSchema),
@@ -25,7 +28,9 @@ const ForgotPassword = () => {
       email: data.email,
       resetUrl: `${window.location.origin}/reset-password`,
     };
-    forgotPassword(postData);
+    forgotPassword(postData, {
+      onSuccess: () => reset(),
+    });
   };
   return (
     <div className="w-full max-w-md mx-auto border helix-card p-8 fade-up">
@@ -52,7 +57,11 @@ const ForgotPassword = () => {
           type="submit"
           className="helix-btn-primary flex justify-center  w-full"
         >
-          {isPending ? <Loader /> : 'Continue'}
+          {isPending ? (
+            <Loader color={isDark ? 'white' : 'black'} />
+          ) : (
+            'Continue'
+          )}
         </button>
       </form>
       <div className="flex justify-center items-center gap-2 mt-4 text-sm">

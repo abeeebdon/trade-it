@@ -40,11 +40,12 @@ export default function Login() {
           fullName: result.data.fullName,
         };
         dispatch(login(userDetails));
-        console.log(result.data.roles[0].toLowerCase());
         switch (result.data.roles[0].toLowerCase()) {
           case 'admin':
             dispatch(setAuthRole('admin'));
             router.push('/admin');
+            // dispatch(setAuthRole('exporter'));
+            // router.push('/exporter');
             break;
           case 'retailer':
             dispatch(setAuthRole('retailer'));
@@ -58,15 +59,19 @@ export default function Login() {
             dispatch(setAuthRole('exporter'));
             router.push('/exporter');
             break;
+          case 'export admin':
+            dispatch(setAuthRole('exporter'));
+            router.push('/exporter');
+            break;
           default:
-            router.push('/');
+            toast.error('Contact Support');
         }
       } else {
         toast.error(result.message);
       }
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const message = (error as any)?.response?.data?.message;
+      const message = (error as any)?.response?.data.message;
       toast.error(
         message ?? 'An error occurred during login. Please try again.',
       );

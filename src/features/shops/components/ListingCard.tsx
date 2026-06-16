@@ -16,11 +16,11 @@ export default function ListingCard({ l }: { l: Listing }) {
       data-testid={`listing-${l.id}`}
       className="helix-card group overflow-hidden flex flex-col"
     >
-      <div className="aspect-4/3 relative overflow-hidden">
+      <div className="aspect-3/2 relative overflow-hidden">
         <Image
           src={photo}
-          width={200}
-          height={200}
+          width={150}
+          height={100}
           alt={l.title}
           onError={(e) => {
             if (e.currentTarget.src !== FALLBACK_IMG)
@@ -45,7 +45,7 @@ export default function ListingCard({ l }: { l: Listing }) {
           {l.category.replace('-', ' ')}
         </p>
         <p className="helix-h3 mt-1 line-clamp-2 text-[15px]">{l.title}</p>
-        <div className="mt-auto pt-4 flex items-end justify-between">
+        <div className="mt-auto pt-2 flex items-end justify-between">
           <div>
             <p className="font-mono text-xl text-[#C9922A] font-bold">
               {formatUSD(l.retail_price_usd)}

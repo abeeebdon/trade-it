@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { useResetPassword } from '../hooks/useGetUserTypes';
 import {
@@ -11,13 +11,21 @@ import {
 import InputField from '@/components/form/InputFIeld';
 import { Loader } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect } from 'react';
+import { toast } from 'sonner';
 
 const ResetPassword = () => {
   const searchParams = useSearchParams();
-
+  const router = useRouter();
   const token = searchParams.get('token');
   const email = searchParams.get('email');
-
+  useEffect(() => {
+    if (!token || !email) {
+      toast.error('Please try the link again');
+      router.push('/login');
+      return;
+    }
+  }, []);
   const { mutateAsync: forgotPassword, isPending } = useResetPassword();
   const {
     register,

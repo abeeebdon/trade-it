@@ -38,6 +38,7 @@ export const getProductById = async (id: string): Promise<ProductData> => {
 export const createProduct = async (
   payload: CreateProductPayload,
 ): Promise<void> => {
+  console.log(payload.Images);
   try {
     const form = new FormData();
     const id = getUserId();
@@ -64,7 +65,9 @@ export const createProduct = async (
       form.append('Images', img);
     });
 
-    await api.post('/Product/create', form);
+    await api.post('/Product/create', form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
   } catch (error) {
     throw error;
   }
