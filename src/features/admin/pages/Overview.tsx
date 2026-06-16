@@ -1,12 +1,11 @@
 'use client';
 import { useEffect, useMemo, useState } from 'react';
-import { Package, Receipt } from '@phosphor-icons/react';
-import { formatDateTime, formatUSD } from '@/lib/func';
+import { formatUSD } from '@/lib/func';
 import Stat, { StatSkeleton } from '../components/OverviewStat';
 import { mockOverview, mockVerifications } from '../components/data';
 import { AdminDashboardData, OverviewType, Verification } from '../types/admin';
 import { useGetAdminOverview } from '../hooks/useGetAdminDashboard';
-import { DollarSign, Users } from 'lucide-react';
+import { DollarSign, Package, Receipt, Users } from 'lucide-react';
 import DashboardPendingVerification from '../components/DashboardPendingVerification';
 
 export default function AdminOverview() {

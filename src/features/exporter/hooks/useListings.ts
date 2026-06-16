@@ -1,7 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { createListing, getListingById, getListings } from '../api/listingsApi';
+import {
+  createListing,
+  editListing,
+  getListingById,
+  getListings,
+} from '../api/listingsApi';
 import { toast } from 'sonner';
-import { CreateListingPayload } from '../types/exporter';
+import { CreateListingPayload, EditListingPayload } from '../types/exporter';
 import { AxiosError } from 'axios';
 import { ListingsParams } from '../sell/types/sellType';
 
@@ -10,6 +15,28 @@ export const useCreateListing = (onSuccess?: () => void) => {
 
   return useMutation({
     mutationFn: (payload: CreateListingPayload) => createListing(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['listings'],
+      });
+      toast.success('Listing created successfully');
+      onSuccess?.();
+    },
+    onError: (error: AxiosError) => {
+      console.error('API Mutation Error:', error);
+      const data = error?.response?.data as { message?: string } | undefined;
+      toast.error(
+        data?.message ?? 'Failed to create listing. Please try again.',
+      );
+    },
+  });
+};
+export const useEditListing = (onSuccess?: () => void) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, payload }: EditListingPayload) =>
+      editListing({ id, payload }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['listings'],

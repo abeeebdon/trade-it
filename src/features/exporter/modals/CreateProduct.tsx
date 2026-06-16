@@ -10,7 +10,6 @@ import {
   productSchema,
   ProductFormValues,
 } from '@/features/authentication/components/validation';
-import { Product } from '../types/exporter';
 import {
   useCreateProduct,
   useGetProductCategories,
@@ -18,6 +17,7 @@ import {
 import { RootState } from '@/store/store';
 import InputField from '@/components/form/InputFIeld';
 import { UNITS, STATUSES, DEFAULT_CURRENCY_ID } from '@/lib/constants';
+import { ProductResponseType } from '../products/types/product';
 
 // Helpers
 
@@ -36,26 +36,25 @@ const defaultValues = (): ProductFormValues => ({
   imagePreviews: [],
 });
 
-const valuesFromProduct = (p: Product): ProductFormValues => ({
-  name: p.name,
+const valuesFromProduct = (p: ProductResponseType): ProductFormValues => ({
+  name: p.productName,
   category: p.category,
-  unitId:
-    UNITS.find((u) => u.label.toLowerCase() === p.unit.toLowerCase())?.id ?? 1,
-  price_usd: p.price_usd,
-  moq: p.min_order_qty,
+  unitId: p.unit,
+  price_usd: p.priceUsd,
+  moq: p.moq,
   description: p.description,
   currencyId: DEFAULT_CURRENCY_ID,
-  statusId: STATUSES.find((s) => s.value === p.status)?.id ?? 1,
+  statusId: STATUSES.find((s) => s.value === String(p.statusId))?.id ?? 1,
   thumbnail: null,
   images: [],
-  thumbnailPreview: p.photos?.[0] ?? null,
-  imagePreviews: p.photos?.slice(1) ?? [],
+  thumbnailPreview: p.thumbnailImage?.[0] ?? null,
+  imagePreviews: p.images?.slice(1) ?? [],
 });
 
 //  Props
 interface ProductFormProps {
   onClose: () => void;
-  editing: Product | null;
+  editing: ProductResponseType | null;
   fxRate?: number;
 }
 
@@ -151,6 +150,7 @@ export default function ProductForm({
 
   // Submit
   const onSubmit = (values: ProductFormValues) => {
+    console.log(values.images);
     submitProduct({
       UserId: user?.id ? Number(user.id) : undefined,
       Name: values.name,

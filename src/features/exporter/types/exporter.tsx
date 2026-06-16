@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { AccountDetails } from './finance';
 import { LucideIcon } from 'lucide-react';
+import { ProductResponseType } from '../products/types/product';
 
 export interface StatProps {
   label: string;
@@ -136,7 +137,7 @@ export interface Product {
 }
 
 export interface ProductCardPRops {
-  p: Product;
+  p: ProductResponseType;
 }
 
 export type ProductUnitOption = {
@@ -184,7 +185,7 @@ export type ProductListParams = {
 };
 
 export type ProductListResponse = {
-  data: Product[];
+  data: ProductResponseType[];
   pageNumber: number;
   pageSize: number;
   totalRecords: number;
@@ -300,7 +301,10 @@ export type CreateListingPayload = {
   Photos: File[];
 };
 // Fulfillment
-
+export type EditListingPayload = {
+  payload: CreateListingPayload;
+  id: string | number;
+};
 export type QuoteStatus =
   | 'pending'
   | 'quoted'

@@ -1,28 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Plus, Pencil } from 'lucide-react';
 
 import { formatUSD, formatNGN } from '@/lib/func';
 import { StatusPill } from '@/features/shops/components/StatusPill';
-import { Product } from '../types/exporter';
-import { useGetProducts } from '../hooks/useProducts';
-import ProductForm from '../modals/CreateProduct';
+import { useGetProducts } from '../../hooks/useProducts';
+import ProductForm from '../../modals/CreateProduct';
 import Image from 'next/image';
+import { ProductResponseType } from '../types/product';
+import { getStatusId } from '../components/helpers';
 
 const PAGE_SIZE = 10;
 
 export default function ExporterProducts() {
   const [page, setPage] = useState(1);
   const [formOpen, setFormOpen] = useState(false);
-  const [editing, setEditing] = useState<Product | null>(null);
+  const [editing, setEditing] = useState<ProductResponseType | null>(null);
 
   const { data, isPending, isError } = useGetProducts({
     pageNumber: page,
     pageSize: PAGE_SIZE,
   });
-
-  const products = data?.data ?? [];
+  const products: ProductResponseType[] = useMemo(() => {
+    return data?.data ?? [];
+  }, [data]);
   const totalPages = data?.totalPages ?? 1;
 
   const openCreate = () => {
@@ -30,7 +32,7 @@ export default function ExporterProducts() {
     setFormOpen(true);
   };
 
-  const openEdit = (product: Product) => {
+  const openEdit = (product: ProductResponseType) => {
     setEditing(product);
     setFormOpen(true);
   };
@@ -102,10 +104,10 @@ export default function ExporterProducts() {
                 {products.map((p) => (
                   <tr key={p.id}>
                     <td>
-                      {p.photos?.[0] ? (
+                      {p.thumbnailImage ? (
                         <Image
-                          src={p.photos[0]}
-                          alt=""
+                          src={p.thumbnailImage}
+                          alt={p.productName}
                           className="w-14 h-14 rounded object-cover"
                           width={20}
                           height={20}
@@ -116,19 +118,19 @@ export default function ExporterProducts() {
                         </div>
                       )}
                     </td>
-                    <td className="max-w-xs truncate">{p.name}</td>
+                    <td className="max-w-xs truncate">{p.productName}</td>
                     <td className="text-[13px] text-[#9CA3AF]">{p.category}</td>
                     <td className="font-mono">
-                      {formatUSD(p.price_usd)}
+                      {formatUSD(p.priceUsd)}
                       <div className="text-[11px] text-[#9CA3AF]">
-                        {formatNGN(p.price_ngn)}
+                        {formatNGN(p.priceUsd)}
                       </div>
                     </td>
                     <td className="font-mono">
-                      {p.min_order_qty} {p.unit}
+                      {p.moq} {p.unit}
                     </td>
                     <td>
-                      <StatusPill status={p.status} />
+                      <StatusPill status={getStatusId(p.statusId) ?? 'Draft'} />
                     </td>
                     <td>
                       <button

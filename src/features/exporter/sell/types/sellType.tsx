@@ -42,3 +42,6 @@ export interface ListingFormCardProps {
   l: ProductListingTypes;
   handleEdit: () => void;
 }
+export interface MobileListingCardProps {
+  l: ProductListingTypes;
+}

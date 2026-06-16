@@ -106,7 +106,17 @@ api.interceptors.response.use(
       handleLogout();
       return Promise.reject(error);
     }
-
+    const publicRoutes = [
+      '/authentication/login',
+      '/authentication/register',
+      '/authentication/forgot-password',
+    ];
+    if (
+      config?.url &&
+      publicRoutes.some((route) => config.url?.includes(route))
+    ) {
+      return Promise.reject(error);
+    }
     // Unauthorized
     if (error.response.status === 401 && config && !config.__isRetryRequest) {
       // Queue requests while refreshing

@@ -45,7 +45,7 @@ export default function Pagination({
   }
   return (
     <div
-      className="flex items-center justify-center gap-1.5 mt-8 mb-2 flex-wrap"
+      className="flex items-center  justify-center gap-1.5 mt-8 mb-2 flex-wrap"
       data-testid={testid}
     >
       <button

@@ -1,3 +1,7 @@
+export interface FAQItem {
+  question: string;
+  answer: string;
+}
 export interface ProductType {
   id: number;
   name: string;
@@ -20,7 +24,7 @@ export const PRODUCTS: ProductType[] = [
     name: 'Ankara Ready-to-Wear Collection',
     seller: 'Adaeze Fashions',
     city: 'Lagos, NG',
-    price: '$42.00',
+    price: '$30.00',
     unit: '/unit',
     moq: '50 units',
     image: 'ankara2.jpg',
@@ -38,8 +42,8 @@ export const PRODUCTS: ProductType[] = [
     name: 'Premium Sesame Seeds (Hulled)',
     seller: 'Emeka Agro Exports',
     city: 'Kano, NG',
-    price: '$2,400',
-    unit: '/MT',
+    price: '$1.80',
+    unit: '/kg',
     moq: '1 MT',
     image: 'sesame.jpg',
     category: 'Agricultural Products',
@@ -56,7 +60,7 @@ export const PRODUCTS: ProductType[] = [
     name: 'Dried Hibiscus Flowers (Zobo)',
     seller: 'Zobo Naturals Ltd',
     city: 'Sokoto, NG',
-    price: '$7.56',
+    price: '$2.00',
     unit: '/kg',
     moq: '100 kg',
     image: 'hibiscus.jpg',
@@ -74,7 +78,7 @@ export const PRODUCTS: ProductType[] = [
     name: 'Raw Shea Butter (Unrefined)',
     seller: 'Heritage Naturals',
     city: 'Abuja, NG',
-    price: '$3.80',
+    price: '$2.58',
     unit: '/kg',
     moq: '50 kg',
     image: 'shea-butter.jpg',
@@ -110,7 +114,7 @@ export const PRODUCTS: ProductType[] = [
     name: 'Ground Uziza Pepper (Organic)',
     seller: 'CrossRiver Spice Co.',
     city: 'Calabar, NG',
-    price: '$12.50',
+    price: '$2.80',
     unit: '/kg',
     moq: '20 kg',
     image: 'uzaza2.jpg',
@@ -125,19 +129,19 @@ export const PRODUCTS: ProductType[] = [
   },
   {
     id: 7,
-    name: 'Hand-Carved Igbo Wooden Masks',
-    seller: 'Artisan Collective NG',
-    city: 'Enugu, NG',
-    price: '$65.00',
+    name: 'Snail - Deshelled/Frozen',
+    seller: 'LA Exporters',
+    city: 'Osun, NG',
+    price: '$3.09',
     unit: '/piece',
     moq: '10 pieces',
-    image: 'mask.jfif',
-    category: 'Arts & Crafts',
-    desc: 'Hand-carved iroko wood Igbo masks — each piece individually signed and unique.',
+    image: 'snail.jpg',
+    category: 'Agricultural Products',
+    desc: 'Snail - Deshelled/Frozen — each piece individually signed and unique.',
     specs: {
-      'Lead Time': '5 weeks',
-      Material: 'Iroko wood',
-      Finish: 'Natural oil',
+      'Lead Time': '3 weeks',
+      Compliance: 'SON · Country-of-Origin Label',
+      Material: '100% wax-print cotton',
     },
     grad: 'linear-gradient(135deg,#4A2E8A,#EFA005)',
   },
@@ -165,7 +169,7 @@ export const steps = [
     n: '01',
     icon: '🛂',
     title: 'Get Verified',
-    desc: 'Exporters complete CAC/KYB verification. Retailers confirm their business identity. Every seller on JompShop is authenticated and verified before they can list.',
+    desc: 'Exporters complete CAC/KYB verification. Retailers confirm their business identity. Every seller on JompShop is authenticated and verified before thier list goes active.',
   },
   {
     n: '02',
@@ -181,7 +185,7 @@ export const steps = [
   },
 ];
 export const waitListItems = [
-  { num: '60M+', label: 'African SMEs Ready to Export' },
+  { num: '3M+', label: 'African SMEs Ready to Export' },
   { num: '$400B', label: 'Africa–US Trade Opportunity' },
   { num: '3', label: 'Trusted Platform Partners' },
   { num: '12 wks', label: 'To Launch' },
@@ -196,3 +200,5 @@ export const catWailtist = [
   '🫚 Natural Oils',
   '🌾 Grains & Seeds',
 ];
+
+export const faqs: FAQItem[] = [];

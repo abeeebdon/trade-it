@@ -1,10 +1,10 @@
 'use client';
 
 import { CheckCircle2 } from 'lucide-react';
-import type { Business } from '../../types/exporter';
+import { OnboardingRespType } from '../types/exporterOnboardingtypes';
 
 interface VerificationApprovedCardProps {
-  biz: Business;
+  biz: OnboardingRespType;
 }
 
 export default function VerificationApprovedCard({
@@ -25,7 +25,7 @@ export default function VerificationApprovedCard({
                 NGN Virtual Account
               </div>
               <div className="text-[15px] text-[#C9922A]">
-                {biz.anchor_ngn_virtual_account ?? '—'}
+                {biz.anchorAccounts.ngnVirtualAccount ?? '—'}
               </div>
             </div>
             <div>
@@ -33,7 +33,7 @@ export default function VerificationApprovedCard({
                 USD Virtual Account
               </div>
               <div className="text-[15px] text-[#C9922A]">
-                {biz.anchor_usd_virtual_account ?? '—'}
+                {biz.anchorAccounts.usdVirtualAccount ?? '—'}
               </div>
             </div>
           </div>

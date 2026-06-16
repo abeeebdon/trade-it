@@ -36,7 +36,7 @@ const DashboardHeader = () => {
   const isDark: boolean = useColorScheme();
   return (
     <>
-      <header className="sticky top-0 z-30 w-full border bg-bg backdrop-blur border-b border-[#1A7A6E]/15">
+      <header className="lg:sticky top-0 z-30 w-full border bg-bg backdrop-blur border-b border-[#1A7A6E]/15">
         <article className="flex flex-col-reverse md:block ">
           <div className="max-w-350 mx-auto px-6 lg:px-10 py-6 flex items-start justify-between gap-4 flex-wrap">
             {/* LEFT: Kicker + Title */}

@@ -9,6 +9,8 @@ import {
   ProductCategoryListResponse,
   ProductCountryListResponse,
 } from '../types/exporter';
+import { getUserId } from '@/lib/helpers/TokenDetails';
+import { toast } from 'sonner';
 
 export const getProducts = async ({
   pageNumber,
@@ -36,13 +38,16 @@ export const getProductById = async (id: string): Promise<ProductData> => {
 export const createProduct = async (
   payload: CreateProductPayload,
 ): Promise<void> => {
+  console.log(payload.Images);
   try {
     const form = new FormData();
-
-    if (payload.UserId !== undefined) {
-      form.append('UserId', String(payload.UserId));
+    const id = getUserId();
+    if (!id) {
+      toast.error('Please logout and login');
+      return;
     }
 
+    form.append('UserId', String(id));
     form.append('Name', payload.Name);
     form.append('Category', payload.Category);
     form.append('Unit', String(payload.Unit));
@@ -60,7 +65,9 @@ export const createProduct = async (
       form.append('Images', img);
     });
 
-    await api.post('/Product/create', form);
+    await api.post('/Product/create', form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
   } catch (error) {
     throw error;
   }

@@ -1,5 +1,5 @@
+import { X } from 'lucide-react';
 import { ReactNode, useEffect } from 'react';
-import { X } from '@phosphor-icons/react';
 
 interface ModalProps {
   onClose: () => void;

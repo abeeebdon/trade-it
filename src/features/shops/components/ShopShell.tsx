@@ -1,12 +1,11 @@
 'use client';
-import { Handbag, SignOut, UserCircle } from '@phosphor-icons/react';
 import ThemeToggle from '@/components/buttons/ToggleButton';
 import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
 import { logout } from '@/store/auth/auth.slice';
+import { Handbag, LogOut, User } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ReactNode } from 'react';
 interface ShopShellProps {
   setMode?: (mode: string) => void;
 }
@@ -92,7 +91,7 @@ export default function ShopShell({ setMode }: ShopShellProps) {
                   className="text-[#9CA3AF] hover:text-[#F5F5F5]"
                   data-testid="shop-logout"
                 >
-                  <SignOut size={16} />
+                  <LogOut size={16} />
                 </button>
               </>
             ) : (
@@ -101,7 +100,7 @@ export default function ShopShell({ setMode }: ShopShellProps) {
                 className="helix-btn-primary text-sm inline-flex items-center gap-1"
                 data-testid="shop-login-cta"
               >
-                <UserCircle size={14} /> Sign in
+                <User size={14} /> Sign in
               </Link>
             )}
           </div>

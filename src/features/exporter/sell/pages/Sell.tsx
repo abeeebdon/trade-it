@@ -17,17 +17,23 @@ import { formatUSD } from '@/lib/func';
 import { RootState } from '@/store/store';
 import { useHeader } from '@/context/HeaderContext';
 import { StatusPill } from '@/features/shops/components/StatusPill';
-import { useGetListings } from '../../hooks/useListings';
+import { useCreateListing, useGetListings } from '../../hooks/useListings';
 import { PER_PAGE } from '@/lib/constants';
 import ListingformCard from '../components/ListingformCard';
 import { ProductListingTypes } from '../types/sellType';
 import ListingForm from '../components/ListingForm';
+import { CreateListingPayload } from '../../types/exporter';
+import MobileListingCard from '../components/MobileListingCard';
 
 // Component
 
 export default function Sell() {
   const user = useSelector((state: RootState) => state.auth.user);
   const { setHeader } = useHeader();
+  const {
+    mutateAsync: createListingMutation,
+    isPending: createListingPending,
+  } = useCreateListing();
 
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
@@ -45,7 +51,6 @@ export default function Sell() {
   }, [data]);
   const totalPages = data?.listings.totalPages ?? 1;
 
-  // Notice text — prefer API value, fall back to static copy
   const notice =
     data?.notice ??
     (isExporter
@@ -108,7 +113,11 @@ export default function Sell() {
       </div>
     );
   }
-  const handleCreate = () => {};
+  const handleCreate = async (payload: CreateListingPayload) => {
+    await createListingMutation(payload, {
+      onSuccess: () => setOpen(false),
+    });
+  };
 
   return (
     <>
@@ -173,69 +182,7 @@ export default function Sell() {
           {/* MOBILE */}
           <div className="grid gap-4 lg:hidden">
             {listings.map((l, i) => (
-              <div key={i} className="helix-card p-4 space-y-4">
-                <div className="flex gap-4">
-                  {l.photos?.[0] ? (
-                    <Image
-                      src={l.photos[0].imageUrl}
-                      alt={l.title}
-                      width={80}
-                      height={80}
-                      className="w-20 h-20 rounded-lg object-cover shrink-0"
-                      unoptimized
-                    />
-                  ) : (
-                    <div className="w-20 h-20 rounded-lg bg-[#1A7A6E]/10 flex items-center justify-center text-[10px] font-mono shrink-0">
-                      NO IMG
-                    </div>
-                  )}
-
-                  <div className="min-w-0 flex-1">
-                    <h3 className="font-semibold text-sm truncate">
-                      {l.title}
-                    </h3>
-                    <p className="text-xs text-[#9CA3AF] mt-1">{l.category}</p>
-                    <div className="mt-2 flex items-center gap-2 flex-wrap">
-                      <StatusPill status={l.status} />
-                      <span
-                        className={`helix-status ${
-                          l.deliveryPartnerOfRecord === 'riby_dtc'
-                            ? 'helix-status-gold'
-                            : 'helix-status-ok'
-                        }`}
-                      >
-                        {l.deliveryPartnerOfRecord === 'riby_dtc'
-                          ? 'DTC · RIBY'
-                          : 'LOCAL · 48HR'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between text-sm">
-                  <div>
-                    <p className="text-xs text-[#9CA3AF]">Price</p>
-                    <p className="font-semibold font-mono">
-                      {formatUSD(l.retailPriceUsd)}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-xs text-[#9CA3AF]">Stock</p>
-                    <p className="font-semibold font-mono">{l.stockQty}</p>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => {
-                    setEditing(String(l.id));
-                    setOpen(true);
-                  }}
-                  className="helix-btn-secondary w-full inline-flex items-center justify-center gap-2"
-                >
-                  <Pencil size={15} />
-                  Edit
-                </button>
-              </div>
+              <MobileListingCard key={i} l={l} />
             ))}
           </div>
 
@@ -321,6 +268,7 @@ export default function Sell() {
           setOpen(false);
         }}
         onSave={handleCreate}
+        isLoading={createListingPending}
       />
     </>
   );
