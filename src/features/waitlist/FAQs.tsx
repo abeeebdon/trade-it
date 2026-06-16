@@ -3,23 +3,15 @@
 import { FC, useState } from 'react';
 
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { faqs } from './constants';
 
-export interface FAQItem {
-  question: string;
-  answer: string;
-}
 const FAQSection: FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
-  const faqs: FAQItem[] = [
-    {
-      question: 'What is Jompshop?',
-      answer: 'Jompshop',
-    },
-  ];
+
   return (
     <section id="faq" className="my-15 px-4 py-20  text-center md:px-6">
       <div className="text-center">

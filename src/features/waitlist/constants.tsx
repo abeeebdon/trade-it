@@ -1,3 +1,7 @@
+export interface FAQItem {
+  question: string;
+  answer: string;
+}
 export interface ProductType {
   id: number;
   name: string;
@@ -196,3 +200,5 @@ export const catWailtist = [
   '🫚 Natural Oils',
   '🌾 Grains & Seeds',
 ];
+
+export const faqs: FAQItem[] = [];
