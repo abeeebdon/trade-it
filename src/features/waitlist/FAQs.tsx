@@ -16,7 +16,7 @@ const FAQSection: FC = () => {
     <section id="faq" className="my-15 px-4 py-20  text-center md:px-6">
       <div className="text-center">
         <p className="mb-2 text-lg font-semibold text-primary-300 md:text-2xl ">
-          Let’s Answer You
+          Let’s Answer Your
         </p>
         <h2
           data-aos="fade-down"
@@ -30,10 +30,13 @@ const FAQSection: FC = () => {
         <div className="mx-auto w-full max-w-5xl space-y-3 text-left">
           {faqs.map((faq, index) => (
             <div
+              style={{
+                borderColor: '#CF9FFF',
+              }}
               key={index}
               data-aos="fade-up"
               data-aos-duration="600"
-              className="overflow-hidden rounded-lg border border-purple"
+              className="overflow-hidden rounded-lg border  "
             >
               <button
                 onClick={() => toggleFAQ(index)}
