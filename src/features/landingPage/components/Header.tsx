@@ -7,7 +7,6 @@ import { useState } from 'react';
 import SidebarComp from './SidebarComp';
 import { NAV_LINKS } from './data';
 import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
-import UserComponent from './UserComponent';
 import { cn } from '@/lib/cn';
 import useColorScheme from '@/hooks/useColorScheme';
 import JompsShopLogoDark from '@/assets/JompshopLogoDark';

@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 export const handleLogoutFn = () => {
   // implement logout by remove token from cookie
   Cookies.remove('token');
+  Cookies.remove('role');
   Cookies.remove('refreshToken');
 };
 
