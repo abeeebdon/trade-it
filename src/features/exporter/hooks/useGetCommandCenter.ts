@@ -3,7 +3,7 @@ import { getCommandCenter } from '../api/commandCenterApi';
 
 export const useGetCommandCenter = () => {
   return useQuery({
-    queryKey: ['exporter-command-center'],
+    queryKey: ['command-center'],
     queryFn: getCommandCenter,
   });
 };

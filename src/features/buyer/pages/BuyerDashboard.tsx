@@ -15,6 +15,7 @@ import {
 } from '../types/buyers';
 import { useAppSelector } from '@/hooks/store/store';
 import { useHeader } from '@/context/HeaderContext';
+import { useGetCommandCenter } from '@/features/exporter/hooks/useGetCommandCenter';
 export const dummyFXRate: FXRate = {
   usd_to_ngn: 1585.75,
   fetched_at: Date.now(),
@@ -23,6 +24,8 @@ export const dummyFXRate: FXRate = {
 const BuyerDashboard = () => {
   const { user } = useAppSelector((state) => state.auth);
   const { setHeader } = useHeader();
+  const { data: command, isPending } = useGetCommandCenter();
+  console.log(command);
 
   const [fx, setFx] = useState<FXRate | null>(dummyFXRate);
   const [orders, setOrders] = useState<Order[]>([]);

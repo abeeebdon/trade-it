@@ -30,8 +30,6 @@ function walletToVa(wallet: CommandCenterWallet | undefined) {
   };
 }
 
-// Dashboard
-
 export default function Dashboard() {
   const user = useSelector((state: RootState) => state.auth.user);
   const { setHeader } = useHeader();

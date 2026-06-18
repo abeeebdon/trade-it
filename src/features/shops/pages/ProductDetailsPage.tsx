@@ -67,37 +67,7 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
       toast.error('Shipping details required');
       return;
     }
-    // setPlacing(true);
-    // try {
-    //   const body = { listing_id: id, quantity: qty, ...form };
-    //   if (quote?.id) body.quote_id = quote.id;
-    //   const { data } = await api.post('/shop/orders', body);
-    //   toast.success(`Order ${data.order_number} placed — funds in Riby escrow`);
-    //   router.push('/shop/orders');
-    // } catch (err:any) {
-    //   toast.error(err.response?.data?.detail || 'Checkout failed');
-    // } finally {
-    //   setPlacing(false);
-    // }
   };
-
-  //  const requestQuote = async () => {
-  //    if (!user) {
-  //      nav('/login', { state: { from: `/shop/product/${id}?mode=quote` } });
-  //      return;
-  //    }
-  //    try {
-  //      const { data } = await api.post('/shop/quotes', {
-  //        listing_id: id,
-  //        quantity: qty,
-  //        message: quoteMsg,
-  //      });
-  //      toast.success(`Quote ${data.quote_number} sent — seller will respond`);
-  //      nav('/shop/orders');
-  //    } catch (err) {
-  //      toast.error(err.response?.data?.detail || 'Failed');
-  //    }
-  //  };
 
   return (
     <section className="grid lg:grid-cols-5 gap-8">
