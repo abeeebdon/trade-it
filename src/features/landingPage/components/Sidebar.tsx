@@ -39,9 +39,9 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`relative h-screen hidden sm:flex   bg-bg border-r border-secondary/20  flex-col z-40 ${hideLabel ? 'w-20' : 'w-60'}`}
+      className={`relative h-screen hidden sm:flex bg-bg border-r border-secondary/20  flex-col z-40 ${hideLabel ? 'w-20' : 'max-w-60'}`}
     >
-      <div className="px-4  py-5 border-b border-[#1A7A6E]/15 flex items-center gap-2">
+      <div className="px-4 py-5 border-b border-[#1A7A6E]/15 flex items-center gap-2">
         <JompShopLogo
           primaryColor={isDark ? 'white' : '#31005C'}
           secondaryColor={isDark ? '#EFA005' : '#EFA005'}
@@ -51,7 +51,7 @@ export default function Sidebar() {
         />
         <button
           onClick={() => setHideLabel((prev) => !prev)}
-          className="absolute hidden lg:block -right-1 z-50 top-20 bg-bg border border-secondary/30 rounded-full p-1 shadow"
+          className="absolute hidden md:block -right-1 z-50 top-20 bg-bg border border-secondary/30 rounded-full p-1 shadow"
         >
           <ChevronLast
             size={16}
@@ -62,7 +62,7 @@ export default function Sidebar() {
           />
         </button>
         {!hideLabel && (
-          <div className="hidden lg:flex flex-col ">
+          <div className="hidden md:flex flex-col ">
             <span className="font-bold text-secondary tracking-widest text-lg">
               JOMPSHOP
             </span>
@@ -73,7 +73,7 @@ export default function Sidebar() {
         )}
       </div>
 
-      <nav className="flex-1 mt-6 py-4 overflow-y-auto">
+      <nav className="flex-1  mt-6 py-4 overflow-y-auto">
         {items.map((item) => {
           const Icon = item.icon;
           const isActive = item.to === pathname;
@@ -81,7 +81,7 @@ export default function Sidebar() {
             <div key={item.to} className="group overflow-hidden relative">
               <Link
                 href={item.to}
-                className={`flex items-center gap-3 px-4 lg:px-4 py-3 border-l-2 ${
+                className={`flex items-center gap-3 px-4  py-3 border-l-2 ${
                   isActive
                     ? 'border-[#C9922A] bg-[#C9922A]/6 text-[#C9922A]'
                     : 'border-transparent text-[#9CA3AF] hover:text-[#F5F5F5] hover:bg-secondary/50'
@@ -89,7 +89,7 @@ export default function Sidebar() {
               >
                 {<Icon size={18} />}
                 {!hideLabel && (
-                  <span className="hidden lg:block text-[13px] font-medium tracking-wide">
+                  <span className="hidden md:block text-[13px] font-medium tracking-wide">
                     {item.label}
                   </span>
                 )}
@@ -104,8 +104,8 @@ export default function Sidebar() {
         })}
       </nav>
 
-      <div className="border-t border-[#1A7A6E]/15 px-3 lg:px-4 py-3">
-        <div className="hidden lg:flex items-center gap-2 mb-3 px-2">
+      <div className="border-t border-[#1A7A6E]/15 px-3 py-3">
+        <div className="hidden md:flex items-center gap-2 mb-3 px-2">
           <p className="w-8 h-8 rounded-full bg-[#C9922A]/20 border border-[#C9922A]/40 flex items-center justify-center text-[#C9922A] font-bold text-xs">
             {user?.fullName[0] || 'H'}
           </p>
@@ -126,7 +126,7 @@ export default function Sidebar() {
           className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded text-[#9CA3AF] hover:text-[#F5F5F5] hover:bg-secondary/50 text-[12px] transition-colors"
         >
           <LogOut size={16} />
-          {!hideLabel && <span className="hidden lg:inline">Sign out</span>}
+          {!hideLabel && <span className="hidden md:inline">Sign out</span>}
         </button>
       </div>
       <LogoutModal

@@ -1,19 +1,11 @@
-'use client';
-
-import type { ComplianceScore } from '../types/exporter';
-
-interface MissingDocsCardProps {
-  score: ComplianceScore | null;
-}
+import { MissingDocsCardProps } from '../types/compliance';
 
 export default function MissingDocsCard({ score }: MissingDocsCardProps) {
-  if (!score?.missing?.length) return null;
-
   return (
     <div className="helix-card p-6">
       <div className="helix-label">Missing documents</div>
       <ul className="mt-3 space-y-2">
-        {score.missing.map((m) => (
+        {score?.map((m) => (
           <li
             key={m}
             className="text-[13px] flex items-center gap-2 text-[#F5F5F5]"

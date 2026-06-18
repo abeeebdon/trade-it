@@ -13,9 +13,6 @@ import {
   Listing,
   SellerQuote,
   FulfillmentOrder,
-  ComplianceDocument,
-  ComplianceScore,
-  ComplianceRequirement,
   WithdrawalAccount,
   NgnBank,
   RepaymentData,
@@ -725,92 +722,6 @@ export const mockFulfillmentOrders: FulfillmentOrder[] = [
     tracking_number: 'FEDEX-276847211310',
   },
 ];
-
-export const mockComplianceDocuments: ComplianceDocument[] = [
-  {
-    id: 'doc-001',
-    document_type: 'NAFDAC',
-    issuing_authority: 'NAFDAC Nigeria',
-    issued_date: '2025-01-15',
-    expiry_date: '2027-01-14',
-    original_filename: 'nafdac-cert-2025.pdf',
-    file_url: '/docs/nafdac-cert-2025.pdf',
-    status: 'active',
-  },
-  {
-    id: 'doc-002',
-    document_type: 'Phytosanitary Certificate',
-    issuing_authority: 'Federal Ministry of Agriculture',
-    issued_date: '2026-02-01',
-    expiry_date: '2026-08-01',
-    original_filename: 'phyto-cert-feb2026.pdf',
-    file_url: '/docs/phyto-cert-feb2026.pdf',
-    status: 'expiring_soon',
-  },
-  {
-    id: 'doc-003',
-    document_type: 'SON Certification',
-    issuing_authority: 'Standards Organisation of Nigeria',
-    issued_date: '2024-06-10',
-    expiry_date: '2025-06-09',
-    original_filename: 'son-cert-2024.pdf',
-    file_url: '/docs/son-cert-2024.pdf',
-    status: 'expired',
-  },
-  {
-    id: 'doc-004',
-    document_type: 'Country of Origin Label',
-    issuing_authority: 'Nigeria Customs Service',
-    issued_date: '2026-01-20',
-    expiry_date: '2028-01-19',
-    original_filename: 'origin-label-2026.pdf',
-    file_url: '/docs/origin-label-2026.pdf',
-    status: 'active',
-  },
-];
-
-export const mockComplianceScore: ComplianceScore = {
-  score: 74,
-  missing: [
-    'Fumigation Certificate',
-    'Halal Certification',
-    'FSSAI / FDA Equivalence',
-  ],
-  category_scores: {
-    agriculture: { score: 30, max: 40 },
-    'general-goods': { score: 24, max: 40 },
-    fashion: { score: 20, max: 20 },
-  },
-};
-
-export const mockRequirements: Record<string, ComplianceRequirement> = {
-  agriculture: {
-    us_import_guide: [
-      'Phytosanitary Certificate required for all plant-based exports.',
-      'USDA APHIS inspection may apply to raw agricultural commodities.',
-      'FDA Prior Notice required for food shipments entering the US.',
-      'Aflatoxin testing required for nuts, grains, and dried fruits.',
-      'Country of Origin labelling must comply with COOL regulations.',
-    ],
-  },
-  'general-goods': {
-    us_import_guide: [
-      'FCC certification required for electronics.',
-      'CPSC compliance needed for consumer goods targeting children.',
-      'All products must carry country-of-origin labels (19 CFR 134).',
-      'Shea butter and cosmetics must meet FDA import alert thresholds.',
-      'REACH compliance required if goods are destined for EU re-export.',
-    ],
-  },
-  fashion: {
-    us_import_guide: [
-      'Fibre content labelling required under the Textile Fiber Act.',
-      'Care instructions must be permanently attached to garments.',
-      'Quota/visa requirements vary by HTS code and country.',
-      'Customs bond required for commercial imports over $2,500.',
-    ],
-  },
-};
 
 // Withdrawal Accounts Mock Data
 export const mockWithdrawalAccounts: WithdrawalAccount[] = [

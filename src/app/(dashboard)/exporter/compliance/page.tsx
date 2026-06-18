@@ -1,4 +1,4 @@
-import Compliance from '@/features/exporter/pages/Compliance';
+import Compliance from '@/features/exporter/compliance/pages/Compliance';
 
 const Page = () => {
   return <Compliance />;

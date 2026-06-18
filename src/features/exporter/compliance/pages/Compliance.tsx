@@ -1,47 +1,27 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import { useEffect, useMemo, useState } from 'react';
 import { Plus, FileText, Trash2 } from 'lucide-react';
-import { formatDateTime } from '@/lib/func';
+import { formatDateToMM } from '@/lib/func';
 import { StatusPill } from '@/features/shops/components/StatusPill';
 import { useHeader } from '@/context/HeaderContext';
-import type {
-  ComplianceDocument,
-  ComplianceScore,
-  AddDocForm,
-} from '../types/exporter';
-import {
-  mockComplianceDocuments,
-  mockComplianceScore,
-  mockRequirements,
-} from '../components/data';
-import ComplianceScoreCard from '../components/ComplianceScoreCard';
+import ComplianceScoreCard from '../../components/ComplianceScoreCard';
 import MissingDocsCard from '../components/MissingDocsCard';
-import RequirementsCard from '../components/RequirementsCard';
+import RequirementsCard from '../../components/RequirementsCard';
 import AddDocModal from '../components/AddDocModal';
+import { useGetCOmplianceStatus } from '../hooks/useGetCompliance';
+import { ComplianceDocument, ComplianceVaultData } from '../types/compliance';
+import { Loading } from '@/components/loading';
 
 // ─── Compliance ───────────────────────────────────────────────────────────────────
 
 export default function Compliance() {
   const { setHeader } = useHeader();
-
-  const [docs, setDocs] = useState<ComplianceDocument[]>([]);
-  const [score, setScore] = useState<ComplianceScore | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data, isPending } = useGetCOmplianceStatus();
   const [open, setOpen] = useState(false);
-
-  const load = () => {
-    setTimeout(() => {
-      setDocs(mockComplianceDocuments);
-      setScore(mockComplianceScore);
-      setLoading(false);
-    }, 800);
-  };
-
-  useEffect(() => {
-    load();
-  }, []);
+  const complianceData: ComplianceVaultData = useMemo(() => {
+    return data ? data : ({} as ComplianceVaultData);
+  }, [data]);
 
   // ── Dynamic header with CTA button
   useEffect(() => {
@@ -66,46 +46,11 @@ export default function Compliance() {
     };
   }, [setHeader]);
 
-  const del = (id: string) => {
-    if (!window.confirm('Remove this document?')) return;
-    setDocs((prev) => prev.filter((d) => d.id !== id));
-    // Recalculate score mock — bump score up slightly when a doc is removed
-    setScore((prev) =>
-      prev ? { ...prev, score: Math.max(0, prev.score - 5) } : prev,
-    );
-    toast.success('Removed');
-  };
-
-  const handleSave = (form: AddDocForm) => {
-    const newDoc: ComplianceDocument = {
-      id: `doc-${Date.now()}`,
-      ...form,
-      status: 'pending',
-    };
-    setDocs((prev) => [newDoc, ...prev]);
-    // Bump score when a new doc is added
-    setScore((prev) =>
-      prev
-        ? {
-            ...prev,
-            score: Math.min(100, prev.score + 5),
-            missing: prev.missing.filter((m) => m !== form.document_type),
-          }
-        : prev,
-    );
-  };
-
   // ── Loading skeleton
-  if (loading) {
+  if (isPending) {
     return (
-      <div className="grid lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-1 space-y-4">
-          <div className="helix-card p-6 h-48 animate-pulse opacity-40" />
-          <div className="helix-card p-6 h-32 animate-pulse opacity-40" />
-        </div>
-        <div className="lg:col-span-2">
-          <div className="helix-card h-64 animate-pulse opacity-40" />
-        </div>
+      <div className="flex justify-center items-center h-[50vh]">
+        <Loading />
       </div>
     );
   }
@@ -115,10 +60,10 @@ export default function Compliance() {
       <div className="grid lg:grid-cols-3 gap-6">
         {/* ── Left col: score + missing + guides ── */}
         <div className="lg:col-span-1 space-y-4">
-          <ComplianceScoreCard score={score} />
-          <MissingDocsCard score={score} />
-          {Object.entries(mockRequirements).map(([cat, req]) => (
-            <RequirementsCard key={cat} category={cat} requirement={req} />
+          <ComplianceScoreCard score={complianceData} />
+          <MissingDocsCard score={complianceData?.missingDocuments ?? []} />
+          {complianceData?.importGuides?.map((cat) => (
+            <RequirementsCard key={cat.title} cat={cat} />
           ))}
         </div>
 
@@ -127,10 +72,12 @@ export default function Compliance() {
           <div className="helix-card overflow-hidden">
             <div className="px-5 py-4 border-b border-[#1A7A6E]/20">
               <div className="helix-label">Document Vault</div>
-              <div className="helix-h3 mt-1">{docs.length} document(s)</div>
+              <div className="helix-h3 mt-1">
+                {complianceData.documentCount} document(s)
+              </div>
             </div>
 
-            {docs.length === 0 ? (
+            {complianceData.documents.length === 0 ? (
               <div className="p-10 text-center text-[#9CA3AF]">
                 No documents uploaded yet.
               </div>
@@ -150,7 +97,7 @@ export default function Compliance() {
                       </tr>
                     </thead>
                     <tbody>
-                      {docs.map((d) => (
+                      {complianceData.documents.map((d) => (
                         <tr key={d.id} data-testid={`doc-${d.id}`}>
                           <td>
                             <div className="flex items-center gap-2">
@@ -158,28 +105,21 @@ export default function Compliance() {
                                 size={16}
                                 className="text-[#C9922A] shrink-0"
                               />
-                              <span>{d.document_type}</span>
-                            </div>
-                            <div className="text-[11px] text-[#9CA3AF] mt-0.5 pl-6">
-                              {d.original_filename}
+                              <span>{d.documentType}</span>
                             </div>
                           </td>
-                          <td className="text-[12px]">{d.issuing_authority}</td>
+                          <td className="text-[12px]">{d.issuingAuthority}</td>
                           <td className="font-mono text-[12px] text-[#9CA3AF]">
-                            {formatDateTime(d.issued_date)}
+                            {formatDateToMM(d.issuedDate)}
                           </td>
                           <td className="font-mono text-[12px]">
-                            {formatDateTime(d.expiry_date)}
+                            {formatDateToMM(d.expiryDate)}
                           </td>
                           <td>
                             <StatusPill status={d.status} />
                           </td>
                           <td>
-                            <button
-                              onClick={() => del(d.id)}
-                              className="text-[#E74C3C] hover:text-[#ff8e82] transition-colors"
-                              data-testid={`del-doc-${d.id}`}
-                            >
+                            <button className="text-[#E74C3C] hover:text-[#ff8e82] transition-colors">
                               <Trash2 size={14} />
                             </button>
                           </td>
@@ -191,7 +131,7 @@ export default function Compliance() {
 
                 {/* Mobile cards */}
                 <div className="sm:hidden divide-y divide-[#1A7A6E]/10">
-                  {docs.map((d) => (
+                  {complianceData.documents.map((d) => (
                     <div
                       key={d.id}
                       className="p-4 space-y-2"
@@ -205,15 +145,14 @@ export default function Compliance() {
                           />
                           <div className="min-w-0">
                             <div className="font-medium text-[13px] truncate">
-                              {d.document_type}
+                              {d.documentType}
                             </div>
                             <div className="text-[11px] text-[#9CA3AF] truncate">
-                              {d.original_filename}
+                              {d.fileName}
                             </div>
                           </div>
                         </div>
                         <button
-                          onClick={() => del(d.id)}
                           className="text-[#E74C3C] hover:text-[#ff8e82] shrink-0"
                           data-testid={`del-doc-${d.id}`}
                         >
@@ -223,7 +162,7 @@ export default function Compliance() {
 
                       <div className="flex items-center justify-between pl-6">
                         <div className="text-[12px] text-[#9CA3AF]">
-                          {d.issuing_authority}
+                          {d.issuingAuthority}
                         </div>
                         <StatusPill status={d.status} />
                       </div>
@@ -232,7 +171,7 @@ export default function Compliance() {
                         <span>
                           Issued:{' '}
                           <span className="text-[#F5F5F5]">
-                            {formatDateTime(d.issued_date)}
+                            {formatDateToMM(d.issuedDate)}
                           </span>
                         </span>
                         <span>
@@ -246,7 +185,7 @@ export default function Compliance() {
                                   : 'text-[#F5F5F5]'
                             }
                           >
-                            {formatDateTime(d.expiry_date)}
+                            {formatDateToMM(d.expiryDate)}
                           </span>
                         </span>
                       </div>
@@ -260,15 +199,7 @@ export default function Compliance() {
       </div>
 
       {/* ── Add document modal ── */}
-      {open && (
-        <AddDocModal
-          onClose={() => setOpen(false)}
-          onSave={(form) => {
-            handleSave(form);
-            setOpen(false);
-          }}
-        />
-      )}
+      {open && <AddDocModal onClose={() => setOpen(false)} />}
     </>
   );
 }

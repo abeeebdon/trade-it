@@ -363,32 +363,9 @@ export type RespondForm = {
 
 // ─── Compliance ───────────────────────────────────────────────────────────────
 
-export type DocStatus = 'active' | 'expired' | 'expiring_soon' | 'pending';
-
-export type ComplianceDocument = {
-  id: string;
-  document_type: string;
-  issuing_authority: string;
-  issued_date: string;
-  expiry_date: string;
-  original_filename: string;
-  file_url: string;
-  status: DocStatus;
-};
-
 export type CategoryScore = {
   score: number;
   max: number;
-};
-
-export type ComplianceScore = {
-  score: number;
-  missing: string[];
-  category_scores?: Record<string, CategoryScore>;
-};
-
-export type ComplianceRequirement = {
-  us_import_guide: string[];
 };
 
 export type AddDocForm = {
