@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { formatUSD, formatDateTime } from '@/lib/func';
 import { StatusPill } from '@/features/shops/components/StatusPill';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useGetSellerOrders } from '../hooks/useOrders';
+import { useGetSellerOrders } from '../../hooks/useOrders';
 import { PER_PAGE } from '@/lib/constants';
 
 //  Component
@@ -20,10 +20,13 @@ export default function Orders() {
     pageNumber: page,
     pageSize: PER_PAGE,
   });
-
-  const orders = data?.data ?? [];
-  const totalPages = data?.totalPages ?? 1;
-
+  console.log(data);
+  const orders = useMemo(() => {
+    return data ? data : [];
+  }, [data]);
+  const totalPages = useMemo(() => {
+    return data ? data.length : 1;
+  }, [data]);
   // Loading
   if (isPending) {
     return (
@@ -80,25 +83,28 @@ export default function Orders() {
           <tbody>
             {orders.map((o) => (
               <tr key={o.id} data-testid={`order-row-${o.id}`}>
-                <td className="font-mono text-[#C9922A]">{o.order_number}</td>
+                <td className="font-mono text-[#C9922A]">{o.orderNumber}</td>
                 <td className="text-[12px]">
-                  {o.buyer_user_id === user?.id ? 'Buyer' : 'Supplier'}
+                  {o.shipTo === user?.id ? 'Buyer' : 'Supplier'}
                 </td>
-                <td className="max-w-55 truncate">{o.product_name}</td>
+                <td className="max-w-55 truncate">{o.productName}</td>
                 <td className="font-mono">{o.quantity}</td>
-                <td className="font-mono">{formatUSD(o.agreed_price_usd)}</td>
+                <td className="font-mono">{formatUSD(o.amount)}</td>
                 <td className="text-[12px] text-[#9CA3AF]">
-                  {formatDateTime(o.target_delivery_date)}
+                  {formatDateTime(o.deliveryDate)}
                 </td>
                 <td>
                   <StatusPill status={o.status} />
                 </td>
                 <td>
-                  <StatusPill status={o.payment_status} />
+                  <StatusPill status={o.paymentStatus} />
                 </td>
                 <td>
                   <Link
-                    href={`/exporter/orders/${o.id}`}
+                    href={{
+                      pathname: '/exporter/orders/details',
+                      query: { id: `${o.id}` },
+                    }}
                     className="text-[12px] text-[#C9922A] hover:underline whitespace-nowrap"
                   >
                     View details

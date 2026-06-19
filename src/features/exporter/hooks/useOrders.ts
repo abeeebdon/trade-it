@@ -1,9 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import {
-  getSellerOrders,
-  SellerOrdersParams,
-  getOrderById,
-} from '../api/ordersApi';
+import { getSellerOrders, getOrderById } from '../api/ordersApi';
+import { SellerOrdersParams } from '../orders/types/exporterOrdersType';
 
 export const useGetSellerOrders = ({
   pageNumber,

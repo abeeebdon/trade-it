@@ -42,7 +42,6 @@ const ProductDetailsPage = () => {
   const [placing, setPlacing] = useState(false);
   const [quote, setQuote] = useState<Quote | null>(null); // if quote_id passed in URL
   const { data, isPending } = useGetProductById(id ?? '');
-  console.log(data);
 
   const productDetails: ProductData = useMemo(() => {
     return data ? data : ({} as ProductData);
@@ -60,6 +59,7 @@ const ProductDetailsPage = () => {
       router.push('/login');
       return;
     }
+    console.log(form);
     if (!form.shipping_address || !form.shipping_email) {
       toast.error('Shipping details required');
       return;
@@ -276,7 +276,6 @@ const ProductDetailsPage = () => {
                   disabled={placing || productDetails.unit <= 0}
                   onClick={checkout}
                   className="helix-btn-primary w-full"
-                  data-testid="buy-btn"
                 >
                   {placing
                     ? 'Placing…'

@@ -24,25 +24,8 @@ interface Order {
 export default function BUyerOrders() {
   const { user } = useAppSelector((state) => state.auth);
   const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
 
-  const dummyOrders = useMemo(
-    () =>
-      Array.from({ length: 28 }).map((_, i) => ({
-        order_number: 1000 + i,
-        buyer_user_id: 1,
-        product_name: `Premium Product ${i + 1}`,
-        quantity: (i % 20) + 1,
-        agreed_price_usd: (i % 450) + 50,
-        target_delivery_date: new Date().toISOString(),
-        status: ['pending', 'shipped', 'delivered'][i % 3] as Order['status'],
-        payment_status: ['pending', 'paid', 'failed'][
-          i % 3
-        ] as Order['payment_status'],
-      })),
-    [],
-  );
   const { data, isPending } = useGetBuyerOrders();
   const buyerOrders = useMemo(() => {
     return data ? data : [];
