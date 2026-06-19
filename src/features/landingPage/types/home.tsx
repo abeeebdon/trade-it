@@ -16,3 +16,9 @@ export interface ProductsResponse {
   totalPages: number;
   data: Product[];
 }
+export type LandingPageParams = {
+  pageNumber: number;
+  pageSize: number;
+  search: string;
+  category: string;
+};

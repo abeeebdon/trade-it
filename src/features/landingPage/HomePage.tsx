@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import HomePageFIlter from './components/HomePageFIlter';
 import { useGetLandingProducts } from './hooks/useGetLandingPageProducts';
 import { ProductsResponse } from './types/home';
+import { useDebounce } from '@/components/debounce/useDebounce';
 
 export default function HomePage() {
   const searchParams = useSearchParams();
@@ -30,15 +31,19 @@ export default function HomePage() {
     });
   };
 
+  const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 500);
+
   const { data, isPending } = useGetLandingProducts({
     pageNumber: 1,
     pageSize: 10,
+    search: debouncedSearch,
+    category: category,
   });
 
   const fetchProducts: ProductsResponse = useMemo(() => {
     return data ? data : ({} as ProductsResponse);
   }, [data]);
-  const [search, setSearch] = useState('');
 
   const clearCategory = () => {
     const params = new URLSearchParams(searchParams.toString());
@@ -81,7 +86,6 @@ export default function HomePage() {
           <form
             onSubmit={submitSearch}
             className="mt-4 flex sm:flex-row flex-col gap-2 max-w-2xl"
-            data-testid="hero-search-form"
           >
             <div className="flex-1 flex items-center h-12 gap-2  helix-input">
               <label htmlFor="hero-search border">
@@ -95,11 +99,7 @@ export default function HomePage() {
                 className="w-full text-sm py-1.5 sm:text-[15px] sm:py-3.5 border-none outline-none"
               />
             </div>
-            <button
-              type="submit"
-              className="helix-btn-primary py-2! px-7"
-              data-testid="hero-search-submit"
-            >
+            <button type="submit" className="helix-btn-primary py-2! px-7">
               Search
             </button>
           </form>
@@ -157,7 +157,7 @@ export default function HomePage() {
         <h2 className="text-lg font-semibold mb-5">
           {showCategoryGrid
             ? 'Featured today'
-            : `${fetchProducts.data.length} products`}
+            : `${fetchProducts?.data?.length ?? 0} products`}
         </h2>
         {isPending ? (
           <article className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
@@ -167,12 +167,12 @@ export default function HomePage() {
           </article>
         ) : (
           <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {fetchProducts.data.length === 0 && (
+            {fetchProducts?.data?.length === 0 && (
               <div className="col-span-full text-center text-[#9CA3AF] py-16">
                 No listings match your filters.
               </div>
             )}
-            {fetchProducts.data.map((l) => (
+            {fetchProducts?.data?.map((l) => (
               <ListingCard key={l.id} l={l} />
             ))}
           </div>

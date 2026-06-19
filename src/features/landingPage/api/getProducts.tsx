@@ -1,14 +1,15 @@
 import api from '@/configs/api-config';
-import { ListingsParams } from '@/features/exporter/sell/types/sellType';
-import { ProductsResponse } from '../types/home';
+import { LandingPageParams, ProductsResponse } from '../types/home';
 
 export const getLandingPageProducts = async ({
   pageNumber,
   pageSize,
-}: ListingsParams): Promise<ProductsResponse> => {
+  search,
+  category,
+}: LandingPageParams): Promise<ProductsResponse> => {
   try {
     const response = await api.get(
-      `/Product/get-landing-page-product?PageNumber=${pageNumber}&PageSize=${pageSize}`,
+      `/Product/get-landing-page-product?PageNumber=${pageNumber}&PageSize=${pageSize}&category=${category}&search=${search}`,
     );
     return response.data.data;
   } catch (error) {

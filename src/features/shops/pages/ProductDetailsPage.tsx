@@ -1,6 +1,6 @@
 'use client';
 import { useAppSelector } from '@/hooks/store/store';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Check,
   Lock,
@@ -13,8 +13,11 @@ import {
 import { formatUSD } from '@/lib/func';
 import { goodslistings, Listing } from '../components/data';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
+import { useGetProductById } from '@/features/exporter/hooks/useProducts';
+import { Loading } from '@/components/loading';
+import { ProductData } from '@/features/exporter/api/productsApi';
 
 interface Quote {
   id: string;
@@ -22,10 +25,11 @@ interface Quote {
   quoted_unit_price_usd: number;
 }
 
-const ProductDetailsPage = ({ id }: { id: string }) => {
+const ProductDetailsPage = () => {
   const { user } = useAppSelector((state) => state.auth);
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
   const router = useRouter();
-  const [l, setL] = useState<Listing | null>(null);
   const [qty, setQty] = useState(1);
   const [mode, setMode] = useState('prepay');
   const [form, setForm] = useState({
@@ -37,26 +41,19 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
   const [quoteMsg, setQuoteMsg] = useState('');
   const [placing, setPlacing] = useState(false);
   const [quote, setQuote] = useState<Quote | null>(null); // if quote_id passed in URL
+  const { data, isPending } = useGetProductById(id ?? '');
+  console.log(data);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const datum = goodslistings.find((item) => item.id === id);
-      setL(datum || null);
-    };
-    fetchData();
-  }, [id]);
-  if (!l)
+  const productDetails: ProductData = useMemo(() => {
+    return data ? data : ({} as ProductData);
+  }, [data]);
+
+  if (isPending)
     return (
-      <div>
-        <div className="text-[#9CA3AF]">Loading…</div>
+      <div className="flex justify-center items-center h-[60vh]">
+        <Loading />
       </div>
     );
-  const FALLBACK_IMG =
-    'https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?auto=format&fit=crop&w=900&q=80';
-  const heroPhoto = FALLBACK_IMG;
-  const isDtc = l.fulfillment_mode === 'riby_dtc';
-  const effectiveUnit = quote?.quoted_unit_price_usd || l.retail_price_usd;
-  const totalDisplay = effectiveUnit * qty;
 
   const checkout = async () => {
     if (!user) {
@@ -75,12 +72,8 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
         <div className="helix-card overflow-hidden">
           <div className="aspect-4/3 bg-[#0A1628]">
             <Image
-              src={heroPhoto}
-              alt={l.title}
-              onError={(e) => {
-                if (e.currentTarget.src !== FALLBACK_IMG)
-                  e.currentTarget.src = FALLBACK_IMG;
-              }}
+              src={productDetails.thumbnailImage}
+              alt={productDetails.productName}
               width={300}
               height={300}
               className="w-full h-full object-cover"
@@ -88,7 +81,7 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
           </div>
           <div className="p-6">
             <div className="flex flex-wrap gap-2 mb-4">
-              {isDtc ? (
+              {/* {isDtc ? (
                 <span className="helix-status helix-status-gold">
                   <Truck size={10} /> Direct · Riby Inc of Record
                 </span>
@@ -96,40 +89,40 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
                 <span className="helix-status helix-status-ok">
                   <Store size={10} /> US In-Stock · 48-hour
                 </span>
-              )}
+              )} */}
               <span className="helix-status helix-status-neutral">
-                {l.category.replace('-', ' ')}
+                {productDetails.category.replace('-', ' ')}
               </span>
               <span className="helix-status helix-status-gold">
                 <Lock size={10} /> Riby Escrow Protected
               </span>
             </div>
-            <h1 className="helix-h2">{l.title}</h1>
+            <h1 className="helix-h2">{productDetails.productName}</h1>
             <p className="text-[15px] text-text mt-4 leading-relaxed">
-              {l.description}
+              {productDetails.description}
             </p>
 
             <div className="mt-6 pt-6 border-t border-[#1A7A6E]/15 grid grid-cols-2 gap-6 text-[13px]">
               <div>
                 <p className="helix-label">Country of origin</p>
-                <p className="mt-1">{l.country_of_origin}</p>
+                {/* <p className="mt-1">{productDetails.}</p> */}
               </div>
               <div>
                 <p className="helix-label">Ships from</p>
-                <p className="mt-1">{l.ships_from}</p>
+                {/* <p className="mt-1">{productDetails.}</p> */}
               </div>
               <div>
                 <p className="helix-label">Seller</p>
                 <p className="mt-1">Jompshop</p>
               </div>
-              {l.delivery_partner_of_record && (
+              {/* {l.delivery_partner_of_record && (
                 <div>
                   <p className="helix-label">Delivery Partner of Record</p>
                   <p className="mt-1 text-[#C9922A] font-medium">
                     {l.delivery_partner_of_record}
                   </p>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </div>
@@ -139,10 +132,12 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
         <div className="helix-card p-6">
           <p className="helix-label">Price</p>
           <p className="font-mono text-4xl text-[#C9922A] font-bold mt-1">
-            {formatUSD(effectiveUnit)}
+            {formatUSD(productDetails.price)}
           </p>
           <div className="text-[12px] text-[#9CA3AF] mt-1">
-            {l.stock_qty > 0 ? `${l.stock_qty} in stock` : 'Sold out'}
+            {productDetails.unit > 0
+              ? `${productDetails.unit} in stock`
+              : 'Sold out'}
             {quote && (
               <>
                 {' '}
@@ -159,7 +154,6 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
             <div className="mt-4 grid grid-cols-2 gap-2">
               <button
                 onClick={() => setMode('prepay')}
-                data-testid="mode-prepay"
                 className={`p-3 rounded border text-left text-[12px] ${mode === 'prepay' ? 'border-[#C9922A] bg-[#C9922A]/8' : 'border-[#1A7A6E]/30 hover:border-[#1A7A6E]'}`}
               >
                 <div className="font-semibold text-text inline-flex items-center gap-1">
@@ -190,19 +184,22 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
               <input
                 type="number"
                 min={1}
-                max={l.stock_qty}
+                max={productDetails.unit}
                 className="helix-input w-24"
                 value={qty}
                 disabled={!!quote}
                 onChange={(e) =>
                   setQty(
-                    Math.max(1, Math.min(l.stock_qty, Number(e.target.value))),
+                    Math.max(
+                      1,
+                      Math.min(productDetails.unit, Number(e.target.value)),
+                    ),
                   )
                 }
                 data-testid="qty-input"
               />
               <div className="font-mono text-[14px] text-[#F5F5F5]">
-                = {formatUSD(totalDisplay)}
+                = {formatUSD(productDetails.price)}
               </div>
             </div>
 
@@ -276,7 +273,7 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
                   </div>
                 </div>
                 <button
-                  disabled={placing || l.stock_qty <= 0}
+                  disabled={placing || productDetails.unit <= 0}
                   onClick={checkout}
                   className="helix-btn-primary w-full"
                   data-testid="buy-btn"
@@ -285,8 +282,8 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
                     ? 'Placing…'
                     : user
                       ? quote
-                        ? `Accept quote & prepay ${formatUSD(totalDisplay)}`
-                        : `Prepay ${formatUSD(totalDisplay)} · Escrow`
+                        ? `Accept quote & prepay ${formatUSD(productDetails.price)}`
+                        : `Prepay ${formatUSD(productDetails.price)} · Escrow`
                       : 'Sign in to buy'}
                 </button>
                 <div className="text-[11px] text-[#9CA3AF] text-center inline-flex items-center justify-center gap-1 w-full">
@@ -301,7 +298,7 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
 
         <div className="helix-card p-5">
           <div className="helix-label">How this ships</div>
-          {isDtc ? (
+          {true ? (
             <div className="mt-3 space-y-2 text-[13px] text-text">
               <div className="flex items-start gap-2">
                 <Truck size={16} className="text-[#C9922A] mt-0.5" />

@@ -9,10 +9,12 @@ import { Product } from '@/features/landingPage/types/home';
 
 export default function ListingCard({ l }: { l: Product }) {
   // const isDtc = l.fulfillment_mode === 'riby_dtc';
-  console.log(l);
   return (
     <Link
-      href={`/shop/product/${l.id}`}
+      href={{
+        pathname: '/shop/product',
+        query: { id: l.id },
+      }}
       className="helix-card group overflow-hidden flex flex-col"
     >
       <div className="aspect-3/2 relative overflow-hidden">
