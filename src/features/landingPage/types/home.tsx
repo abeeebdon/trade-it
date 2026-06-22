@@ -7,6 +7,8 @@ export interface Product {
   priceUsd: number;
   description: string;
   createdAt: string;
+  exportStatus: string;
+  moq: string | number;
 }
 
 export interface ProductsResponse {
