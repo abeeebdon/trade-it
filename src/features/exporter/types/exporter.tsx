@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { AccountDetails } from './finance';
 import { LucideIcon } from 'lucide-react';
 import { ProductResponseType } from '../products/types/product';
+import { CommandCenterWallet } from './command-center';
 
 export interface StatProps {
   label: string;
@@ -10,6 +11,71 @@ export interface StatProps {
   accent?: boolean;
 }
 
+export interface CommandCenterResponse {
+  data: CommandCenterData;
+}
+
+export interface CommandCenterData {
+  title: string;
+  welcomeMessage: string;
+  badges: string[];
+  wallets: CommandCenterWallet[];
+
+  fxRate: FxRate;
+
+  recentOrders: RecentOrders;
+
+  compliance: Compliance;
+
+  recentTransactions: Transaction[];
+}
+
+export interface Wallet {
+  name: string;
+}
+
+export interface FxRate {
+  pair: string;
+  rate: number;
+  source: string;
+  updatedAt: string;
+}
+
+export interface RecentOrders {
+  activeCount: number;
+  items: OrderItem[];
+}
+
+export interface OrderItem {
+  id: number;
+  orderNumber: string;
+  orderType: string; // you can tighten this later: 'prepay' | 'quote'
+  role: string;
+  productId: number;
+  productName: string;
+  category: string;
+  quantity: number;
+  amount: number;
+  deliveryDate: string;
+  status: string;
+  paymentStatus: string;
+  shipTo: string;
+  shippingAddress: string;
+  email: string;
+  phone: string;
+  description: string;
+}
+
+export interface Compliance {
+  score: number;
+  status: string;
+  missingDocuments: string[];
+}
+
+export interface DashboardOrderOverviewProps {
+  data: CommandCenterData;
+  orders: OrderItem[];
+}
 // Currency & Sector
 
 export type CurrencyCode = 'USD' | 'NGN' | 'EUR' | string;
@@ -225,18 +291,6 @@ export type PaymentStatus =
   | 'confirmed'
   | 'refunded'
   | 'failed';
-
-export type Order = {
-  id: string;
-  order_number: string;
-  buyer_user_id: string;
-  product_name: string;
-  quantity: number;
-  agreed_price_usd: number;
-  target_delivery_date: string;
-  status: OrderStatus;
-  payment_status: PaymentStatus;
-};
 
 export type TimelineEvent = {
   event: string;
@@ -572,13 +626,6 @@ export type Transaction = {
   anchor_transaction_ref: string;
   currency: string;
   amount: number;
-};
-
-export type FxRate = {
-  pair: string;
-  rate: number;
-  source: string;
-  updatedAt: string;
 };
 
 // Component Props

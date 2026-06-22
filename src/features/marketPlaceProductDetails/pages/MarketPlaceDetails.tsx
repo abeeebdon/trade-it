@@ -1,11 +1,9 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import { toast } from 'sonner';
+import { useSearchParams } from 'next/navigation';
 import { useGetMarketPlaceById } from '../hooks/useMarketDetails';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import RequestQuotationModal from '../components/RequestQuotationModal';
-import { CheckCircle, MapPin, Warehouse } from 'lucide-react';
 import { StatusPill } from '@/features/shops/components/StatusPill';
 import { formatNGN, formatUSD } from '@/lib/func';
 import { useAppSelector } from '@/hooks/store/store';

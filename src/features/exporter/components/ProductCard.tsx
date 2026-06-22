@@ -1,5 +1,4 @@
 import { formatNGN, formatUSD } from '@/lib/func';
-import { CheckCircle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ProductCardPRops } from '../types/exporter';
@@ -7,11 +6,13 @@ import { ProductCardPRops } from '../types/exporter';
 export default function ProductCard({ p }: ProductCardPRops) {
   return (
     <Link
-      href={`/exporter/products/${p.id}`}
+      href={{
+        pathname: '/exporter/product-details',
+        query: { id: p.id },
+      }}
       className="helix-card group overflow-hidden flex flex-col h-full"
-      data-testid={`product-${p.id}`}
     >
-      <div className="relative w-full h-[180px] bg-[#0A1628] overflow-hidden">
+      <div className="relative w-full h-45 bg-[#0A1628] overflow-hidden">
         {p.thumbnailImage ? (
           <Image
             src={p.thumbnailImage}

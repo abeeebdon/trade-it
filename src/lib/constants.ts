@@ -1,5 +1,3 @@
-export const PER_PAGE = 15;
-
 export const TRANSACTION_TYPES = ['credit', 'debit', 'transfer', 'fee'];
 
 export const UNITS = [
