@@ -4,7 +4,6 @@ import ComingSoon from '@/features/waitlist/COmingSOon';
 import { getSavedCookie } from '@/store/auth/cookies';
 import Footer from '@/features/landingPage/components/Footer';
 import Header from '@/features/landingPage/components/Header';
-import { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
 import { setBeta } from '@/store/waitlist/waitlist.slice';

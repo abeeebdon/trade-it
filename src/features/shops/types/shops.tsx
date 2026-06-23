@@ -56,3 +56,17 @@ export type HomePageFilterProps = {
   clearMode: () => void;
   setMode: (mode: string) => void;
 };
+
+export type OrderType = 'prepay' | 'quote';
+
+export interface CreateOrderPayload {
+  productId: string | number;
+  quantity: number;
+  deliveryDate?: string;
+  shipTo: string;
+  shippingAddress: string;
+  email: string;
+  phone: string;
+  description?: string;
+  orderType: OrderType;
+}

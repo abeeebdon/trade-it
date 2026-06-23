@@ -1,16 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { formatUSD, formatDateTime } from '@/lib/func';
 import { StatusPill } from '@/features/shops/components/StatusPill';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useGetSellerOrders } from '../hooks/useOrders';
-import { PER_PAGE } from '@/lib/constants';
-
-//  Component
+import { useGetSellerOrders } from '../../hooks/useOrders';
+import { Loading } from '@/components/loading';
+import Pagination from '../../components/pagination';
 
 export default function Orders() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -18,21 +16,24 @@ export default function Orders() {
 
   const { data, isPending, isError } = useGetSellerOrders({
     pageNumber: page,
-    pageSize: PER_PAGE,
+    pageSize: 10,
   });
-
-  const orders = data?.data ?? [];
-  const totalPages = data?.totalPages ?? 1;
-
+  const orders = useMemo(() => {
+    return data ? data : [];
+  }, [data]);
+  const totalPages = useMemo(() => {
+    return data ? Math.ceil(data.length / 10) : 1;
+  }, [data]);
   // Loading
   if (isPending) {
     return (
-      <div className="helix-card overflow-hidden animate-pulse opacity-40">
-        <div className="p-5 space-y-3">
+      <div className="h-[70vh] overflow-hidden justify-center flex items-center opacity-40">
+        {/* <div className="p-5 space-y-3">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="h-10 bg-[#1A7A6E]/10 rounded" />
           ))}
-        </div>
+        </div> */}
+        <Loading />
       </div>
     );
   }
@@ -80,25 +81,28 @@ export default function Orders() {
           <tbody>
             {orders.map((o) => (
               <tr key={o.id} data-testid={`order-row-${o.id}`}>
-                <td className="font-mono text-[#C9922A]">{o.order_number}</td>
+                <td className="font-mono text-[#C9922A]">{o.orderNumber}</td>
                 <td className="text-[12px]">
-                  {o.buyer_user_id === user?.id ? 'Buyer' : 'Supplier'}
+                  {o.shipTo === user?.id ? 'Buyer' : 'Supplier'}
                 </td>
-                <td className="max-w-55 truncate">{o.product_name}</td>
+                <td className="max-w-55 truncate">{o.productName}</td>
                 <td className="font-mono">{o.quantity}</td>
-                <td className="font-mono">{formatUSD(o.agreed_price_usd)}</td>
+                <td className="font-mono">{formatUSD(o.amount)}</td>
                 <td className="text-[12px] text-[#9CA3AF]">
-                  {formatDateTime(o.target_delivery_date)}
+                  {formatDateTime(o.deliveryDate)}
                 </td>
                 <td>
                   <StatusPill status={o.status} />
                 </td>
                 <td>
-                  <StatusPill status={o.payment_status} />
+                  <StatusPill status={o.paymentStatus} />
                 </td>
                 <td>
                   <Link
-                    href={`/exporter/orders/${o.id}`}
+                    href={{
+                      pathname: '/exporter/orders/details',
+                      query: { id: `${o.id}` },
+                    }}
                     className="text-[12px] text-[#C9922A] hover:underline whitespace-nowrap"
                   >
                     View details
@@ -110,40 +114,11 @@ export default function Orders() {
         </table>
       </div>
 
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 px-5 py-4 border-t border-[#1A7A6E]/15">
-          <button
-            onClick={() => setPage((prev) => Math.max(1, prev - 1))}
-            disabled={page === 1}
-            className="p-2 rounded border border-[#1A7A6E]/40 text-[#9CA3AF] hover:border-[#1A7A6E] hover:text-[#F5F5F5] disabled:opacity-30 disabled:cursor-not-allowed transition"
-          >
-            <ChevronLeft size={14} />
-          </button>
-
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
-            <button
-              key={n}
-              onClick={() => setPage(n)}
-              className={`w-8 h-8 rounded text-[12px] font-mono border transition ${
-                n === page
-                  ? 'bg-[#C9922A] text-[#0A1628] border-[#C9922A] font-bold'
-                  : 'bg-transparent text-[#9CA3AF] border-[#1A7A6E]/40 hover:border-[#1A7A6E] hover:text-[#F5F5F5]'
-              }`}
-            >
-              {n}
-            </button>
-          ))}
-
-          <button
-            onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
-            disabled={page === totalPages}
-            className="p-2 rounded border border-[#1A7A6E]/40 text-[#9CA3AF] hover:border-[#1A7A6E] hover:text-[#F5F5F5] disabled:opacity-30 disabled:cursor-not-allowed transition"
-          >
-            <ChevronRight size={14} />
-          </button>
-        </div>
-      )}
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onChange={(page) => setPage(page)}
+      />
     </div>
   );
 }

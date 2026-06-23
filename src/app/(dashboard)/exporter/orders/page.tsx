@@ -1,4 +1,4 @@
-import Orders from '@/features/exporter/pages/Orders';
+import Orders from '@/features/exporter/orders/pages/Orders';
 const Page = () => {
   return <Orders />;
 };

@@ -3,7 +3,6 @@ import {
   CreateProductPayload,
   ProductListParams,
   ProductListResponse,
-  ProductData,
   ProductCategory,
   ProductCategoryListParams,
   ProductCategoryListResponse,
@@ -11,7 +10,31 @@ import {
 } from '../types/exporter';
 import { getUserId } from '@/lib/helpers/TokenDetails';
 import { toast } from 'sonner';
+export interface ProductData {
+  id: number;
+  userId: number;
+  user: null;
 
+  productName: string;
+  description: string;
+  category: string;
+
+  price: number;
+  quantity: number;
+  unit: number;
+
+  currencyId: number;
+  currency: null;
+
+  productStatusId: number;
+  productStatus: null;
+
+  thumbnailImage: string;
+  productImages: null;
+
+  createdAt: string;
+  updatedAt: string;
+}
 export const getProducts = async ({
   pageNumber,
   pageSize,

@@ -4,8 +4,9 @@ import { StatusPill } from '@/features/shops/components/StatusPill';
 import { useAppSelector } from '@/hooks/store/store';
 import { formatDateTime, formatUSD } from '@/lib/func';
 import Link from 'next/link';
-import { useState, useMemo, useEffect } from 'react';
-import OrderTableSkeleton from '../components/OrderTableSkeleton';
+import { useState, useMemo } from 'react';
+import OrderTableSkeleton from '../../components/OrderTableSkeleton';
+import { useGetBuyerOrders } from '../hooks/useGetBuyerOrders';
 
 const PER_PAGE = 10;
 
@@ -23,40 +24,19 @@ interface Order {
 export default function BUyerOrders() {
   const { user } = useAppSelector((state) => state.auth);
   const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
 
-  const dummyOrders = useMemo(
-    () =>
-      Array.from({ length: 28 }).map((_, i) => ({
-        order_number: 1000 + i,
-        buyer_user_id: 1,
-        product_name: `Premium Product ${i + 1}`,
-        quantity: (i % 20) + 1,
-        agreed_price_usd: (i % 450) + 50,
-        target_delivery_date: new Date().toISOString(),
-        status: ['pending', 'shipped', 'delivered'][i % 3] as Order['status'],
-        payment_status: ['pending', 'paid', 'failed'][
-          i % 3
-        ] as Order['payment_status'],
-      })),
-    [],
-  );
+  const { data, isPending } = useGetBuyerOrders();
+  const buyerOrders = useMemo(() => {
+    return data ? data : [];
+  }, [data]);
+  console.log(buyerOrders);
 
-  // ✅ simulate API
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setOrders(dummyOrders);
-      setLoading(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
   return (
     <main>
-      {loading ? (
+      {isPending ? (
         <OrderTableSkeleton />
-      ) : orders.length === 0 ? (
+      ) : buyerOrders.length === 0 ? (
         <div className="helix-card p-12 text-center text-[#9CA3AF]">
           No orders yet.{' '}
           {user?.role === 'retailer'
@@ -82,7 +62,7 @@ export default function BUyerOrders() {
                   </tr>
                 </thead>
                 <tbody>
-                  {p.items.map((o, i) => (
+                  {buyerOrders.map((o, i) => (
                     <tr key={i} data-testid={`order-row-${i + 1}`}>
                       <td>
                         <Link

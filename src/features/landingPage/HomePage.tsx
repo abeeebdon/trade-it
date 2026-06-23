@@ -1,14 +1,16 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import ListingCard from '../shops/components/ListingCard';
-import { CATS, goodslistings, Listing } from '../shops/components/data';
+import { CATS } from '../shops/components/data';
 import { Search } from 'lucide-react';
 import { ListingCardSkeleton } from '../shops/components/ListingCardSkeleton';
 import { useRouter, useSearchParams } from 'next/navigation';
 import HomePageFIlter from './components/HomePageFIlter';
+import { useGetLandingProducts } from './hooks/useGetLandingPageProducts';
+import { ProductsResponse } from './types/home';
+import { useDebounce } from '@/components/debounce/useDebounce';
 
 export default function HomePage() {
-  const [items, setItems] = useState<Listing[]>([]);
   const searchParams = useSearchParams();
   const mode = searchParams.get('mode') ?? '';
   const category = searchParams.get('category') ?? '';
@@ -28,42 +30,21 @@ export default function HomePage() {
       scroll: false,
     });
   };
-  const [loading, setLoading] = useState(true);
+
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 500);
 
-  useEffect(() => {
-    const fetchSimulate = () => {
-      setLoading(true);
+  const { data, isPending } = useGetLandingProducts({
+    pageNumber: 1,
+    pageSize: 10,
+    search: debouncedSearch,
+    category: category,
+  });
 
-      const simulateFetch = setTimeout(() => {
-        let filteredItems = [...goodslistings];
+  const fetchProducts: ProductsResponse = useMemo(() => {
+    return data ? data : ({} as ProductsResponse);
+  }, [data]);
 
-        if (category) {
-          filteredItems = filteredItems.filter(
-            (item) => item.category === category,
-          );
-        }
-
-        if (mode) {
-          filteredItems = filteredItems.filter(
-            (item) => item.fulfillment_mode === mode,
-          );
-        }
-
-        if (search.trim()) {
-          filteredItems = filteredItems.filter((item) =>
-            item.title.toLowerCase().includes(search.toLowerCase()),
-          );
-        }
-
-        setItems(filteredItems);
-        setLoading(false);
-      }, 1500);
-
-      return () => clearTimeout(simulateFetch);
-    };
-    fetchSimulate();
-  }, [mode, category, search]);
   const clearCategory = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete('category');
@@ -105,7 +86,6 @@ export default function HomePage() {
           <form
             onSubmit={submitSearch}
             className="mt-4 flex sm:flex-row flex-col gap-2 max-w-2xl"
-            data-testid="hero-search-form"
           >
             <div className="flex-1 flex items-center h-12 gap-2  helix-input">
               <label htmlFor="hero-search border">
@@ -119,11 +99,7 @@ export default function HomePage() {
                 className="w-full text-sm py-1.5 sm:text-[15px] sm:py-3.5 border-none outline-none"
               />
             </div>
-            <button
-              type="submit"
-              className="helix-btn-primary py-2! px-7"
-              data-testid="hero-search-submit"
-            >
+            <button type="submit" className="helix-btn-primary py-2! px-7">
               Search
             </button>
           </form>
@@ -179,9 +155,11 @@ export default function HomePage() {
       )}
       <section>
         <h2 className="text-lg font-semibold mb-5">
-          {showCategoryGrid ? 'Featured today' : `${items.length} products`}
+          {showCategoryGrid
+            ? 'Featured today'
+            : `${fetchProducts?.data?.length ?? 0} products`}
         </h2>
-        {loading ? (
+        {isPending ? (
           <article className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {[...Array(8)].map((_, i) => (
               <ListingCardSkeleton key={i} />
@@ -189,14 +167,14 @@ export default function HomePage() {
           </article>
         ) : (
           <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {items.map((l: Listing) => (
-              <ListingCard key={l.id} l={l} />
-            ))}
-            {items.length === 0 && (
+            {fetchProducts?.data?.length === 0 && (
               <div className="col-span-full text-center text-[#9CA3AF] py-16">
                 No listings match your filters.
               </div>
             )}
+            {fetchProducts?.data?.map((l) => (
+              <ListingCard key={l.id} l={l} />
+            ))}
           </div>
         )}
       </section>

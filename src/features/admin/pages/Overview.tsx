@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { formatUSD } from '@/lib/func';
 import Stat, { StatSkeleton } from '../components/OverviewStat';
-import { mockOverview, mockVerifications } from '../components/data';
+import { mockOverview } from '../components/data';
 import { AdminDashboardData, OverviewType, Verification } from '../types/admin';
 import { useGetAdminOverview } from '../hooks/useGetAdminDashboard';
 import { DollarSign, Package, Receipt, Users } from 'lucide-react';
@@ -10,13 +10,11 @@ import DashboardPendingVerification from '../components/DashboardPendingVerifica
 
 export default function AdminOverview() {
   const [overview, setOverview] = useState<OverviewType | null>(null);
-  const [verifs, setVerifs] = useState<Verification[]>([]);
 
   useEffect(() => {
     // simulate API
     setTimeout(() => {
       setOverview(mockOverview);
-      setVerifs(mockVerifications);
     }, 800);
   }, []);
   const { data, isPending } = useGetAdminOverview();

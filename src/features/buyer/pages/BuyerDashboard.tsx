@@ -1,6 +1,11 @@
 'use client';
-import { formatDateTime, formatNGN, formatUSD } from '@/lib/func';
-import { useEffect, useState } from 'react';
+import {
+  formatDateTime,
+  formatDateToMM,
+  formatNGN,
+  formatUSD,
+} from '@/lib/func';
+import { useEffect, useMemo, useState } from 'react';
 import BalanceCard from '../components/BalanceCard';
 import { ArrowUpRight, Coins, Package, Receipt } from 'lucide-react';
 import Link from 'next/link';
@@ -15,6 +20,8 @@ import {
 } from '../types/buyers';
 import { useAppSelector } from '@/hooks/store/store';
 import { useHeader } from '@/context/HeaderContext';
+import { useGetCommandCenter } from '@/features/exporter/hooks/useGetCommandCenter';
+import { CommandCenterData } from '@/features/exporter/types/command-center';
 export const dummyFXRate: FXRate = {
   usd_to_ngn: 1585.75,
   fetched_at: Date.now(),
@@ -22,13 +29,19 @@ export const dummyFXRate: FXRate = {
 };
 const BuyerDashboard = () => {
   const { user } = useAppSelector((state) => state.auth);
-  const { setHeader } = useHeader();
-
   const [fx, setFx] = useState<FXRate | null>(dummyFXRate);
   const [orders, setOrders] = useState<Order[]>([]);
   const [complianceScore, setComplianceScore] =
     useState<ComplianceScore | null>(null);
   const [biz, setBiz] = useState<Business | null>(null);
+  const { setHeader } = useHeader();
+
+  const { data: command, isPending } = useGetCommandCenter();
+
+  const commandData: CommandCenterData = useMemo(() => {
+    return command ? command : ({} as CommandCenterData);
+  }, [command]);
+
   const title = `Welcome back, ${user?.fullName?.split(' ')[0]}`;
   const anchor_env = 'SANDBOX · MOCK';
 
@@ -73,18 +86,17 @@ const BuyerDashboard = () => {
         <div className="helix-card p-5">
           <div className="flex justify-between items-start">
             <div>
-              <p className="helix-label">USD / NGN Rate</p>
+              <p className="helix-label">{commandData?.fxRate?.pair} Rate</p>
               <p className="font-mono text-3xl font-bold text-primary mt-2 tracking-tight">
-                ₦{fx ? Number(fx.usd_to_ngn).toLocaleString() : '—'}
+                ₦{commandData?.fxRate?.rate ?? ''}
               </p>
             </div>
             <Coins size={22} className="text-secondary" />
           </div>
           <div className="mt-4 text-[11px] font-mono text-muted tracking-wider">
-            {fx?.source?.toUpperCase()} ·{' '}
-            {fx
-              ? formatDateTime(new Date(fx.fetched_at * 1000).toISOString())
-              : ''}
+            {commandData?.fxRate?.source ?? ''}
+            <br />
+            {formatDateTime(commandData?.fxRate?.updatedAt ?? '')}
           </div>
         </div>
       </div>
@@ -156,9 +168,9 @@ const BuyerDashboard = () => {
             <div>
               <div className="helix-label">Compliance Score</div>
               <div className="font-mono text-4xl font-bold text-[#F5F5F5] mt-2">
-                {complianceScore
-                  ? `${complianceScore.score}`
-                  : (biz?.compliance_score ?? '—')}
+                {commandData?.compliance
+                  ? `${commandData?.compliance?.score}`
+                  : 0}
                 <span className="text-[#9CA3AF] text-xl">/100</span>
               </div>
             </div>
@@ -170,26 +182,29 @@ const BuyerDashboard = () => {
               }
             />
           </div>
-          {complianceScore?.missing && complianceScore.missing.length > 0 && (
-            <div className="mt-5">
-              <div className="text-[11px] uppercase tracking-wider text-[#9CA3AF] mb-2">
-                Missing documents
+          {commandData?.compliance?.missingDocuments &&
+            commandData?.compliance?.missingDocuments.length > 0 && (
+              <div className="mt-5">
+                <div className="text-[11px] uppercase tracking-wider text-[#9CA3AF] mb-2">
+                  Missing documents
+                </div>
+                <ul className="space-y-1">
+                  {commandData?.compliance?.missingDocuments
+                    ?.slice(0, 4)
+                    .map((m) => (
+                      <li
+                        key={m}
+                        className="text-[13px] flex items-center gap-2 text-[#F5F5F5]"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#C9922A]" />{' '}
+                        {m}
+                      </li>
+                    ))}
+                </ul>
               </div>
-              <ul className="space-y-1">
-                {complianceScore?.missing.slice(0, 4).map((m) => (
-                  <li
-                    key={m}
-                    className="text-[13px] flex items-center gap-2 text-[#F5F5F5]"
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#C9922A]" />{' '}
-                    {m}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+            )}
           <Link
-            href="/compliance"
+            href="/buyer/compliance"
             className="mt-5 inline-flex items-center gap-1 text-[#C9922A] text-[12px] hover:gap-2 transition-all"
           >
             Manage vault <ArrowUpRight size={14} />

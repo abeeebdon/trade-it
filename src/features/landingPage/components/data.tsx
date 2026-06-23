@@ -19,6 +19,7 @@ import {
   HandHelping,
   BookAIcon,
   User,
+  Command,
 } from 'lucide-react';
 
 export const helixCards = [
@@ -121,6 +122,7 @@ export const NAV: {
     { to: '/buyer/sell', label: 'Local Inventory Shop', icon: ShoppingCart },
     { to: '/buyer/fulfillment', label: 'Fulfillment', icon: Truck },
     { to: '/buyer/finance', label: 'Finance', icon: Wallet },
+    { to: '/buyer/compliance', label: 'Compliance', icon: Command },
     {
       to: '/buyer/finance/accounts',
       label: 'Withdrawal Accounts',

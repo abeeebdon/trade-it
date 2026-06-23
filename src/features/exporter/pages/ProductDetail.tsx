@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { formatUSD, formatNGN } from '@/lib/func';
@@ -25,15 +25,15 @@ type RfqForm = {
 //  Component
 
 export default function ProductDetail() {
-  const params = useParams();
-  const id = params?.id as string;
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
   const router = useRouter();
 
   const user = useSelector((state: RootState) => state.auth.user);
   const { setHeader } = useHeader();
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
-  const { data, isPending, isError } = useGetProductById(id);
+  const { data, isPending, isError } = useGetProductById(id ?? '');
 
   const defaultMOQ = data?.product?.min_order_qty ?? 10;
 

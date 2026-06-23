@@ -1,0 +1,26 @@
+export interface Product {
+  id: number;
+  productName: string;
+  thumbnailImage: string;
+  category: string;
+  unit: number;
+  priceUsd: number;
+  description: string;
+  createdAt: string;
+  exportStatus: string;
+  moq: string | number;
+}
+
+export interface ProductsResponse {
+  pageNumber: number;
+  pageSize: number;
+  totalRecords: number;
+  totalPages: number;
+  data: Product[];
+}
+export type LandingPageParams = {
+  pageNumber: number;
+  pageSize: number;
+  search: string;
+  category: string;
+};

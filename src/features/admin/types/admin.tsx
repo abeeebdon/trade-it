@@ -105,9 +105,6 @@ export interface Product {
   status: ProductStatus;
   created_at: string;
 }
-export interface ProductCardPRops {
-  p: Product;
-}
 
 // new guys
 
@@ -146,12 +143,12 @@ export interface SectorMix {
 
 export type Verification = {
   id: string;
-  business_name: string;
+  business: string;
   country: string;
   sector: string;
-  kyc_status: VerificationStatus;
-  kyb_status: VerificationStatus;
-  updated_at: string;
+  kycStatus: VerificationStatus;
+  kybStatus: VerificationStatus;
+  submittedAt: string;
 };
 
 export interface DashboardPendingVerificationProps {

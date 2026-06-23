@@ -13,8 +13,6 @@ import { useGetCOmplianceStatus } from '../hooks/useGetCompliance';
 import { ComplianceDocument, ComplianceVaultData } from '../types/compliance';
 import { Loading } from '@/components/loading';
 
-// ─── Compliance ───────────────────────────────────────────────────────────────────
-
 export default function Compliance() {
   const { setHeader } = useHeader();
   const { data, isPending } = useGetCOmplianceStatus();
