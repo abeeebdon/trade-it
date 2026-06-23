@@ -21,3 +21,13 @@ export interface SellerOrder {
   shippingAddress: string;
   deliveryDate: string;
 }
+
+export interface LifecycleStep {
+  value: string;
+  label: string;
+}
+
+export interface LifecycleStepperProps {
+  steps: LifecycleStep[];
+  currentIdx: number;
+}

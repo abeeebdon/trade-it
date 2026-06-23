@@ -1,26 +1,17 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { formatUSD } from '@/lib/func';
 import { StatusPill } from '@/features/shops/components/StatusPill';
 import { toast } from 'sonner';
-import { FileText, Package, Truck, CheckCircle2, Download } from 'lucide-react';
+import { CheckCircle2, Download } from 'lucide-react';
 import { useGetOrderById } from '../../hooks/useOrders';
 import { useHeader } from '@/context/HeaderContext';
-import { LIFECYCLE } from '@/lib/constants';
+import { LIFECYCLE, tradeDocuments } from '@/lib/constants';
 import { SellerOrder } from '../types/exporterOrdersType';
 import { Loading } from '@/components/loading';
-
-const LABELS: Record<string, string> = {
-  draft: 'Draft (RFQ)',
-  confirmed: 'Confirmed',
-  in_production: 'In Production',
-  ready_to_ship: 'Ready to Ship',
-  shipped: 'Shipped',
-  delivered: 'Delivered',
-  disputed: 'Disputed',
-};
+import { LifecycleStepper } from '../components/LifeCycleScroller';
 
 export default function OrderDetail() {
   const searchParams = useSearchParams();
@@ -36,20 +27,18 @@ export default function OrderDetail() {
     return data ? data : ({} as SellerOrder);
   }, [data]);
 
-  // Set header dynamically once data is loaded
-  useEffect(() => {
-    if (!data) return;
-    const o = data;
-    setHeader({
-      kicker: `${LABELS[o.status] ?? o.status} · ${o.productName}`,
-      title: o.orderNumber,
-      badge: (LABELS[o.status] ?? o.status).toUpperCase(),
-    });
-    return () => {
-      setHeader(null);
-    };
-  }, [data, setHeader]);
+  const currentIdx = LIFECYCLE.findIndex(
+    (item) => item.value === orderDetails.status,
+  );
+  const activeRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    activeRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      inline: 'center',
+      block: 'nearest',
+    });
+  }, [currentIdx]);
   const issueProforma = async () => {
     setBusy(true);
     try {
@@ -62,21 +51,6 @@ export default function OrderDetail() {
       setBusy(false);
     }
   };
-
-  // const simulatePayment = async () => {
-  //   setBusy(true);
-  //   try {
-  //     await new Promise((res) => setTimeout(res, 600));
-  //     toast.success(
-  //       `Payment received: ${formatUSD(data?.order.agreed_price_usd ?? 0)}`,
-  //     );
-  //     refetch();
-  //   } catch {
-  //     toast.error('Failed');
-  //   } finally {
-  //     setBusy(false);
-  //   }
-  // };
 
   // Loading skeleton
   if (isLoading) {
@@ -97,10 +71,9 @@ export default function OrderDetail() {
 
   const isSupplier = orderDetails?.role?.toLowerCase() === 'exporter';
   const isBuyer = orderDetails?.role?.toLowerCase() === 'retailer';
-  const currentIdx = LIFECYCLE.indexOf(orderDetails.status);
 
   return (
-    <>
+    <main className="w-full overflow-hidden">
       {/* Status pills */}
       <div className="flex gap-2 flex-wrap mb-6">
         <StatusPill status={orderDetails.status} />
@@ -112,38 +85,7 @@ export default function OrderDetail() {
           {/* Trade Lifecycle */}
           <div className="helix-card p-6">
             <div className="helix-label mb-4">Trade Lifecycle</div>
-            <div className="flex items-center gap-2 overflow-x-auto pb-2">
-              {LIFECYCLE.map((s, i) => (
-                <div key={s} className="flex items-center gap-2 flex-shrink-0">
-                  <div
-                    className={`w-7 h-7 rounded-full flex items-center justify-center ${
-                      i <= currentIdx
-                        ? 'bg-[#C9922A] text-[#0A1628]'
-                        : 'bg-[#0A1628] border border-[#1A7A6E]/40 text-[#9CA3AF]'
-                    }`}
-                  >
-                    {i <= currentIdx ? (
-                      <CheckCircle2 size={14} />
-                    ) : (
-                      <span className="text-[11px] font-mono">{i + 1}</span>
-                    )}
-                  </div>
-                  <div
-                    className="text-[11px] uppercase tracking-wider whitespace-nowrap"
-                    style={{ color: i <= currentIdx ? '#F5F5F5' : '#9CA3AF' }}
-                  >
-                    {LABELS[s]}
-                  </div>
-                  {i < LIFECYCLE.length - 1 && (
-                    <div
-                      className={`w-6 h-px ${
-                        i < currentIdx ? 'bg-[#C9922A]' : 'bg-[#1A7A6E]/30'
-                      }`}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
+            <LifecycleStepper steps={LIFECYCLE} currentIdx={currentIdx} />
           </div>
 
           {/* Actions */}
@@ -156,7 +98,6 @@ export default function OrderDetail() {
                     onClick={issueProforma}
                     disabled={busy}
                     className="helix-btn-primary"
-                    data-testid="issue-proforma-btn"
                   >
                     Issue Proforma Invoice
                   </button>
@@ -178,18 +119,17 @@ export default function OrderDetail() {
                   orderDetails.status !== 'delivered' &&
                   LIFECYCLE.slice(currentIdx + 1, currentIdx + 2).map((s) => (
                     <button
-                      key={s}
+                      key={s.value}
                       // onClick={() => setStatus(s)}
                       disabled={busy}
                       className="helix-btn-secondary"
                     >
-                      Mark {LABELS[s]}
+                      Mark {s.label}
                     </button>
                   ))}
                 <button
                   onClick={() => setDisputeOpen(true)}
                   className="helix-btn-secondary border-[#E74C3C]/60! text-[#E74C3C]!"
-                  data-testid="raise-dispute"
                 >
                   Raise dispute
                 </button>
@@ -200,17 +140,8 @@ export default function OrderDetail() {
           {/* ── Trade Documents ── */}
           <div className="helix-card p-6">
             <div className="helix-label mb-3">Trade Documents</div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {[
-                { kind: 'proforma', label: 'Proforma Invoice', icon: FileText },
-                {
-                  kind: 'commercial',
-                  label: 'Commercial Invoice',
-                  icon: FileText,
-                },
-                { kind: 'packing', label: 'Packing List', icon: Package },
-                { kind: 'origin', label: 'Certificate of Origin', icon: Truck },
-              ].map((d) => {
+            <div className="flex flex-wrap gap-3">
+              {tradeDocuments.map((d) => {
                 const Icon = d.icon;
                 return (
                   <button
@@ -232,24 +163,6 @@ export default function OrderDetail() {
           {/* Timeline */}
           <div className="helix-card p-6">
             <div className="helix-label mb-3">Timeline</div>
-            {/* <div className="space-y-3">
-              {(orderDetails.timeline || [])
-                .slice()
-                .reverse()
-                .map((t, i) => (
-                  <div key={i} className="flex gap-3">
-                    <div className="w-2 h-2 rounded-full bg-[#1A7A6E] mt-2 shrink-0" />
-                    <div>
-                      <div className="text-[13px]">
-                        {t.event.replace(/_/g, ' ').replace(/status:/, '→ ')}
-                      </div>
-                      <div className="text-[11px] text-[#9CA3AF] font-mono">
-                        {formatDateTime(t.at)}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-            </div> */}
           </div>
         </div>
 
@@ -343,7 +256,6 @@ export default function OrderDetail() {
                   onChange={(e) =>
                     setDispute({ ...dispute, reason: e.target.value })
                   }
-                  data-testid="dispute-reason"
                 />
               </div>
               <div>
@@ -354,7 +266,6 @@ export default function OrderDetail() {
                   onChange={(e) =>
                     setDispute({ ...dispute, description: e.target.value })
                   }
-                  data-testid="dispute-desc"
                 />
               </div>
               <div className="flex gap-2">
@@ -368,7 +279,6 @@ export default function OrderDetail() {
                   // onClick={raiseDispute}
                   disabled={busy}
                   className="helix-btn-primary flex-1"
-                  data-testid="dispute-submit"
                 >
                   {busy ? 'Submitting…' : 'Submit'}
                 </button>
@@ -377,6 +287,6 @@ export default function OrderDetail() {
           </div>
         </div>
       )}
-    </>
+    </main>
   );
 }

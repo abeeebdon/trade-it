@@ -18,12 +18,13 @@ import { RootState } from '@/store/store';
 import { useHeader } from '@/context/HeaderContext';
 import { StatusPill } from '@/features/shops/components/StatusPill';
 import { useCreateListing, useGetListings } from '../../hooks/useListings';
-import { PER_PAGE } from '@/lib/constants';
 import ListingformCard from '../components/ListingformCard';
 import { ProductListingTypes } from '../types/sellType';
 import ListingForm from '../components/ListingForm';
 import { CreateListingPayload } from '../../types/exporter';
 import MobileListingCard from '../components/MobileListingCard';
+import Pagination from '../../components/pagination';
+import SelectDropDown from '@/components/SelectDropDown';
 
 // Component
 
@@ -38,12 +39,12 @@ export default function Sell() {
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<string | null>(null);
-
+  const [perPage, setPerPage] = useState(10);
   const isExporter = user?.role === 'exporter';
 
   const { data, isPending, isError } = useGetListings({
     pageNumber: page,
-    pageSize: PER_PAGE,
+    pageSize: perPage,
   });
 
   const listings: ProductListingTypes[] = useMemo(() => {
@@ -71,7 +72,6 @@ export default function Sell() {
             setOpen(true);
           }}
           className="helix-btn-primary inline-flex items-center gap-2"
-          data-testid="create-listing-btn"
         >
           <Plus size={14} />
           <span className="hidden sm:inline">New listing</span>
@@ -103,8 +103,6 @@ export default function Sell() {
       </div>
     );
   }
-
-  // ── Error ──────────────────────────────────────────────────────────────────
 
   if (isError) {
     return (
@@ -187,7 +185,7 @@ export default function Sell() {
           </div>
 
           {/* DESKTOP */}
-          <div className="hidden lg:block  overflow-hidden">
+          <section className="hidden lg:block  overflow-hidden">
             <div className="overflow-x-auto">
               <table className="helix-table min-w-full">
                 <thead>
@@ -216,46 +214,15 @@ export default function Sell() {
                 </tbody>
               </table>
             </div>
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-2 px-5 py-4 border-t border-[#1A7A6E]/15">
-                <button
-                  onClick={() => setPage((prev) => Math.max(1, prev - 1))}
-                  disabled={page === 1}
-                  className="p-2 rounded border border-[#1A7A6E]/40 text-[#9CA3AF] hover:border-[#1A7A6E] hover:text-[#F5F5F5] disabled:opacity-30 disabled:cursor-not-allowed transition"
-                >
-                  <ChevronLeft size={14} />
-                </button>
-
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                  (n) => (
-                    <button
-                      key={n}
-                      onClick={() => setPage(n)}
-                      className={`w-8 h-8 rounded text-[12px] font-mono border transition ${
-                        n === page
-                          ? 'bg-[#C9922A] text-[#0A1628] border-[#C9922A] font-bold'
-                          : 'bg-transparent text-[#9CA3AF] border-[#1A7A6E]/40 hover:border-[#1A7A6E] hover:text-[#F5F5F5]'
-                      }`}
-                    >
-                      {n}
-                    </button>
-                  ),
-                )}
-
-                <button
-                  onClick={() =>
-                    setPage((prev) => Math.min(totalPages, prev + 1))
-                  }
-                  disabled={page === totalPages}
-                  className="p-2 rounded border border-[#1A7A6E]/40 text-[#9CA3AF] hover:border-[#1A7A6E] hover:text-[#F5F5F5] disabled:opacity-30 disabled:cursor-not-allowed transition"
-                >
-                  <ChevronRight size={14} />
-                </button>
-              </div>
-            )}
-          </div>
+            <article className="flex justify-between  items-end gap-4 ">
+              <Pagination
+                totalPages={totalPages}
+                page={page}
+                onChange={(page) => setPage(page)}
+              />
+              <SelectDropDown pageNum={perPage} setPageNum={setPerPage} />
+            </article>
+          </section>
         </>
       )}
 

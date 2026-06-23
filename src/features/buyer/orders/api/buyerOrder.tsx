@@ -1,8 +1,9 @@
+import { ConsumerOrder } from '@/features/shops/types/shops';
 import { getSavedCookie } from '@/store/auth/cookies';
 import axios from 'axios';
 import { toast } from 'sonner';
 
-export const getBuyerOrders = async () => {
+export const getBuyerOrders = async (): Promise<ConsumerOrder[]> => {
   const token = getSavedCookie('token');
   try {
     const response = await axios.get(
@@ -16,8 +17,11 @@ export const getBuyerOrders = async () => {
     if (response.data.success) {
       toast.success(response.data.message);
       return response.data.data;
+    } else {
+      toast.error(response.data.message);
+
+      return response.data.data;
     }
-    toast.error(response.data.message);
   } catch (error) {
     throw error;
   }

@@ -21,28 +21,6 @@ export type OrderStatus = 'pending' | 'paid' | 'shipped' | 'delivered';
 
 export type EscrowStatus = 'held' | 'released';
 
-export type Order = {
-  id: string;
-  order_number: string;
-  listing_title: string;
-  quantity: number;
-  unit_price_usd: number;
-  total_usd: number;
-
-  checkout_mode: 'quote_prepay' | 'instant';
-
-  delivery_partner_of_record?: string;
-  tracking_number?: string;
-
-  status: OrderStatus;
-  escrow_status: EscrowStatus;
-  escrow_held_by?: string;
-
-  created_at: string;
-
-  shipping_name: string;
-  shipping_address: string;
-};
 export type FilterButton = {
   label: string;
   onClick: () => void;
@@ -70,3 +48,22 @@ export interface CreateOrderPayload {
   description?: string;
   orderType: OrderType;
 }
+export type ConsumerOrder = {
+  id: number;
+  amount: number;
+  category: string;
+  deliveryDate: string;
+  description: string;
+  email: string;
+  orderNumber: string;
+  orderType: string;
+  paymentStatus: string;
+  phone: string;
+  productId: number;
+  productName: string;
+  quantity: number;
+  role: string;
+  shipTo: string;
+  shippingAddress: string;
+  status: string;
+};

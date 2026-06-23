@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 
 export const getAdminUSers = async ({ search }: useGetAdminUsersProps) => {
   try {
-    const response = await api.get(`/Admin/users?${search}`);
+    const response = await api.get(`/Admin/users?search=${search}`);
     return response.data.data;
   } catch (error) {
     throw error;
