@@ -4,17 +4,19 @@ import ComingSoon from '@/features/waitlist/COmingSOon';
 import { getSavedCookie } from '@/store/auth/cookies';
 import Footer from '@/features/landingPage/components/Footer';
 import Header from '@/features/landingPage/components/Header';
-import { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
+import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
+import { setBeta } from '@/store/waitlist/waitlist.slice';
 
 const Homepage = () => {
   const modeLive = false;
   const token = getSavedCookie('token');
-  const [isBetaPreview, setIsBetaPreview] = useState(false);
+  const dispatch = useAppDispatch();
+
+  const isBetaPreview = useAppSelector((state) => state.wait.beta);
   const exitBeta = () => {
-    setIsBetaPreview(false);
+    dispatch(setBeta(false));
   };
-  console.log(isBetaPreview);
   return modeLive || token || isBetaPreview ? (
     <main>
       {isBetaPreview && (
@@ -33,14 +35,14 @@ const Homepage = () => {
           </div>
         </div>
       )}
-      <Header className="relative!" />
-      <div className="pt-36 px-6 lg:px-10 pb-24">
+      <Header className="overflow-hidden w-full dark:bg-[#0A1628]/85 bg-[#ffffffee] backdrop-blur border-b border-[#1A7A6E]/15 sticky! top-0 z-30" />
+      <div className="pt-6 sm:px-6 min-[500]:px-4 px-2 lg:px-10 pb-24">
         <HomePage />
       </div>
       <Footer />
     </main>
   ) : (
-    <ComingSoon setIsBetaPreview={setIsBetaPreview} />
+    <ComingSoon />
   );
 };
 

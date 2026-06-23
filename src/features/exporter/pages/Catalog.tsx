@@ -10,8 +10,6 @@ import {
   useGetProductCountries,
 } from '../hooks/useProducts';
 
-// ─── Constants ────────────────────────────────────────────────────────────────
-
 const PER_PAGE = 12;
 
 // Catalog
@@ -63,7 +61,7 @@ export default function Catalog() {
   const filtered = search
     ? products.filter(
         (p) =>
-          p.name.toLowerCase().includes(search.toLowerCase()) ||
+          p.productName.toLowerCase().includes(search.toLowerCase()) ||
           p.description.toLowerCase().includes(search.toLowerCase()),
       )
     : products;
@@ -110,16 +108,13 @@ export default function Catalog() {
           </div>
 
           {/* Search */}
-          <div className="relative">
-            <Search
-              size={14}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]"
-            />
+          <div className="flex items-center w-full max-w-60 p-2 rounded-xl border-border gap-2 border ">
+            <Search size={14} className=" text-[#9CA3AF]" />
             <input
               placeholder="Search products..."
               value={search}
               onChange={(e) => handleSearchChange(e.target.value)}
-              className="helix-input pl-9 w-64"
+              className="w-full outline-none border-none"
             />
           </div>
         </div>

@@ -1,5 +1,4 @@
-export const PER_PAGE = 15;
-
+import { FileText, Package, Truck } from 'lucide-react';
 export const TRANSACTION_TYPES = ['credit', 'debit', 'transfer', 'fee'];
 
 export const UNITS = [
@@ -25,4 +24,41 @@ export const CATS = [
   { value: 'agriculture', label: 'Agriculture' },
   { value: 'staple-foods', label: 'Staple Foods' },
   { value: 'general-goods', label: 'General Goods' },
+];
+export const LIFECYCLE = [
+  {
+    label: 'Draft (RFQ)',
+    value: 'draft',
+  },
+  {
+    label: 'Confirmed',
+    value: 'confirmed',
+  },
+  {
+    label: 'Ready to Ship',
+    value: 'ready_to_ship',
+  },
+  {
+    label: 'Shipped',
+    value: 'shipped',
+  },
+  {
+    label: 'Delivered',
+    value: 'delivered',
+  },
+  {
+    label: 'Disputed',
+    value: 'disputed',
+  },
+];
+
+export const tradeDocuments = [
+  { kind: 'proforma', label: 'Proforma Invoice', icon: FileText },
+  {
+    kind: 'commercial',
+    label: 'Commercial Invoice',
+    icon: FileText,
+  },
+  { kind: 'packing', label: 'Packing List', icon: Package },
+  { kind: 'origin', label: 'Certificate of Origin', icon: Truck },
 ];

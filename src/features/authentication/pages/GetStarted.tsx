@@ -38,8 +38,8 @@ const GetStarted = () => {
   return (
     <div className="w-full mx-auto p-6 my-6 max-w-4xl fade-up">
       <div className="text-center mb-8">
-        <div className="helix-kicker mb-2">Jomp Shop · Create account</div>
-        <h1 className="helix-h2">How would you like to use Jomp Shop?</h1>
+        <div className="helix-kicker mb-2">Jompshop · Create account</div>
+        <h1 className="helix-h2">How would you like to use Jompshop?</h1>
         <p className="text-[#9CA3AF] text-sm mt-2">
           Pick the path that fits — you can change later in settings.
         </p>

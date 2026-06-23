@@ -18,7 +18,8 @@ import BalanceCard from '../components/BalanceCard';
 import { useGetCommandCenter } from '../hooks/useGetCommandCenter';
 import { CommandCenterWallet } from '../types/command-center';
 import { useHeader } from '@/context/HeaderContext';
-import { Order, Transaction } from '../types/exporter';
+import { Transaction } from '../types/exporter';
+import DashboardOrderOverview from '../components/DashboardOrderOverview';
 
 // Helpers
 
@@ -29,8 +30,6 @@ function walletToVa(wallet: CommandCenterWallet | undefined) {
     bank: wallet.bankName,
   };
 }
-
-// Dashboard
 
 export default function Dashboard() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -146,70 +145,7 @@ export default function Dashboard() {
 
       {/* Orders + Compliance */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
-        <div className="helix-card lg:col-span-2 overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-[#1A7A6E]/20">
-            <div>
-              <div className="helix-label">Recent Orders</div>
-              <div className="helix-h3 mt-1">
-                {data?.recentOrders?.activeCount
-                  ? `${data.recentOrders.activeCount} active`
-                  : 'No orders yet'}
-              </div>
-            </div>
-            <Link
-              href="/orders"
-              className="text-[12px] text-[#C9922A] hover:underline"
-            >
-              View all
-            </Link>
-          </div>
-
-          {orders.length ? (
-            <div className="overflow-x-auto">
-              <table className="helix-table">
-                <thead>
-                  <tr>
-                    <th>Order</th>
-                    <th>Product</th>
-                    <th>Qty</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                    <th>Payment</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.slice(0, 6).map((o: Order) => (
-                    <tr key={o.id}>
-                      <td className="font-mono text-[#C9922A]">
-                        <Link href={`/orders/${o.id}`}>{o.order_number}</Link>
-                      </td>
-                      <td className="max-w-[220px] truncate">
-                        {o.product_name}
-                      </td>
-                      <td className="font-mono">{o.quantity}</td>
-                      <td className="font-mono">
-                        {formatUSD(o.agreed_price_usd ?? 0)}
-                      </td>
-                      <td>
-                        <StatusPill status={o.status} />
-                      </td>
-                      <td>
-                        <StatusPill status={o.payment_status} />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <div className="p-10 text-center text-[#9CA3AF] text-sm">
-              <Package size={34} className="mx-auto mb-3 text-[#1A7A6E]" />
-              {user?.role === 'retailer'
-                ? 'Browse the marketplace to submit your first RFQ.'
-                : 'Orders you receive or place will appear here.'}
-            </div>
-          )}
-        </div>
+        <DashboardOrderOverview data={data} orders={orders} />
 
         <div className="helix-card p-5">
           <div className="flex items-start justify-between">
@@ -247,7 +183,7 @@ export default function Dashboard() {
           )}
 
           <Link
-            href="/compliance"
+            href="/exporter/compliance"
             className="mt-5 inline-flex items-center gap-1 text-[#C9922A] text-[12px] hover:gap-2 transition-all"
           >
             Manage vault <ArrowUpRight size={14} />

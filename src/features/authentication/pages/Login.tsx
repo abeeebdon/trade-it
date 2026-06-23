@@ -40,11 +40,12 @@ export default function Login() {
           fullName: result.data.fullName,
         };
         dispatch(login(userDetails));
-        console.log(result.data.roles[0].toLowerCase());
         switch (result.data.roles[0].toLowerCase()) {
           case 'admin':
             dispatch(setAuthRole('admin'));
             router.push('/admin');
+            // dispatch(setAuthRole('exporter'));
+            // router.push('/exporter');
             break;
           case 'retailer':
             dispatch(setAuthRole('retailer'));
@@ -58,15 +59,19 @@ export default function Login() {
             dispatch(setAuthRole('exporter'));
             router.push('/exporter');
             break;
+          case 'export admin':
+            dispatch(setAuthRole('exporter'));
+            router.push('/exporter');
+            break;
           default:
-            router.push('/');
+            toast.error('Contact Support');
         }
       } else {
         toast.error(result.message);
       }
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const message = (error as any)?.response?.data?.message;
+      const message = (error as any)?.response?.data.message;
       toast.error(
         message ?? 'An error occurred during login. Please try again.',
       );
@@ -79,15 +84,8 @@ export default function Login() {
     <div className="w-full border max-w-md mx-auto helix-card p-8 fade-up">
       <h1 className="helix-kicker mb-2">Jomp Trade · Sign in</h1>
       <h1 className="helix-h2">Access your command center</h1>
-      <p className="text-[#9CA3AF] text-sm mt-2">
-        Exporter, buyer, consumer, or admin &mdash; one login.
-      </p>
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="mt-7 space-y-4"
-        data-testid="login-form"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-7 space-y-4">
         {/* EMAIL */}
         <InputField
           label="Email"
@@ -106,7 +104,14 @@ export default function Login() {
           error={errors.password?.message}
           name="password"
         />
-
+        <div className="flex items-center py-2 justify-end">
+          <Link
+            href="/forgot-password "
+            className="font-semibold text-sm hover:underline"
+          >
+            Forgot Password?
+          </Link>
+        </div>
         {/* SUBMIT */}
         <button
           disabled={loading}
@@ -135,7 +140,7 @@ export default function Login() {
       </button>
 
       <div className="mt-8 text-center text-[13px] text-[#9CA3AF]">
-        New to Helix?{' '}
+        New to Jompshop?{' '}
         <Link href="/getstarted" className="text-[#C9922A] font-semibold">
           Create an account
         </Link>

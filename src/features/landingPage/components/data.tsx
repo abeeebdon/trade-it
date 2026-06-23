@@ -18,20 +18,22 @@ import {
   Lightbulb,
   HandHelping,
   BookAIcon,
+  User,
+  Command,
 } from 'lucide-react';
 
 export const helixCards = [
-  {
-    title: 'RIBY INC',
-    subtitle: 'US & GLOBAL',
-    description:
-      'US & Global operations and transaction management. Payment collection entity, escrow custodian, and Delivery Partner of Record for direct-to-consumer shipments.',
-  },
   {
     title: 'JOMPSTART DIGITAL',
     subtitle: 'NIGERIA & AFRICA · TECH · CREDIT',
     description:
       'Nigeria & Africa ground operations. Builds and maintains the platform and technology integrations. Underwrites and manages Business Credit to suppliers.',
+  },
+  {
+    title: 'RIBY INC',
+    subtitle: 'US & GLOBAL',
+    description:
+      'US & Global operations and transaction management. Payment collection entity, escrow custodian, and Delivery Partner of Record for direct-to-consumer shipments.',
   },
   {
     title: 'ANCHOR',
@@ -120,7 +122,12 @@ export const NAV: {
     { to: '/buyer/sell', label: 'Local Inventory Shop', icon: ShoppingCart },
     { to: '/buyer/fulfillment', label: 'Fulfillment', icon: Truck },
     { to: '/buyer/finance', label: 'Finance', icon: Wallet },
-    { to: '/buyer/accounts', label: 'Withdrawal Accounts', icon: HandHelping },
+    { to: '/buyer/compliance', label: 'Compliance', icon: Command },
+    {
+      to: '/buyer/finance/accounts',
+      label: 'Withdrawal Accounts',
+      icon: HandHelping,
+    },
     { to: '/buyer/onboarding', label: 'Business Profile', icon: FileText },
   ],
   consumer: [{ to: '/shop/orders', label: 'My Orders', icon: LayoutDashboard }],
@@ -137,6 +144,7 @@ export const NAV: {
     },
     { to: '/admin/catalog', label: 'Marketplace', icon: Store },
     { to: '/admin/waitlist', label: 'Waitlist', icon: BookAIcon },
+    { to: '/admin/users', label: 'Users', icon: User },
   ],
 
   super_admin: [

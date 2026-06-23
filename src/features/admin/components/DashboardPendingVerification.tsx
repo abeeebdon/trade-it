@@ -1,5 +1,5 @@
 import { StatusPill } from '@/features/shops/components/StatusPill';
-import { formatDateTime } from '@/lib/func';
+import { formatDateToMM } from '@/lib/func';
 import { DashboardPendingVerificationProps } from '../types/admin';
 
 const DashboardPendingVerification = ({
@@ -28,18 +28,18 @@ const DashboardPendingVerification = ({
           </thead>
           <tbody className="">
             {pendingVerifications?.map((v) => (
-              <tr key={v.id} className="   text-text">
-                <td className="py-2">{v.business_name}</td>
+              <tr key={v.business} className="   text-text">
+                <td className="py-2">{v.business}</td>
                 <td>{v.country}</td>
                 <td className="text-muted">{v.sector}</td>
                 <td>
-                  <StatusPill status={v.kyc_status} />
+                  <StatusPill status={v.kycStatus} />
                 </td>
                 <td>
-                  <StatusPill status={v.kyb_status} />
+                  <StatusPill status={v.kybStatus} />
                 </td>
                 <td className="text-[11px] font-mono text-muted">
-                  {formatDateTime(v.updated_at)}
+                  {formatDateToMM(v.submittedAt)}
                 </td>
               </tr>
             ))}

@@ -1,5 +1,8 @@
+import { ReactNode } from 'react';
 import { AccountDetails } from './finance';
 import { LucideIcon } from 'lucide-react';
+import { ProductResponseType } from '../products/types/product';
+import { CommandCenterWallet } from './command-center';
 
 export interface StatProps {
   label: string;
@@ -8,6 +11,71 @@ export interface StatProps {
   accent?: boolean;
 }
 
+export interface CommandCenterResponse {
+  data: CommandCenterData;
+}
+
+export interface CommandCenterData {
+  title: string;
+  welcomeMessage: string;
+  badges: string[];
+  wallets: CommandCenterWallet[];
+
+  fxRate: FxRate;
+
+  recentOrders: RecentOrders;
+
+  compliance: Compliance;
+
+  recentTransactions: Transaction[];
+}
+
+export interface Wallet {
+  name: string;
+}
+
+export interface FxRate {
+  pair: string;
+  rate: number;
+  source: string;
+  updatedAt: string;
+}
+
+export interface RecentOrders {
+  activeCount: number;
+  items: OrderItem[];
+}
+
+export interface OrderItem {
+  id: number;
+  orderNumber: string;
+  orderType: string; // you can tighten this later: 'prepay' | 'quote'
+  role: string;
+  productId: number;
+  productName: string;
+  category: string;
+  quantity: number;
+  amount: number;
+  deliveryDate: string;
+  status: string;
+  paymentStatus: string;
+  shipTo: string;
+  shippingAddress: string;
+  email: string;
+  phone: string;
+  description: string;
+}
+
+export interface Compliance {
+  score: number;
+  status: string;
+  missingDocuments: string[];
+}
+
+export interface DashboardOrderOverviewProps {
+  data: CommandCenterData;
+  orders: OrderItem[];
+}
 // Currency & Sector
 
 export type CurrencyCode = 'USD' | 'NGN' | 'EUR' | string;
@@ -27,6 +95,11 @@ export type OverviewType = {
 };
 
 //  Verification
+export interface FieldProps {
+  label?: string;
+  children: ReactNode;
+  full?: string;
+}
 
 export type VerificationStatus =
   | 'pending'
@@ -130,7 +203,7 @@ export interface Product {
 }
 
 export interface ProductCardPRops {
-  p: Product;
+  p: ProductResponseType;
 }
 
 export type ProductUnitOption = {
@@ -178,7 +251,7 @@ export type ProductListParams = {
 };
 
 export type ProductListResponse = {
-  data: Product[];
+  data: ProductResponseType[];
   pageNumber: number;
   pageSize: number;
   totalRecords: number;
@@ -218,18 +291,6 @@ export type PaymentStatus =
   | 'confirmed'
   | 'refunded'
   | 'failed';
-
-export type Order = {
-  id: string;
-  order_number: string;
-  buyer_user_id: string;
-  product_name: string;
-  quantity: number;
-  agreed_price_usd: number;
-  target_delivery_date: string;
-  status: OrderStatus;
-  payment_status: PaymentStatus;
-};
 
 export type TimelineEvent = {
   event: string;
@@ -280,8 +341,24 @@ export type Listing = {
 
 export type ListingFormData = Omit<Listing, 'id' | 'fulfillment_mode'>;
 
+export type CreateListingPayload = {
+  UserId: number;
+  Title: string;
+  ThumbnailImage: File | null;
+  Category: string;
+  RetailPriceUsd: number;
+  StockQty: number;
+  ShipsFrom: string;
+  Description: string;
+  ProductStatusId: number;
+  FulfillmentMode: string;
+  Photos: File[];
+};
 // Fulfillment
-
+export type EditListingPayload = {
+  payload: CreateListingPayload;
+  id: string | number;
+};
 export type QuoteStatus =
   | 'pending'
   | 'quoted'
@@ -340,32 +417,9 @@ export type RespondForm = {
 
 // ─── Compliance ───────────────────────────────────────────────────────────────
 
-export type DocStatus = 'active' | 'expired' | 'expiring_soon' | 'pending';
-
-export type ComplianceDocument = {
-  id: string;
-  document_type: string;
-  issuing_authority: string;
-  issued_date: string;
-  expiry_date: string;
-  original_filename: string;
-  file_url: string;
-  status: DocStatus;
-};
-
 export type CategoryScore = {
   score: number;
   max: number;
-};
-
-export type ComplianceScore = {
-  score: number;
-  missing: string[];
-  category_scores?: Record<string, CategoryScore>;
-};
-
-export type ComplianceRequirement = {
-  us_import_guide: string[];
 };
 
 export type AddDocForm = {
@@ -574,13 +628,6 @@ export type Transaction = {
   amount: number;
 };
 
-export type FxRate = {
-  pair: string;
-  rate: number;
-  source: string;
-  updatedAt: string;
-};
-
 // Component Props
 
 export interface BalanceCardProps {
@@ -641,3 +688,8 @@ export type ProductCountryListResponse = {
   totalPages: number;
   data: ProductCountry[];
 };
+export interface FieldProps {
+  label?: string;
+  children: ReactNode;
+  full?: string;
+}

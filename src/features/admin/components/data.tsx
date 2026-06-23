@@ -29,35 +29,6 @@ export const mockOverview: OverviewType = {
   },
 };
 
-export const mockVerifications: Verification[] = [
-  {
-    id: 'v1',
-    business_name: 'Lagos Textiles Ltd',
-    country: 'Nigeria',
-    sector: 'fashion',
-    kyc_status: 'approved',
-    kyb_status: 'pending',
-    updated_at: '2026-04-28T10:00:00Z',
-  },
-  {
-    id: 'v2',
-    business_name: 'Accra Shea Co.',
-    country: 'Ghana',
-    sector: 'beauty',
-    kyc_status: 'pending',
-    kyb_status: 'pending',
-    updated_at: '2026-04-29T14:20:00Z',
-  },
-  {
-    id: 'v3',
-    business_name: 'Addis Coffee Export',
-    country: 'Ethiopia',
-    sector: 'food',
-    kyc_status: 'approved',
-    kyb_status: 'approved',
-    updated_at: '2026-04-27T08:15:00Z',
-  },
-];
 export const sampleVerifications: VerificationItem[] = [
   {
     id: 'verif-001',
