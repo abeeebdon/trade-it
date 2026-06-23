@@ -46,7 +46,7 @@ export interface CreateOrderPayload {
   email: string;
   phone: string;
   description?: string;
-  orderType: OrderType;
+  orderType: string;
 }
 export type ConsumerOrder = {
   id: number;

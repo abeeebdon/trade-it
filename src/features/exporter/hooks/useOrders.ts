@@ -26,9 +26,9 @@ export const useCreateOrder = (onSuccess?: () => void) => {
 
   return useMutation({
     mutationFn: (payload: CreateOrderPayload) => createOrder(payload),
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['exporter-products'] });
-      toast.success('Product created successfully');
+      toast.success(data.message ?? 'Order created successfully');
       onSuccess?.();
     },
     onError: () => {

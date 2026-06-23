@@ -10,3 +10,17 @@ export const productOrderSchema = z.object({
 });
 
 export type ProductOrderForm = z.infer<typeof productOrderSchema>;
+export const prepayOrderSchema = z.object({
+  qty: z.string(),
+  shipping_name: z.string().min(1),
+  shipping_address: z.string().min(1),
+  shipping_email: z.string().email(),
+  shipping_phone: z.string().min(1),
+});
+export type PrepayOrderForm = z.infer<typeof prepayOrderSchema>;
+
+export const quoteOrderSchema = z.object({
+  qty: z.string(),
+  quoteMsg: z.string().optional(),
+});
+export type QuoteOrderForm = z.infer<typeof quoteOrderSchema>;
