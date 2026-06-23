@@ -13,6 +13,7 @@ import {
 } from '../admin/hooks/useGetAdminDashboard';
 import { PaginationType, WaitlistOverview, WaitlistTypeData } from './types';
 import { formatDateToMM } from '@/lib/func';
+import SelectDropDown from '@/components/SelectDropDown';
 
 type WaitlistType = 'hero' | 'exporter' | 'buyer';
 
@@ -46,7 +47,6 @@ const filters: [FilterType, string][] = [
 ];
 export default function AdminWaitlist() {
   const [pageNumValue, setPAgeNumValue] = useState<number>(10);
-  const pageNumberOptions = [5, 10, 20, 50];
 
   const [mode, setMode] = useState<ModeType>('coming_soon');
   const [filter, setFilter] = useState<FilterType>('');
@@ -74,44 +74,7 @@ export default function AdminWaitlist() {
         }
       : ({} as PaginationType);
   }, [waitlist]);
-
-  // const toggleMode = async (): Promise<void> => {
-  //   const next: ModeType = mode === 'live' ? 'coming_soon' : 'live';
-
-  //   const confirmed = window.confirm(
-  //     `Switch site to ${
-  //       next === 'live' ? 'LIVE marketplace' : 'COMING SOON landing page'
-  //     }?\n\nThis affects what the public sees on /`,
-  //   );
-
-  //   if (!confirmed) return;
-
-  //   try {
-  //     const { data } = await api.patch<PlatformModeResponse>(
-  //       '/admin/platform/mode',
-  //       { mode: next },
-  //     );
-
-  //     setMode(data.mode);
-
-  //     toast.success(
-  //       `Site mode → ${
-  //         data.mode === 'live' ? 'LIVE marketplace' : 'COMING SOON'
-  //       }`,
-  //     );
-  //   } catch (error) {
-  //     const err = error as AxiosError<ErrorResponse>;
-
-  //     toast.error(err.response?.data?.detail || 'Failed');
-  //   }
-  // };
   const { mutate, isPending: isMutating } = useGetWaitlistCSV();
-
-  // const handleExport = async () => {
-  //   const response = await refetch();
-
-  //   console.log(response.data);
-  // };
 
   const handleExport = () => {
     mutate(filter, {
@@ -209,16 +172,16 @@ export default function AdminWaitlist() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <StatCard
           label="Total signups"
-          n={waitlistOverview.totalSignups ?? ''}
+          n={waitlistOverview?.totalSignups ?? ''}
         />
         <StatCard
           label={
-            waitlistOverview.customerTypes.find(
+            waitlistOverview?.customerTypes?.find(
               (d) => d.customerType.toLowerCase() === 'retailer',
             )?.customerType ?? ''
           }
           n={
-            waitlistOverview.customerTypes.find(
+            waitlistOverview?.customerTypes?.find(
               (d) => d.customerType.toLowerCase() === 'retailer',
             )?.count ?? 0
           }
@@ -249,9 +212,11 @@ export default function AdminWaitlist() {
               </button>
             ))}
           </div>
-
-          <div className="text-[12px] text-[#9CA3AF] font-mono">
-            {waitlists.length} shown
+          <div className="flex items-end flex-col">
+            <p>Total Records: {metrics.totalRecords}</p>
+            <p className="text-[12px] text-[#9CA3AF] font-mono">
+              {waitlists.length} shown
+            </p>
           </div>
         </div>
 
@@ -299,17 +264,10 @@ export default function AdminWaitlist() {
                 totalPages={metrics.totalPages}
                 onChange={setPage}
               />
-              <select
-                value={pageNumValue}
-                onChange={(e) => setPAgeNumValue(Number(e.target.value))}
-                className="border border-gray-300 mb-2 rounded-md px-3 py-1 outline-none"
-              >
-                {pageNumberOptions.map((num) => (
-                  <option key={num} value={num}>
-                    {num}
-                  </option>
-                ))}
-              </select>
+              <SelectDropDown
+                pageNum={pageNumValue}
+                setPageNum={setPAgeNumValue}
+              />
             </article>
           </section>
         )}

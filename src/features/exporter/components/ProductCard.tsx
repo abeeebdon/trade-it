@@ -7,7 +7,7 @@ export default function ProductCard({ p }: ProductCardPRops) {
   return (
     <Link
       href={{
-        pathname: '/exporter/product-details',
+        pathname: 'product-details',
         query: { id: p.id },
       }}
       className="helix-card group overflow-hidden flex flex-col h-full"

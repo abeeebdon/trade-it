@@ -1,4 +1,4 @@
-import BuyerInventorySell from '@/features/buyer/pages/BuyerInventorySell';
+import BuyerInventorySell from '@/features/buyer/inventory/BuyerInventorySell';
 
 const page = () => {
   return <BuyerInventorySell />;

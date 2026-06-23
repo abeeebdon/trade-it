@@ -26,17 +26,13 @@ export default function BUyerOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [page, setPage] = useState(1);
 
-  const { data, isPending } = useGetBuyerOrders();
-  const buyerOrders = useMemo(() => {
-    return data ? data : [];
-  }, [data]);
-  console.log(buyerOrders);
+  const { data: buyerOrders, isPending } = useGetBuyerOrders();
 
   return (
     <main>
       {isPending ? (
         <OrderTableSkeleton />
-      ) : buyerOrders.length === 0 ? (
+      ) : buyerOrders?.length === 0 ? (
         <div className="helix-card p-12 text-center text-[#9CA3AF]">
           No orders yet.{' '}
           {user?.role === 'retailer'
@@ -62,14 +58,14 @@ export default function BUyerOrders() {
                   </tr>
                 </thead>
                 <tbody>
-                  {buyerOrders.map((o, i) => (
-                    <tr key={i} data-testid={`order-row-${i + 1}`}>
+                  {buyerOrders?.map((o, i) => (
+                    <tr key={i}>
                       <td>
                         <Link
                           href={`/orders/${i + 1}`}
                           className="font-mono text-[#C9922A]"
                         >
-                          {o?.order_number ?? 0}
+                          {o?.orderNumber ?? 0}
                         </Link>
                       </td>
                       <td className="text-[12px]">
@@ -77,19 +73,17 @@ export default function BUyerOrders() {
                           ? 'Buyer'
                           : 'Supplier'} */}
                       </td>
-                      <td className="max-w-55 truncate">{o.product_name}</td>
+                      <td className="max-w-55 truncate">{o.productName}</td>
                       <td className="font-mono">{o.quantity}</td>
-                      <td className="font-mono">
-                        {formatUSD(o.agreed_price_usd)}
-                      </td>
+                      <td className="font-mono">{formatUSD(o.amount)}</td>
                       <td className="text-[12px] text-[#9CA3AF]">
-                        {formatDateTime(o.target_delivery_date)}
+                        {formatDateTime(o.deliveryDate)}
                       </td>
                       <td>
                         <StatusPill status={o.status} />
                       </td>
                       <td>
-                        <StatusPill status={o.payment_status} />
+                        <StatusPill status={o.status} />
                       </td>
                     </tr>
                   ))}

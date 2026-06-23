@@ -1,4 +1,5 @@
-import { Order, Transaction, FxRate } from './exporter';
+import { ConsumerOrder } from '@/features/shops/types/shops';
+import { Transaction, FxRate } from './exporter';
 
 export type WalletStatus = 'active' | 'inactive' | 'suspended';
 
@@ -22,7 +23,7 @@ export type CommandCenterCompliance = {
 
 export type CommandCenterRecentOrders = {
   activeCount: number;
-  items: Order[];
+  items: ConsumerOrder[];
 };
 
 export type CommandCenterData = {

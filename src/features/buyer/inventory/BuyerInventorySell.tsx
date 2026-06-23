@@ -7,12 +7,10 @@ import { StatusPill } from '@/features/shops/components/StatusPill';
 import { formatUSD } from '@/lib/func';
 import Image from 'next/image';
 import { ListingItem } from '../types/buyers';
-import { dummyItems } from '../components/data';
 import PressableBtn from '@/components/buttons/PressableBtn';
 import { useHeader } from '@/context/HeaderContext';
 
 const BuyerInventorySell = () => {
-  const { user } = useAppSelector((state) => state.auth);
   const { setHeader } = useHeader();
 
   const [items, setItems] = useState<ListingItem[]>([]);
@@ -37,7 +35,6 @@ const BuyerInventorySell = () => {
             setOpen(true);
           }}
           className="helix-btn-primary inline-flex items-center gap-2"
-          data-testid="create-listing-btn"
         >
           <Plus size={14} /> New listing
         </button>

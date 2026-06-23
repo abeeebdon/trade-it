@@ -29,7 +29,6 @@ export const dummyFXRate: FXRate = {
 };
 const BuyerDashboard = () => {
   const { user } = useAppSelector((state) => state.auth);
-  const [fx, setFx] = useState<FXRate | null>(dummyFXRate);
   const [orders, setOrders] = useState<Order[]>([]);
   const [complianceScore, setComplianceScore] =
     useState<ComplianceScore | null>(null);
@@ -112,7 +111,7 @@ const BuyerDashboard = () => {
               </div>
             </div>
             <Link
-              href="/orders"
+              href="/buyer/orders"
               className="text-[12px] text-[#C9922A] hover:underline"
             >
               View all
