@@ -4,10 +4,11 @@
 @variant dark (&:is(.dark *));
 
 :root {
-  /* Core palette */
+  /* Core palette 
+  */
   --helix-navy: #ffffff;
   --helix-primeBackground: #fffdfd;
-  --helix-surface: #fffdf7;
+  --helix-surface: #f4f2ee;
   --helix-gold: #f39c12;
   --helix-gold-dim: #c77f0a;
   --helix-teal: #4a2e8a;

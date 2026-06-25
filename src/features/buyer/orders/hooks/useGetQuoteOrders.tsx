@@ -1,10 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getBuyerQuoteRequest, placeQuote } from '../api/buyerQuotes';
-import { invalidateQueries } from '@/lib/react-query';
 import { QuoteRequestType } from '../types/orders';
 import { toast } from 'sonner';
 
-export const useGetBuyerOrders = () => {
+export const useGetBuyerQuotes = () => {
   return useQuery({
     queryKey: ['buyer-quotes'],
     queryFn: getBuyerQuoteRequest,

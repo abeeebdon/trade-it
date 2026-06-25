@@ -1,10 +1,8 @@
 'use client';
-import { useAppSelector } from '@/hooks/store/store';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import Image from 'next/image';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { toast } from 'sonner';
+import { useSearchParams } from 'next/navigation';
 import { useGetProductById } from '@/features/exporter/hooks/useProducts';
 import { Loading } from '@/components/loading';
 import { ProductData } from '@/features/exporter/api/productsApi';
@@ -12,16 +10,8 @@ import ProductDetailsForm from '../components/ProductDetailsForm';
 import { Lock } from 'lucide-react';
 
 const ProductDetailsPage = () => {
-  const { user } = useAppSelector((state) => state.auth);
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
-  const router = useRouter();
-  const [form, setForm] = useState({
-    shipping_name: '',
-    shipping_address: '',
-    shipping_email: '',
-    shipping_phone: '',
-  });
   const { data, isPending } = useGetProductById(id ?? '');
 
   const productDetails: ProductData = useMemo(() => {
@@ -34,18 +24,6 @@ const ProductDetailsPage = () => {
         <Loading />
       </div>
     );
-
-  const checkout = async () => {
-    if (!user) {
-      router.push('/login');
-      return;
-    }
-    console.log(form);
-    if (!form.shipping_address || !form.shipping_email) {
-      toast.error('Shipping details required');
-      return;
-    }
-  };
 
   return (
     <section className="grid lg:grid-cols-5 gap-8">

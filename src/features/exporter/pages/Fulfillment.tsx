@@ -13,6 +13,7 @@ import { mockSellerQuotes, mockFulfillmentOrders } from '../components/data';
 import QuoteCard from '../components/QuoteCard';
 import FulfillmentOrderCard from '../components/FulfillmentOrderCard';
 import RespondQuoteModal from '../components/RespondQuoteModal';
+import { useGetBuyerQuotes } from '@/features/buyer/orders/hooks/useGetQuoteOrders';
 
 export default function Fulfillment() {
   const [orders, setOrders] = useState<FulfillmentOrder[]>([]);
@@ -25,7 +26,8 @@ export default function Fulfillment() {
     quote_note: '',
     valid_days: 7,
   });
-
+  const { data, isPending } = useGetBuyerQuotes();
+  console.log(isPending, data);
   const load = () => {
     setTimeout(() => {
       setOrders(mockFulfillmentOrders);

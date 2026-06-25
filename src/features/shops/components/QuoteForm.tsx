@@ -10,6 +10,8 @@ import { QuoteOrderForm, quoteOrderSchema } from './validation';
 import { useGetQuoteOrder } from '@/features/buyer/orders/hooks/useGetQuoteOrders';
 import { QuoteRequestType } from '@/features/buyer/orders/types/orders';
 import { getUserId } from '@/lib/helpers/TokenDetails';
+import { useGetConsumerQuoteOrder } from '../hooks/useGetOrders';
+import { CreateConsumerQuoteRequest } from '../types/shops';
 
 interface Props {
   productDetails: ProductData;
@@ -19,6 +21,7 @@ export function QuoteForm({ productDetails }: Props) {
   const [placing, setPlacing] = useState(false);
   const { user } = useAppSelector((state) => state.auth);
   const { mutateAsync } = useGetQuoteOrder();
+  const { mutateAsync: consumerMutateAsync } = useGetConsumerQuoteOrder();
   const { register, watch, handleSubmit } = useForm<QuoteOrderForm>({
     resolver: zodResolver(quoteOrderSchema),
     defaultValues: {
@@ -29,9 +32,24 @@ export function QuoteForm({ productDetails }: Props) {
   const id = getUserId();
 
   const qty = watch('qty');
+  const submitConsumer = async (data: QuoteOrderForm) => {
+    try {
+      const postData: CreateConsumerQuoteRequest = {
+        sellerId: productDetails.userId,
+        productName: productDetails.productName,
+        message: data.quoteMsg ?? '',
+        quantity: Number(data.qty),
+        consumerEmail: user?.email ?? '',
+        consumerName: user?.fullName ?? '',
+      };
+      await consumerMutateAsync(postData);
 
-  const onSubmit = async (data: QuoteOrderForm) => {
-    setPlacing(true);
+      // TODO: wire up the actual quote-request mutation here
+    } finally {
+      setPlacing(false);
+    }
+  };
+  const submitBuyer = async (data: QuoteOrderForm) => {
     try {
       const postData: QuoteRequestType = {
         sellerId: productDetails.userId,
@@ -47,6 +65,16 @@ export function QuoteForm({ productDetails }: Props) {
       // TODO: wire up the actual quote-request mutation here
     } finally {
       setPlacing(false);
+    }
+  };
+  const onSubmit = async (data: QuoteOrderForm) => {
+    setPlacing(true);
+
+    if (user?.role == 'consumer') {
+      submitConsumer(data);
+      return;
+    } else {
+      submitBuyer(data);
     }
   };
 

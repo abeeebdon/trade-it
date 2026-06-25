@@ -67,3 +67,11 @@ export type ConsumerOrder = {
   shippingAddress: string;
   status: string;
 };
+export interface CreateConsumerQuoteRequest {
+  sellerId: number;
+  productName: string;
+  quantity: number;
+  consumerName: string;
+  consumerEmail: string;
+  message: string;
+}
