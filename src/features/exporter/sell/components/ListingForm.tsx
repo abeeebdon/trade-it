@@ -84,7 +84,6 @@ export default function ListingForm({
     setThumbNailPreview(previewUrl);
   };
   const existingPhotos = editing?.photos?.map((p) => p.imageUrl) ?? [];
-  console.log(existingPhotos);
   const getProductStatusId = (status: ListingStatus) => {
     switch (status) {
       case 'active':

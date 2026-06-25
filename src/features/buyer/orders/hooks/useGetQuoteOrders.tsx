@@ -1,20 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getConsumerOrders, placeConsumerQuote } from '../api/consumerApi';
-import { CreateConsumerQuoteRequest } from '../types/shops';
+import { getBuyerQuoteRequest, placeQuote } from '../api/buyerQuotes';
+import { QuoteRequestType } from '../types/orders';
 import { toast } from 'sonner';
 
-export const useGetOrders = () => {
+export const useGetBuyerQuotes = () => {
   return useQuery({
-    queryKey: ['buyer-orders'],
-    queryFn: getConsumerOrders,
+    queryKey: ['buyer-quotes'],
+    queryFn: getBuyerQuoteRequest,
   });
 };
-export const useGetConsumerQuoteOrder = (onSuccess?: () => void) => {
+
+export const useGetQuoteOrder = (onSuccess?: () => void) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (payload: CreateConsumerQuoteRequest) =>
-      placeConsumerQuote(payload),
+    mutationFn: (payload: QuoteRequestType) => placeQuote(payload),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['buyer-quotes'] });
       toast.success(data.message ?? 'Order created successfully');

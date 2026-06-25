@@ -46,7 +46,7 @@ export interface CreateOrderPayload {
   email: string;
   phone: string;
   description?: string;
-  orderType: OrderType;
+  orderType: string;
 }
 export type ConsumerOrder = {
   id: number;
@@ -67,3 +67,11 @@ export type ConsumerOrder = {
   shippingAddress: string;
   status: string;
 };
+export interface CreateConsumerQuoteRequest {
+  sellerId: number;
+  productName: string;
+  quantity: number;
+  consumerName: string;
+  consumerEmail: string;
+  message: string;
+}

@@ -20,6 +20,7 @@ import {
   BookAIcon,
   User,
   Command,
+  ShoppingBasket,
 } from 'lucide-react';
 
 export const helixCards = [
@@ -137,6 +138,7 @@ export const NAV: {
     { to: '/admin/verifications', label: 'Verifications', icon: ShieldCheck },
     { to: '/admin/credit', label: 'JompStart Credit', icon: HandCoins },
     { to: '/admin/disputes', label: 'Disputes', icon: RefreshCw },
+    { to: '/admin/orders', label: 'Orders', icon: ShoppingBasket },
     {
       to: '/admin/finance',
       label: 'Financial Overview',
@@ -168,9 +170,5 @@ export const NAV_LINKS = [
   {
     label: 'About',
     href: '/about',
-  },
-  {
-    label: 'Become a Seller',
-    href: '/register?role=exporter',
   },
 ];

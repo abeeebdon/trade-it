@@ -22,11 +22,7 @@ import { useAppSelector } from '@/hooks/store/store';
 import { useHeader } from '@/context/HeaderContext';
 import { useGetCommandCenter } from '@/features/exporter/hooks/useGetCommandCenter';
 import { CommandCenterData } from '@/features/exporter/types/command-center';
-export const dummyFXRate: FXRate = {
-  usd_to_ngn: 1585.75,
-  fetched_at: Date.now(),
-  source: 'CBN',
-};
+
 const BuyerDashboard = () => {
   const { user } = useAppSelector((state) => state.auth);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -166,11 +162,11 @@ const BuyerDashboard = () => {
           <div className="flex items-start justify-between">
             <div>
               <div className="helix-label">Compliance Score</div>
-              <div className="font-mono text-4xl font-bold text-[#F5F5F5] mt-2">
+              <div className="font-mono text-4xl font-bold text-text mt-2">
                 {commandData?.compliance
                   ? `${commandData?.compliance?.score}`
                   : 0}
-                <span className="text-[#9CA3AF] text-xl">/100</span>
+                <span className="text-muted text-xl">/100</span>
               </div>
             </div>
             <StatusPill
@@ -193,7 +189,7 @@ const BuyerDashboard = () => {
                     .map((m) => (
                       <li
                         key={m}
-                        className="text-[13px] flex items-center gap-2 text-[#F5F5F5]"
+                        className="text-[13px] flex items-center gap-2 text-text"
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-[#C9922A]" />{' '}
                         {m}

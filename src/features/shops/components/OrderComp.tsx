@@ -1,17 +1,19 @@
-import { CheckCircle2, Key, Link, Truck } from 'lucide-react';
+import { Link } from 'lucide-react';
 import { useGetOrders } from '../hooks/useGetOrders';
 import { formatDateTime, formatUSD } from '@/lib/func';
 import { StatusPill } from './StatusPill';
+import { Loading } from '@/components/loading';
 
 const OrderComp = () => {
   const { data: consumerOrders, isPending } = useGetOrders();
-  console.log(consumerOrders);
 
   return (
     <main>
-      <div className="helix-label mb-3">Orders</div>
+      <div className="helix-h3 mb-3 mt-6">Orders</div>
       {isPending ? (
-        <div className="text-[#9CA3AF]">Loading…</div>
+        <div className="flex justify-center">
+          <Loading />
+        </div>
       ) : consumerOrders?.length === 0 ? (
         <div className="helix-card p-12 text-center text-[#9CA3AF]">
           No orders yet.{' '}
@@ -22,11 +24,7 @@ const OrderComp = () => {
       ) : (
         <div className="space-y-4">
           {consumerOrders?.map((o) => (
-            <div
-              key={o.id}
-              className="helix-card p-5"
-              data-testid={`consumer-order-${o.id}`}
-            >
+            <div key={o.id} className="helix-card p-5">
               <div className="flex items-start justify-between flex-wrap gap-3">
                 <div>
                   <div className="text-[11px] font-mono tracking-widest text-[#1A7A6E]">

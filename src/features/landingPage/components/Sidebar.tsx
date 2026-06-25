@@ -89,13 +89,13 @@ export default function Sidebar() {
               >
                 {<Icon size={18} />}
                 {!hideLabel && (
-                  <span className="hidden md:block text-[13px] font-medium tracking-wide">
+                  <span className="hidden md:block text-muted text-[13px] font-medium tracking-wide">
                     {item.label}
                   </span>
                 )}
               </Link>
               {hideLabel && (
-                <p className="absolute left-full z-[9999] top-1/2 -translate-y-1/2 whitespace-nowrap  text-xs hidden group-hover:block transition pointer-events-none">
+                <p className="absolute left-full z-[9999] top-1/2 -translate-y-1/2 text-text whitespace-nowrap  text-xs hidden group-hover:block transition pointer-events-none">
                   {item.label}
                 </p>
               )}

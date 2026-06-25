@@ -29,9 +29,11 @@ const Header = ({ className }: { className?: string }) => {
       ? '/shop/orders'
       : user?.role === 'super_admin'
         ? '/admin/credit'
-        : user
-          ? `/${user?.role}`
-          : null;
+        : user?.role === 'retailer'
+          ? '/buyer'
+          : user
+            ? `/${user?.role}`
+            : null;
   const handleLogout = async () => {
     await logoutAction();
     dispatch(logout());
@@ -55,7 +57,7 @@ const Header = ({ className }: { className?: string }) => {
               <JompsShopLogo width={120} />
             )}
           </Link>
-          <nav className="hidden md:flex items-center lg:gap-8 gap-2 text-[13px] text-[#9CA3AF]">
+          <nav className="hidden md:flex items-center lg:gap-8 gap-2 md:gap-4 text-[13px] text-[#9CA3AF]">
             {NAV_LINKS.map((link, i) => (
               <Link
                 key={i}
@@ -65,6 +67,14 @@ const Header = ({ className }: { className?: string }) => {
                 {link.label}
               </Link>
             ))}
+            {!user && (
+              <Link
+                href="/register?role=exporter"
+                className="text-muted hover:text-text"
+              >
+                Become a Seller
+              </Link>
+            )}
 
             {user?.role === 'consumer' && (
               <Link href="/shop/orders" className="text-muted hover:text-text">

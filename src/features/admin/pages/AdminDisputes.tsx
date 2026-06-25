@@ -8,17 +8,7 @@ import DisputeCardSkeleton from '../components/DisputeCardSkeleton';
 export default function AdminDisputes() {
   const [items, setItems] = useState<Dispute[]>([]);
   const [loading, setLoading] = useState(true);
-  // const load = async () => {
-  //   const { data } = await api.get('/admin/disputes');
-  //   setItems(data);
-  // };
-  // useEffect(() => { load(); }, []);
-  // const resolve = async (id, status) => {
-  //   try {
-  //     await api.post(`/admin/disputes/${id}/resolve`, { status, resolution: resolution[id] || "" });
-  //     toast.success(`Marked ${status}`); load();
-  //   } catch (err) { toast.error(err.response?.data?.detail || "Failed"); }
-  // };
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setItems(disputes);
