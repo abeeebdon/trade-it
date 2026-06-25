@@ -29,9 +29,11 @@ const Header = ({ className }: { className?: string }) => {
       ? '/shop/orders'
       : user?.role === 'super_admin'
         ? '/admin/credit'
-        : user
-          ? `/${user?.role}`
-          : null;
+        : user?.role === 'retailer'
+          ? '/buyer'
+          : user
+            ? `/${user?.role}`
+            : null;
   const handleLogout = async () => {
     await logoutAction();
     dispatch(logout());

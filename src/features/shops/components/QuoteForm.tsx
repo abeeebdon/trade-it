@@ -12,6 +12,7 @@ import { QuoteRequestType } from '@/features/buyer/orders/types/orders';
 import { getUserId } from '@/lib/helpers/TokenDetails';
 import { useGetConsumerQuoteOrder } from '../hooks/useGetOrders';
 import { CreateConsumerQuoteRequest } from '../types/shops';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   productDetails: ProductData;
@@ -20,6 +21,7 @@ interface Props {
 export function QuoteForm({ productDetails }: Props) {
   const [placing, setPlacing] = useState(false);
   const { user } = useAppSelector((state) => state.auth);
+  const router = useRouter();
   const { mutateAsync } = useGetQuoteOrder();
   const { mutateAsync: consumerMutateAsync } = useGetConsumerQuoteOrder();
   const { register, watch, handleSubmit } = useForm<QuoteOrderForm>({
@@ -98,18 +100,23 @@ export function QuoteForm({ productDetails }: Props) {
         <label className="helix-label">Message</label>
         <textarea className="helix-input h-24" {...register('quoteMsg')} />
       </div>
-
-      <button
-        disabled={placing || productDetails.unit <= 0}
-        className="helix-btn-primary w-full"
-        type="submit"
-      >
-        {placing
-          ? 'Processing...'
-          : user
-            ? 'Request Quote'
-            : 'Sign in to request quote'}
-      </button>
+      {user ? (
+        <button
+          disabled={placing || productDetails.unit <= 0}
+          className="helix-btn-primary w-full"
+          type="submit"
+        >
+          {placing ? 'Processing...' : 'Request Quote'}
+        </button>
+      ) : (
+        <button
+          onClick={() => router.push('/login')}
+          className="helix-btn-primary w-full"
+          type="button"
+        >
+          Sign in to buy
+        </button>
+      )}
     </form>
   );
 }

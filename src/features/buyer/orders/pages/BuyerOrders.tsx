@@ -62,7 +62,10 @@ export default function BUyerOrders() {
                     <tr key={i}>
                       <td>
                         <Link
-                          href={`/orders/${i + 1}`}
+                          href={{
+                            pathname: 'orders/details',
+                            query: { id: o.id },
+                          }}
                           className="font-mono text-[#C9922A]"
                         >
                           {o?.orderNumber ?? 0}

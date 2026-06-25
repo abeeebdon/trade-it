@@ -8,6 +8,7 @@ import { useAppSelector } from '@/hooks/store/store';
 import { ProductData } from '@/features/exporter/api/productsApi';
 import { useCreateOrder } from '@/features/exporter/hooks/useOrders';
 import { PrepayOrderForm, prepayOrderSchema } from './validation';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   productDetails: ProductData;
@@ -17,7 +18,7 @@ export function PrepayForm({ productDetails }: Props) {
   const [placing, setPlacing] = useState(false);
   const { mutateAsync } = useCreateOrder();
   const { user } = useAppSelector((state) => state.auth);
-
+  const router = useRouter();
   const {
     register,
     watch,
@@ -111,18 +112,25 @@ export function PrepayForm({ productDetails }: Props) {
       {errors.shipping_phone && (
         <p className="text-red-500 text-xs">{errors.shipping_phone.message}</p>
       )}
-
-      <button
-        disabled={placing || productDetails.unit <= 0}
-        className="helix-btn-primary w-full"
-        type="submit"
-      >
-        {placing
-          ? 'Processing...'
-          : user
-            ? `Prepay ${formatUSD(productDetails.price)}`
-            : 'Sign in to buy'}
-      </button>
+      {user ? (
+        <button
+          disabled={placing || productDetails.unit <= 0}
+          className="helix-btn-primary w-full"
+          type="submit"
+        >
+          {placing
+            ? 'Processing...'
+            : `Prepay ${formatUSD(productDetails.price)}`}
+        </button>
+      ) : (
+        <button
+          onClick={() => router.push('/login')}
+          className="helix-btn-primary w-full"
+          type="button"
+        >
+          Sign in
+        </button>
+      )}
     </form>
   );
 }
