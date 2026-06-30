@@ -1,5 +1,5 @@
 'use client';
-import PressableBtn from '@/features/buttons/PressableBtn';
+import PressableBtn from '@/components/buttons/PressableBtn';
 import { useRouter } from 'next/navigation';
 
 const NotFOund = () => {

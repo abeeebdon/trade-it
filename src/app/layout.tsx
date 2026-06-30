@@ -1,5 +1,10 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import {
+  Geist,
+  Geist_Mono,
+  Noto_Sans,
+  Playfair_Display,
+} from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/providers/ThemeProvider';
 import ReduxPersistGate from '@/store/persist-gate';
@@ -7,6 +12,17 @@ import ReduxProvider from '@/store/redux-provider';
 import { ReactQueryProvider } from '@/lib/react-query';
 import { Inter } from 'next/font/google';
 import AOSWrapper from '@/providers/AOSProviders';
+import { cn } from '@/lib/utils';
+import { Toaster } from '@/components/ui/sonner';
+import { HeaderProvider } from '@/context/HeaderContext';
+
+const playfairDisplayHeading = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-heading',
+});
+
+const notoSans = Noto_Sans({ subsets: ['latin'], variable: '--font-sans' });
+
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
@@ -23,9 +39,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Jomp Shop',
-  description:
-    'Jomp Shop — Connecting Africa to the World, One Trade at a Time',
+  title: 'Jompshop',
+  description: 'Jompshop — Connecting Africa to the World, One Trade at a Time',
 };
 
 export default function RootLayout({
@@ -36,19 +51,32 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={cn(
+        'h-full',
+        'antialiased',
+        geistSans.variable,
+        geistMono.variable,
+        'font-sans',
+        notoSans.variable,
+        playfairDisplayHeading.variable,
+      )}
       suppressHydrationWarning
     >
       <body className={`"min-h-full flex flex-col", ${inter.className}`}>
-        <ReduxProvider>
-          <ReduxPersistGate>
-            <ReactQueryProvider>
-              <ThemeProvider attribute="class">
-                <AOSWrapper>{children}</AOSWrapper>
-              </ThemeProvider>
-            </ReactQueryProvider>
-          </ReduxPersistGate>
-        </ReduxProvider>
+        <ThemeProvider attribute="class" disableTransitionOnChange>
+          <ReduxProvider>
+            <ReduxPersistGate>
+              <ReactQueryProvider>
+                <AOSWrapper>
+                  <HeaderProvider>
+                    <Toaster />
+                    {children}
+                  </HeaderProvider>
+                </AOSWrapper>
+              </ReactQueryProvider>
+            </ReduxPersistGate>
+          </ReduxProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

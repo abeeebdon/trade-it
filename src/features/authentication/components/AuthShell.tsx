@@ -1,29 +1,25 @@
-import Image from 'next/image';
+'use client';
+import JompsShopLogo from '@/assets/jompshop_logo';
+import JompsShopLogoDark from '@/assets/JompshopLogoDark';
+import useColorScheme from '@/hooks/useColorScheme';
 import Link from 'next/link';
 
 export function AuthShell() {
+  const isDark: boolean = useColorScheme();
+
   return (
-    <div className="hidden md:flex md:w-1/2 relative overflow-hidden border-r border-[#1A7A6E]/20">
+    <div className="hidden md:flex md:w-1/2 relative overflow-hidden border-r border-secondary/20">
       <div className="absolute inset-0 helix-dot-bg" />
-      <div className="relative z-10 flex flex-col justify-between p-10 w-full">
-        <Link
-          href="/"
-          className="flex items-center gap-3"
-          data-testid="brand-auth"
-        >
-          <Image
-            width={36}
-            height={36}
-            src="/jomp-icon.png"
-            alt="Jomp"
-            className="w-9 h-9 rounded-full"
-          />
-          <div>
-            <h2 className="font-bold tracking-[0.22em] text-sm">JOMP TRADE</h2>
-            <p className="text-[10px] tracking-[0.3em] text-[#1A7A6E] font-mono">
-              EXPORT OS
-            </p>
-          </div>
+      <div className="relative z-10 flex flex-col justify-between p-10 py-5  w-full">
+        <Link href="/" className="" data-testid="brand-auth">
+          {isDark ? (
+            <JompsShopLogoDark width={140} />
+          ) : (
+            <JompsShopLogo width={140} />
+          )}
+          <p className="text-[10px] mt-2 tracking-[0.3em] dark:text-[#1A7A6E] text-[#4a2e8a] font-mono">
+            DIRECT · FROM AFRICA
+          </p>
         </Link>
         <div>
           <div className="helix-kicker mb-3" data-aos="fade-down">
@@ -34,7 +30,7 @@ export function AuthShell() {
             data-aos="fade-up"
             data-aos-duration="700"
           >
-            One login. Four roles. Every trade in one command center.
+            One login. Every trade in one command center.
           </h2>
           <p
             className="text-[#9CA3AF] mt-4 text-sm max-w-md"
@@ -42,11 +38,11 @@ export function AuthShell() {
             data-aos-delay="100"
             data-aos-duration="1000"
           >
-            Riby Inc · JompStart Digital Limited · Anchor.
+            JompStart Digital Limited · Riby Inc · Anchor.
           </p>
         </div>
         <div className="font-mono text-[11px] text-[#1A7A6E] tracking-widest">
-          © 2026 · JOMP TRADE v1.1
+          © {new Date().getFullYear()} · JOMP TRADE v1.1
         </div>
       </div>
     </div>

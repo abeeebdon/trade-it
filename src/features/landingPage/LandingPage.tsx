@@ -1,16 +1,12 @@
 'use client';
-import { useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { useAppSelector } from '@/hooks/store/store';
 import Image from 'next/image';
 import PartnerComponents from './components/PartnerComponents';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import HeroComponent from './components/HeroComponent';
 import { catData, moduleArr } from './components/data';
-import Footer from './components/Footer';
 
 const TEXTILE_IMG =
   'https://images.unsplash.com/photo-1768212566108-4ce4f329e4d2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODB8MHwxfHNlYXJjaHwxfHxmYXNoaW9uJTIwdGV4dGlsZXMlMjBhZnJpY2FufGVufDB8fHx8MTc3NjgyNDU2MHww&ixlib=rb-4.1.0&q=85';
@@ -18,14 +14,7 @@ const AGRO_IMG =
   'https://images.unsplash.com/photo-1622676566956-b42b50c84c31?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTJ8MHwxfHNlYXJjaHwzfHxhZ3JpY3VsdHVyZSUyMGZhcm1lciUyMGFmcmljYW58ZW58MHx8fHwxNzc2ODI0NTYxfDA&ixlib=rb-4.1.0&q=85';
 
 export default function Landing() {
-  const user = useAppSelector((state) => state.auth.user);
   const router = useRouter();
-  useEffect(() => {
-    if (!user) return;
-    if (user.role === 'consumer') router.push('/shop');
-    else if (user.role === 'jompstart_admin') router.push('/admin/credit');
-    else router.push('/dashboard');
-  }, [user, router]);
 
   return (
     <main className="min-h-screen bg-white text-[] dark:bg-[#0A1628] dark:text-[#F5F5F5]">
@@ -128,7 +117,7 @@ export default function Landing() {
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.85 }}
-              onClick={() => router.push('/register')}
+              onClick={() => router.push('/getstarted')}
               className="helix-btn-primary inline-flex items-center gap-2"
             >
               Start free <ArrowRight size={16} />
@@ -144,8 +133,6 @@ export default function Landing() {
           </div>
         </article>
       </section>
-
-      <Footer />
     </main>
   );
 }

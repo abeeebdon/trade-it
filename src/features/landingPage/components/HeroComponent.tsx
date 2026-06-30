@@ -2,13 +2,13 @@ import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { CARGO_IMG, heroText } from './data';
 import Image from 'next/image';
-import PressableBtn from '@/features/buttons/PressableBtn';
+import PressableBtn from '@/components/buttons/PressableBtn';
 import { useRouter } from 'next/navigation';
 
 const HeroComponent = () => {
   const router = useRouter();
   return (
-    <section className="pt-36 pb-24 relative overflow-hidden">
+    <section className="relative overflow-hidden">
       <div className="helix-dot-bg absolute inset-0 opacity-70 pointer-events-none" />
       <div className="max-w-350 mx-auto px-6 lg:px-10 grid lg:grid-cols-12 gap-12 items-center relative">
         <article className="lg:col-span-7 fade-up">
@@ -42,7 +42,7 @@ const HeroComponent = () => {
               className="helix-btn-primary"
             />
             <Link
-              href="/catalog"
+              href="/shop"
               data-testid="hero-cta-browse"
               className="helix-btn-secondary inline-flex items-center gap-2"
             >

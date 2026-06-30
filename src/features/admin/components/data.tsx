@@ -1,0 +1,259 @@
+// mock.ts
+
+import {
+  CreditApplication,
+  Dispute,
+  OverviewType,
+  Product,
+  Verification,
+  VerificationItem,
+} from '../types/admin';
+
+export const mockOverview: OverviewType = {
+  business_count: 128,
+  order_count: 542,
+  transaction_count: 789,
+  fees_collected_usd: 12450,
+
+  total_volume_by_currency: {
+    USD: 95000,
+    NGN: 42000000,
+    EUR: 12000,
+  },
+
+  by_sector: {
+    fashion: { volume_usd: 32000, count: 120 },
+    beauty: { volume_usd: 18000, count: 90 },
+    food: { volume_usd: 45000, count: 210 },
+    electronics: { volume_usd: 12000, count: 60 },
+  },
+};
+
+export const sampleVerifications: VerificationItem[] = [
+  {
+    id: 'verif-001',
+    business_name: 'Lagos Agro Exports Ltd',
+    registration_type: 'LLC',
+    country: 'Nigeria',
+    sector: 'agriculture',
+    anchor_customer_id: 'anchor-88921',
+    cac_number: 'RC-1293847',
+    bvn: '22345678901',
+    tin: 'TIN-99887766',
+    director_name: 'Adebayo Ogunleye',
+    kyc_status: 'pending',
+    kyb_status: 'pending',
+  },
+  {
+    id: 'verif-002',
+    business_name: 'Accra Shea Butter Co.',
+    registration_type: 'Partnership',
+    country: 'Ghana',
+    sector: 'beauty',
+    bvn: '33445566778',
+    director_name: 'Ama Mensah',
+    kyc_status: 'approved',
+    kyb_status: 'pending',
+  },
+  {
+    id: 'verif-003',
+    business_name: 'Nairobi Coffee Exporters',
+    registration_type: 'Corporation',
+    country: 'Kenya',
+    sector: 'food',
+    ein: 'EIN-55443322',
+    director_name: 'David Mwangi',
+    kyc_status: 'approved',
+    kyb_status: 'approved',
+  },
+  {
+    id: 'verif-004',
+    business_name: 'Cape Textiles Studio',
+    registration_type: 'Sole Proprietorship',
+    country: 'South Africa',
+    sector: 'fashion',
+    tin: 'TIN-11223344',
+    director_name: 'Thandi Nkosi',
+    kyc_status: 'rejected',
+    kyb_status: 'rejected',
+  },
+];
+export const creditApplications: CreditApplication[] = [
+  {
+    id: 'app_1',
+    application_number: 'JSC-10021',
+    business_name: 'Lagos Heritage Textiles Ltd',
+    business_country: 'Nigeria',
+    amount_usd: 25000,
+    indicative_apr: 18,
+    term_months: 12,
+    risk_score: 72,
+    status: 'submitted',
+    created_at: '2026-04-20T10:15:00.000Z',
+    snapshot_sales: {
+      total_volume_usd: 42000,
+    },
+  },
+  {
+    id: 'app_2',
+    application_number: 'JSC-10022',
+    business_name: 'Accra Agro Exporters',
+    business_country: 'Ghana',
+    amount_usd: 50000,
+    indicative_apr: 15,
+    term_months: 18,
+    risk_score: 61,
+    status: 'under_review',
+    created_at: '2026-04-18T14:30:00.000Z',
+    snapshot_sales: {
+      total_volume_usd: 98000,
+    },
+  },
+  {
+    id: 'app_3',
+    application_number: 'JSC-10023',
+    business_name: 'Nairobi Coffee Collective',
+    business_country: 'Kenya',
+    amount_usd: 120000,
+    indicative_apr: 12,
+    term_months: 24,
+    risk_score: 45,
+    status: 'offered',
+    created_at: '2026-04-15T09:00:00.000Z',
+    snapshot_sales: {
+      total_volume_usd: 210000,
+    },
+  },
+  {
+    id: 'app_4',
+    application_number: 'JSC-10024',
+    business_name: 'Abuja Food Distributors',
+    business_country: 'Nigeria',
+    amount_usd: 15000,
+    indicative_apr: 22,
+    term_months: 6,
+    risk_score: 81,
+    status: 'rejected',
+    created_at: '2026-04-10T08:45:00.000Z',
+    snapshot_sales: {
+      total_volume_usd: 18000,
+    },
+  },
+];
+export const disputes: Dispute[] = [
+  {
+    id: 'disp_1',
+    reason: 'Item not received',
+    order_id: 'ORD-77821',
+    description:
+      'Buyer claims package was marked delivered but never received the shipment.',
+    status: 'open',
+    created_at: '2026-04-25T12:30:00.000Z',
+  },
+  {
+    id: 'disp_2',
+    reason: 'Product not as described',
+    order_id: 'ORD-77822',
+    description:
+      'Customer received different fabric quality compared to listing photos.',
+    status: 'under_review',
+    created_at: '2026-04-26T09:10:00.000Z',
+  },
+];
+export const products: Product[] = [
+  {
+    id: '3b58c1c6-164c-407c-906a-c940fcc3ce75',
+    business_id: '19e8e37e-a736-42d0-a2ee-f4c07108ea5f',
+    name: 'Leather Tote — Handcrafted (Lagos Edition)',
+    category: 'fashion',
+    description:
+      'Full-grain Nigerian leather tote bag, hand-stitched in Lagos. Individually numbered, with origin certificate.',
+    photos: [
+      'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=900&q=80',
+    ],
+    price_ngn: 161802.35,
+    price_usd: 120.0,
+    min_order_qty: 10,
+    unit: 'piece',
+    export_readiness_score: 70,
+    compliance_badges: ['Country-of-Origin Label'],
+    status: 'active',
+    created_at: '2026-04-22T04:43:07.669023Z',
+  },
+  {
+    id: 'c1a7e5b2-9914-4f3c-8a9d-1d7d3d8caa21',
+    business_id: '19e8e37e-a736-42d0-a2ee-f4c07108ea5f',
+    name: 'Adire Indigo Fabric Roll',
+    category: 'textiles',
+    description:
+      'Traditional hand-dyed Adire fabric from Abeokuta artisans. Sold in bulk rolls for export markets.',
+    photos: [
+      'https://images.unsplash.com/photo-1528459105426-b9548367069b?auto=format&fit=crop&w=900&q=80',
+    ],
+    price_ngn: 95000,
+    price_usd: 70,
+    min_order_qty: 20,
+    unit: 'roll',
+    export_readiness_score: 82,
+    compliance_badges: ['Eco Dye Certified', 'Country-of-Origin Label'],
+    status: 'active',
+    created_at: '2026-04-20T08:12:10.000Z',
+  },
+  {
+    id: '7d2f4b0c-5c77-4f0d-9c21-6a32c44b0b12',
+    business_id: '19e8e37e-a736-42d0-a2ee-f4c07108ea5f',
+    name: 'Shea Butter — Premium Grade (Organic)',
+    category: 'beauty',
+    description:
+      'Raw unrefined shea butter sourced from Northern Nigeria, processed using traditional methods.',
+    photos: [
+      'https://images.unsplash.com/photo-1590086782792-42dd2350140d?auto=format&fit=crop&w=900&q=80',
+    ],
+    price_ngn: 35000,
+    price_usd: 25,
+    min_order_qty: 50,
+    unit: 'kg',
+    export_readiness_score: 88,
+    compliance_badges: ['Organic Certified', 'FDA Export Ready'],
+    status: 'active',
+    created_at: '2026-04-18T10:30:00.000Z',
+  },
+  {
+    id: 'a8b9d1e2-2f4b-4e1a-9a5c-33c4b2f6d981',
+    business_id: '19e8e37e-a736-42d0-a2ee-f4c07108ea5f',
+    name: 'Dried Hibiscus (Zobo) Export Pack',
+    category: 'agro',
+    description:
+      'Sun-dried hibiscus petals packaged for international markets. High-grade export quality.',
+    photos: [
+      'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=900&q=80',
+    ],
+    price_ngn: 42000,
+    price_usd: 32,
+    min_order_qty: 30,
+    unit: 'bag',
+    export_readiness_score: 90,
+    compliance_badges: ['NAFDAC Approved', 'Phytosanitary Certified'],
+    status: 'active',
+    created_at: '2026-04-17T14:45:00.000Z',
+  },
+  {
+    id: 'f4c3e2b1-6d77-4a88-bb1d-55c9d3f2a111',
+    business_id: '19e8e37e-a736-42d0-a2ee-f4c07108ea5f',
+    name: 'Hand-Carved Wooden Bowl Set',
+    category: 'crafts',
+    description:
+      'Set of handcrafted wooden bowls made from sustainable Nigerian hardwood. Export-grade finishing.',
+    photos: [
+      'https://images.unsplash.com/photo-1616627456059-0c4cfd4a0e8b?auto=format&fit=crop&w=900&q=80',
+    ],
+    price_ngn: 78000,
+    price_usd: 58,
+    min_order_qty: 15,
+    unit: 'set',
+    export_readiness_score: 76,
+    compliance_badges: ['Sustainably Sourced'],
+    status: 'active',
+    created_at: '2026-04-15T09:20:00.000Z',
+  },
+];

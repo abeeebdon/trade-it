@@ -14,12 +14,57 @@ export const loginSchema = z.object({
 });
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
+export const forgotPasswordSchema = z.object({
+  email: z.string().email('Enter a valid email address'),
+});
+export type forgotPasswordValues = z.infer<typeof forgotPasswordSchema>;
+export const resetPasswordSchema = z
+  .object({
+    password: passwordSchema,
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  });
 
+export type ResetPasswordValues = z.infer<typeof resetPasswordSchema>;
 export const registerSchema = z.object({
   name: z.string().min(2, 'Name is too short'),
   email: z.string().email('Enter a valid email'),
   password: passwordSchema,
-  role: z.enum(['exporter', 'buyer', 'consumer']),
+  role: z.string(),
 });
 
 export type RegisterFormValues = z.infer<typeof registerSchema>;
+
+// Product validation schema
+
+export const productSchema = z.object({
+  name: z.string().min(2, 'Product name is required'),
+  category: z.string().min(1, 'Please select a category'),
+
+  unitId: z.number({ error: 'Please select a unit' }),
+
+  price_usd: z
+    .number({ error: 'Price is required' })
+    .positive('Price must be greater than 0'),
+
+  moq: z
+    .number({ error: 'MOQ is required' })
+    .int()
+    .positive('MOQ must be at least 1'),
+
+  description: z.string().min(10, 'Description must be at least 10 characters'),
+
+  currencyId: z.number(),
+  statusId: z.number(),
+  thumbnail: z.instanceof(File).nullable().optional(),
+  images: z
+    .array(z.instanceof(File))
+    .min(1, 'At least one product image is required'),
+  thumbnailPreview: z.string().nullable().optional(),
+  imagePreviews: z.array(z.string()).optional(),
+});
+
+export type ProductFormValues = z.infer<typeof productSchema>;
