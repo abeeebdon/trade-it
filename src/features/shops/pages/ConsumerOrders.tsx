@@ -1,9 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { StatusPill } from '../components/StatusPill';
-import { formatUSD } from '@/lib/func';
-import Link from 'next/link';
-import { Lock } from 'lucide-react';
+import { useState } from 'react';
 import { useAppSelector } from '@/hooks/store/store';
 import { useRouter } from 'next/navigation';
 import OrderComp from '../components/OrderComp';
@@ -23,7 +19,7 @@ export default function ConsumerOrders() {
     <main>
       <div className="text-primary!  helix-h3 mb-2">My orders & quotes</div>
       <h1 className="helix-h2 mb-6">Jompshop · Order history</h1>
-      <OrderPageFilter active={filter} onChange={setFilter} /> {/* Quotes */}
+      <OrderPageFilter active={filter} onChange={setFilter} />
       {filter !== '' ? (
         filter == 'orders' ? (
           <OrderComp />

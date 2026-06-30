@@ -1,22 +1,11 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import Image from 'next/image';
 import { useSelector } from 'react-redux';
-import {
-  Plus,
-  Truck,
-  Store,
-  Pencil,
-  ChevronLeft,
-  ChevronRight,
-  Eye,
-} from 'lucide-react';
+import { Plus, Truck, Store } from 'lucide-react';
 
-import { formatUSD } from '@/lib/func';
 import { RootState } from '@/store/store';
 import { useHeader } from '@/context/HeaderContext';
-import { StatusPill } from '@/features/shops/components/StatusPill';
 import { useCreateListing, useGetListings } from '../../hooks/useListings';
 import ListingformCard from '../components/ListingformCard';
 import { ProductListingTypes } from '../types/sellType';

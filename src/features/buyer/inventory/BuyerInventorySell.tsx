@@ -2,18 +2,24 @@
 import { useAppSelector } from '@/hooks/store/store';
 import { Pencil, Plus, Store, Trash, Truck } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import ListingForm from '../components/ListingForm';
 import { StatusPill } from '@/features/shops/components/StatusPill';
 import { formatUSD } from '@/lib/func';
 import Image from 'next/image';
 import { ListingItem } from '../types/buyers';
 import PressableBtn from '@/components/buttons/PressableBtn';
 import { useHeader } from '@/context/HeaderContext';
+import ListingForm from './components/ListingForm';
+import { useGetLocalListings } from './hooks/useGetInventory';
 
 const BuyerInventorySell = () => {
   const { setHeader } = useHeader();
 
   const [items, setItems] = useState<ListingItem[]>([]);
+  const { data, isPending } = useGetLocalListings({
+    pageNumber: 1,
+    pageSize: 10,
+  });
+  console.log(data);
 
   const [open, setOpen] = useState(false);
 

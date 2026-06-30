@@ -1,14 +1,11 @@
 'use client';
-import { useMemo, useState } from 'react';
-import ListingCard from '../shops/components/ListingCard';
+import { useState } from 'react';
 import { CATS } from '../shops/components/data';
 import { Search } from 'lucide-react';
-import { ListingCardSkeleton } from '../shops/components/ListingCardSkeleton';
 import { useRouter, useSearchParams } from 'next/navigation';
 import HomePageFIlter from './components/HomePageFIlter';
-import { useGetLandingProducts } from './hooks/useGetLandingPageProducts';
-import { ProductsResponse } from './types/home';
 import { useDebounce } from '@/components/debounce/useDebounce';
+import HomepageProducts from './components/HomepageProducts';
 
 export default function HomePage() {
   const searchParams = useSearchParams();
@@ -33,17 +30,6 @@ export default function HomePage() {
 
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 500);
-
-  const { data, isPending } = useGetLandingProducts({
-    pageNumber: 1,
-    pageSize: 10,
-    search: debouncedSearch,
-    category: category,
-  });
-
-  const fetchProducts: ProductsResponse = useMemo(() => {
-    return data ? data : ({} as ProductsResponse);
-  }, [data]);
 
   const clearCategory = () => {
     const params = new URLSearchParams(searchParams.toString());
@@ -153,31 +139,11 @@ export default function HomePage() {
           ))}
         </div>
       )}
-      <section>
-        <h2 className="text-lg font-semibold mb-5">
-          {showCategoryGrid
-            ? 'Featured today'
-            : `${fetchProducts?.data?.length ?? 0} products`}
-        </h2>
-        {isPending ? (
-          <article className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {[...Array(8)].map((_, i) => (
-              <ListingCardSkeleton key={i} />
-            ))}
-          </article>
-        ) : (
-          <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {fetchProducts?.data?.length === 0 && (
-              <div className="col-span-full text-center text-[#9CA3AF] py-16">
-                No listings match your filters.
-              </div>
-            )}
-            {fetchProducts?.data?.map((l) => (
-              <ListingCard key={l.id} l={l} />
-            ))}
-          </div>
-        )}
-      </section>
+      <HomepageProducts
+        showCategoryGrid={showCategoryGrid}
+        category={category}
+        debouncedSearch={debouncedSearch}
+      />
     </main>
   );
 }
