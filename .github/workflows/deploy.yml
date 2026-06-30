@@ -10,14 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: latest
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build
+      - run: npm install
+      - run: npm run build
       - name: Prepare deploy branch
         if: github.event_name == 'push'
         run: |
@@ -25,7 +22,7 @@ jobs:
           cp -r .next deploy/
           cp -r public deploy/
           cp package.json deploy/
-          cp pnpm-lock.yaml deploy/
+          cp package-lock.json deploy/
       - name: Push to deploy branch
         if: github.event_name == 'push'
         run: |
