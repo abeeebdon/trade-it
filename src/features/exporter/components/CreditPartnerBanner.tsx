@@ -19,7 +19,7 @@ export default function CreditPartnerBanner() {
           <div className="helix-kicker">Credit · Technology Partner</div>
           <h2 className="helix-h3 mt-1">JompStart Digital Limited</h2>
           <p className="text-[13px] text-[#9CA3AF] mt-2 max-w-2xl leading-relaxed">
-            JompStart builds &amp; maintains Helix alongside our operating
+            JompStart builds &amp; maintains Jompshop alongside our operating
             partners, and — as the platform&rsquo;s business-credit partner —
             offers working-capital financing to exporters against their verified
             sales history on Helix.

@@ -75,7 +75,7 @@ export default function CreditEligibilityGrid({
 
       {/* ── Sales basis ── */}
       <div className="helix-card p-6">
-        <div className="helix-label">Sales basis (Helix history)</div>
+        <div className="helix-label">Sales basis (Jompshop history)</div>
         <div className="mt-3 space-y-2 text-[13px]">
           <Row
             label="Paid orders"

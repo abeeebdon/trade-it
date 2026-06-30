@@ -174,7 +174,7 @@ export default function CreditDetail() {
               </button>
 
               <div className="text-[11px] text-[#9CA3AF] mt-2">
-                Funds credit to your Helix USD wallet instantly.
+                Funds credit to your Jompshop USD wallet instantly.
               </div>
             </div>
           )}
@@ -269,7 +269,8 @@ export default function CreditDetail() {
                 JompStart Digital Limited
               </div>
               <div className="text-[12px] text-[#9CA3AF] mt-2 leading-relaxed">
-                Business credit &amp; technology partner of the Helix platform.
+                Business credit &amp; technology partner of the Jompshop
+                platform.
               </div>
             </div>
           </div>

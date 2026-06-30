@@ -55,7 +55,10 @@ export default function WaitlistFooter({ setShowWaitlistModal }: Props) {
               <a href="https://www.instagram.com/jompshop_/" target="blank">
                 Instagram
               </a>
-              <a href="https://www.instagram.com/jompshop_/" target="blank">
+              <a
+                href="https://www.facebook.com/profile.php?id=61578300267978"
+                target="blank"
+              >
                 Facebook
               </a>
             </div>

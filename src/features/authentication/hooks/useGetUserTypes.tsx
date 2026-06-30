@@ -5,7 +5,6 @@ import {
   resetPasswordApi,
 } from '../api/auth';
 import { toast } from 'sonner';
-import { queryClient } from '@/lib/react-query';
 import { useRouter } from 'next/navigation';
 
 const useGetUserTypes = () => {

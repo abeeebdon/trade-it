@@ -9,8 +9,8 @@ const Footer = () => {
 
   return (
     <footer className="border-t border-[#1A7A6E]/15 py-10 mt-16">
-      <div className="max-w-350 mx-auto px-6 lg:px-10 grid md:grid-cols-4 gap-8">
-        <div>
+      <div className="max-w-350 mx-auto px-6 lg:px-10 grid md:grid-cols-5 lg:grid-cols-6  gap-8">
+        <div className="col-span-2">
           <div className="flex items-end gap-2 mb-3">
             {isDark ? (
               <JompsShopLogoDark width={120} />
@@ -143,6 +143,35 @@ const Footer = () => {
               </Link>
             </li>
           </ul>
+        </div>
+        <div>
+          <div className="text-[11px] font-mono uppercase tracking-wider text-[#1A7A6E] mb-3">
+            Connect
+          </div>
+          <div className="space-y-2 flex flex-col text-[12px] text-[#9CA3AF]">
+            <a
+              href="mailto:hello@jompshop.com"
+              className="hover:text-[#F5F5F5]"
+            >
+              hello@jompshop.com
+            </a>
+
+            <a
+              href="https://www.instagram.com/jompshop_/"
+              target="blank"
+              className="hover:text-[#F5F5F5]"
+            >
+              Instagram
+            </a>
+
+            <a
+              href="https://www.facebook.com/profile.php?id=61578300267978"
+              target="blank"
+              className="hover:text-[#F5F5F5]"
+            >
+              Facebook
+            </a>
+          </div>
         </div>
       </div>
 

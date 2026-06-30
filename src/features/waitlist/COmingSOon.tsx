@@ -1,12 +1,11 @@
 'use client';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Hero from './Hero';
 import Marketplace from './MarketPlace';
 import HowItWorks from './HowItWorks';
 import DualCTA from './DualCTA';
 import WaitlistFooter from './WaitlistFooter';
 import ProductModal from './ProductModal';
-import { useRouter } from 'next/navigation';
 import { catWailtist, ProductType } from './constants';
 import './waitlist.css';
 import WaitlistNav from './WailtListNav';
@@ -14,7 +13,6 @@ import WaitlistModal from './WaitlistModal';
 import FAQSection from './FAQs';
 
 export default function ComingSoon() {
-  const router = useRouter();
   const [funcEmail, setFuncEmail] = useState('');
   const [scrolled, setScrolled] = useState(false);
   const [modal, setModal] = useState<ProductType | null>(null); // active product or null
@@ -127,14 +125,6 @@ export default function ComingSoon() {
           onClose={() => setShowWaitlistModal(false)}
         />
       )}
-      <button
-        onClick={() => router.push('/login')}
-        className="js-discreet-admin"
-        data-testid="discreet-admin"
-        aria-label="Admin login"
-      >
-        ·
-      </button>
     </section>
   );
 }

@@ -4,7 +4,6 @@ import { login, setAuthRole } from '@/store/auth/auth.slice';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import Image from 'next/image';
 import InputField from '@/components/form/InputFIeld';
 import { LoginFormValues, loginSchema } from '../components/validation';
 import { useForm } from 'react-hook-form';
@@ -44,8 +43,6 @@ export default function Login() {
           case 'admin':
             dispatch(setAuthRole('admin'));
             router.push('/admin');
-            // dispatch(setAuthRole('exporter'));
-            // router.push('/exporter');
             break;
           case 'retailer':
             dispatch(setAuthRole('retailer'));
@@ -121,24 +118,6 @@ export default function Login() {
           {loading ? <Loader /> : 'Sign in'}
         </button>
       </form>
-      <div className="flex items-center gap-3 my-6 text-[11px] font-mono tracking-widest text-[#9CA3AF]">
-        <div className="flex-1 h-px bg-[#1A7A6E]/25" /> OR{' '}
-        <div className="flex-1 h-px bg-[#1A7A6E]/25" />
-      </div>
-
-      <button
-        data-testid="google-login-btn"
-        className="w-full cursor-pointer flex items-center justify-center gap-3 border border-secondary/40 rounded px-4 py-3 text-sm text-text font-medium hover:bg-secondary/10 transition"
-      >
-        <Image
-          src="/icons/googleicon.png"
-          alt="Google icon"
-          width={18}
-          height={18}
-        />
-        Continue with Google
-      </button>
-
       <div className="mt-8 text-center text-[13px] text-[#9CA3AF]">
         New to Jompshop?{' '}
         <Link href="/getstarted" className="text-[#C9922A] font-semibold">

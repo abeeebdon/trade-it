@@ -90,7 +90,6 @@ const Header = ({ className }: { className?: string }) => {
                 <button
                   onClick={() => setMenuOpen((o) => !o)}
                   className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border cursor-pointer border-[#1A7A6E]/30 text-[12px] hover:border-[#C9922A]/50"
-                  data-testid="user-menu-trigger"
                 >
                   <UserCircle size={14} />{' '}
                   <p className="hidden md:block">
@@ -107,11 +106,7 @@ const Header = ({ className }: { className?: string }) => {
                 >
                   Sign in
                 </Link>
-                <Link
-                  href="/getstarted"
-                  data-testid="register-cta"
-                  className="helix-btn-primary text-sm"
-                >
+                <Link href="/getstarted" className="helix-btn-primary text-sm">
                   Get Started
                 </Link>
               </div>
@@ -135,7 +130,7 @@ const Header = ({ className }: { className?: string }) => {
       />
       {menuOpen && (
         <div
-          className="absolute right-0 mt-2 w-56 helix-card p-2 shadow-2xl z-40"
+          className="fixed right-0 mt-2 w-56 helix-card p-2 shadow-2xl z-40"
           onMouseLeave={() => setMenuOpen(false)}
         >
           <div className="px-3 py-2 border-b border-[#1A7A6E]/20 mb-1">
@@ -165,7 +160,6 @@ const Header = ({ className }: { className?: string }) => {
           <button
             onClick={() => setShowLogoutModal(true)}
             className="w-full text-left px-3 py-2 text-[12px] text-[#E74C3C] cursor-pointer hover:bg-[#E74C3C]/10 rounded inline-flex items-center gap-2"
-            data-testid="shop-logout"
           >
             <LogOut size={12} /> Sign out
           </button>
