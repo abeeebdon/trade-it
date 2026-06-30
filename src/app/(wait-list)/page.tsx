@@ -1,7 +1,6 @@
 'use client';
 import HomePage from '@/features/landingPage/HomePage';
 import ComingSoon from '@/features/waitlist/COmingSOon';
-import { getSavedCookie } from '@/store/auth/cookies';
 import Footer from '@/features/landingPage/components/Footer';
 import Header from '@/features/landingPage/components/Header';
 import { ArrowLeft } from 'lucide-react';
@@ -9,15 +8,13 @@ import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
 import { setBeta } from '@/store/waitlist/waitlist.slice';
 
 const Homepage = () => {
-  const modeLive = false;
-  const token = getSavedCookie('token');
   const dispatch = useAppDispatch();
 
   const isBetaPreview = useAppSelector((state) => state.wait.beta);
   const exitBeta = () => {
     dispatch(setBeta(false));
   };
-  return modeLive || token || isBetaPreview ? (
+  return isBetaPreview ? (
     <main>
       {isBetaPreview && (
         <div className="bg-[#EFA005]  w-full text-[#1E0038] text-[12px] font-mono tracking-wider uppercase">

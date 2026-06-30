@@ -47,7 +47,7 @@ const ProfileStep2 = ({ biz, kycForm, setKycForm }: ProfileStep2Props) => {
             {biz.registration_type === 'business'
               ? 'CAC certificate, TIN, director ID and proof of address'
               : 'government ID, BVN slip, proof of address'}
-            . Helix will forward to Anchor for verification.
+            . Jompshop will forward to Anchor for verification.
           </p>
           <div className="grid md:grid-cols-2 gap-4">
             {biz.registration_type === 'business' ? (

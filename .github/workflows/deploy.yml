@@ -1,0 +1,30 @@
+name: Build and Deploy
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run build
+      - name: Prepare deploy branch
+        run: |
+          mkdir deploy
+          cp -r .next deploy/
+          cp -r public deploy/
+          cp -r node_modules deploy/   # or just standalone output if you switch
+          cp package.json deploy/
+      - name: Push to deploy branch
+        run: |
+          cd deploy
+          git init
+          git checkout -b deploy
+          git add -A
+          git -c user.name=ci -c user.email=ci@ci commit -m "Build $(date)"
+          git push --force https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/yourname/yourrepo.git deploy:deploy

@@ -13,7 +13,7 @@ export const getKicker = (path: string, product?: ProductMeta): string => {
   switch (path) {
     // Admin
     case '/admin':
-      return 'Helix Platform Control';
+      return 'Jompshop Platform Control';
     case '/admin/verifications':
       return 'KYC / KYB · Admin';
     case '/admin/credit':

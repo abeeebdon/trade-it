@@ -59,7 +59,7 @@ const BuyerInventorySell = () => {
 
             <p className="text-[13px] text-text">
               Listings here sell your <b>US-stocked inventory</b> to consumers
-              with 48-hour delivery. Helix keeps a 2% marketplace fee; Anchor
+              with 48-hour delivery. Jompshop keeps a 2% marketplace fee; Anchor
               credits the remainder to your USD wallet instantly.
             </p>
           </div>

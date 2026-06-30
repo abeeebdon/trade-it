@@ -62,7 +62,7 @@ export default function KycKybForm({
         {isBusiness
           ? 'CAC certificate, TIN, director ID and proof of address'
           : 'government ID, BVN slip, proof of address'}
-        . Helix will forward to Anchor for verification.
+        . Jompshop will forward to Anchor for verification.
       </p>
 
       {/* Form fields */}

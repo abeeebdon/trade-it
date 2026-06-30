@@ -174,8 +174,8 @@ export default function RepaymentCard({ app }: RepaymentCardProps) {
       {/* ── Auto-debit notice ── */}
       <div className="mt-4 pt-3 border-t border-[#1A7A6E]/15 text-[11px] text-[#9CA3AF] leading-relaxed">
         Auto-debit: whenever USD lands in your wallet (trade payments or
-        consumer orders), Helix deducts up to the next installment in full and
-        sends it to JompStart.
+        consumer orders), Jompshop deducts up to the next installment in full
+        and sends it to JompStart.
       </div>
     </div>
   );
