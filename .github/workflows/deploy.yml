@@ -31,4 +31,4 @@ jobs:
           git checkout -b deploy
           git add -A
           git -c user.name=ci -c user.email=ci@ci commit -m "Build $(date)"
-          git push --force https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/yourname/yourrepo.git deploy:deploy
+          git push --force https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/abeeebdon/trade-it.git deploy:deploy
