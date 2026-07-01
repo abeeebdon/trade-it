@@ -1,0 +1,3 @@
+{
+  "/(dashboard)/exporter/page": "app/(dashboard)/exporter/page.js"
+}

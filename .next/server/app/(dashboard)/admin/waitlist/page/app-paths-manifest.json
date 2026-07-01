@@ -1,0 +1,3 @@
+{
+  "/(dashboard)/admin/waitlist/page": "app/(dashboard)/admin/waitlist/page.js"
+}

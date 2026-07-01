@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(dashboard)/layout,_N_T_/(dashboard)/buyer/layout,_N_T_/(dashboard)/buyer/onboarding/layout,_N_T_/(dashboard)/buyer/onboarding/page,_N_T_/buyer/onboarding"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/!KGRhc2hib2FyZCk/buyer/onboarding/__PAGE__",
+    "/!KGRhc2hib2FyZCk/buyer/onboarding",
+    "/!KGRhc2hib2FyZCk/buyer",
+    "/!KGRhc2hib2FyZCk",
+    "/_index",
+    "/_head"
+  ]
+}

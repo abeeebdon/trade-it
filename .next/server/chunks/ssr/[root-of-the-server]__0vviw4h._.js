@@ -1,0 +1,3 @@
+module.exports=[93695,(a,b,c)=>{b.exports=a.x("next/dist/shared/lib/no-fallback-error.external.js",()=>require("next/dist/shared/lib/no-fallback-error.external.js"))},10585,a=>{a.v("/_next/static/media/favicon.0s4zga19i7vym.ico"+(globalThis.NEXT_CLIENT_ASSET_SUFFIX||""))},68611,a=>{"use strict";let b={src:a.i(10585).default,width:256,height:256};a.s(["default",0,b])},46248,a=>{"use strict";var b=a.i(7997);a.s(["default",0,()=>(0,b.jsx)("main",{className:"flex justify-center items-center h-[50vh] text-xl font-semibold",children:"Coming soon"})])},57917,a=>{a.n(a.i(46248))}];
+
+//# sourceMappingURL=%5Broot-of-the-server%5D__0vviw4h._.js.map
