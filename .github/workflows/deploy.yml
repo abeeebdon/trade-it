@@ -1,4 +1,6 @@
 name: Build and Deploy
+env:
+  NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
 on:
   push:
     branches: [main]
@@ -8,25 +10,28 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm ci
+      - run: npm install
       - run: npm run build
       - name: Prepare deploy branch
+        if: github.event_name == 'push'
         run: |
-          mkdir deploy
-          cp -r .next deploy/
-          cp -r public deploy/
-          cp -r node_modules deploy/   # or just standalone output if you switch
-          cp package.json deploy/
+          git fetch origin deploy || true
+          git worktree add deploy-out origin/deploy || git worktree add deploy-out --orphan deploy
+          cp -r .next deploy-out/
+          cp -r public deploy-out/
+          cp package.json deploy-out/
+          cp package-lock.json deploy-out/
       - name: Push to deploy branch
+        if: github.event_name == 'push'
         run: |
-          cd deploy
-          git init
-          git checkout -b deploy
+          cd deploy-out
           git add -A
           git -c user.name=ci -c user.email=ci@ci commit -m "Build $(date)"
-          git push --force https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/yourname/yourrepo.git deploy:deploy
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/abeeebdon/trade-it.git HEAD:deploy

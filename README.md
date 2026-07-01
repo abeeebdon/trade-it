@@ -1,4 +1,4 @@
-# 🚀 JompTrade Frontend
+# 🚀 Jomphop Frontend
 
 A modern, scalable frontend application built with **Next.js**, powered by a robust stack for state management, form handling, UI, and developer experience.
 

@@ -63,7 +63,7 @@ export default function Landing() {
             </h2>
             <p className="text-[#9CA3AF] mt-5 leading-relaxed">
               From Adire panels shipping out of Abeokuta to single-origin Ofada
-              rice headed to Brooklyn, Jomp Trade routes every dollar and
+              rice headed to Brooklyn, Jomp Shop routes every dollar and
               document through one place &mdash; with Riby Inc holding buyer
               funds in escrow until goods land.
             </p>
