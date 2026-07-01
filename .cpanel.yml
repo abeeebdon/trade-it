@@ -1,0 +1,7 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/jompymkb/jomp
+    - cd $DEPLOYPATH
+    - npm install --omit=dev
+    - touch tmp/restart.txt
