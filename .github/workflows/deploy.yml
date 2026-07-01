@@ -1,4 +1,6 @@
 name: Build and Deploy
+env:
+  NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
 on:
   push:
     branches: [main]
