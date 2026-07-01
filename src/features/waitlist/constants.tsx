@@ -216,8 +216,19 @@ export const faqData = [
       },
       {
         question: 'Who runs JompShop?',
-        answer:
-          'JompShop is powered by three operating partners: JompStart Digital, which manages the platform, exporter onboarding, African operations, compliance, and logistics support; Riby Inc., which manages US and global operations and serves as the Delivery Partner of Record for direct-to-consumer shipments; and Anchor, which provides the global multi-currency banking and payment infrastructure.',
+        answer: (
+          <p>
+            JompShop is powered by three operating partners:{' '}
+            <strong className="text-primary">JompStart Digital</strong>, which
+            manages the platform, exporter onboarding, African operations,
+            compliance, and logistics support;{' '}
+            <strong className="text-primary">Riby Inc</strong>., which manages
+            US and global operations and serves as the Delivery Partner of
+            Record for direct-to-consumer shipments; and{' '}
+            <strong className="text-primary">Anchor</strong> , which provides
+            the global multi-currency banking and payment infrastructure.
+          </p>
+        ),
       },
       {
         question: 'Where is JompShop available?',
