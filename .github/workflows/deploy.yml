@@ -17,14 +17,7 @@ jobs:
           node-version: 20
       - run: npm install
       - run: npm run build
-      - name: Prepare deploy branch
-        if: github.event_name == 'push'
-        run: |
-          mkdir deploy
-          cp -r .next deploy/
-          cp -r public deploy/
-          cp package.json deploy/
-          cp package-lock.json deploy/
+
       - name: Push to deploy branch
         if: github.event_name == 'push'
         run: |
