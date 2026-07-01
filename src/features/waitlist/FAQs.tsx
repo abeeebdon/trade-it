@@ -3,7 +3,7 @@
 import { FC, useState } from 'react';
 
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import { faqs } from './constants';
+import { faqData } from './constants';
 
 const FAQSection: FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -22,41 +22,50 @@ const FAQSection: FC = () => {
           data-aos="fade-down"
           data-aos-easing="linear"
           data-aos-duration="600"
-          className="mb-8 text-xl font-bold text-primary md:text-3xl"
+          className="mb-10 text-xl font-bold text-primary md:text-3xl"
         >
           Frequently Asked Question
         </h2>
 
-        <div className="mx-auto w-full max-w-5xl space-y-3 text-left">
-          {faqs.map((faq, index) => (
-            <div
-              style={{
-                borderColor: '#CF9FFF',
-              }}
-              key={index}
-              data-aos="fade-up"
-              data-aos-duration="600"
-              className="overflow-hidden rounded-lg border  "
-            >
-              <button
-                onClick={() => toggleFAQ(index)}
-                className="flex w-full items-center justify-between p-4 text-left font-medium transition"
-              >
-                <span className="text-base font-semibold text-purple-50 ">
-                  {faq.question}
-                </span>
-                {openIndex !== index ? (
-                  <ChevronUp className="text-lg" />
-                ) : (
-                  <ChevronDown className="text-lg" />
-                )}
-              </button>
-              {openIndex === index && (
-                <p className=" px-4 py-3 text-sm text-purple-100/90">
-                  {faq.answer}
-                </p>
-              )}
-            </div>
+        <div className="mx-auto w-full max-w-5xl space-y-10 text-left">
+          {faqData.map((section) => (
+            <section key={section.section}>
+              <h2 className="text-xl font-bold text-primary mb-4">
+                {section.section}
+              </h2>
+              <article className="space-y-3">
+                {section.items.map((faq, index) => (
+                  <div
+                    style={{
+                      borderColor: '#CF9F99',
+                    }}
+                    key={index}
+                    data-aos="fade-up"
+                    data-aos-duration="600"
+                    className="overflow-hidden rounded-lg border  "
+                  >
+                    <button
+                      onClick={() => toggleFAQ(index)}
+                      className="flex w-full items-center justify-between p-4 text-left font-medium transition"
+                    >
+                      <span className="text-base font-semibold text-purple-100/90 ">
+                        {faq.question}
+                      </span>
+                      {openIndex !== index ? (
+                        <ChevronUp className="text-lg" />
+                      ) : (
+                        <ChevronDown className="text-lg" />
+                      )}
+                    </button>
+                    {openIndex === index && (
+                      <p className=" px-4 py-3 text-sm text-white">
+                        {faq.answer}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </article>
+            </section>
           ))}
         </div>
       </div>

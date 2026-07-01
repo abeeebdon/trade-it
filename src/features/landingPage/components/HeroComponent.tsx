@@ -35,22 +35,18 @@ const HeroComponent = () => {
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <PressableBtn
               title="Open an account"
-              handleClick={() => router.push('/register')}
+              handleClick={() => router.push('/getstarted')}
               rightComponent={<ArrowRight size={16} />}
-              helix-btn-primary
-              data-testid="hero-cta-primary"
               className="helix-btn-primary"
             />
             <Link
-              href="/shop"
-              data-testid="hero-cta-browse"
+              href="/"
               className="helix-btn-secondary inline-flex items-center gap-2"
             >
               Browse marketplace
             </Link>
             <Link
-              href="/shop"
-              data-testid="hero-cta-shop"
+              href="/"
               className="text-[13px] text-[#C9922A] font-semibold inline-flex items-center gap-1 hover:gap-2 transition-all pl-2"
             >
               Or shop direct from Africa →

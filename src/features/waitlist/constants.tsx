@@ -200,63 +200,146 @@ export const catWailtist = [
   '🫚 Natural Oils',
   '🌾 Grains & Seeds',
 ];
-
-export const faqs: FAQItem[] = [
+export const faqData = [
   {
-    question: 'Will the textiles be of good quality?',
-    answer:
-      'That’s why we exist. Products already packaged go from producers and then shipped within days, not months in warehouses. We test packaging for heat or breakage because we know what “quality” should be.',
+    section: 'General',
+    items: [
+      {
+        question: 'What is JompShop?',
+        answer:
+          'JompShop enables Nigerian and African producers to market, sell, ship, and collect payments from US-based customers without needing to be physically present in the United States. The platform provides a US correspondence address, payment collection, compliance support, marketplace setup, warehousing, shipping options, and last-mile delivery. It also enables Africans in the US and customers seeking African products to safely buy, pay, and receive products at their doorstep.',
+      },
+      {
+        question: 'Is JompShop a shipping company or a marketplace?',
+        answer:
+          'JompShop is a marketplace, not a shipping company. It connects sellers and buyers while coordinating logistics, payments, and compliance through trusted operating partners. International shipping partners and local logistics providers ensure products move smoothly across borders and to customers.',
+      },
+      {
+        question: 'Who runs JompShop?',
+        answer: (
+          <p>
+            JompShop is powered by three operating partners:{' '}
+            <strong className="text-primary">JompStart Digital</strong>, which
+            manages the platform, exporter onboarding, African operations,
+            compliance, and logistics support;{' '}
+            <strong className="text-primary">Riby Inc</strong>., which manages
+            US and global operations and serves as the Delivery Partner of
+            Record for direct-to-consumer shipments; and{' '}
+            <strong className="text-primary">Anchor</strong> , which provides
+            the global multi-currency banking and payment infrastructure.
+          </p>
+        ),
+      },
+      {
+        question: 'Where is JompShop available?',
+        answer:
+          'JompShop currently serves producers and exporters in Nigeria, with buyers located in the United States. Expansion into additional African countries is planned in the future.',
+      },
+    ],
   },
   {
-    question: 'How is this different from Amazon/Etsy African stores?',
-    answer:
-      'Most stores buy from 3-4 middlemen first. We connect you directly to the producer in Nigeria. Less handling, lower cost, and the maker gets respected. We just handle the shipping and customs stress for you.',
+    section: 'For Sellers',
+    items: [
+      {
+        question: 'Who can sell on JompShop?',
+        answer:
+          'Registered Nigerian producers, exporters, and small-to-medium businesses with export-ready products can sell on JompShop. Supported categories include fashion, beauty, cosmetics, food products, home goods, art, and handmade products.',
+      },
+      {
+        question: 'How do I become a seller on JompShop?',
+        answer:
+          'JompShop is currently in private beta with selected exporters. Interested businesses can join the waitlist. Once public registration opens, sellers can sign up, complete business verification, set up their storefront, and list products with guidance from the onboarding team.',
+      },
+      {
+        question: 'What does it cost to list on JompShop?',
+        answer:
+          'Listing products on JompShop is free. The platform earns a commission only on completed sales, with full fee details shared during seller onboarding.',
+      },
+      {
+        question: 'Do I need to handle shipping alone?',
+        answer:
+          'No. JompShop coordinates logistics together with international shipping partners. For direct-to-customer shipments, the Delivery Partner of Record manages payment collection and last-mile delivery, while sellers receive clear shipment preparation and hand-off instructions.',
+      },
+      {
+        question: 'How do I get paid?',
+        answer:
+          "Payments are processed through Anchor and Stripe. Sellers receive payouts in their local currency through Anchor's multi-currency infrastructure after order confirmation and delivery according to the payout schedule.",
+      },
+      {
+        question: 'What currencies does JompShop support?',
+        answer:
+          'JompShop currently supports multiple currencies through Anchor, including USD and NGN, with more currencies planned as the platform expands.',
+      },
+      {
+        question: 'What locations can I ship from?',
+        answer:
+          "Sellers can ship from anywhere in Nigeria to JompShop's shipping pickup centers in Lagos and Ibadan.",
+      },
+    ],
   },
   {
-    question: 'When will you launch and how do I get early access?',
-    answer:
-      'We’re still setting up with producers now. Join the waitlist via link in bio and you’ll get first access and details before we open to everyone.',
+    section: 'For Buyers',
+    items: [
+      {
+        question: 'Who can buy on JompShop?',
+        answer:
+          'Anyone in the United States, and selected parts of Canada, can shop on JompShop. The platform supports individual consumers, retailers purchasing wholesale inventory, and business buyers seeking supplier relationships.',
+      },
+      {
+        question: 'How long does delivery take?',
+        answer:
+          "Delivery typically ranges from a few days to a couple of weeks depending on the seller's location, product category, and delivery destination. Estimated delivery dates are shown during checkout, and shipment tracking is provided.",
+      },
+      {
+        question: 'How are buyer payments handled?',
+        answer:
+          "Payments are securely processed through JompShop's payment partners. Buyers pay in USD or NGN, while the platform handles currency conversion for sellers. Sellers are paid only after successful delivery.",
+      },
+      {
+        question: "What happens if my order doesn't arrive or arrives damaged?",
+        answer:
+          'JompShop provides a dispute resolution process for delayed, damaged, missing, or incorrect orders. The operations team works with customers to resolve issues, including returns and refunds where applicable.',
+      },
+      {
+        question: 'Can I buy in bulk or place wholesale orders?',
+        answer:
+          'Yes. JompShop supports both direct-to-consumer purchases and wholesale orders. Retailers can request quotations and place bulk orders directly with verified suppliers.',
+      },
+    ],
   },
   {
-    question:
-      'I don’t know how to use the computer/internet. Can I still join?',
-    answer:
-      'Yes. No tech skills needed. We talk to you on WhatsApp/call. You focus on your craft. We’ll guide you through photos, pricing, everything. Many makers we’re speaking to are in the same situation.',
+    section: 'Trust, Payments & Compliance',
+    items: [
+      {
+        question: 'Is JompShop safe to use?',
+        answer:
+          "Yes. JompShop operates on vetted infrastructure managed by experienced operating partners. Sellers are verified during onboarding, payments are secured through Anchor's licensed banking infrastructure, and deliveries are managed by Riby Inc.",
+      },
+      {
+        question: 'Is my payment information secure?',
+        answer:
+          'Yes. All payment processing is handled securely by Anchor. JompShop does not store sensitive payment credentials on its own servers.',
+      },
+      {
+        question: 'Does JompShop comply with US import and export regulations?',
+        answer:
+          'Yes. Export compliance is managed by JompStart Digital, while US import requirements and delivery compliance are handled by Riby Inc. Sellers receive guidance throughout the onboarding process.',
+      },
+    ],
   },
   {
-    question: 'How will I get paid? I don’t have a dollar account.',
-    answer:
-      'You get paid in Naira, straight to your Nigerian bank account. We handle dollars on our end. You see the price, agree, and get paid after delivery. Simple.',
-  },
-  {
-    question: 'What if the buyer in America rejects my product?',
-    answer:
-      'We agree on quality and photos with you first. Only buyers who want that exact product see it. If there’s ever an issue, we sort it with you directly. Your craft won’t be wasted.',
-  },
-  {
-    question: 'Who are you guys? Why should we trust you?',
-    answer:
-      'We’re Nigerians too, and we’re tired of seeing great products and great people disconnected. We started this because we kept watching buyers struggle to find real stuff, and makers struggle to reach buyers. We’re building the link slowly, talking to both sides first. No big company promises,we are just people trying to do it right.',
-  },
-  {
-    question: 'What happens after I join the waitlist / send “TELL ME MORE”?',
-    answer:
-      'Nothing stressful. For buyers: we’ll share updates, tell you when the launch is close, ask what products you miss most. For producers: we’ll have a simple chat on WhatsApp, learn about your craft, explain how we’d work together. You can ask questions and leave anytime. No forms, no pressure.',
-  },
-  {
-    question: 'How do you make sure quality stays high on both sides?',
-    answer:
-      'Small steps. For producers: we start with samples/photos so buyers know exactly what they’re getting. For buyers: we only list makers we’ve spoken to and tested packaging with. If quality drops, we pause and fix it. Reputation matters more to us than rushing.',
-  },
-  {
-    question:
-      'What if something goes wrong? Maybe a delay, broken item, misunderstanding, etc?',
-    answer:
-      'We own the middle. If a buyer’s package is delayed, we handle it. If a producer has an issue, we sort it without blaming. You won’t be left fighting someone in another country. That’s why we exist to take the stress so both sides can focus on what they do best.',
-  },
-  {
-    question: 'When does this actually start?',
-    answer:
-      'Slowly. We’re still listening to buyers about what they miss, and talking to makers about how they work. Launch comes after we get those conversations right. Joining the waitlist now just means you’re part of that early conversation. You’ll know before anyone else. We are closer to launching sooner than you expect.',
+    section: 'Getting in Touch',
+    items: [
+      {
+        question: 'How do I contact JompShop support?',
+        answer:
+          "If you've joined the waitlist, the team will reach out to you. You can also contact support via email, social media, or WhatsApp. Seller support is available in Nigeria, while the US team handles buyer support and delivery correspondence.",
+      },
+      {
+        question: 'How do I stay updated about JompShop?',
+        answer:
+          'Follow JompShop on social media and subscribe to the newsletter for updates on products, sellers, and platform announcements.',
+      },
+    ],
   },
 ];
