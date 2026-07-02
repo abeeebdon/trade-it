@@ -7,6 +7,7 @@ import {
   ProductCategoryListParams,
   ProductCategoryListResponse,
   ProductCountryListResponse,
+  EditProductPayload,
 } from '../types/exporter';
 import { getUserId } from '@/lib/helpers/TokenDetails';
 import { toast } from 'sonner';
@@ -61,7 +62,6 @@ export const getProductById = async (id: string): Promise<ProductData> => {
 export const createProduct = async (
   payload: CreateProductPayload,
 ): Promise<void> => {
-  console.log(payload.Images);
   try {
     const form = new FormData();
     const id = getUserId();
@@ -85,10 +85,38 @@ export const createProduct = async (
     }
 
     payload.Images.forEach((img) => {
-      form.append('Images', img);
+      form.append('images', img);
     });
 
     await api.post('/Product/create', form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+export const editProduct = async ({ id, payload }: EditProductPayload) => {
+  try {
+    const form = new FormData();
+
+    form.append('Name', payload.Name);
+    form.append('Category', payload.Category);
+    form.append('Unit', String(payload.Unit));
+    form.append('PriceUsd', String(payload.PriceUsd));
+    form.append('Moq', String(payload.Moq));
+    form.append('Description', payload.Description);
+    form.append('CurrencyId', String(payload.CurrencyId));
+    form.append('StatusId', String(payload.StatusId));
+
+    if (payload.ThumbnailImage) {
+      form.append('ThumbnailImage', payload.ThumbnailImage);
+    }
+
+    payload.Images.forEach((img) => {
+      form.append('images', img);
+    });
+
+    await api.put(`/Product/${id}`, form, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
   } catch (error) {

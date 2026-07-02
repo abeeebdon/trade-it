@@ -7,11 +7,13 @@ import {
   getProductCategories,
   getProductCategoryById,
   getProductCountries,
+  editProduct,
 } from '../api/productsApi';
 import {
   CreateProductPayload,
   ProductListParams,
   ProductCategoryListParams,
+  EditProductPayload,
 } from '../types/exporter';
 
 export const useGetProducts = ({ pageNumber, pageSize }: ProductListParams) => {
@@ -37,6 +39,22 @@ export const useCreateProduct = (onSuccess?: () => void) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['exporter-products'] });
       toast.success('Product created successfully');
+      onSuccess?.();
+    },
+    onError: () => {
+      toast.error('Failed to save product. Please try again.');
+    },
+  });
+};
+export const useEditProduct = (onSuccess?: () => void) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, payload }: EditProductPayload) =>
+      editProduct({ id, payload }),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['exporter-products'] });
+      toast.success(data ?? 'Product updated successfully');
       onSuccess?.();
     },
     onError: () => {

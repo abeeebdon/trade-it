@@ -54,10 +54,10 @@ export default function ProductCard({ p }: ProductCardPRops) {
         <div className="mt-auto pt-4 flex items-end justify-between">
           <div>
             <div className="font-mono text-xl text-[#C9922A] font-bold">
-              {formatUSD(p.priceUsd)}
+              {formatUSD(p.amountInUsd)}
             </div>
             <div className="text-[11px] text-[#9CA3AF] font-mono">
-              {formatNGN(p.priceUsd)}
+              {formatNGN(p.amountInNaira)}
             </div>
           </div>
 

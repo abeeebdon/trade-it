@@ -63,8 +63,6 @@ export const createListing = async (payload: CreateListingPayload) => {
 };
 export const editListing = async ({ id, payload }: EditListingPayload) => {
   const formData = new FormData();
-  console.log(payload.ThumbnailImage);
-  console.log(payload.Photos);
   formData.append('UserId', '9');
   formData.append('Title', payload.Title);
   formData.append('Category', payload.Category);
