@@ -102,10 +102,7 @@ export interface FieldProps {
 }
 
 export type VerificationStatus =
-  | 'pending'
-  | 'approved'
-  | 'rejected'
-  | 'under_review';
+  'pending' | 'approved' | 'rejected' | 'under_review';
 
 export type Verification = {
   id: string;
@@ -136,11 +133,7 @@ export interface VerificationItem {
 // Credit (Admin-facing)
 
 type CreditStatus =
-  | 'submitted'
-  | 'under_review'
-  | 'approved'
-  | 'rejected'
-  | 'offered';
+  'submitted' | 'under_review' | 'approved' | 'rejected' | 'offered';
 
 export interface CreditApplicationX {
   id: string;
@@ -230,6 +223,10 @@ export type CreateProductPayload = {
   ThumbnailImage: File | null;
   Images: File[];
 };
+export type EditProductPayload = {
+  payload: CreateProductPayload;
+  id: string | number;
+};
 
 // Internal form state — maps to CreateProductPayload before submit
 export type ProductFormState = {
@@ -286,11 +283,7 @@ export type OrderStatus =
   | 'cancelled';
 
 export type PaymentStatus =
-  | 'awaiting'
-  | 'paid'
-  | 'confirmed'
-  | 'refunded'
-  | 'failed';
+  'awaiting' | 'paid' | 'confirmed' | 'refunded' | 'failed';
 
 export type TimelineEvent = {
   event: string;
@@ -360,19 +353,12 @@ export type EditListingPayload = {
   id: string | number;
 };
 export type QuoteStatus =
-  | 'pending'
-  | 'quoted'
-  | 'accepted'
-  | 'rejected'
-  | 'expired';
+  'pending' | 'quoted' | 'accepted' | 'rejected' | 'expired';
 
 export type EscrowStatus = 'held' | 'released' | 'refunded';
 
 export type FulfillmentOrderStatus =
-  | 'paid'
-  | 'shipped'
-  | 'delivered'
-  | 'cancelled';
+  'paid' | 'shipped' | 'delivered' | 'cancelled';
 
 export type CheckoutMode = 'quote_prepay' | 'listed';
 

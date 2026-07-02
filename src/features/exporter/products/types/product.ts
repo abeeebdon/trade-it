@@ -6,6 +6,8 @@ export interface ProductResponseType {
   description: string;
   images: string[];
   moq: number;
+  amountInUsd: number;
+  amountInNaira: number;
   priceUsd: number;
   statusId: number;
   thumbnailImage: string;

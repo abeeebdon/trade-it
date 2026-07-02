@@ -15,11 +15,11 @@ export const useCreateListing = (onSuccess?: () => void) => {
 
   return useMutation({
     mutationFn: (payload: CreateListingPayload) => createListing(payload),
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: ['listings'],
       });
-      toast.success('Listing created successfully');
+      toast.success(data?.message ?? 'Listing created successfully');
       onSuccess?.();
     },
     onError: (error: AxiosError) => {
@@ -37,11 +37,11 @@ export const useEditListing = (onSuccess?: () => void) => {
   return useMutation({
     mutationFn: ({ id, payload }: EditListingPayload) =>
       editListing({ id, payload }),
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: ['listings'],
       });
-      toast.success('Listing created successfully');
+      toast.success(data?.message ?? 'Listing edited successfully');
       onSuccess?.();
     },
     onError: (error: AxiosError) => {

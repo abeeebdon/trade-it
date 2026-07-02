@@ -10,7 +10,10 @@ export const passwordSchema = z
   .regex(/[^a-zA-Z0-9]/, 'Must include at least one special character');
 export const loginSchema = z.object({
   email: z.string().email('Enter a valid email address'),
-  password: passwordSchema,
+  password: z
+    .string()
+    .min(8, 'Password is required')
+    .max(64, 'Password must not exceed 64 characters'),
 });
 
 export type LoginFormValues = z.infer<typeof loginSchema>;

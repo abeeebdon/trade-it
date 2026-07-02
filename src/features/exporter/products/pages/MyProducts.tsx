@@ -96,6 +96,7 @@ export default function ExporterProducts() {
                   <th>Category</th>
                   <th>Price</th>
                   <th>MOQ</th>
+                  <th>Unit</th>
                   <th>Status</th>
                   <th></th>
                 </tr>
@@ -122,13 +123,12 @@ export default function ExporterProducts() {
                     <td className="text-[13px] text-[#9CA3AF]">{p.category}</td>
                     <td className="font-mono">
                       {formatUSD(p.priceUsd)}
-                      <div className="text-[11px] text-[#9CA3AF]">
+                      {/* <div className="text-[11px] text-[#9CA3AF]">
                         {formatNGN(p.priceUsd)}
-                      </div>
+                      </div> */}
                     </td>
-                    <td className="font-mono">
-                      {p.moq} {p.unit}
-                    </td>
+                    <td className="font-mono">{p.moq}</td>
+                    <td className="font-mono">{p.unit}</td>
                     <td>
                       <StatusPill status={getStatusId(p.statusId) ?? 'Draft'} />
                     </td>
@@ -136,7 +136,6 @@ export default function ExporterProducts() {
                       <button
                         onClick={() => openEdit(p)}
                         className="text-[#1A7A6E] hover:text-[#C9922A]"
-                        data-testid={`edit-${p.id}`}
                       >
                         <Pencil size={16} />
                       </button>
