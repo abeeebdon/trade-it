@@ -12,6 +12,7 @@ import {
 } from '@/features/authentication/components/validation';
 import {
   useCreateProduct,
+  useEditProduct,
   useGetProductCategories,
 } from '../hooks/useProducts';
 import { RootState } from '@/store/store';
@@ -79,7 +80,11 @@ export default function ProductForm({
     defaultValues: editing ? valuesFromProduct(editing) : defaultValues(),
   });
 
+  const isEditMode = !!editing;
+
   const { mutate: submitProduct, isPending } = useCreateProduct(onClose);
+  const { mutate: editProduct, isPending: editProductPending } =
+    useEditProduct(onClose);
 
   const { data: categoryData, isPending: categoriesLoading } =
     useGetProductCategories({ pageNumber: 1, pageSize: 100 });
@@ -150,7 +155,25 @@ export default function ProductForm({
 
   // Submit
   const onSubmit = (values: ProductFormValues) => {
-    console.log(values.images);
+    if (isEditMode && editing) {
+      editProduct({
+        id: editing.id,
+        payload: {
+          UserId: user?.id ? Number(user.id) : undefined,
+          Name: values.name,
+          Category: values.category,
+          Unit: values.unitId,
+          PriceUsd: values.price_usd,
+          Moq: values.moq,
+          Description: values.description,
+          CurrencyId: values.currencyId,
+          StatusId: values.statusId,
+          ThumbnailImage: values.thumbnail ?? null,
+          Images: values.images,
+        },
+      });
+      return;
+    }
     submitProduct({
       UserId: user?.id ? Number(user.id) : undefined,
       Name: values.name,
