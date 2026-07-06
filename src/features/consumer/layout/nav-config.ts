@@ -31,26 +31,26 @@ export const NAV_GROUPS: NavGroupConfig[] = [
     label: 'My Account',
     items: [
       {
-        href: '/account',
+        href: '/consumer',
         icon: Home,
         label: 'Dashboard',
         testid: 'cs-nav-dash',
       },
       {
-        href: '/account/orders',
+        href: '/consumer/orders',
         icon: Package,
         label: 'My Orders',
         testid: 'cs-nav-orders',
         badgeKey: 'orders',
       },
       {
-        href: '/account/favourites',
+        href: '/consumer/favourites',
         icon: Heart,
         label: 'Favourites',
         testid: 'cs-nav-favs',
       },
       {
-        href: '/account/lists',
+        href: '/consumer/lists',
         icon: ListChecks,
         label: 'Shopping Lists',
         testid: 'cs-nav-lists',
@@ -61,13 +61,13 @@ export const NAV_GROUPS: NavGroupConfig[] = [
     label: 'Payments',
     items: [
       {
-        href: '/account/payment-methods',
+        href: '/consumer/payment-methods',
         icon: CreditCard,
         label: 'Payment Methods',
         testid: 'cs-nav-pm',
       },
       {
-        href: '/account/receipts',
+        href: '/consumer/receipts',
         icon: Receipt,
         label: 'Receipts',
         testid: 'cs-nav-receipts',
@@ -78,25 +78,25 @@ export const NAV_GROUPS: NavGroupConfig[] = [
     label: 'Account',
     items: [
       {
-        href: '/account/profile',
+        href: '/consumer/profile',
         icon: UserCircle,
         label: 'Profile',
         testid: 'cs-nav-profile',
       },
       {
-        href: '/account/addresses',
+        href: '/consumer/addresses',
         icon: MapPin,
         label: 'Delivery Addresses',
         testid: 'cs-nav-addr',
       },
       {
-        href: '/account/notifications',
+        href: '/consumer/notifications',
         icon: Bell,
         label: 'Notifications',
         testid: 'cs-nav-notifs',
       },
       {
-        href: '/account/help',
+        href: '/consumer/help',
         icon: HelpCircle,
         label: 'Help & Support',
         testid: 'cs-nav-help',

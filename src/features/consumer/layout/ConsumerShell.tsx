@@ -1,18 +1,9 @@
 'use client';
 
 import { useEffect, useState, type ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import { useAppSelector } from '@/hooks/store/store';
-
-interface CartLine {
-  qty?: number;
-}
-
-interface DashboardStats {
-  in_transit?: number;
-}
 
 interface ConsumerShellProps {
   children: ReactNode;
@@ -27,7 +18,6 @@ export default function ConsumerShell({
   kicker,
   actions,
 }: ConsumerShellProps) {
-  const router = useRouter();
   const { user } = useAppSelector((state) => state.auth);
   const [cart, setCart] = useState(0);
   const [orderBadge, setOrderBadge] = useState(0);

@@ -1,5 +1,5 @@
-const page = () => {
-  return <div>page</div>;
-};
+import ConsumerDashboard from '@/features/consumer/dashboard/pages/ConsumerDashboard';
 
-export default page;
+export default function ConsumerPage() {
+  return <ConsumerDashboard />;
+}

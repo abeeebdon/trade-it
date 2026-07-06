@@ -75,7 +75,6 @@ export default function Sidebar({ user, orderBadge, onSignOut }: SidebarProps) {
           href="/?beta=1"
           className="flex items-center justify-center gap-2 w-full py-2.5 rounded-[10px] font-semibold text-[13px] transition-all"
           style={{ background: '#EFA005', color: '#1E0038' }}
-          data-testid="cs-marketplace-cta"
         >
           <ShoppingBasket size={16} />
           <span className="hidden lg:inline">Marketplace</span>
