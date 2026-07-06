@@ -21,5 +21,5 @@ export interface AddressFormValues {
   state: string;
   postal_code: string;
   phone?: string;
-  is_default: boolean;
+  is_default?: boolean;
 }

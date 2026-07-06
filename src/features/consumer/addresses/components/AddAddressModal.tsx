@@ -16,7 +16,7 @@ const schema = z.object({
   state: z.string().min(2, 'State is required').max(2),
   postal_code: z.string().min(5, 'Valid postal code is required'),
   phone: z.string().optional(),
-  is_default: z.boolean().optional(),
+  is_default: z.boolean().default(false),
 });
 
 interface AddAddressModalProps {
@@ -32,7 +32,7 @@ export default function AddAddressModal({ onClose }: AddAddressModalProps) {
     formState: { errors },
   } = useForm<AddressFormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { country: 'United States' } as AddressFormValues,
+    defaultValues: { is_default: false },
   });
 
   const onSubmit = () => {

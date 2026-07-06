@@ -10,7 +10,7 @@ import type { PaymentKind } from '../types';
 
 const baseSchema = z.object({
   kind: z.enum(['card', 'zelle', 'ach']),
-  is_default: z.boolean().optional(),
+  is_default: z.boolean().default(false),
   // Card fields
   card_number: z.string().optional(),
   exp_month: z.string().optional(),
