@@ -1,4 +1,4 @@
-import type { JourneyStep } from '../../dashboard/types';
+import type { JourneyStep } from '../dashboard/types';
 
 export type { JourneyStep };
 
