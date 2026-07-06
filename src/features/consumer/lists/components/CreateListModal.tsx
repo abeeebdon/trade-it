@@ -2,13 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-
-const schema = z.object({
-  name: z.string().min(1, 'List name is required').max(100, 'Name is too long'),
-});
-
-type FormValues = z.infer<typeof schema>;
+import { createListSchema } from './validation';
 
 interface CreateListModalProps {
   onSuccess: (name: string) => void;
@@ -23,12 +17,12 @@ export default function CreateListModal({
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<FormValues>({
-    resolver: zodResolver(schema),
+  } = useForm({
+    resolver: zodResolver(createListSchema),
     defaultValues: { name: '' },
   });
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = (data: { name: string }) => {
     onSuccess(data.name.trim());
   };
 

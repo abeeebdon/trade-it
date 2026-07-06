@@ -3,23 +3,13 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { UserCircle, Mail, Phone } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAppSelector } from '@/hooks/store/store';
 import { MOCK_PROFILE_PHONE } from '../constants';
+import { profileSchema } from '../components/validation';
 import ProfileAvatar from '../components/ProfileAvatar';
 import ProfileSkeleton from '../components/ProfileSkeleton';
-
-const schema = z.object({
-  name: z.string().min(1, 'Full name is required').max(100),
-  phone: z
-    .string()
-    .regex(/^\+?[\d\s\-().]{7,20}$/, 'Enter a valid phone number')
-    .or(z.literal('')),
-});
-
-type FormValues = z.infer<typeof schema>;
 
 const SIMULATED_DELAY_MS = 600;
 
@@ -33,8 +23,8 @@ export default function Profile() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormValues>({
-    resolver: zodResolver(schema),
+  } = useForm({
+    resolver: zodResolver(profileSchema),
   });
 
   useEffect(() => {
