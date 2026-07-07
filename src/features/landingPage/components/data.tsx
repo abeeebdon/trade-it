@@ -100,7 +100,7 @@ export const NAV: {
   exporter: [
     { to: '/exporter', label: 'Command Center', icon: LayoutDashboard },
     { to: '/exporter/my-products', label: 'My Products', icon: Package },
-    { to: '/exporter/catalog', label: 'Marketplace', icon: Store },
+    { to: '/', label: 'Marketplace', icon: Store },
     { to: '/exporter/orders', label: 'Orders', icon: Receipt },
     { to: '/exporter/sell', label: 'Sell Direct (DTC)', icon: Truck },
     { to: '/exporter/fulfillment', label: 'Fulfillment', icon: ShoppingCart },
@@ -118,7 +118,7 @@ export const NAV: {
 
   retailer: [
     { to: '/buyer', label: 'Command Center', icon: LayoutDashboard },
-    { to: '/buyer/catalog', label: 'Marketplace', icon: Store },
+    { to: '/', label: 'Marketplace', icon: Store },
     { to: '/buyer/orders', label: 'My Orders', icon: Receipt },
     { to: '/buyer/sell', label: 'Local Inventory Shop', icon: ShoppingCart },
     { to: '/buyer/fulfillment', label: 'Fulfillment', icon: Truck },
@@ -139,12 +139,13 @@ export const NAV: {
     { to: '/admin/credit', label: 'JompStart Credit', icon: HandCoins },
     { to: '/admin/disputes', label: 'Disputes', icon: RefreshCw },
     { to: '/admin/orders', label: 'Orders', icon: ShoppingBasket },
+    { to: '/admin/categories', label: 'Categories', icon: Lightbulb },
     {
       to: '/admin/finance',
       label: 'Financial Overview',
       icon: DollarSign,
     },
-    { to: '/admin/catalog', label: 'Marketplace', icon: Store },
+    { to: '/', label: 'Marketplace', icon: Store },
     { to: '/admin/waitlist', label: 'Waitlist', icon: BookAIcon },
     { to: '/admin/users', label: 'Users', icon: User },
   ],

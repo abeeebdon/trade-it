@@ -649,8 +649,8 @@ export type ProductCategory = {
 };
 
 export type ProductCategoryListParams = {
-  pageNumber: number;
-  pageSize: number;
+  pageNumber?: number;
+  pageSize?: number;
 };
 
 export type ProductCategoryListResponse = {

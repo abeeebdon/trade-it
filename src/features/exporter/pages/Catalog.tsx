@@ -22,7 +22,7 @@ export default function Catalog() {
 
   // API-driven filter options
   const { data: categoryData, isPending: categoriesLoading } =
-    useGetProductCategories({ pageNumber: 1, pageSize: 100 });
+    useGetProductCategories();
 
   const { data: countryData, isPending: countriesLoading } =
     useGetProductCountries();

@@ -87,7 +87,7 @@ export default function ProductForm({
     useEditProduct(onClose);
 
   const { data: categoryData, isPending: categoriesLoading } =
-    useGetProductCategories({ pageNumber: 1, pageSize: 100 });
+    useGetProductCategories();
 
   const categories = useMemo(
     () => categoryData?.data ?? [],
