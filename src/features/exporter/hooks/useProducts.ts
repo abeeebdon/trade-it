@@ -8,11 +8,13 @@ import {
   getProductCategoryById,
   getProductCountries,
   editProduct,
+  createProductCategory,
+  updateProductCategory,
+  deleteProductCategory,
 } from '../api/productsApi';
 import {
   CreateProductPayload,
   ProductListParams,
-  ProductCategoryListParams,
   EditProductPayload,
 } from '../types/exporter';
 
@@ -65,13 +67,10 @@ export const useEditProduct = (onSuccess?: () => void) => {
 
 //Product Categories hooks
 
-export const useGetProductCategories = ({
-  pageNumber,
-  pageSize,
-}: ProductCategoryListParams) => {
+export const useGetProductCategories = () => {
   return useQuery({
-    queryKey: ['product-categories', pageNumber, pageSize],
-    queryFn: () => getProductCategories({ pageNumber, pageSize }),
+    queryKey: ['product-categories'],
+    queryFn: () => getProductCategories(),
   });
 };
 
@@ -80,6 +79,61 @@ export const useGetProductCategoryById = (id: number) => {
     queryKey: ['product-category', id],
     queryFn: () => getProductCategoryById(id),
     enabled: !!id,
+  });
+};
+
+export const useCreateProductCategory = (onSuccess?: () => void) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: { name: string; description: string }) =>
+      createProductCategory(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['product-categories'] });
+      toast.success('Category created successfully');
+      onSuccess?.();
+    },
+    onError: () => {
+      toast.error('Failed to create category. Please try again.');
+    },
+  });
+};
+
+export const useUpdateProductCategory = (onSuccess?: () => void) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      payload,
+    }: {
+      id: number;
+      payload: { name: string; description: string };
+    }) => updateProductCategory(id, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['product-categories'] });
+      toast.success('Category updated successfully');
+      onSuccess?.();
+    },
+    onError: () => {
+      toast.error('Failed to update category. Please try again.');
+    },
+  });
+};
+
+export const useDeleteProductCategory = (onSuccess?: () => void) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: number) => deleteProductCategory(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['product-categories'] });
+      toast.success('Category deleted successfully');
+      onSuccess?.();
+    },
+    onError: () => {
+      toast.error('Failed to delete category. Please try again.');
+    },
   });
 };
 

@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import HomePageFIlter from './components/HomePageFIlter';
 import { useDebounce } from '@/components/debounce/useDebounce';
 import HomepageProducts from './components/HomepageProducts';
+import LandingPageCatFilter from './components/LandingPageCatFilter';
 
 export default function HomePage() {
   const searchParams = useSearchParams();
@@ -100,45 +101,12 @@ export default function HomePage() {
         setMode={setMode}
         clearCategory={clearCategory}
       />
+      <LandingPageCatFilter
+        showFullCategory={showCategoryGrid}
+        setCategory={setCategory}
+        category={category}
+      />
 
-      {/* Category chips */}
-      {showCategoryGrid && (
-        <section className="mb-4 ">
-          <div className="flex items-end justify-between mb-5">
-            <h2 className="helix-h3">Shop by category</h2>
-          </div>
-          <article className="flex py-1 max-w-[90vw] hide-scrollbar overflow-x-scroll gap-4">
-            {CATS.map((c) => (
-              <button
-                key={c.value}
-                onClick={() => setCategory(c.value)}
-                className="helix-card min-w-42 shrink-0 cursor-pointer space-y-1 p-4 py-3 text-left"
-              >
-                <div className="flex items-center gap-3">
-                  {c.icon}
-                  <p className="text-[12px] font-semibold leading-tight">
-                    {c.label}
-                  </p>
-                </div>
-                <p className="text-[10.5px] text-[#9CA3AF] mt-1.5 ">{c.hint}</p>
-              </button>
-            ))}
-          </article>
-        </section>
-      )}
-      {!showCategoryGrid && (
-        <div className="flex flex-wrap gap-2 mb-8">
-          {CATS.map((c) => (
-            <button
-              onClick={() => setCategory(c.value)}
-              key={c.value}
-              className={`px-3 py-1.5 rounded-full text-[11px] font-mono tracking-wider uppercase border ${category === c.value ? 'bg-[#1A7A6E]/20 text-[#1A7A6E] border-[#1A7A6E]' : 'border-[#1A7A6E]/30 text-[#9CA3AF] hover:border-[#1A7A6E]/60'}`}
-            >
-              {c.label}
-            </button>
-          ))}
-        </div>
-      )}
       <HomepageProducts
         showCategoryGrid={showCategoryGrid}
         category={category}

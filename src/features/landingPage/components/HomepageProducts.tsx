@@ -14,6 +14,7 @@ const HomepageProducts = ({
   category,
   showCategoryGrid,
 }: HomepageProductsProps) => {
+  console.log(category, 'category');
   const { data, isPending, refetch, isError } = useGetLandingProducts({
     pageNumber: 1,
     pageSize: 10,

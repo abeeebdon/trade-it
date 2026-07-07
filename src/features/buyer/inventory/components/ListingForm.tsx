@@ -27,10 +27,7 @@ function ListingForm({ editing, onClose }: ListingFormProps) {
   } = useForm<ListingFormData>({
     resolver: zodResolver(listingSchema),
   });
-  const { data, refetch, isPending } = useGetProductCategories({
-    pageNumber: 1,
-    pageSize: 10,
-  });
+  const { data, refetch, isPending } = useGetProductCategories();
   const categoryArray = useMemo(() => {
     return data ? data.data : [];
   }, [data]);

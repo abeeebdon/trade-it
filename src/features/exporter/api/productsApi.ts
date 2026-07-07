@@ -125,19 +125,15 @@ export const editProduct = async ({ id, payload }: EditProductPayload) => {
 };
 
 //product category
-export const getProductCategories = async ({
-  pageNumber,
-  pageSize,
-}: ProductCategoryListParams): Promise<ProductCategoryListResponse> => {
-  try {
-    const response = await api.get(
-      `/ProductCategory?PageNumber=${pageNumber}&PageSize=${pageSize}`,
-    );
-    return response.data.data;
-  } catch (error) {
-    throw error;
-  }
-};
+export const getProductCategories =
+  async (): Promise<ProductCategoryListResponse> => {
+    try {
+      const response = await api.get('/ProductCategory');
+      return response.data.data;
+    } catch (error) {
+      throw error;
+    }
+  };
 
 export const getProductCategoryById = async (
   id: number,
@@ -145,6 +141,36 @@ export const getProductCategoryById = async (
   try {
     const response = await api.get(`/ProductCategory/${id}`);
     return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createProductCategory = async (payload: {
+  name: string;
+  description: string;
+}): Promise<void> => {
+  try {
+    await api.post('/ProductCategory', payload);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateProductCategory = async (
+  id: number,
+  payload: { name: string; description: string },
+): Promise<void> => {
+  try {
+    await api.put(`/ProductCategory/${id}`, payload);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteProductCategory = async (id: number): Promise<void> => {
+  try {
+    await api.delete(`/ProductCategory/${id}`);
   } catch (error) {
     throw error;
   }

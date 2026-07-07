@@ -40,10 +40,7 @@ export default function BusinessProfileForm() {
       sector: 'fashion',
     },
   });
-  const { data, isPending } = useGetProductCategories({
-    pageNumber: 1,
-    pageSize: 10,
-  });
+  const { data } = useGetProductCategories();
   const SECTORS = useMemo(() => {
     return data
       ? data.data.map((d) => ({
