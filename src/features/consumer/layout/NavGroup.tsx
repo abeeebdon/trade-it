@@ -4,12 +4,23 @@ import type { NavGroupConfig } from './nav-config';
 interface NavGroupProps {
   group: NavGroupConfig;
   orderBadge: number;
+  showLabel?: boolean;
 }
 
-export default function NavGroup({ group, orderBadge }: NavGroupProps) {
+export default function NavGroup({
+  group,
+  orderBadge,
+  showLabel,
+}: NavGroupProps) {
   return (
     <div>
-      <div className="hidden lg:block px-4 pb-2 text-[10px] font-mono uppercase tracking-widest text-[#B0A4C0]">
+      <div
+        className={
+          showLabel
+            ? ' px-4 pb-2 text-sm font-mono uppercase tracking-widest '
+            : 'hidden lg:block px-4 pb-2 text-sm font-mono uppercase tracking-widest '
+        }
+      >
         {group.label}
       </div>
       <div className="space-y-0.5">
@@ -18,6 +29,7 @@ export default function NavGroup({ group, orderBadge }: NavGroupProps) {
             key={item.href}
             item={item}
             badge={item.badgeKey === 'orders' ? orderBadge : 0}
+            showLabel={showLabel}
           />
         ))}
       </div>
