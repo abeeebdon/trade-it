@@ -9,7 +9,7 @@ const ROLE_ROUTES: Record<string, UserRole[]> = {
   '/admin': ['admin', 'super_admin'],
   '/buyer': ['retailer'],
   '/exporter': ['exporter'],
-  '/shop/orders': ['consumer'],
+  '/consumer': ['consumer'],
 };
 
 export async function proxy(req: NextRequest) {
@@ -64,6 +64,7 @@ export async function proxy(req: NextRequest) {
 export const config = {
   matcher: [
     '/admin/:path*',
+    '/consumer/:path*',
     '/buyer/:path*',
     '/exporter/:path*',
     '/dashboard/:path*',

@@ -1,0 +1,7 @@
+{
+  "files.autoSave": "onFocusChange",
+  "editor.defaultFormatter": "vscode.typescript-language-features",
+  "editor.wordWrap": "bounded",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true
+}

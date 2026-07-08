@@ -26,7 +26,7 @@ const Header = ({ className }: { className?: string }) => {
   const isDark: boolean = useColorScheme();
   const dashHome =
     user?.role === 'consumer'
-      ? '/shop/orders'
+      ? '/consumer/orders'
       : user?.role === 'super_admin'
         ? '/admin/credit'
         : user?.role === 'retailer'

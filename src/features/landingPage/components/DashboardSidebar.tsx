@@ -10,6 +10,8 @@ import { NAV } from './data';
 import { useState } from 'react';
 import { logout } from '@/store/auth/auth.slice';
 import { logoutAction } from '@/features/authentication/components/helper';
+import { NAV_GROUPS } from '@/features/consumer/layout/nav-config';
+import NavGroup from '@/features/consumer/layout/NavGroup';
 interface Props {
   setOpenSideBar: (open: boolean) => void;
   openSidebar: boolean;
@@ -59,30 +61,44 @@ const DashboardSidebar = ({ setOpenSideBar, openSidebar }: Props) => {
               <X className="cursor-pointer text-text hover:text-text/20" />
             </motion.button>
           </div>
-          <nav className="py-4">
-            {items.map((item) => {
-              const Icon = item.icon;
-              const isActive = item.to === pathname;
-              return (
-                <Link
-                  key={item.to}
-                  href={item.to}
-                  onClick={() => setOpenSideBar(false)}
-                  data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
-                  className={`group flex items-center gap-3 px-4 lg:px-6 py-3 border-l-2 transition-colors ${
-                    isActive
-                      ? 'border-[#C9922A] bg-[#C9922A]/6 text-[#C9922A]'
-                      : 'border-transparent text-muted hover:text-text hover:bg-[#1A7A6E]/8'
-                  }`}
-                >
-                  {<Icon size={18} />}
-                  <span className=" text-[13px] font-medium tracking-wide">
-                    {item.label}
-                  </span>
-                </Link>
-              );
-            })}
-          </nav>
+
+          {user?.role === 'consumer' ? (
+            <nav className="flex-1 mt-6 py-4 px-2 space-y-4">
+              {NAV_GROUPS.map((group) => (
+                <NavGroup
+                  key={group.label}
+                  group={group}
+                  orderBadge={0}
+                  showLabel={true}
+                />
+              ))}
+            </nav>
+          ) : (
+            <nav className="py-4">
+              {items.map((item) => {
+                const Icon = item.icon;
+                const isActive = item.to === pathname;
+                return (
+                  <Link
+                    key={item.to}
+                    href={item.to}
+                    onClick={() => setOpenSideBar(false)}
+                    data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+                    className={`group flex items-center gap-3 px-4 lg:px-6 py-3 border-l-2 transition-colors ${
+                      isActive
+                        ? 'border-[#C9922A] bg-[#C9922A]/6 text-[#C9922A]'
+                        : 'border-transparent text-muted hover:text-text hover:bg-[#1A7A6E]/8'
+                    }`}
+                  >
+                    {<Icon size={18} />}
+                    <span className=" text-[13px] font-medium tracking-wide">
+                      {item.label}
+                    </span>
+                  </Link>
+                );
+              })}
+            </nav>
+          )}
         </article>
 
         <article>
