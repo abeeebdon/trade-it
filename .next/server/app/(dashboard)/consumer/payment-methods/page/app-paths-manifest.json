@@ -1,0 +1,3 @@
+{
+  "/(dashboard)/consumer/payment-methods/page": "app/(dashboard)/consumer/payment-methods/page.js"
+}

@@ -71,10 +71,10 @@
       "namedRegex": "^/admin(?:/)?$"
     },
     {
-      "page": "/admin/catalog",
-      "regex": "^/admin/catalog(?:/)?$",
+      "page": "/admin/categories",
+      "regex": "^/admin/categories(?:/)?$",
       "routeKeys": {},
-      "namedRegex": "^/admin/catalog(?:/)?$"
+      "namedRegex": "^/admin/categories(?:/)?$"
     },
     {
       "page": "/admin/credit",
@@ -131,12 +131,6 @@
       "namedRegex": "^/buyer(?:/)?$"
     },
     {
-      "page": "/buyer/catalog",
-      "regex": "^/buyer/catalog(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/buyer/catalog(?:/)?$"
-    },
-    {
       "page": "/buyer/compliance",
       "regex": "^/buyer/compliance(?:/)?$",
       "routeKeys": {},
@@ -191,16 +185,70 @@
       "namedRegex": "^/buyer/sell(?:/)?$"
     },
     {
+      "page": "/consumer",
+      "regex": "^/consumer(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/consumer(?:/)?$"
+    },
+    {
+      "page": "/consumer/addresses",
+      "regex": "^/consumer/addresses(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/consumer/addresses(?:/)?$"
+    },
+    {
+      "page": "/consumer/favourites",
+      "regex": "^/consumer/favourites(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/consumer/favourites(?:/)?$"
+    },
+    {
+      "page": "/consumer/help",
+      "regex": "^/consumer/help(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/consumer/help(?:/)?$"
+    },
+    {
+      "page": "/consumer/lists",
+      "regex": "^/consumer/lists(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/consumer/lists(?:/)?$"
+    },
+    {
+      "page": "/consumer/notifications",
+      "regex": "^/consumer/notifications(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/consumer/notifications(?:/)?$"
+    },
+    {
+      "page": "/consumer/orders",
+      "regex": "^/consumer/orders(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/consumer/orders(?:/)?$"
+    },
+    {
+      "page": "/consumer/payment-methods",
+      "regex": "^/consumer/payment\\-methods(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/consumer/payment\\-methods(?:/)?$"
+    },
+    {
+      "page": "/consumer/profile",
+      "regex": "^/consumer/profile(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/consumer/profile(?:/)?$"
+    },
+    {
+      "page": "/consumer/receipts",
+      "regex": "^/consumer/receipts(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/consumer/receipts(?:/)?$"
+    },
+    {
       "page": "/exporter",
       "regex": "^/exporter(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/exporter(?:/)?$"
-    },
-    {
-      "page": "/exporter/catalog",
-      "regex": "^/exporter/catalog(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/exporter/catalog(?:/)?$"
     },
     {
       "page": "/exporter/compliance",
