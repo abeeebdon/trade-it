@@ -50,7 +50,7 @@ export default function Login() {
             break;
           case 'consumer':
             dispatch(setAuthRole('consumer'));
-            router.push('/');
+            router.push('/consumer');
             break;
           case 'exporter':
             dispatch(setAuthRole('exporter'));

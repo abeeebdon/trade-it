@@ -248,7 +248,7 @@ export const faqData = [
       {
         question: 'How do I become a seller on JompShop?',
         answer:
-          'JompShop is currently in private beta with selected exporters. Interested businesses can join the waitlist. Once public registration opens, sellers can sign up, complete business verification, set up their storefront, and list products with guidance from the onboarding team.',
+          'JompShop is currently in private beta with a few select exporters. Interested producers and sellers should join our waitlist now and we will contact you within 48 hours. In a few weeks, public registration will open and sellers can sign up, complete business verification, set up their storefront, and list products with guidance from the JompShop onboarding team.',
       },
       {
         question: 'What does it cost to list on JompShop?',
@@ -258,7 +258,7 @@ export const faqData = [
       {
         question: 'Do I need to handle shipping alone?',
         answer:
-          'No. JompShop coordinates logistics together with international shipping partners. For direct-to-customer shipments, the Delivery Partner of Record manages payment collection and last-mile delivery, while sellers receive clear shipment preparation and hand-off instructions.',
+          'No. JompShop coordinates shipping and logistics together with you and our international shipping partners. For direct-to-customer shipments, the Delivery Partner of Record manages payment collection and last-mile delivery, while sellers receive clear shipment preparation and hand-off instructions.',
       },
       {
         question: 'How do I get paid?',

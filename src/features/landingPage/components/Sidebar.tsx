@@ -11,6 +11,8 @@ import JompShopLogo from '@/assets/JompShopIcon';
 import useColorScheme from '@/hooks/useColorScheme';
 import { logoutAction } from '@/features/authentication/components/helper';
 import { cn } from '@/lib/cn';
+import NavGroup from '@/features/consumer/layout/NavGroup';
+import { NAV_GROUPS } from '@/features/consumer/layout/nav-config';
 
 NAV.super_admin = NAV.admin;
 
@@ -72,37 +74,44 @@ export default function Sidebar() {
           </div>
         )}
       </div>
-
-      <nav className="flex-1  mt-6 py-4 overflow-y-auto">
-        {items.map((item) => {
-          const Icon = item.icon;
-          const isActive = item.to === pathname;
-          return (
-            <div key={item.to} className="group overflow-hidden relative">
-              <Link
-                href={item.to}
-                className={`flex items-center gap-3 px-4  py-3 border-l-2 ${
-                  isActive
-                    ? 'border-[#C9922A] bg-[#C9922A]/6 text-[#C9922A]'
-                    : 'border-transparent text-[#9CA3AF] hover:text-[#F5F5F5] hover:bg-secondary/50'
-                }`}
-              >
-                {<Icon size={18} />}
-                {!hideLabel && (
-                  <span className="hidden md:block text-muted text-[13px] font-medium tracking-wide">
+      {user?.role === 'consumer' ? (
+        <nav className="flex-1 py-4 px-2 space-y-4">
+          {NAV_GROUPS.map((group) => (
+            <NavGroup key={group.label} group={group} orderBadge={0} />
+          ))}
+        </nav>
+      ) : (
+        <nav className="flex-1  mt-6 py-4 overflow-y-auto">
+          {items.map((item) => {
+            const Icon = item.icon;
+            const isActive = item.to === pathname;
+            return (
+              <div key={item.to} className="group overflow-hidden relative">
+                <Link
+                  href={item.to}
+                  className={`flex items-center gap-3 px-4  py-3 border-l-2 ${
+                    isActive
+                      ? 'border-[#C9922A] bg-[#C9922A]/6 text-[#C9922A]'
+                      : 'border-transparent text-[#9CA3AF] hover:text-[#F5F5F5] hover:bg-secondary/50'
+                  }`}
+                >
+                  {<Icon size={18} />}
+                  {!hideLabel && (
+                    <span className="hidden md:block text-muted text-[13px] font-medium tracking-wide">
+                      {item.label}
+                    </span>
+                  )}
+                </Link>
+                {hideLabel && (
+                  <p className="absolute left-full z-[9999] top-1/2 -translate-y-1/2 text-text whitespace-nowrap  text-xs hidden group-hover:block transition pointer-events-none">
                     {item.label}
-                  </span>
+                  </p>
                 )}
-              </Link>
-              {hideLabel && (
-                <p className="absolute left-full z-[9999] top-1/2 -translate-y-1/2 text-text whitespace-nowrap  text-xs hidden group-hover:block transition pointer-events-none">
-                  {item.label}
-                </p>
-              )}
-            </div>
-          );
-        })}
-      </nav>
+              </div>
+            );
+          })}
+        </nav>
+      )}
 
       <div className="border-t border-[#1A7A6E]/15 px-3 py-3">
         <div className="hidden md:flex items-center gap-2 mb-3 px-2">

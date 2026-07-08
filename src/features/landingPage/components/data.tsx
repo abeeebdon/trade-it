@@ -13,6 +13,14 @@ import {
   RefreshCw,
   FileText,
   DollarSign,
+  Home,
+  Heart,
+  ListChecks,
+  CreditCard,
+  UserCircle,
+  Bell,
+  HelpCircle,
+  MapPin,
   // Users,
   Currency,
   Lightbulb,
@@ -131,7 +139,7 @@ export const NAV: {
     },
     { to: '/buyer/onboarding', label: 'Business Profile', icon: FileText },
   ],
-  consumer: [{ to: '/shop/orders', label: 'My Orders', icon: LayoutDashboard }],
+  consumer: [],
 
   admin: [
     { to: '/admin', label: 'Admin Overview', icon: LayoutDashboard },
