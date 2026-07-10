@@ -95,6 +95,12 @@
       "namedRegex": "^/admin/finance(?:/)?$"
     },
     {
+      "page": "/admin/listings",
+      "regex": "^/admin/listings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/listings(?:/)?$"
+    },
+    {
       "page": "/admin/orders",
       "regex": "^/admin/orders(?:/)?$",
       "routeKeys": {},
@@ -345,6 +351,12 @@
       "regex": "^/login(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/login(?:/)?$"
+    },
+    {
+      "page": "/payment",
+      "regex": "^/payment(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/payment(?:/)?$"
     },
     {
       "page": "/register",
