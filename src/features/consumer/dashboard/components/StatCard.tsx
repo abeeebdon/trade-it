@@ -23,10 +23,10 @@ export default function StatCard({
       }`}
     >
       <div>
-        <div className="helix-label">{label}</div>
-        <div className="font-mono text-2xl font-bold mt-1 text-[#C9922A]">
+        <p className="helix-label">{label}</p>
+        <p className="font-mono text-2xl font-bold mt-1 text-[#C9922A]">
           {value}
-        </div>
+        </p>
       </div>
       <Icon
         size={20}

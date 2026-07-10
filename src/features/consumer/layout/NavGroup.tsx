@@ -16,9 +16,11 @@ export default function NavGroup({
     <div>
       <div
         className={
-          showLabel
-            ? ' px-4 pb-2 text-sm font-mono uppercase tracking-widest '
-            : 'hidden lg:block px-4 pb-2 text-sm font-mono uppercase tracking-widest '
+          showLabel == true
+            ? 'px-4 pb-2 text-sm font-mono uppercase tracking-widest'
+            : showLabel == false
+              ? ' px-4 pb-2 text-sm hidden font-mono tracking-widest'
+              : 'hidden lg:block px-4 pb-2 text-sm font-mono uppercase tracking-widest '
         }
       >
         {group.label}

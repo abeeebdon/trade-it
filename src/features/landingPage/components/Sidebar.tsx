@@ -41,7 +41,7 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`relative h-screen hidden sm:flex bg-bg border-r border-secondary/20  flex-col z-40 ${hideLabel ? 'w-20' : 'max-w-60'}`}
+      className={`relative h-screen overflow-y-auto hide-scrollbar hidden sm:flex bg-bg border-r border-secondary/20  flex-col z-40 ${hideLabel ? 'w-20' : 'max-w-60'}`}
     >
       <div className="px-4 py-5 border-b border-[#1A7A6E]/15 flex items-center gap-2">
         <JompShopLogo
@@ -77,7 +77,12 @@ export default function Sidebar() {
       {user?.role === 'consumer' ? (
         <nav className="flex-1 py-4 px-2 space-y-4">
           {NAV_GROUPS.map((group) => (
-            <NavGroup key={group.label} group={group} orderBadge={0} />
+            <NavGroup
+              key={group.label}
+              showLabel={!hideLabel}
+              group={group}
+              orderBadge={0}
+            />
           ))}
         </nav>
       ) : (
