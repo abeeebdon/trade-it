@@ -11,6 +11,7 @@ import EmptyState from '../components/EmptyState';
 import DashboardSkeleton from '../components/DashboardSkeleton';
 import { MOCK_DASHBOARD } from '../constants';
 import type { DashboardData, Listing } from '../types';
+import Image from 'next/image';
 
 const SIMULATED_DELAY_MS = 1200;
 
@@ -71,7 +72,7 @@ export default function ConsumerDashboard() {
       </p>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
         <StatCard
           to="/account/orders"
           icon={Package}
@@ -138,10 +139,12 @@ export default function ConsumerDashboard() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
             {d.buy_again.map((l) => (
               <div key={l.id} className="helix-card p-3 flex flex-col">
-                <img
-                  src={l.photos?.[0]}
+                <Image
+                  src="/icons/ankara2.jpg"
                   alt={l.title}
                   className="aspect-square object-cover rounded mb-2"
+                  width={200}
+                  height={200}
                 />
                 <div className="text-[12px] font-semibold leading-tight line-clamp-2 flex-1">
                   {l.title}
