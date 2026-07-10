@@ -9,6 +9,7 @@ import { ProductData } from '@/features/exporter/api/productsApi';
 import { useCreateOrder } from '@/features/exporter/hooks/useOrders';
 import { PrepayOrderForm, prepayOrderSchema } from './validation';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 interface Props {
   productDetails: ProductData;
@@ -23,6 +24,7 @@ export function PrepayForm({ productDetails }: Props) {
     register,
     watch,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<PrepayOrderForm>({
     resolver: zodResolver(prepayOrderSchema),
@@ -36,8 +38,15 @@ export function PrepayForm({ productDetails }: Props) {
   });
 
   const qty = watch('qty');
+  const qtyNum = Number(qty) || 0;
+  const maxQty = Number(productDetails.quantity) || 0;
 
   const onSubmit = async (data: PrepayOrderForm) => {
+    const q = Number(data.qty);
+    if (q > maxQty) {
+      toast.error(`Quantity exceeds available stock of ${maxQty}`);
+      return; // guard against exceeding stock
+    }
     setPlacing(true);
 
     try {
@@ -53,7 +62,12 @@ export function PrepayForm({ productDetails }: Props) {
         orderType: 'prepay',
       };
 
-      await mutateAsync(postData);
+      await mutateAsync(postData, {
+        onSuccess: (response) => {
+          reset();
+          router.push(`/payment?id=${response.data.id}`);
+        },
+      });
     } finally {
       setPlacing(false);
     }
@@ -64,14 +78,19 @@ export function PrepayForm({ productDetails }: Props) {
       <div className="flex items-center gap-3">
         <label className="helix-label mb-0">Qty</label>
         <input
-          type="text"
+          type="number"
           className="helix-input w-24"
           {...register('qty')}
           min={1}
-          max={productDetails.unit}
+          max={maxQty}
         />
-        <div className="font-mono text-[14px]">
-          = {formatUSD(Number(qty) * productDetails.price)}
+        <div>
+          <p className="font-mono text-[14px]">
+            = {formatUSD(qtyNum * productDetails.price)}
+          </p>
+          {qtyNum > maxQty && (
+            <p className="text-red-500 text-[10px] ">Max available: {maxQty}</p>
+          )}
         </div>
       </div>
 
@@ -114,7 +133,7 @@ export function PrepayForm({ productDetails }: Props) {
       )}
       {user ? (
         <button
-          disabled={placing || productDetails.unit <= 0}
+          disabled={placing || maxQty <= 0 || qtyNum > maxQty || qtyNum < 1}
           className="helix-btn-primary w-full"
           type="submit"
         >

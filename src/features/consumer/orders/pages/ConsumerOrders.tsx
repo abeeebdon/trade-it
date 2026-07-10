@@ -9,6 +9,7 @@ import OrderRow from '../components/OrderRow';
 import OrdersEmptyState from '../components/OrdersEmptyState';
 import OrdersSkeleton from '../components/OrdersSkeleton';
 import type { OrdersData, OrderStatusCategory } from '../types';
+import { useGetOrders } from '@/features/shops/hooks/useGetOrders';
 
 const SIMULATED_DELAY_MS = 1000;
 
@@ -46,6 +47,8 @@ export default function ConsumerOrders() {
 
   const activeLabel = FILTERS.find((f) => f.v === filter)?.l || '';
 
+  const { data, isPending } = useGetOrders();
+
   if (loading) return <OrdersSkeleton />;
 
   return (
@@ -55,10 +58,7 @@ export default function ConsumerOrders() {
 
       {/* Category summary breakdown */}
       {counts[filter] > 0 && (
-        <div
-          className="helix-card p-4 mb-6 flex flex-wrap items-center gap-4 text-[12px]"
-          data-testid="cs-orders-summary"
-        >
+        <div className="helix-card p-4 mb-6 flex flex-wrap items-center gap-4 text-[12px]">
           <div className="flex items-center gap-2">
             <Package size={14} className="text-[#C9922A]" />
             <span className="text-[#9CA3AF]">{activeLabel}:</span>

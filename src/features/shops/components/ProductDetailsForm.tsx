@@ -31,8 +31,8 @@ const ProductDetailsForm = ({ productDetails }: Props) => {
         </p>
 
         <div className="text-[12px] text-[#9CA3AF] mt-1">
-          {productDetails.unit > 0
-            ? `${productDetails.unit} in stock`
+          {productDetails.quantity > 0
+            ? `${productDetails.quantity} in stock`
             : 'Sold out'}
         </div>
 

@@ -5,6 +5,7 @@ import {
   SellerOrdersParams,
 } from '../orders/types/exporterOrdersType';
 import { CreateOrderPayload } from '@/features/shops/types/shops';
+import { toast } from 'sonner';
 
 export const getSellerOrders = async ({
   pageNumber,
@@ -32,7 +33,9 @@ export const createOrder = async (data: CreateOrderPayload) => {
   try {
     const response = await api.post('/Orders', data);
     return response.data;
-  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    toast.error(error.response.data.message);
     throw error;
   }
 };

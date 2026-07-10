@@ -4,7 +4,7 @@ import { StatusPill } from '@/features/shops/components/StatusPill';
 import { useAppSelector } from '@/hooks/store/store';
 import { formatDateTime, formatUSD } from '@/lib/func';
 import Link from 'next/link';
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import OrderTableSkeleton from '../../components/OrderTableSkeleton';
 import { useGetBuyerOrders } from '../hooks/useGetBuyerOrders';
 
