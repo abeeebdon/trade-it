@@ -31,9 +31,11 @@ export default function NavItem({
       <Icon size={16} />
       <span
         className={
-          showLabel
-            ? 'lg:inline flex-1 truncate'
-            : 'hidden lg:inline flex-1 truncate'
+          showLabel == true
+            ? 'inline flex-1 truncate'
+            : showLabel == false
+              ? 'hidden flex-1 truncate'
+              : 'hidden lg:inline flex-1 truncate'
         }
       >
         {item.label}

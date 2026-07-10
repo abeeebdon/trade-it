@@ -31,8 +31,5 @@ export const useCreateOrder = (onSuccess?: () => void) => {
       toast.success(data.message ?? 'Order created successfully');
       onSuccess?.();
     },
-    onError: () => {
-      toast.error('Failed to save product. Please try again.');
-    },
   });
 };

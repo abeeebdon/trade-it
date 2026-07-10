@@ -5,6 +5,7 @@ export const APIENDPOINTS = {
 
   //admin
   ADMIN_ORDERS: '/Admin/orders',
+  ADMIN_LISTINGS: '/Admin/listings',
 
   // buyer
   LOCAL_LISTINGS: '/local-listings',

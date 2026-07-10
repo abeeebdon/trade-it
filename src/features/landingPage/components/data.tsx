@@ -29,6 +29,7 @@ import {
   User,
   Command,
   ShoppingBasket,
+  ListCheck,
 } from 'lucide-react';
 
 export const helixCards = [
@@ -148,6 +149,7 @@ export const NAV: {
     { to: '/admin/disputes', label: 'Disputes', icon: RefreshCw },
     { to: '/admin/orders', label: 'Orders', icon: ShoppingBasket },
     { to: '/admin/categories', label: 'Categories', icon: Lightbulb },
+    { to: '/admin/listings', label: 'Listings', icon: ListCheck },
     {
       to: '/admin/finance',
       label: 'Financial Overview',

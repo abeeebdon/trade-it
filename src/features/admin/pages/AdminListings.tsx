@@ -2,72 +2,67 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { useGetAdminOrders } from '../hooks/useGetAdminOrders';
-import { AdminOrder } from '../types/orders';
+import { useGetAdminListings } from '../hooks/useGetAdminListings';
+import { AdminListing } from '../types/listings';
 import { StatusPill } from '@/features/shops/components/StatusPill';
 import { formatDateTime, formatUSD } from '@/lib/func';
 import Pagination, { paginate } from '@/components/ui/Pagination';
 import SelectDropDown from '@/components/SelectDropDown';
 import {
-  OrderRowSkeleton,
-  OrderCardSkeleton,
-} from '../components/OrdersSkeleton';
-import { OrdersError } from '../components/OrdersError';
-import { OrdersEmpty } from '../components/OrdersEmpty';
-import { FilterBarSkeleton } from '../components/ListingsSkeleton';
+  ListingRowSkeleton,
+  ListingCardSkeleton,
+  FilterBarSkeleton,
+} from '../components/ListingsSkeleton';
+import { ListingsError } from '../components/ListingsError';
+import { ListingsEmpty } from '../components/ListingsEmpty';
 
 // ── Helpers ────────────────────────────────────────────
 const categoryLabel = (cat: string) =>
   cat.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 
 // ── Mobile Card ────────────────────────────────────────
-function OrderMobileCard({ order }: { order: AdminOrder }) {
+function ListingMobileCard({ listing }: { listing: AdminListing }) {
   return (
     <Link
-      href={`/admin/orders/${order.id}`}
+      href={`/admin/listings/${listing.id}`}
       className="helix-card p-4 block hover:border-[#C9922A]/30 transition-colors"
     >
       <div className="flex items-start justify-between gap-2">
         <div>
-          <h3 className="text-[13px] font-mono font-semibold text-[#C9922A]">
-            {order.orderNumber}
+          <h3 className="text-[15px] font-semibold text-[#F5F5F5]">
+            {listing.title}
           </h3>
-          <p className="text-[14px] text-[#F5F5F5] mt-0.5">
-            {order.productName}
-          </p>
-          <p className="text-[12px] text-[#9CA3AF]">
-            {categoryLabel(order.category)} · Qty: {order.quantity}
+          <p className="text-[12px] text-[#9CA3AF] mt-0.5">
+            #{listing.id} · {categoryLabel(listing.category)}
           </p>
         </div>
-        <StatusPill status={order.status} />
+        <StatusPill status={listing.status} />
       </div>
 
       <div className="flex items-center justify-between mt-3">
         <span className="font-mono text-[#C9922A] font-semibold">
-          {formatUSD(order.amount)}
+          {formatUSD(listing.retailPriceUsd)}
         </span>
-        <StatusPill status={order.paymentStatus} />
+        <span className="text-[13px] text-[#9CA3AF]">
+          Stock: {listing.stockQty}
+        </span>
       </div>
 
       <div className="flex items-center justify-between mt-2 text-[12px] text-[#6B7280]">
-        <span>{order.email}</span>
-        <span>{formatDateTime(order.deliveryDate)}</span>
+        <span>{listing.sellerEmail}</span>
+        <span>{formatDateTime(listing.createdAt)}</span>
       </div>
     </Link>
   );
 }
 
 // ── Filters ────────────────────────────────────────────
-type StatusFilter =
-  '' | 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
+type StatusFilter = '' | 'Published' | 'Draft';
 
 const statusFilters: [StatusFilter, string][] = [
   ['', 'All'],
-  ['pending', 'Pending'],
-  ['confirmed', 'Confirmed'],
-  ['shipped', 'Shipped'],
-  ['delivered', 'Delivered'],
-  ['cancelled', 'Cancelled'],
+  ['Published', 'Published'],
+  ['Draft', 'Draft'],
 ];
 
 // ── Filter Bar ─────────────────────────────────────────
@@ -99,19 +94,19 @@ function FilterBar({
 }
 
 // ── Main Page ──────────────────────────────────────────
-const AdminOrders = () => {
+const AdminListings = () => {
   const [status, setStatus] = useState<StatusFilter>('');
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-  const { data, isPending, isError, refetch } = useGetAdminOrders({
+  const { data, isPending, isError, refetch } = useGetAdminListings({
     status: status || undefined,
   });
 
-  const orders: AdminOrder[] = useMemo(() => data ?? [], [data]);
+  const listings: AdminListing[] = useMemo(() => data ?? [], [data]);
 
-  const { items, totalPages } = paginate(orders, page, pageSize);
-  const totalRecords = orders.length;
+  const { items, totalPages } = paginate(listings, page, pageSize);
+  const totalRecords = listings.length;
 
   // ── Loading ────────────────────────────────────────
   if (isPending) {
@@ -124,18 +119,18 @@ const AdminOrders = () => {
           <table className="helix-table">
             <thead>
               <tr>
-                <th>Order #</th>
-                <th>Product</th>
-                <th>Qty</th>
-                <th>Amount</th>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Seller</th>
+                <th>Price</th>
+                <th>Stock</th>
                 <th>Status</th>
-                <th>Payment</th>
-                <th>Delivery</th>
               </tr>
             </thead>
             <tbody>
               {Array.from({ length: 6 }).map((_, i) => (
-                <OrderRowSkeleton key={i} />
+                <ListingRowSkeleton key={i} />
               ))}
             </tbody>
           </table>
@@ -144,7 +139,7 @@ const AdminOrders = () => {
         {/* Mobile skeleton */}
         <div className="md:hidden space-y-3">
           {Array.from({ length: 4 }).map((_, i) => (
-            <OrderCardSkeleton key={i} />
+            <ListingCardSkeleton key={i} />
           ))}
         </div>
       </div>
@@ -153,11 +148,11 @@ const AdminOrders = () => {
 
   // ── Error ──────────────────────────────────────────
   if (isError) {
-    return <OrdersError onRetry={() => refetch()} />;
+    return <ListingsError onRetry={() => refetch()} />;
   }
 
   // ── Empty ──────────────────────────────────────────
-  if (orders.length === 0) {
+  if (listings.length === 0) {
     return (
       <div className="space-y-6">
         <FilterBar
@@ -167,7 +162,7 @@ const AdminOrders = () => {
             setPage(1);
           }}
         />
-        <OrdersEmpty />
+        <ListingsEmpty />
       </div>
     );
   }
@@ -188,59 +183,75 @@ const AdminOrders = () => {
         <table className="helix-table">
           <thead>
             <tr>
-              <th>Order #</th>
-              <th>Product</th>
-              <th>Qty</th>
-              <th>Amount</th>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Seller</th>
+              <th>Price</th>
+              <th>Stock</th>
               <th>Status</th>
-              <th>Payment</th>
-              <th>Delivery</th>
             </tr>
           </thead>
           <tbody>
-            {items.map((order) => (
+            {items.map((listing) => (
               <tr
-                key={order.id}
+                key={listing.id}
                 className="cursor-pointer hover:bg-[#C9922A]/5 transition-colors"
               >
-                <td className="font-mono text-[13px] text-[#C9922A]">
-                  <Link href={`/admin/orders/${order.id}`} className="block">
-                    {order.orderNumber}
+                <td className="font-mono text-[13px] text-[#9CA3AF]">
+                  <Link
+                    href={`/admin/listings/${listing.id}`}
+                    className="block"
+                  >
+                    #{listing.id}
                   </Link>
                 </td>
                 <td>
-                  <Link href={`/admin/orders/${order.id}`} className="block">
-                    <span className="font-medium text-[#F5F5F5] hover:text-[#C9922A] transition-colors">
-                      {order.productName}
-                    </span>
-                    <span className="block text-[11px] text-[#9CA3AF]">
-                      {categoryLabel(order.category)}
-                    </span>
-                  </Link>
-                </td>
-                <td>
-                  <Link href={`/admin/orders/${order.id}`} className="block">
-                    {order.quantity}
-                  </Link>
-                </td>
-                <td className="font-mono text-[#C9922A]">
-                  <Link href={`/admin/orders/${order.id}`} className="block">
-                    {formatUSD(order.amount)}
-                  </Link>
-                </td>
-                <td>
-                  <Link href={`/admin/orders/${order.id}`} className="block">
-                    <StatusPill status={order.status} />
-                  </Link>
-                </td>
-                <td>
-                  <Link href={`/admin/orders/${order.id}`} className="block">
-                    <StatusPill status={order.paymentStatus} />
+                  <Link
+                    href={`/admin/listings/${listing.id}`}
+                    className="block font-medium text-[#F5F5F5] hover:text-[#C9922A] transition-colors"
+                  >
+                    {listing.title}
                   </Link>
                 </td>
                 <td className="text-[13px] text-[#9CA3AF]">
-                  <Link href={`/admin/orders/${order.id}`} className="block">
-                    {formatDateTime(order.deliveryDate)}
+                  <Link
+                    href={`/admin/listings/${listing.id}`}
+                    className="block"
+                  >
+                    {categoryLabel(listing.category)}
+                  </Link>
+                </td>
+                <td className="text-[13px]">
+                  <Link
+                    href={`/admin/listings/${listing.id}`}
+                    className="block"
+                  >
+                    {listing.sellerEmail}
+                  </Link>
+                </td>
+                <td className="font-mono text-[#C9922A]">
+                  <Link
+                    href={`/admin/listings/${listing.id}`}
+                    className="block"
+                  >
+                    {formatUSD(listing.retailPriceUsd)}
+                  </Link>
+                </td>
+                <td>
+                  <Link
+                    href={`/admin/listings/${listing.id}`}
+                    className="block"
+                  >
+                    {listing.stockQty}
+                  </Link>
+                </td>
+                <td>
+                  <Link
+                    href={`/admin/listings/${listing.id}`}
+                    className="block"
+                  >
+                    <StatusPill status={listing.status} />
                   </Link>
                 </td>
               </tr>
@@ -251,8 +262,8 @@ const AdminOrders = () => {
 
       {/* Mobile cards */}
       <div className="md:hidden space-y-3">
-        {items.map((order) => (
-          <OrderMobileCard key={order.id} order={order} />
+        {items.map((listing) => (
+          <ListingMobileCard key={listing.id} listing={listing} />
         ))}
       </div>
 
@@ -279,4 +290,4 @@ const AdminOrders = () => {
   );
 };
 
-export default AdminOrders;
+export default AdminListings;
