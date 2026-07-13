@@ -101,6 +101,12 @@
       "namedRegex": "^/admin/listings(?:/)?$"
     },
     {
+      "page": "/admin/management",
+      "regex": "^/admin/management(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/management(?:/)?$"
+    },
+    {
       "page": "/admin/orders",
       "regex": "^/admin/orders(?:/)?$",
       "routeKeys": {},

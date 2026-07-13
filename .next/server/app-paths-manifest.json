@@ -8,6 +8,7 @@
   "/(dashboard)/admin/disputes/page": "app/(dashboard)/admin/disputes/page.js",
   "/(dashboard)/admin/finance/page": "app/(dashboard)/admin/finance/page.js",
   "/(dashboard)/admin/listings/page": "app/(dashboard)/admin/listings/page.js",
+  "/(dashboard)/admin/management/page": "app/(dashboard)/admin/management/page.js",
   "/(dashboard)/admin/orders/page": "app/(dashboard)/admin/orders/page.js",
   "/(dashboard)/admin/page": "app/(dashboard)/admin/page.js",
   "/(dashboard)/admin/product-details/page": "app/(dashboard)/admin/product-details/page.js",

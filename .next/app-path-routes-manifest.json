@@ -8,6 +8,7 @@
   "/(dashboard)/admin/disputes/page": "/admin/disputes",
   "/(dashboard)/admin/finance/page": "/admin/finance",
   "/(dashboard)/admin/listings/page": "/admin/listings",
+  "/(dashboard)/admin/management/page": "/admin/management",
   "/(dashboard)/admin/orders/page": "/admin/orders",
   "/(dashboard)/admin/page": "/admin",
   "/(dashboard)/admin/product-details/page": "/admin/product-details",
