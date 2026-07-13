@@ -1,6 +1,6 @@
 'use client';
 
-import { Search } from 'lucide-react';
+import { Filter, Search } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
 import UserTableCard from '../components/UserTableCard';
@@ -10,8 +10,18 @@ import { AdminUserResponseType } from '../types/adminuserTypes';
 import { useDebounce } from '@/components/debounce/useDebounce';
 import { useHeader } from '@/context/HeaderContext';
 
+const ROLE_OPTIONS = [
+  'All',
+  'admin',
+  'exporter',
+  'consumer',
+  'retailer',
+] as const;
+type RoleFilter = (typeof ROLE_OPTIONS)[number];
+
 const AdminUsers = () => {
   const [search, setSearch] = useState('');
+  const [roleFilter, setRoleFilter] = useState<RoleFilter>('All');
   const { setHeader } = useHeader();
   const debouncedSearch = useDebounce(search, 500);
 
@@ -20,8 +30,16 @@ const AdminUsers = () => {
   });
 
   const adminUsers: AdminUserResponseType[] = useMemo(() => {
-    return data ?? [];
-  }, [data]);
+    const users = (data ?? []) as AdminUserResponseType[];
+
+    if (roleFilter === 'All') return users;
+
+    return users.filter((user) =>
+      user.roles.some(
+        (role) => role.toLowerCase() === roleFilter.toLowerCase(),
+      ),
+    );
+  }, [data, roleFilter]);
 
   useEffect(() => {
     setHeader({
@@ -33,18 +51,19 @@ const AdminUsers = () => {
   }, [setHeader]);
   return (
     <section className="space-y-6">
-      {/* Table Card */}
-      <div className="relative w-full md:w-87">
-        <Search
-          size={18}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-        />
+      {/* Search + Role Filter */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="relative w-full md:w-64">
+          <Search
+            size={18}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+          />
 
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search by name or email..."
-          className="
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by name or email..."
+            className="
               h-11
               w-full
               rounded-xl
@@ -63,7 +82,29 @@ const AdminUsers = () => {
               dark:text-white
               dark:placeholder:text-gray-500
             "
-        />
+          />
+        </div>
+
+        <div className="relative">
+          <Filter
+            size={16}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+          />
+
+          <select
+            value={roleFilter}
+            onChange={(e) => setRoleFilter(e.target.value as RoleFilter)}
+            className="h-11 w-full cursor-pointer appearance-none rounded-xl border border-gray-200 bg-white pl-9 pr-8 text-sm text-gray-900 outline-none transition focus:border-primary dark:border-gray-700 dark:bg-gray-900 dark:text-white sm:w-40"
+          >
+            {ROLE_OPTIONS.map((role) => (
+              <option key={role} value={role}>
+                {role === 'All'
+                  ? 'All Roles'
+                  : role.charAt(0).toUpperCase() + role.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
       <div
         className="
