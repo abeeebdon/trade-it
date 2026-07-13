@@ -5,14 +5,17 @@ import { Eye, EyeOff } from 'lucide-react';
 
 type InputFieldProps = {
   label: string;
-  name: string;
-  type?: string;
-  placeholder?: string;
   error?: string;
-};
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'className'> & {
+    type?: string;
+    className?: string;
+  };
 
 const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
-  ({ label, name, type = 'text', placeholder, error, ...rest }, ref) => {
+  (
+    { label, name, type = 'text', placeholder, error, className, ...rest },
+    ref,
+  ) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const isPassword = type === 'password';
@@ -30,7 +33,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
             ref={ref}
             type={isPassword && showPassword ? 'text' : type}
             placeholder={placeholder}
-            className="helix-input pr-10"
+            className={`helix-input pr-10 ${className ?? ''}`}
             {...rest}
           />
 

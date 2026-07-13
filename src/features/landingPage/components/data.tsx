@@ -13,15 +13,6 @@ import {
   RefreshCw,
   FileText,
   DollarSign,
-  Home,
-  Heart,
-  ListChecks,
-  CreditCard,
-  UserCircle,
-  Bell,
-  HelpCircle,
-  MapPin,
-  // Users,
   Currency,
   Lightbulb,
   HandHelping,
@@ -30,6 +21,7 @@ import {
   Command,
   ShoppingBasket,
   ListCheck,
+  Cone,
 } from 'lucide-react';
 
 export const helixCards = [
@@ -158,6 +150,7 @@ export const NAV: {
     { to: '/', label: 'Marketplace', icon: Store },
     { to: '/admin/waitlist', label: 'Waitlist', icon: BookAIcon },
     { to: '/admin/users', label: 'Users', icon: User },
+    { to: '/admin/management', label: 'Management', icon: Cone },
   ],
 
   super_admin: [
