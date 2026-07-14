@@ -31,7 +31,7 @@ const GetStarted = () => {
 
   const userTypes: AuthRole[] = data
     ? data
-        .filter((d: AuthRole) => d.id <= 3)
+        .filter((d: AuthRole) => d.name.toLowerCase() !== 'admin')
         .map((r: AuthRole) => ({ ...r, value: ROLE_VALUES[r.id - 1] }))
     : [];
 

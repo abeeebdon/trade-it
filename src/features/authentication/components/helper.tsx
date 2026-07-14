@@ -13,15 +13,9 @@ export const getIcon = (id: number) => {
   return <Icon />;
 };
 
-export const ROLE_BLURBS: string[] = ROLES.map((role) => role.blurb);
-export const ROLE_PILL: string[] = ROLES.map((role) => role.pill);
-
 export const ROLE_VALUES = ROLES.map((role) => role.value) as authRoleType[];
-export const getRoleBlurb = (id: number) => {
-  return ROLE_BLURBS[id - 1] || '';
-};
-export const getRolePill = (id: number) => {
-  return ROLE_PILL[id - 1] || '';
+export const getRoleBlurb = (id: string) => {
+  return ROLES.find((r) => r.value == id);
 };
 export const logoutAction = async () => {
   handleLogoutFn();
