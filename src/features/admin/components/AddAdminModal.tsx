@@ -41,7 +41,7 @@ const AddAdminModal = () => {
   const onSubmit = (data: AddAdminFormData) => {
     const postData: RegisterPostData = {
       ...data,
-      customerTypeIds: [5],
+      customerTypeIds: [1],
       countryId: 125,
     };
     createAdmin(postData, {

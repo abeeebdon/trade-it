@@ -1,6 +1,5 @@
 import { CheckCircle } from 'lucide-react';
-import { cloneElement } from 'react';
-import { getIcon, getRoleBlurb, getRolePill } from './helper';
+import { getRoleBlurb } from './helper';
 import { AuthRole } from '@/types';
 
 const RoleCard = ({
@@ -12,7 +11,8 @@ const RoleCard = ({
   active: boolean;
   setSelected: (value: AuthRole) => void;
 }) => {
-  const icon = getIcon(r.id - 1);
+  const role = getRoleBlurb(r.name.toLowerCase());
+  const Icon = role?.Icon;
 
   return (
     <button
@@ -24,12 +24,7 @@ const RoleCard = ({
       }`}
     >
       <div className="flex items-start justify-between">
-        {icon
-          ? cloneElement(icon, {
-              size: 30,
-              className: active ? 'text-[#C9922A]' : 'text-[#1A7A6E]',
-            })
-          : null}
+        {Icon ? <Icon /> : null}
 
         {active && <CheckCircle size={18} className="text-[#C9922A]" />}
       </div>
@@ -41,11 +36,11 @@ const RoleCard = ({
       </div>
       <p className="text-[13px] text-[#9CA3AF] mt-3 leading-relaxed">
         {' '}
-        {getRoleBlurb(r.id)}
+        {role?.blurb}
       </p>{' '}
       <div className="mt-5 inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider text-[#C9922A]/80 border border-[#C9922A]/30 rounded-full px-2.5 py-1">
         {' '}
-        {getRolePill(r.id)}{' '}
+        {role?.sub}
       </div>
     </button>
   );
