@@ -1,20 +1,10 @@
-import { getSavedCookie } from '@/store/auth/cookies';
-import axios from 'axios';
 import { toast } from 'sonner';
 import { QuoteRequestType } from '../types/orders';
 import { APIENDPOINTS } from '@/configs/api-urls';
-const baseUrl = 'https://jompshop.jompstart.com/api';
+import api from '@/configs/api-config';
 export const getBuyerQuoteRequest = async () => {
-  const token = getSavedCookie('token');
   try {
-    const response = await axios.get(
-      `${baseUrl}${APIENDPOINTS.BUYER_FULFILLMENTQUEUE}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
+    const response = await api.get(APIENDPOINTS.BUYER_FULFILLMENTQUEUE);
     if (response.data.success) {
       toast.success(response.data.message);
       return response.data.data;
@@ -29,17 +19,8 @@ export const getBuyerQuoteRequest = async () => {
 };
 
 export const placeQuote = async (payload: QuoteRequestType) => {
-  const token = getSavedCookie('token');
   try {
-    const response = await axios.post(
-      `${baseUrl}${APIENDPOINTS.BUYER_QUOTE_REQ}`,
-      payload,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
+    const response = await api.post(APIENDPOINTS.BUYER_QUOTE_REQ, payload);
 
     if (response.data.success) {
       toast.success(response.data.message);

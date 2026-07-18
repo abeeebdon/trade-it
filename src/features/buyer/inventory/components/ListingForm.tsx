@@ -11,23 +11,43 @@ import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useGetProductCategories } from '@/features/exporter/hooks/useProducts';
 import { toast } from 'sonner';
-import { useCreateLocalListing } from '../hooks/useGetInventory';
+import {
+  useCreateLocalListing,
+  useEditLocalListing,
+} from '../hooks/useGetInventory';
 import { CreateLocalListingPayload } from '../types/inventory';
 
 type ListingFormData = z.infer<typeof listingSchema>;
 
 function ListingForm({ editing, onClose }: ListingFormProps) {
   const [photos, setPhotos] = useState<{ file: File; preview: string }[]>([]);
+  const existingImages = useMemo(() => editing?.images ?? [], [editing]);
+
+  const defaultValues = useMemo(
+    () =>
+      editing
+        ? {
+            Title: editing.title,
+            Category: editing.category,
+            RetailPriceUsd: String(editing.retailPriceUsd),
+            StockQty: String(editing.stockQty),
+            ShipsFrom: editing.shipsFrom,
+            Description: editing.description,
+            LocalListingStatusId: String(editing.localListingStatusId),
+          }
+        : undefined,
+    [editing],
+  );
+
   const {
     register,
     handleSubmit,
-    watch,
-    setValue,
     formState: { errors, isSubmitting },
   } = useForm<ListingFormData>({
     resolver: zodResolver(listingSchema),
+    values: defaultValues,
   });
-  const { data, refetch, isPending } = useGetProductCategories();
+  const { data } = useGetProductCategories();
   const categoryArray = useMemo(() => {
     return data ? data.data : [];
   }, [data]);
@@ -43,17 +63,27 @@ function ListingForm({ editing, onClose }: ListingFormProps) {
 
     setPhotos((prev) => [...prev, ...newPhotos]);
   };
-  const { mutateAsync } = useCreateLocalListing();
-  console.log(errors);
-  const onSubmit = async (data: ListingFormData) => {
-    console.log(data);
-    const photoArray = photos.map((ph) => ph.file);
-    if (photoArray.length < 1) {
+  const { mutateAsync: createListing } = useCreateLocalListing();
+  const { mutateAsync: editListing } = useEditLocalListing();
+
+  const onSubmit = async (formData: ListingFormData) => {
+    const newPhotos = photos.map((ph) => ph.file);
+
+    if (!editing && newPhotos.length < 1) {
       toast.error('Please select a photo');
       return;
     }
-    const payload: CreateLocalListingPayload = { ...data, Photos: photoArray };
-    await mutateAsync(payload);
+
+    const payload: CreateLocalListingPayload = {
+      ...formData,
+      Photos: newPhotos,
+    };
+
+    if (editing?.id) {
+      await editListing({ id: editing.id, payload }, { onSuccess: onClose });
+    } else {
+      await createListing(payload, { onSuccess: onClose });
+    }
   };
 
   return (
@@ -144,11 +174,21 @@ function ListingForm({ editing, onClose }: ListingFormProps) {
             />
 
             <div className="flex gap-2 mt-3 flex-wrap">
+              {existingImages.map((url, index) => (
+                <Image
+                  width={60}
+                  height={60}
+                  key={`existing-${index}`}
+                  src={url}
+                  alt=""
+                  className="w-16 h-16 rounded object-cover"
+                />
+              ))}
               {photos.map((photo, index) => (
                 <Image
                   width={60}
                   height={60}
-                  key={index}
+                  key={`new-${index}`}
                   src={photo.preview}
                   alt=""
                   className="w-16 h-16 rounded object-cover"
@@ -186,7 +226,11 @@ function ListingForm({ editing, onClose }: ListingFormProps) {
               disabled={isSubmitting}
               className="helix-btn-primary flex-1"
             >
-              {isSubmitting ? 'Saving...' : 'Save Listing'}
+              {isSubmitting
+                ? 'Saving...'
+                : editing
+                  ? 'Update Listing'
+                  : 'Save Listing'}
             </button>
           </div>
         </form>

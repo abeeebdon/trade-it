@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   createListing,
+  deleteListing,
   editListing,
   getListingById,
   getListings,
@@ -17,7 +18,7 @@ export const useCreateListing = (onSuccess?: () => void) => {
     mutationFn: (payload: CreateListingPayload) => createListing(payload),
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ['listings'],
+        queryKey: ['dtc-listings'],
       });
       toast.success(data?.message ?? 'Listing created successfully');
       onSuccess?.();
@@ -39,7 +40,7 @@ export const useEditListing = (onSuccess?: () => void) => {
       editListing({ id, payload }),
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ['listings'],
+        queryKey: ['dtc-listings'],
       });
       toast.success(data?.message ?? 'Listing edited successfully');
       onSuccess?.();
@@ -61,9 +62,32 @@ export const useGetListings = ({ pageNumber, pageSize }: ListingsParams) => {
     queryFn: () => getListings({ pageNumber, pageSize }),
   });
 };
-export const useGetListingById = ({ id }: { id: string }) => {
+export const useGetListingById = ({ id }: { id?: string }) => {
   return useQuery({
     queryKey: ['dtc-listings-details', id],
     queryFn: () => getListingById({ id }),
+    enabled: !!id,
+  });
+};
+
+export const useDeleteListing = (onSuccess?: () => void) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => deleteListing(id),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ['dtc-listings'],
+      });
+      toast.success(data?.message ?? 'Listing deleted successfully');
+      onSuccess?.();
+    },
+    onError: (error: AxiosError) => {
+      console.error('API Mutation Error:', error);
+      const data = error?.response?.data as { message?: string } | undefined;
+      toast.error(
+        data?.message ?? 'Failed to delete listing. Please try again.',
+      );
+    },
   });
 };

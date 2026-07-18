@@ -1,35 +1,24 @@
 'use client';
-import { useAppSelector } from '@/hooks/store/store';
-import { Pencil, Plus, Store, Trash, Truck } from 'lucide-react';
+import { Plus, Store } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { StatusPill } from '@/features/shops/components/StatusPill';
-import { formatUSD } from '@/lib/func';
-import Image from 'next/image';
 import { ListingItem } from '../types/buyers';
 import PressableBtn from '@/components/buttons/PressableBtn';
 import { useHeader } from '@/context/HeaderContext';
 import ListingForm from './components/ListingForm';
+import InventoryTableCard from './components/InventoryTableCard';
+import InventoryTableSkeleton from './components/InventoryTableSkeleton';
 import { useGetLocalListings } from './hooks/useGetInventory';
 
 const BuyerInventorySell = () => {
   const { setHeader } = useHeader();
 
-  const [items, setItems] = useState<ListingItem[]>([]);
-  const { data, isPending } = useGetLocalListings({
+  const { data, isPending, isError, error, refetch } = useGetLocalListings({
     pageNumber: 1,
     pageSize: 10,
   });
-  console.log(data);
 
   const [open, setOpen] = useState(false);
-
   const [editing, setEditing] = useState<ListingItem | null>(null);
-
-  const load = () => {};
-
-  const del = (id: number) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
-  };
   useEffect(() => {
     setHeader({
       title: 'Direct-to-Consumer Listings',
@@ -49,7 +38,6 @@ const BuyerInventorySell = () => {
 
     return () => setHeader(null);
   }, [setHeader]);
-
   return (
     <>
       <main className="">
@@ -65,7 +53,23 @@ const BuyerInventorySell = () => {
           </div>
         </div>
 
-        {items.length === 0 ? (
+        {isPending ? (
+          <InventoryTableSkeleton />
+        ) : isError ? (
+          <div className="helix-card flex justify-center flex-col items-center gap-4 p-10 text-center">
+            <p className="text-danger font-medium">Failed to load listings</p>
+            <p className="text-sm text-muted">
+              {error instanceof Error
+                ? error.message
+                : 'Something went wrong. Please try again.'}
+            </p>
+            <PressableBtn
+              handleClick={() => refetch()}
+              title="Try again"
+              className="helix-btn-secondary w-fit gap-2"
+            />
+          </div>
+        ) : data?.data?.length === 0 ? (
           <div className="helix-card flex justify-center flex-col items-center gap-6 p-10 text-center text-muted">
             No listings yet.
             <PressableBtn
@@ -79,7 +83,7 @@ const BuyerInventorySell = () => {
             />
           </div>
         ) : (
-          <div className="helix-card overflow-hidden">
+          <div className=" overflow-hidden">
             <table className="helix-table">
               <thead>
                 <tr>
@@ -94,55 +98,15 @@ const BuyerInventorySell = () => {
                 </tr>
               </thead>
               <tbody>
-                {items.map((l) => (
-                  <tr key={l.id}>
-                    <td>
-                      <Image
-                        src={l.photos?.[0]}
-                        alt=""
-                        width={56}
-                        height={56}
-                        className="w-14 h-14 rounded object-cover"
-                      />
-                    </td>
-                    <td className="max-w-xs truncate">{l.title}</td>
-                    <td className="text-[12px] text-muted">{l.category}</td>
-                    <td className="font-mono">
-                      {formatUSD(l.retail_price_usd)}
-                    </td>
-                    <td className="font-mono">{l.stock_qty}</td>
-                    <td>
-                      <span
-                        className={`helix-status ${l.fulfillment_mode === 'riby_dtc' ? 'helix-status-gold' : 'helix-status-ok'}`}
-                      >
-                        {l.fulfillment_mode === 'riby_dtc'
-                          ? 'DTC · RIBY'
-                          : 'LOCAL · 48HR'}
-                      </span>
-                    </td>
-                    <td>
-                      <StatusPill status={l.status} />
-                    </td>
-                    <td>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => {
-                            setEditing(l);
-                            setOpen(true);
-                          }}
-                          className="text-secondary hover:text-primary"
-                        >
-                          <Pencil size={16} />
-                        </button>
-                        <button
-                          onClick={() => del(l.id ?? 0)}
-                          className="text-danger hover:text-shadow-danger"
-                        >
-                          <Trash size={16} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                {(data?.data ?? []).map((item) => (
+                  <InventoryTableCard
+                    key={item.id}
+                    item={item}
+                    onEdit={(listing) => {
+                      setEditing(listing);
+                      setOpen(true);
+                    }}
+                  />
                 ))}
               </tbody>
             </table>
@@ -155,7 +119,6 @@ const BuyerInventorySell = () => {
           editing={editing}
           onClose={() => {
             setOpen(false);
-            load();
           }}
         />
       )}

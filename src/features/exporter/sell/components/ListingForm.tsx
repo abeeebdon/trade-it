@@ -18,7 +18,6 @@ import { useForm, type Resolver } from 'react-hook-form';
 import { ListingFormValues, listingSchema } from './validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import InputField from '@/components/form/InputFIeld';
-import PressableBtn from '@/components/buttons/PressableBtn';
 import { Loader2 } from 'lucide-react';
 
 interface ListingFormProps {
@@ -143,14 +142,16 @@ export default function ListingForm({
               error={errors.title?.message}
               {...register('title')}
             />
-
-            <select className="helix-input" {...register('category')}>
-              {CATS.map((c) => (
-                <option key={c.value} value={c.value}>
-                  {c.label}
-                </option>
-              ))}
-            </select>
+            <div>
+              <label className="helix-label">Category</label>
+              <select className="helix-input" {...register('category')}>
+                {CATS.map((c) => (
+                  <option key={c.value} value={c.value}>
+                    {c.label}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             <InputField
               label="Retail price (USD)"

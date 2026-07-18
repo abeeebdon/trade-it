@@ -141,12 +141,11 @@ export interface ListingItem {
   title: string;
   description: string;
   category: Category;
-  fulfillment_mode?: FulfillmentMode;
-  retail_price_usd: number;
-  stock_qty: number;
-  photos: string[];
-  ships_from: string;
-  status: ListingStatus;
+  images: string[];
+  localListingStatusId: number;
+  retailPriceUsd: number;
+  shipsFrom: string;
+  stockQty: number;
 }
 export interface ListingFormProps {
   isExporter: boolean;

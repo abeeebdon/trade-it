@@ -7,9 +7,14 @@ import type { SellerQuote } from '../types/exporter';
 interface QuoteCardProps {
   q: SellerQuote;
   onRespond: (q: SellerQuote) => void;
+  canRespond?: boolean;
 }
 
-export default function QuoteCard({ q, onRespond }: QuoteCardProps) {
+export default function QuoteCard({
+  q,
+  onRespond,
+  canRespond = true,
+}: QuoteCardProps) {
   return (
     <div className="helix-card p-5" data-testid={`seller-quote-${q.id}`}>
       <div className="flex items-start justify-between flex-wrap gap-3">
@@ -42,7 +47,7 @@ export default function QuoteCard({ q, onRespond }: QuoteCardProps) {
         </div>
         <div className="flex flex-col items-end gap-2 shrink-0">
           <StatusPill status={q.status} />
-          {q.status === 'pending' && (
+          {q.status === 'pending' && canRespond && (
             <button
               onClick={() => onRespond(q)}
               className="helix-btn-primary text-sm"

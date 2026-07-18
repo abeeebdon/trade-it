@@ -1,24 +1,26 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { MessageCircle } from 'lucide-react';
-import { formatUSD } from '@/lib/func';
 import type {
   SellerQuote,
   FulfillmentOrder,
   RespondForm,
 } from '../types/exporter';
-import { mockSellerQuotes, mockFulfillmentOrders } from '../components/data';
+import {
+  mapQuoteToSellerQuote,
+  mapOrderToFulfillmentOrder,
+} from '../types/exporter';
 import QuoteCard from '../components/QuoteCard';
 import FulfillmentOrderCard from '../components/FulfillmentOrderCard';
 import RespondQuoteModal from '../components/RespondQuoteModal';
 import { useGetBuyerQuotes } from '@/features/buyer/orders/hooks/useGetQuoteOrders';
+import { useAppSelector } from '@/hooks/store/store';
 
 export default function Fulfillment() {
-  const [orders, setOrders] = useState<FulfillmentOrder[]>([]);
-  const [quotes, setQuotes] = useState<SellerQuote[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { user } = useAppSelector((state) => state.auth);
+  const isExporter = user?.role === 'exporter';
   const [respond, setRespond] = useState<SellerQuote | null>(null);
   const [busy, setBusy] = useState(false);
   const [form, setForm] = useState<RespondForm>({
@@ -26,19 +28,18 @@ export default function Fulfillment() {
     quote_note: '',
     valid_days: 7,
   });
-  const { data, isPending } = useGetBuyerQuotes();
-  console.log(isPending, data);
-  const load = () => {
-    setTimeout(() => {
-      setOrders(mockFulfillmentOrders);
-      setQuotes(mockSellerQuotes);
-      setLoading(false);
-    }, 800);
-  };
 
-  useEffect(() => {
-    load();
-  }, []);
+  const { data, isPending } = useGetBuyerQuotes();
+
+  const quotes: SellerQuote[] = useMemo(
+    () => data?.quoteRequests?.map(mapQuoteToSellerQuote) ?? [],
+    [data],
+  );
+
+  const orders: FulfillmentOrder[] = useMemo(
+    () => data?.orders?.map(mapOrderToFulfillmentOrder) ?? [],
+    [data],
+  );
 
   // ── Open respond modal and pre-fill if quote already has a price
   const handleRespond = (q: SellerQuote) => {
@@ -52,7 +53,7 @@ export default function Fulfillment() {
     });
   };
 
-  // ── Send quote response
+  // ── Send quote response (mock — replace with real API call)
   const sendQuote = async () => {
     if (!respond || !form.quoted_unit_price_usd) {
       toast.error('Please enter a unit price');
@@ -60,26 +61,8 @@ export default function Fulfillment() {
     }
     setBusy(true);
     try {
+      // TODO: replace with real API call
       await new Promise((res) => setTimeout(res, 600));
-      // Mock: update quote status to 'quoted' in local state
-      setQuotes((prev) =>
-        prev.map((q) =>
-          q.id === respond.id
-            ? {
-                ...q,
-                status: 'quoted' as const,
-                quoted_unit_price_usd: Number(form.quoted_unit_price_usd),
-                quoted_total_usd:
-                  Number(form.quoted_unit_price_usd) * q.quantity,
-                quote_valid_until: new Date(
-                  Date.now() + form.valid_days * 86400000,
-                )
-                  .toISOString()
-                  .split('T')[0],
-              }
-            : q,
-        ),
-      );
       toast.success('Quote sent to consumer');
       setRespond(null);
       setForm({ quoted_unit_price_usd: '', quote_note: '', valid_days: 7 });
@@ -90,62 +73,38 @@ export default function Fulfillment() {
     }
   };
 
-  // ── Mark shipped
+  // ── Mark shipped (mock — replace with real API call)
   const ship = async (id: string) => {
+    void id; // TODO: use in real API call
     const tn = window.prompt('Tracking number (leave blank to auto-generate)');
-    if (tn === null) return; // user cancelled prompt
+    if (tn === null) return;
     try {
+      // TODO: call real ship API with id
       await new Promise((res) => setTimeout(res, 500));
-      const trackingNumber =
-        tn.trim() || `AUTO-${Date.now().toString().slice(-8)}`;
-      setOrders((prev) =>
-        prev.map((o) =>
-          o.id === id
-            ? {
-                ...o,
-                status: 'shipped' as const,
-                tracking_number: trackingNumber,
-              }
-            : o,
-        ),
-      );
       toast.success('Marked shipped');
     } catch {
       toast.error('Failed');
     }
   };
 
-  // ── Mark delivered + release escrow
+  // ── Mark delivered + release escrow (mock — replace with real API call)
   const deliver = async (id: string) => {
+    void id; // TODO: use in real API call
     const confirmed = window.confirm(
       'Mark delivered? This releases the escrow funds to your USD wallet (net of 2% fee).',
     );
     if (!confirmed) return;
     try {
+      // TODO: call real deliver API with id
       await new Promise((res) => setTimeout(res, 600));
-      const order = orders.find((o) => o.id === id);
-      const creditAmount = order ? order.total_usd * 0.98 : 0;
-      setOrders((prev) =>
-        prev.map((o) =>
-          o.id === id
-            ? {
-                ...o,
-                status: 'delivered' as const,
-                escrow_status: 'released' as const,
-              }
-            : o,
-        ),
-      );
-      toast.success(
-        `Escrow released · ${formatUSD(creditAmount)} credited to your USD wallet`,
-      );
+      toast.success('Escrow released · funds credited to your USD wallet');
     } catch {
       toast.error('Failed');
     }
   };
 
   // ── Loading skeleton
-  if (loading) {
+  if (isPending) {
     return (
       <div className="space-y-4">
         {Array.from({ length: 3 }).map((_, i) => (
@@ -168,7 +127,12 @@ export default function Fulfillment() {
           </div>
           <div className="space-y-3">
             {quotes.map((q) => (
-              <QuoteCard key={q.id} q={q} onRespond={handleRespond} />
+              <QuoteCard
+                key={q.id}
+                q={q}
+                onRespond={handleRespond}
+                canRespond={isExporter}
+              />
             ))}
           </div>
         </div>
@@ -188,6 +152,7 @@ export default function Fulfillment() {
               o={o}
               onShip={ship}
               onDeliver={deliver}
+              canAct={isExporter}
             />
           ))}
         </div>

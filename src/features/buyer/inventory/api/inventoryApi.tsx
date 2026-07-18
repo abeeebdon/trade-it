@@ -4,12 +4,14 @@ import { ListingsParams } from '@/features/exporter/sell/types/sellType';
 import {
   CreateLocalListingPayload,
   EditLocalListingPayload,
+  PaginatedResponse,
 } from '../types/inventory';
+import { ListingItem } from '../../types/buyers';
 
 export const getLocalListings = async ({
   pageNumber,
   pageSize,
-}: ListingsParams) => {
+}: ListingsParams): Promise<PaginatedResponse<ListingItem>> => {
   try {
     const response = await api.get(
       `${APIENDPOINTS.LOCAL_LISTINGS}?PageNumber=${pageNumber}&PageSize=${pageSize}`,
@@ -81,7 +83,7 @@ export const editLocalListing = async ({
   });
 
   const response = await api.put(
-    `/Direct-to-Consumer/listings/${id}`,
+    `${APIENDPOINTS.LOCAL_LISTINGS}/${id}`,
     formData,
     {
       headers: {
@@ -91,4 +93,13 @@ export const editLocalListing = async ({
   );
 
   return response.data;
+};
+
+export const deleteLocalListing = async (id: number) => {
+  try {
+    const response = await api.delete(`${APIENDPOINTS.LOCAL_LISTINGS}/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };

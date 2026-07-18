@@ -9,12 +9,14 @@ interface FulfillmentOrderCardProps {
   o: FulfillmentOrder;
   onShip: (id: string) => void;
   onDeliver: (id: string) => void;
+  canAct?: boolean;
 }
 
 export default function FulfillmentOrderCard({
   o,
   onShip,
   onDeliver,
+  canAct = true,
 }: FulfillmentOrderCardProps) {
   return (
     <div className="helix-card p-5" data-testid={`ff-${o.id}`}>
@@ -74,27 +76,29 @@ export default function FulfillmentOrderCard({
       </div>
 
       {/* ── Actions ── */}
-      <div className="mt-4 flex gap-2 flex-wrap">
-        {o.status === 'paid' && (
-          <button
-            onClick={() => onShip(o.id)}
-            className="helix-btn-primary text-sm"
-            data-testid={`ship-${o.id}`}
-          >
-            Mark shipped
-          </button>
-        )}
-        {(o.status === 'shipped' ||
-          (o.status === 'paid' && o.escrow_status === 'held')) && (
-          <button
-            onClick={() => onDeliver(o.id)}
-            className="helix-btn-primary text-sm inline-flex items-center gap-1"
-            data-testid={`deliver-${o.id}`}
-          >
-            <CheckCircle2 size={14} /> Mark delivered · release escrow
-          </button>
-        )}
-      </div>
+      {canAct && (
+        <div className="mt-4 flex gap-2 flex-wrap">
+          {o.status === 'paid' && (
+            <button
+              onClick={() => onShip(o.id)}
+              className="helix-btn-primary text-sm"
+              data-testid={`ship-${o.id}`}
+            >
+              Mark shipped
+            </button>
+          )}
+          {(o.status === 'shipped' ||
+            (o.status === 'paid' && o.escrow_status === 'held')) && (
+            <button
+              onClick={() => onDeliver(o.id)}
+              className="helix-btn-primary text-sm inline-flex items-center gap-1"
+              data-testid={`deliver-${o.id}`}
+            >
+              <CheckCircle2 size={14} /> Mark delivered · release escrow
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }
