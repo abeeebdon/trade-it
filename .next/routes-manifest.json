@@ -29,14 +29,6 @@
         "nxtPid": "nxtPid"
       },
       "namedRegex": "^/exporter/credit/(?<nxtPid>[^/]+?)(?:/)?$"
-    },
-    {
-      "page": "/exporter/sell/[id]",
-      "regex": "^/exporter/sell/([^/]+?)(?:/)?$",
-      "routeKeys": {
-        "nxtPid": "nxtPid"
-      },
-      "namedRegex": "^/exporter/sell/(?<nxtPid>[^/]+?)(?:/)?$"
     }
   ],
   "staticRoutes": [
@@ -197,6 +189,12 @@
       "namedRegex": "^/buyer/sell(?:/)?$"
     },
     {
+      "page": "/buyer/sell/details",
+      "regex": "^/buyer/sell/details(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/buyer/sell/details(?:/)?$"
+    },
+    {
       "page": "/consumer",
       "regex": "^/consumer(?:/)?$",
       "routeKeys": {},
@@ -327,6 +325,12 @@
       "regex": "^/exporter/sell(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/exporter/sell(?:/)?$"
+    },
+    {
+      "page": "/exporter/sell/details",
+      "regex": "^/exporter/sell/details(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/exporter/sell/details(?:/)?$"
     },
     {
       "page": "/exporter/withdrawal-accounts",
