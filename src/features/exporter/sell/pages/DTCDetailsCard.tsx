@@ -1,19 +1,37 @@
 'use client';
 
 import Image from 'next/image';
-import { Edit, Trash2, Package, MapPin, Truck } from 'lucide-react';
-import { useEditListing, useGetListingById } from '../../hooks/useListings';
-import { useMemo, useState } from 'react';
+import { Edit, Trash2, Package, MapPin, Truck, ArrowLeft } from 'lucide-react';
+import {
+  useEditListing,
+  useGetListingById,
+  useDeleteListing,
+} from '../../hooks/useListings';
+import { useEffect, useMemo, useState } from 'react';
 import { ProductListingTypes, ProductPhoto } from '../types/sellType';
 import DTCProductDetailsSkeleton from '../components/DetailsSkeleton';
 import ListingForm from '../components/ListingForm';
 import { CreateListingPayload } from '../../types/exporter';
+import { useRouter, useSearchParams } from 'next/navigation';
+import WarningModal from '@/components/modals/WarningModal';
 
-const DTCDetails = ({ id }: { id: string }) => {
+const DTCDetails = () => {
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id') ?? undefined;
+  const router = useRouter();
+  useEffect(() => {
+    if (!id) router.back();
+  }, [id, router]);
   const { data, isPending } = useGetListingById({ id });
   const [editOpen, setEditOoen] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
   const { mutateAsync: editListingMutation, isPending: isEditing } =
     useEditListing();
+  const { mutateAsync: deleteListingMutation, isPending: isDeleting } =
+    useDeleteListing(() => {
+      setShowDelete(false);
+      router.back();
+    });
 
   const product: ProductListingTypes = useMemo(() => {
     return data ? data : [];
@@ -23,7 +41,7 @@ const DTCDetails = ({ id }: { id: string }) => {
   }, [data]);
   const handleSave = async (payload: CreateListingPayload) => {
     await editListingMutation({
-      id: id,
+      id: id ?? '',
       payload,
     });
     setEditOoen(false);
@@ -32,6 +50,14 @@ const DTCDetails = ({ id }: { id: string }) => {
     <DTCProductDetailsSkeleton />
   ) : (
     <section className="mx-auto max-w-6xl">
+      {/* Back button */}
+      <button
+        onClick={() => router.back()}
+        className="mb-4 inline-flex items-center gap-1 text-sm text-muted hover:text-text transition-colors"
+      >
+        <ArrowLeft size={16} /> Back
+      </button>
+
       <div className="overflow-hidden rounded-2xl  shadow-sm ">
         <div className="grid gap-8 lg:grid-cols-2">
           {/* Images */}
@@ -93,7 +119,7 @@ const DTCDetails = ({ id }: { id: string }) => {
                 </button>
 
                 <button
-                  // onClick={() => onDelete(product.id)}
+                  onClick={() => setShowDelete(true)}
                   className="flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-white transition hover:bg-red-700"
                 >
                   <Trash2 size={16} />
@@ -174,6 +200,16 @@ const DTCDetails = ({ id }: { id: string }) => {
         }}
         onSave={handleSave}
         isLoading={isEditing}
+      />
+
+      <WarningModal
+        open={showDelete}
+        onClose={() => setShowDelete(false)}
+        onConfirm={() => deleteListingMutation(id!)}
+        loading={isDeleting}
+        label="Delete Listing"
+        btnText="Delete"
+        text={`Are you sure you want to delete "${product.title}"? This action cannot be undone.`}
       />
     </section>
   );

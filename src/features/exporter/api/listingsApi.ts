@@ -18,7 +18,7 @@ export const getListings = async ({
   }
 };
 
-export const getListingById = async ({ id }: { id: string }) => {
+export const getListingById = async ({ id }: { id?: string }) => {
   try {
     const response = await api.get(`/Direct-to-Consumer/listings/${id}`);
     return response.data.data;
@@ -91,4 +91,13 @@ export const editListing = async ({ id, payload }: EditListingPayload) => {
   );
 
   return response.data;
+};
+
+export const deleteListing = async (id: string) => {
+  try {
+    const response = await api.delete(`/Direct-to-Consumer/listings/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };

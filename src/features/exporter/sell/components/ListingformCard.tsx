@@ -67,7 +67,7 @@ const ListingformCard = ({ l }: ListingFormCardProps) => {
             <Pencil size={16} />
           </button>
           <button
-            onClick={() => router.push(`/exporter/sell/${l.id}`)}
+            onClick={() => router.push(`/exporter/sell/details?id=${l.id}`)}
             className="text-[#1A7A6E] hover:text-[#C9922A] transition"
           >
             <Eye size={16} />
