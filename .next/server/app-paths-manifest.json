@@ -51,6 +51,7 @@
   "/(dashboard)/exporter/sell/details/page": "app/(dashboard)/exporter/sell/details/page.js",
   "/(dashboard)/exporter/sell/page": "app/(dashboard)/exporter/sell/page.js",
   "/(dashboard)/exporter/withdrawal-accounts/page": "app/(dashboard)/exporter/withdrawal-accounts/page.js",
+  "/(dashboard)/profile/page": "app/(dashboard)/profile/page.js",
   "/(home)/about/page": "app/(home)/about/page.js",
   "/(home)/payment/page": "app/(home)/payment/page.js",
   "/(home)/shop/orders/page": "app/(home)/shop/orders/page.js",

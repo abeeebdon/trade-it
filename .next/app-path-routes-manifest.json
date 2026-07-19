@@ -51,6 +51,7 @@
   "/(dashboard)/exporter/sell/details/page": "/exporter/sell/details",
   "/(dashboard)/exporter/sell/page": "/exporter/sell",
   "/(dashboard)/exporter/withdrawal-accounts/page": "/exporter/withdrawal-accounts",
+  "/(dashboard)/profile/page": "/profile",
   "/(home)/about/page": "/about",
   "/(home)/payment/page": "/payment",
   "/(home)/shop/orders/page": "/shop/orders",
