@@ -1,37 +1,44 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Plus } from 'lucide-react';
-import { toast } from 'sonner';
-import { MOCK_ADDRESSES } from '../constants';
 import AddressCard from '../components/AddressCard';
 import AddressesEmptyState from '../components/AddressesEmptyState';
 import AddAddressModal from '../components/AddAddressModal';
 import AddressesSkeleton from '../components/AddressesSkeleton';
-import type { Address } from '../types';
-
-const SIMULATED_DELAY_MS = 700;
+import WarningModal from '@/components/modals/WarningModal';
+import {
+  useGetAddresses,
+  useDeleteAddress,
+  useSetDefaultAddress,
+} from '../hooks/useAddresses';
 
 export default function Addresses() {
-  const [items, setItems] = useState<Address[]>([]);
-  const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
 
-  useEffect(() => {
-    const t = setTimeout(() => {
-      setItems(MOCK_ADDRESSES);
-      setLoading(false);
-    }, SIMULATED_DELAY_MS);
-    return () => clearTimeout(t);
-  }, []);
+  const { data, isLoading } = useGetAddresses();
+  const { mutate: remove, isPending: deleting } = useDeleteAddress();
+  const { mutate: setDefault } = useSetDefaultAddress();
 
-  const remove = (id: string) => {
-    if (!window.confirm('Remove this address?')) return;
-    setItems((prev) => prev.filter((a) => a.id !== id));
-    toast.success('Address removed');
+  const items = data?.data?.data ?? [];
+
+  const handleDelete = (id: number) => {
+    setDeleteTarget(id);
   };
 
-  if (loading) return <AddressesSkeleton />;
+  const confirmDelete = () => {
+    if (deleteTarget === null) return;
+    remove(deleteTarget, {
+      onSettled: () => setDeleteTarget(null),
+    });
+  };
+
+  const handleSetDefault = (id: number) => {
+    setDefault(id);
+  };
+
+  if (isLoading) return <AddressesSkeleton />;
 
   return (
     <main>
@@ -55,13 +62,28 @@ export default function Addresses() {
           </div>
           <div className="grid md:grid-cols-2 gap-4">
             {items.map((a) => (
-              <AddressCard key={a.id} address={a} onDelete={remove} />
+              <AddressCard
+                key={a.id}
+                address={a}
+                onDelete={handleDelete}
+                onSetDefault={handleSetDefault}
+              />
             ))}
           </div>
         </>
       )}
 
       {open && <AddAddressModal onClose={() => setOpen(false)} />}
+
+      <WarningModal
+        open={deleteTarget !== null}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={confirmDelete}
+        loading={deleting}
+        label="Remove address"
+        text="Are you sure you want to remove this address? This action cannot be undone."
+        btnText="Remove"
+      />
     </main>
   );
 }

@@ -120,9 +120,12 @@ export default function Sidebar() {
 
       <div className="border-t border-[#1A7A6E]/15 px-3 py-3">
         <div className="hidden md:flex items-center gap-2 mb-3 px-2">
-          <p className="w-8 h-8 rounded-full bg-[#C9922A]/20 border border-[#C9922A]/40 flex items-center justify-center text-[#C9922A] font-bold text-xs">
+          <button
+            className="w-8 cursor-pointer h-8 rounded-full bg-[#C9922A]/20 border border-[#C9922A]/40 flex items-center justify-center text-[#C9922A] font-bold text-xs"
+            onClick={() => router.push('/profile')}
+          >
             {user?.fullName[0] || 'H'}
-          </p>
+          </button>
           {!hideLabel && (
             <div className="flex-1 min-w-0">
               <p className="text-[12px] font-medium text-muted truncate">
@@ -135,7 +138,6 @@ export default function Sidebar() {
           )}
         </div>
         <button
-          data-testid="logout-btn"
           onClick={() => setShowLogoutModal(true)}
           className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded text-[#9CA3AF] hover:text-[#F5F5F5] hover:bg-secondary/50 text-[12px] transition-colors"
         >

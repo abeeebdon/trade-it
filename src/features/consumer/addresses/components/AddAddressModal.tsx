@@ -1,33 +1,39 @@
 'use client';
 
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'sonner';
 import { addAddressSchema } from './validation';
+import type { AddAddressFormValues } from './validation';
+import { useAddAddress } from '../hooks/useAddresses';
 
 interface AddAddressModalProps {
   onClose: () => void;
 }
 
 export default function AddAddressModal({ onClose }: AddAddressModalProps) {
-  const [busy, setBusy] = useState(false);
+  const { mutate: submit, isPending: busy } = useAddAddress(onClose);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<AddAddressFormValues>({
     resolver: zodResolver(addAddressSchema),
-    defaultValues: { is_default: false },
+    defaultValues: { isDefault: false },
   });
 
-  const onSubmit = () => {
-    setBusy(true);
-    setTimeout(() => {
-      toast.success('Address added');
-      onClose();
-    }, 500);
+  const onSubmit = (values: AddAddressFormValues) => {
+    submit({
+      label: values.label,
+      recipientName: values.recipientName,
+      phoneNumber: values.phoneNumber ?? '',
+      addressLine1: values.addressLine1,
+      addressLine2: values.addressLine2 ?? '',
+      city: values.city,
+      state: values.state,
+      postalCode: values.postalCode,
+      isDefault: values.isDefault ?? false,
+    });
   };
 
   return (
@@ -64,12 +70,12 @@ export default function AddAddressModal({ onClose }: AddAddressModalProps) {
             <input
               className="helix-input"
               placeholder="Full name"
-              {...register('recipient_name')}
+              {...register('recipientName')}
               data-testid="addr-recipient"
             />
-            {errors.recipient_name && (
+            {errors.recipientName && (
               <p className="text-[#E74C3C] text-[11px] mt-1">
-                {errors.recipient_name.message}
+                {errors.recipientName.message}
               </p>
             )}
           </div>
@@ -78,12 +84,12 @@ export default function AddAddressModal({ onClose }: AddAddressModalProps) {
             <input
               className="helix-input"
               placeholder="123 Main St"
-              {...register('line1')}
+              {...register('addressLine1')}
               data-testid="addr-line1"
             />
-            {errors.line1 && (
+            {errors.addressLine1 && (
               <p className="text-[#E74C3C] text-[11px] mt-1">
-                {errors.line1.message}
+                {errors.addressLine1.message}
               </p>
             )}
           </div>
@@ -92,7 +98,7 @@ export default function AddAddressModal({ onClose }: AddAddressModalProps) {
             <input
               className="helix-input"
               placeholder="Apt / Suite"
-              {...register('line2')}
+              {...register('addressLine2')}
               data-testid="addr-line2"
             />
           </div>
@@ -130,12 +136,12 @@ export default function AddAddressModal({ onClose }: AddAddressModalProps) {
               <label className="helix-label">Postal code</label>
               <input
                 className="helix-input"
-                {...register('postal_code')}
+                {...register('postalCode')}
                 data-testid="addr-postal"
               />
-              {errors.postal_code && (
+              {errors.postalCode && (
                 <p className="text-[#E74C3C] text-[11px] mt-1">
-                  {errors.postal_code.message}
+                  {errors.postalCode.message}
                 </p>
               )}
             </div>
@@ -143,7 +149,7 @@ export default function AddAddressModal({ onClose }: AddAddressModalProps) {
               <label className="helix-label">Phone (optional)</label>
               <input
                 className="helix-input"
-                {...register('phone')}
+                {...register('phoneNumber')}
                 data-testid="addr-phone"
               />
             </div>
@@ -151,7 +157,7 @@ export default function AddAddressModal({ onClose }: AddAddressModalProps) {
           <label className="flex items-center gap-2 text-[12px] text-[#9CA3AF]">
             <input
               type="checkbox"
-              {...register('is_default')}
+              {...register('isDefault')}
               data-testid="addr-default"
             />{' '}
             Set as default

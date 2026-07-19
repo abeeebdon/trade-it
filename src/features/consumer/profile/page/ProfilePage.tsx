@@ -1,22 +1,21 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { UserCircle, Mail, Phone } from 'lucide-react';
-import { toast } from 'sonner';
 import { useAppSelector } from '@/hooks/store/store';
-import { MOCK_PROFILE_PHONE } from '../constants';
 import { profileSchema } from '../components/validation';
 import ProfileAvatar from '../components/ProfileAvatar';
 import ProfileSkeleton from '../components/ProfileSkeleton';
-
-const SIMULATED_DELAY_MS = 600;
+import { useGetProfile, useUpdateProfile } from '../hooks/useProfile';
 
 export default function Profile() {
   const { user } = useAppSelector((state) => state.auth);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+
+  const { data, isLoading } = useGetProfile();
+  const { mutate: save, isPending: saving } = useUpdateProfile();
+
+  const profile = data?.data;
 
   const {
     register,
@@ -28,25 +27,22 @@ export default function Profile() {
   });
 
   useEffect(() => {
-    const t = setTimeout(() => {
+    if (profile) {
       reset({
-        name: user?.fullName || '',
-        phone: MOCK_PROFILE_PHONE,
+        name: profile.fullName || user?.fullName || '',
+        phone: profile.phoneNumber || '',
       });
-      setLoading(false);
-    }, SIMULATED_DELAY_MS);
-    return () => clearTimeout(t);
-  }, [user?.fullName, reset]);
+    }
+  }, [profile, user?.fullName, reset]);
 
-  const onSubmit = () => {
-    setSaving(true);
-    setTimeout(() => {
-      toast.success('Profile updated');
-      setSaving(false);
-    }, 500);
+  const onSubmit = (values: { name: string; phone: string }) => {
+    save({
+      fullName: values.name,
+      phoneNumber: values.phone,
+    });
   };
 
-  if (loading || !user) return <ProfileSkeleton />;
+  if (isLoading || !user) return <ProfileSkeleton />;
 
   return (
     <main>
@@ -63,13 +59,9 @@ export default function Profile() {
           <div className="space-y-4">
             <div>
               <label className="helix-label flex items-center gap-1.5">
-                <UserCircle size={13} /> Full name
+                Full name
               </label>
-              <input
-                className="helix-input"
-                {...register('name')}
-                data-testid="profile-name"
-              />
+              <input className="helix-input" {...register('name')} />
               {errors.name && (
                 <p className="text-[#E74C3C] text-[11px] mt-1">
                   {errors.name.message}
@@ -78,13 +70,12 @@ export default function Profile() {
             </div>
             <div>
               <label className="helix-label flex items-center gap-1.5">
-                <Mail size={13} /> Email
+                Email
               </label>
               <input
                 className="helix-input opacity-60 cursor-not-allowed"
-                value={user.email}
+                value={profile?.email || user.email}
                 disabled
-                data-testid="profile-email"
               />
               <div className="text-[10px] text-[#9CA3AF] mt-1">
                 Email is managed by your sign-in provider.
@@ -92,13 +83,12 @@ export default function Profile() {
             </div>
             <div>
               <label className="helix-label flex items-center gap-1.5">
-                <Phone size={13} /> Phone
+                Phone
               </label>
               <input
                 className="helix-input"
                 placeholder="+1 202 555 0100"
                 {...register('phone')}
-                data-testid="profile-phone"
               />
               {errors.phone && (
                 <p className="text-[#E74C3C] text-[11px] mt-1">
@@ -111,7 +101,6 @@ export default function Profile() {
                 type="submit"
                 disabled={saving}
                 className="helix-btn-primary"
-                data-testid="profile-save"
               >
                 {saving ? 'Saving…' : 'Save changes'}
               </button>
