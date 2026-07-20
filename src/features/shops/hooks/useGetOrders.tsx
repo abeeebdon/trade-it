@@ -1,5 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getConsumerOrders, placeConsumerQuote } from '../api/consumerApi';
+import {
+  getConsumerOrders,
+  getConsumerQuotes,
+  placeConsumerQuote,
+} from '../api/consumerApi';
 import { CreateConsumerQuoteRequest } from '../types/shops';
 import { toast } from 'sonner';
 
@@ -7,6 +11,13 @@ export const useGetOrders = () => {
   return useQuery({
     queryKey: ['buyer-orders'],
     queryFn: getConsumerOrders,
+  });
+};
+
+export const useGetConsumerQuotes = () => {
+  return useQuery({
+    queryKey: ['consumer-quotes'],
+    queryFn: getConsumerQuotes,
   });
 };
 export const useGetConsumerQuoteOrder = (onSuccess?: () => void) => {

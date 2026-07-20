@@ -135,7 +135,7 @@ export const PRODUCTS: ProductType[] = [
     price: '$3.09',
     unit: '/piece',
     moq: '10 pieces',
-    image: 'snail.jpg',
+    image: 'snail2.jpeg',
     category: 'Agricultural Products',
     desc: 'Snail - Deshelled/Frozen — each piece individually signed and unique.',
     specs: {

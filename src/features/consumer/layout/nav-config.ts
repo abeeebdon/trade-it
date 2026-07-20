@@ -10,6 +10,7 @@ import {
   Bell,
   HelpCircle,
   MapPin,
+  ShoppingBag,
 } from 'lucide-react';
 
 export interface NavItemConfig {
@@ -34,6 +35,12 @@ export const NAV_GROUPS: NavGroupConfig[] = [
         href: '/consumer',
         icon: Home,
         label: 'Dashboard',
+        testid: 'cs-nav-dash',
+      },
+      {
+        href: '/',
+        icon: ShoppingBag,
+        label: 'MarketPlace',
         testid: 'cs-nav-dash',
       },
       {

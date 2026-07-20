@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import { Plus, Pencil } from 'lucide-react';
 
-import { formatUSD, formatNGN } from '@/lib/func';
+import { formatUSD } from '@/lib/func';
 import { StatusPill } from '@/features/shops/components/StatusPill';
 import { useGetProducts } from '../../hooks/useProducts';
 import ProductForm from '../../modals/CreateProduct';

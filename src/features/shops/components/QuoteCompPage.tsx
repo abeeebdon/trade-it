@@ -6,8 +6,11 @@ import { useEffect, useState } from 'react';
 import { Quote } from '../types/shops';
 import { testQuotes } from '../components/data';
 import { Loading } from '@/components/loading';
+import { useGetConsumerQuotes } from '../hooks/useGetOrders';
 
 const QuoteCompPage = () => {
+  const { data, isPending } = useGetConsumerQuotes();
+  console.log(data);
   const [quotes, setQuotes] = useState<{
     as_consumer: Quote[];
     as_seller: Quote[];

@@ -400,10 +400,9 @@
 }
 .js-product-emoji {
   font-size: 96px;
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
 }
 .js-product-emoji:hover {
-  animation: zoom 1s ease-in-out;
+  animation: zoom 2s ease-in-out;
 }
 .js-soon-badge {
   position: absolute;
