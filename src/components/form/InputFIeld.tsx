@@ -31,6 +31,8 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
             id={name}
             name={name}
             ref={ref}
+            inputMode={type == 'number' ? 'numeric' : 'none'}
+
             type={isPassword && showPassword ? 'text' : type}
             placeholder={placeholder}
             className={`helix-input pr-10 ${className ?? ''}`}

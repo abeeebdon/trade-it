@@ -48,6 +48,7 @@ export const productSchema = z.object({
   category: z.string().min(1, 'Please select a category'),
 
   unitId: z.number({ error: 'Please select a unit' }),
+  quantity: z.number({ error: 'Please select quantity' }),
 
   price_usd: z
     .number({ error: 'Price is required' })

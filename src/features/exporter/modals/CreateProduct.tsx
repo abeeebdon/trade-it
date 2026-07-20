@@ -22,7 +22,7 @@ import { ProductResponseType } from '../products/types/product';
 
 // Helpers
 
-const defaultValues = (): ProductFormValues => ({
+const defaultValues = () => ({
   name: '',
   category: '',
   unitId: 1,
@@ -37,7 +37,7 @@ const defaultValues = (): ProductFormValues => ({
   imagePreviews: [],
 });
 
-const valuesFromProduct = (p: ProductResponseType): ProductFormValues => ({
+const valuesFromProduct = (p: ProductResponseType) => ({
   name: p.productName,
   category: p.category,
   unitId: p.unit,
@@ -83,8 +83,7 @@ export default function ProductForm({
   const isEditMode = !!editing;
 
   const { mutate: submitProduct, isPending } = useCreateProduct(onClose);
-  const { mutate: editProduct, isPending: editProductPending } =
-    useEditProduct(onClose);
+  const { mutate: editProduct } = useEditProduct(onClose);
 
   const { data: categoryData, isPending: categoriesLoading } =
     useGetProductCategories();
@@ -276,6 +275,15 @@ export default function ProductForm({
               </p>
             )}
           </div>
+          <div>
+            <InputField
+              label="Quantity"
+              type="number"
+              placeholder="Enter the quantity available"
+              error={errors.quantity?.message}
+              {...register('quantity', { valueAsNumber: true })}
+            />
+          </div>
 
           {/* Price */}
           <div>
@@ -284,7 +292,6 @@ export default function ProductForm({
               type="number"
               placeholder="0.00"
               error={errors.price_usd?.message}
-              data-testid="pf-price"
               {...register('price_usd', { valueAsNumber: true })}
             />
             {ngnEstimate && (
@@ -295,15 +302,13 @@ export default function ProductForm({
           </div>
 
           {/* MOQ */}
-          <div>
-            <InputField
-              label="Minimum Order Quantity (MOQ)"
-              type="number"
-              placeholder="10"
-              error={errors.moq?.message}
-              {...register('moq', { valueAsNumber: true })}
-            />
-          </div>
+          <InputField
+            label="Minimum Order Quantity (MOQ)"
+            type="number"
+            placeholder="10"
+            error={errors.moq?.message}
+            {...register('moq', { valueAsNumber: true })}
+          />
 
           {/* Status */}
           <div>
