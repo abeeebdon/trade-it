@@ -1,6 +1,7 @@
 export const APIENDPOINTS = {
-  BUYER_QUOTE_REQ: '/buyer-fulfillment/quote-requests',
+  BUYER_QUOTE_REQ: '/BuyerFulfillment/quote-requests',
   CONSUMER_QUOTE_REQ: 'ConsumerFulfillment/quote-requests',
+  CONSUMER_QUOTE: 'ConsumerFulfillment/queue',
   BUYER_FULFILLMENTQUEUE: '/BuyerFulfillment/queue',
 
   //admin

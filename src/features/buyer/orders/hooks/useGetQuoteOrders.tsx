@@ -21,8 +21,8 @@ export const useGetQuoteOrder = (onSuccess?: () => void) => {
       toast.success(data.message ?? 'Order created successfully');
       onSuccess?.();
     },
-    onError: () => {
-      toast.error('Failed to save product. Please try again.');
+    onError: (err) => {
+      toast.error(err.message ?? 'Failed to save product. Please try again.');
     },
   });
 };

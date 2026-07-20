@@ -24,7 +24,7 @@ export function QuoteForm({ productDetails }: Props) {
   const router = useRouter();
   const { mutateAsync } = useGetQuoteOrder();
   const { mutateAsync: consumerMutateAsync } = useGetConsumerQuoteOrder();
-  const { register, watch, handleSubmit } = useForm<QuoteOrderForm>({
+  const { register, watch, handleSubmit, reset } = useForm<QuoteOrderForm>({
     resolver: zodResolver(quoteOrderSchema),
     defaultValues: {
       qty: '1',
@@ -55,14 +55,18 @@ export function QuoteForm({ productDetails }: Props) {
     try {
       const postData: QuoteRequestType = {
         sellerId: productDetails.userId,
-        buyerId: id,
+        buyerId: Number(id),
         productName: productDetails.productName,
         message: data.quoteMsg ?? '',
         quantity: Number(data.qty),
         buyerEmail: user?.email ?? '',
         buyerName: user?.fullName ?? '',
       };
-      await mutateAsync(postData);
+      await mutateAsync(postData, {
+        onSuccess: () => {
+          reset();
+        },
+      });
 
       // TODO: wire up the actual quote-request mutation here
     } finally {
