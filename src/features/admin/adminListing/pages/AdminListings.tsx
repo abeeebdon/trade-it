@@ -2,10 +2,11 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import { ShieldCheck, Archive } from 'lucide-react';
 import { useGetAdminListings } from '../hooks/useGetAdminListings';
 import { AdminListing } from '../types/listings';
 import { StatusPill } from '@/features/shops/components/StatusPill';
-import { formatDateTime, formatUSD } from '@/lib/func';
+import { formatUSD } from '@/lib/func';
 import Pagination, { paginate } from '@/components/ui/Pagination';
 import SelectDropDown from '@/components/SelectDropDown';
 import {
@@ -15,89 +16,19 @@ import {
 } from '../components/ListingsSkeleton';
 import { ListingsError } from '../components/ListingsError';
 import { ListingsEmpty } from '../components/ListingsEmpty';
-
-// ── Helpers ────────────────────────────────────────────
-const categoryLabel = (cat: string) =>
-  cat.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
-
-// ── Mobile Card ────────────────────────────────────────
-function ListingMobileCard({ listing }: { listing: AdminListing }) {
-  return (
-    <Link
-      href={`/admin/listings/${listing.id}`}
-      className="helix-card p-4 block hover:border-[#C9922A]/30 transition-colors"
-    >
-      <div className="flex items-start justify-between gap-2">
-        <div>
-          <h3 className="text-[15px] font-semibold text-[#F5F5F5]">
-            {listing.title}
-          </h3>
-          <p className="text-[12px] text-[#9CA3AF] mt-0.5">
-            #{listing.id} · {categoryLabel(listing.category)}
-          </p>
-        </div>
-        <StatusPill status={listing.status} />
-      </div>
-
-      <div className="flex items-center justify-between mt-3">
-        <span className="font-mono text-[#C9922A] font-semibold">
-          {formatUSD(listing.retailPriceUsd)}
-        </span>
-        <span className="text-[13px] text-[#9CA3AF]">
-          Stock: {listing.stockQty}
-        </span>
-      </div>
-
-      <div className="flex items-center justify-between mt-2 text-[12px] text-[#6B7280]">
-        <span>{listing.sellerEmail}</span>
-        <span>{formatDateTime(listing.createdAt)}</span>
-      </div>
-    </Link>
-  );
-}
-
-// ── Filters ────────────────────────────────────────────
-type StatusFilter = '' | 'Published' | 'Draft';
-
-const statusFilters: [StatusFilter, string][] = [
-  ['', 'All'],
-  ['Published', 'Published'],
-  ['Draft', 'Draft'],
-];
-
-// ── Filter Bar ─────────────────────────────────────────
-function FilterBar({
-  status,
-  onStatusChange,
-}: {
-  status: StatusFilter;
-  onStatusChange: (s: StatusFilter) => void;
-}) {
-  return (
-    <div className="helix-card px-5 py-3 flex flex-wrap gap-2 items-center">
-      <span className="text-[12px] text-[#9CA3AF] mr-1">Status:</span>
-      {statusFilters.map(([value, label]) => (
-        <button
-          key={value}
-          onClick={() => onStatusChange(value)}
-          className={`px-3 py-1.5 rounded-full text-[12px] border transition-colors ${
-            status === value
-              ? 'bg-[#C9922A] text-[#0A1628] border-[#C9922A]'
-              : 'border-[#1A7A6E]/40 text-[#9CA3AF] hover:border-[#1A7A6E] hover:text-[#F5F5F5]'
-          }`}
-        >
-          {label}
-        </button>
-      ))}
-    </div>
-  );
-}
+import ModerateListingModal from '../components/ModerateListingModal';
+import ListingMobileCard from '../components/ListingMobileCard';
+import FilterBar, { StatusFilter } from '../components/FilterBar';
+import { categoryLabel } from '../utils';
 
 // ── Main Page ──────────────────────────────────────────
 const AdminListings = () => {
   const [status, setStatus] = useState<StatusFilter>('');
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [moderateTarget, setModerateTarget] = useState<AdminListing | null>(
+    null,
+  );
 
   const { data, isPending, isError, refetch } = useGetAdminListings({
     status: status || undefined,
@@ -126,6 +57,7 @@ const AdminListings = () => {
                 <th>Price</th>
                 <th>Stock</th>
                 <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -190,6 +122,7 @@ const AdminListings = () => {
               <th>Price</th>
               <th>Stock</th>
               <th>Status</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -199,20 +132,12 @@ const AdminListings = () => {
                 className="cursor-pointer hover:bg-[#C9922A]/5 transition-colors"
               >
                 <td className="font-mono text-[13px] text-[#9CA3AF]">
-                  <Link
-                    href={`/admin/listings/${listing.id}`}
-                    className="block"
-                  >
-                    #{listing.id}
-                  </Link>
+                  <p className="block">#{listing.id}</p>
                 </td>
                 <td>
-                  <Link
-                    href={`/admin/listings/${listing.id}`}
-                    className="block font-medium text-[#F5F5F5] hover:text-[#C9922A] transition-colors"
-                  >
+                  <p className="block font-medium text-[#F5F5F5] hover:text-[#C9922A] transition-colors">
                     {listing.title}
-                  </Link>
+                  </p>
                 </td>
                 <td className="text-[13px] text-[#9CA3AF]">
                   <Link
@@ -254,6 +179,40 @@ const AdminListings = () => {
                     <StatusPill status={listing.status} />
                   </Link>
                 </td>
+                <td>
+                  <div className="flex items-center gap-1.5">
+                    {listing.status.toLowerCase() === 'draft' && (
+                      <button
+                        type="button"
+                        onClick={() => setModerateTarget(listing)}
+                        title="Activate"
+                        className="p-1.5 rounded-lg border border-[#22C55E]/30 text-[#22C55E] hover:bg-[#22C55E]/10 transition-colors"
+                      >
+                        <ShieldCheck size={15} />
+                      </button>
+                    )}
+                    {listing.status.toLowerCase() === 'active' && (
+                      <button
+                        type="button"
+                        onClick={() => setModerateTarget(listing)}
+                        title="Archive"
+                        className="p-1.5 rounded-lg border border-[#EF4444]/30 text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors"
+                      >
+                        <Archive size={15} />
+                      </button>
+                    )}
+                    {listing.status.toLowerCase() === 'archived' && (
+                      <button
+                        type="button"
+                        onClick={() => setModerateTarget(listing)}
+                        title="Activate"
+                        className="p-1.5 rounded-lg border border-[#22C55E]/30 text-[#22C55E] hover:bg-[#22C55E]/10 transition-colors"
+                      >
+                        <ShieldCheck size={15} />
+                      </button>
+                    )}
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -263,7 +222,11 @@ const AdminListings = () => {
       {/* Mobile cards */}
       <div className="md:hidden space-y-3">
         {items.map((listing) => (
-          <ListingMobileCard key={listing.id} listing={listing} />
+          <ListingMobileCard
+            key={listing.id}
+            listing={listing}
+            onModerate={setModerateTarget}
+          />
         ))}
       </div>
 
@@ -286,6 +249,16 @@ const AdminListings = () => {
           />
         </div>
       </div>
+
+      {/* Moderate modal */}
+      {moderateTarget && (
+        <ModerateListingModal
+          listingId={moderateTarget.id}
+          listingTitle={moderateTarget.title}
+          currentStatus={moderateTarget.status}
+          onClose={() => setModerateTarget(null)}
+        />
+      )}
     </div>
   );
 };

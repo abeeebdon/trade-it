@@ -1,4 +1,4 @@
-import AdminListings from '@/features/admin/pages/AdminListings';
+import AdminListings from '@/features/admin/adminListing/pages/AdminListings';
 
 const page = () => {
   return <AdminListings />;

@@ -9,3 +9,8 @@ export interface AdminListing {
   status: string;
   createdAt: string;
 }
+
+export interface ModerateListingPayload {
+  status: string;
+  notes: string;
+}

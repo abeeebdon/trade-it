@@ -14,7 +14,7 @@ import {
 } from '../components/OrdersSkeleton';
 import { OrdersError } from '../components/OrdersError';
 import { OrdersEmpty } from '../components/OrdersEmpty';
-import { FilterBarSkeleton } from '../components/ListingsSkeleton';
+import { FilterBarSkeleton } from '../adminListing/components/ListingsSkeleton';
 
 // ── Helpers ────────────────────────────────────────────
 const categoryLabel = (cat: string) =>
@@ -59,7 +59,12 @@ function OrderMobileCard({ order }: { order: AdminOrder }) {
 
 // ── Filters ────────────────────────────────────────────
 type StatusFilter =
-  '' | 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
+  | ''
+  | 'pending'
+  | 'confirmed'
+  | 'shipped'
+  | 'delivered'
+  | 'cancelled';
 
 const statusFilters: [StatusFilter, string][] = [
   ['', 'All'],

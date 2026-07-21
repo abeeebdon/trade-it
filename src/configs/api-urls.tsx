@@ -7,6 +7,8 @@ export const APIENDPOINTS = {
   //admin
   ADMIN_ORDERS: '/Admin/orders',
   ADMIN_LISTINGS: '/Admin/listings',
+  ADMIN_LISTINGS_MODERATE: (listingId: number) =>
+    `/Admin/listings/${listingId}/moderate`,
 
   // buyer
   LOCAL_LISTINGS: '/local-listings',

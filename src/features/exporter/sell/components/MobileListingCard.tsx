@@ -82,9 +82,7 @@ const MobileListingCard = ({ l }: MobileListingCardProps) => {
           Edit
         </button>
         <button
-          onClick={() => {
-            router.push(`/exporter/sell/${l.id}`);
-          }}
+          onClick={() => router.push(`/exporter/sell/details?id=${l.id}`)}
           className="helix-btn-secondary w-full inline-flex items-center justify-center gap-2"
         >
           <Eye size={15} />
