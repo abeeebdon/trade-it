@@ -77,7 +77,10 @@ const Header = ({ className }: { className?: string }) => {
             )}
 
             {user?.role === 'consumer' && (
-              <Link href="/shop/orders" className="text-muted hover:text-text">
+              <Link
+                href="/consumer/orders"
+                className="text-muted hover:text-text"
+              >
                 My Orders
               </Link>
             )}
@@ -146,7 +149,7 @@ const Header = ({ className }: { className?: string }) => {
               href={dashHome}
               className="block px-3 py-2 text-[12px] hover:bg-[#1A7A6E]/10 rounded"
             >
-              {user?.role === 'consumer' ? 'My Orders' : 'Dashboard'}
+              {user?.role === 'consumer' ? 'My Order' : 'Dashboard'}
             </Link>
           )}
           {(user?.role === 'exporter' || user?.role === 'retailer') && (

@@ -4,11 +4,13 @@ import type { PaymentMethod } from '../types';
 interface PaymentMethodCardProps {
   pm: PaymentMethod;
   onDelete: (id: string) => void;
+  onSetDefault?: (id: string) => void;
 }
 
 export default function PaymentMethodCard({
   pm,
   onDelete,
+  onSetDefault,
 }: PaymentMethodCardProps) {
   return (
     <div
@@ -30,13 +32,24 @@ export default function PaymentMethodCard({
           )}
         </div>
       </div>
-      <button
-        onClick={() => onDelete(pm.id)}
-        className="text-[#9CA3AF] hover:text-[#E74C3C]"
-        data-testid={`del-pm-${pm.id}`}
-      >
-        <Trash size={16} />
-      </button>
+      <div className="flex items-center gap-1">
+        {!pm.is_default && onSetDefault && (
+          <button
+            onClick={() => onSetDefault(pm.id)}
+            className="text-[11px] text-[#C9922A] hover:underline"
+            data-testid={`set-default-${pm.id}`}
+          >
+            Set default
+          </button>
+        )}
+        <button
+          onClick={() => onDelete(pm.id)}
+          className="text-[#9CA3AF] hover:text-[#E74C3C]"
+          data-testid={`del-pm-${pm.id}`}
+        >
+          <Trash size={16} />
+        </button>
+      </div>
     </div>
   );
 }

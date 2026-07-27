@@ -1,18 +1,18 @@
 'use client';
 
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'sonner';
 import { PAYMENT_KINDS } from '../constants';
 import { addPaymentSchema } from './validation';
+import type { AddPaymentFormValues } from './validation';
+import { useAddPaymentMethod } from '../hooks/usePaymentMethods';
 
 interface AddPaymentModalProps {
   onClose: () => void;
 }
 
 export default function AddPaymentModal({ onClose }: AddPaymentModalProps) {
-  const [busy, setBusy] = useState(false);
+  const { mutate: submit, isPending: busy } = useAddPaymentMethod(onClose);
 
   const {
     register,
@@ -20,20 +20,26 @@ export default function AddPaymentModal({ onClose }: AddPaymentModalProps) {
     watch,
     setValue,
     formState: { errors },
-  } = useForm({
+  } = useForm<AddPaymentFormValues>({
     resolver: zodResolver(addPaymentSchema),
     defaultValues: { kind: 'card', is_default: false },
   });
 
   const kind = watch('kind');
 
-  const onSubmit = () => {
-    setBusy(true);
-    setTimeout(() => {
-      toast.success('Payment method added');
-      setBusy(false);
-      onClose();
-    }, 600);
+  const onSubmit = (values: AddPaymentFormValues) => {
+    submit({
+      kind: values.kind,
+      label: '',
+      is_default: values.is_default,
+      exp_month: values.exp_month,
+      exp_year: values.exp_year,
+      card_number: values.card_number,
+      zelle_target: values.zelle_target,
+      bank_name: values.bank_name,
+      routing_number: values.routing_number,
+      account_number: values.account_number,
+    });
   };
 
   return (

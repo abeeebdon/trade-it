@@ -27,7 +27,7 @@ const ProductDetailsForm = ({ productDetails }: Props) => {
         <p className="helix-label">Price</p>
 
         <p className="font-mono text-4xl text-[#C9922A] font-bold mt-1">
-          {formatUSD(productDetails.price)}
+          {formatUSD(productDetails.priceUsd ?? productDetails.price)}
         </p>
 
         <div className="text-[12px] text-[#9CA3AF] mt-1">

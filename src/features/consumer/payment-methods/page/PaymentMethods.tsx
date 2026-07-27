@@ -1,37 +1,44 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Plus } from 'lucide-react';
-import { toast } from 'sonner';
-import { MOCK_PAYMENT_METHODS } from '../constants';
 import PaymentMethodCard from '../components/PaymentMethodCard';
 import PaymentMethodsEmptyState from '../components/PaymentMethodsEmptyState';
 import AddPaymentModal from '../components/AddPaymentModal';
 import PaymentMethodsSkeleton from '../components/PaymentMethodsSkeleton';
-import type { PaymentMethod } from '../types';
-
-const SIMULATED_DELAY_MS = 700;
+import WarningModal from '@/components/modals/WarningModal';
+import {
+  useGetPaymentMethods,
+  useDeletePaymentMethod,
+  useSetDefaultPaymentMethod,
+} from '../hooks/usePaymentMethods';
 
 export default function PaymentMethods() {
-  const [items, setItems] = useState<PaymentMethod[]>([]);
-  const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
-  useEffect(() => {
-    const t = setTimeout(() => {
-      setItems(MOCK_PAYMENT_METHODS);
-      setLoading(false);
-    }, SIMULATED_DELAY_MS);
-    return () => clearTimeout(t);
-  }, []);
+  const { data, isLoading } = useGetPaymentMethods();
+  const { mutate: remove, isPending: deleting } = useDeletePaymentMethod();
+  const { mutate: setDefault } = useSetDefaultPaymentMethod();
 
-  const remove = (id: string) => {
-    if (!window.confirm('Remove this payment method?')) return;
-    setItems((prev) => prev.filter((pm) => pm.id !== id));
-    toast.success('Removed');
+  const items = data?.data?.data ?? [];
+
+  const handleDelete = (id: string) => {
+    setDeleteTarget(id);
   };
 
-  if (loading) return <PaymentMethodsSkeleton />;
+  const confirmDelete = () => {
+    if (deleteTarget === null) return;
+    remove(deleteTarget, {
+      onSettled: () => setDeleteTarget(null),
+    });
+  };
+
+  const handleSetDefault = (id: string) => {
+    setDefault(id);
+  };
+
+  if (isLoading) return <PaymentMethodsSkeleton />;
 
   return (
     <main>
@@ -55,13 +62,28 @@ export default function PaymentMethods() {
           </div>
           <div className="space-y-3">
             {items.map((pm) => (
-              <PaymentMethodCard key={pm.id} pm={pm} onDelete={remove} />
+              <PaymentMethodCard
+                key={pm.id}
+                pm={pm}
+                onDelete={handleDelete}
+                onSetDefault={handleSetDefault}
+              />
             ))}
           </div>
         </>
       )}
 
       {open && <AddPaymentModal onClose={() => setOpen(false)} />}
+
+      <WarningModal
+        open={deleteTarget !== null}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={confirmDelete}
+        loading={deleting}
+        label="Remove payment method"
+        text="Are you sure you want to remove this payment method? This action cannot be undone."
+        btnText="Remove"
+      />
     </main>
   );
 }

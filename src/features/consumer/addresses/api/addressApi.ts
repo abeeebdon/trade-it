@@ -7,6 +7,7 @@ const baseUrl = 'https://jompshop.jompstart.com/api';
 
 const authHeaders = () => {
   const token = getSavedCookie('token');
+  console.log(token);
   return { Authorization: `Bearer ${token}` };
 };
 
@@ -40,7 +41,7 @@ export const updateAddress = async (
   id: number,
   payload: Partial<DeliveryAddress>,
 ): Promise<DeliveryAddress> => {
-  const response = await axios.patch(`${baseUrl}${ENDPOINT}/${id}`, payload, {
+  const response = await axios.put(`${baseUrl}${ENDPOINT}/${id}`, payload, {
     headers: authHeaders(),
   });
   return response.data.data;
@@ -49,10 +50,13 @@ export const updateAddress = async (
 export const setDefaultAddress = async (
   id: number,
 ): Promise<DeliveryAddress> => {
+  const token = getSavedCookie('token');
+
   const response = await axios.patch(
     `${baseUrl}${ENDPOINT}/${id}/set-default`,
+    {},
     {
-      headers: authHeaders(),
+      headers: { Authorization: `Bearer ${token}` },
     },
   );
   return response.data.data;

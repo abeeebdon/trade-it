@@ -21,6 +21,7 @@ export interface ProductData {
   category: string;
 
   price: number;
+  priceUsd: number;
   quantity: number;
   unit: number;
 

@@ -6,6 +6,7 @@ import {
   getAddresses,
   addAddress,
   deleteAddress,
+  updateAddress,
   setDefaultAddress,
 } from '../api/addressApi';
 import type { DeliveryAddress } from '../types';
@@ -61,6 +62,27 @@ export const useSetDefaultAddress = () => {
     },
     onError: () => {
       toast.error('Failed to update default address.');
+    },
+  });
+};
+
+export const useUpdateAddress = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      payload,
+    }: {
+      id: number;
+      payload: Partial<DeliveryAddress>;
+    }) => updateAddress(id, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ADDRESSES_KEY });
+      toast.success('Address updated');
+    },
+    onError: () => {
+      toast.error('Failed to update address.');
     },
   });
 };
