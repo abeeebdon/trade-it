@@ -39,7 +39,7 @@ export function PrepayForm({ productDetails }: Props) {
 
   const qty = watch('qty');
   const qtyNum = Number(qty) || 0;
-  const maxQty = Number(productDetails.quantity) || 0;
+  const maxQty = Number(productDetails.unit) || 0;
 
   const onSubmit = async (data: PrepayOrderForm) => {
     const q = Number(data.qty);
@@ -72,6 +72,9 @@ export function PrepayForm({ productDetails }: Props) {
       setPlacing(false);
     }
   };
+  const calcAmount = (): string => {
+    return formatUSD(qtyNum * productDetails.priceUsd);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mt-5 space-y-4">
@@ -85,9 +88,7 @@ export function PrepayForm({ productDetails }: Props) {
           max={maxQty}
         />
         <div>
-          <p className="font-mono text-[14px]">
-            = {formatUSD(qtyNum * productDetails.price)}
-          </p>
+          <p className="font-mono text-[14px]">= {calcAmount()}</p>
           {qtyNum > maxQty && (
             <p className="text-red-500 text-[10px] ">Max available: {maxQty}</p>
           )}
@@ -137,9 +138,7 @@ export function PrepayForm({ productDetails }: Props) {
           className="helix-btn-primary w-full"
           type="submit"
         >
-          {placing
-            ? 'Processing...'
-            : `Prepay ${formatUSD(productDetails.price)}`}
+          {placing ? 'Processing...' : `Prepay ${calcAmount()}`}
         </button>
       ) : (
         <button

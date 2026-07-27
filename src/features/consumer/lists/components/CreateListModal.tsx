@@ -3,27 +3,27 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createListSchema } from './validation';
+import type { CreateListFormValues } from './validation';
+import { useCreateShoppingList } from '../hooks/useShoppingLists';
 
 interface CreateListModalProps {
-  onSuccess: (name: string) => void;
   onClose: () => void;
 }
 
-export default function CreateListModal({
-  onSuccess,
-  onClose,
-}: CreateListModalProps) {
+export default function CreateListModal({ onClose }: CreateListModalProps) {
+  const { mutate: submit, isPending: busy } = useCreateShoppingList(onClose);
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm({
+    formState: { errors },
+  } = useForm<CreateListFormValues>({
     resolver: zodResolver(createListSchema),
     defaultValues: { name: '' },
   });
 
-  const onSubmit = (data: { name: string }) => {
-    onSuccess(data.name.trim());
+  const onSubmit = (data: CreateListFormValues) => {
+    submit({ name: data.name.trim() });
   };
 
   return (
@@ -62,11 +62,11 @@ export default function CreateListModal({
           </button>
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={busy}
             className="helix-btn-primary flex-1"
             data-testid="list-create-btn"
           >
-            {isSubmitting ? 'Creating…' : 'Create'}
+            {busy ? 'Creating…' : 'Create'}
           </button>
         </div>
       </form>

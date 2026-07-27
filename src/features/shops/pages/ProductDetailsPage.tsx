@@ -17,7 +17,7 @@ const ProductDetailsPage = () => {
   const productDetails: ProductData = useMemo(() => {
     return data ? data : ({} as ProductData);
   }, [data]);
-
+  console.log(data);
   if (isPending)
     return (
       <div className="flex justify-center items-center h-[60vh]">

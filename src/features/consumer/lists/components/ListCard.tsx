@@ -1,15 +1,22 @@
 'use client';
 
 import Link from 'next/link';
-import { Trash } from 'lucide-react';
+import { Trash, ShoppingCart } from 'lucide-react';
 import type { ShoppingList } from '../types';
 
 interface ListCardProps {
   list: ShoppingList;
   onDelete: (id: string) => void;
+  onAddAllToCart?: (id: string) => void;
+  addingToCart?: boolean;
 }
 
-export default function ListCard({ list, onDelete }: ListCardProps) {
+export default function ListCard({
+  list,
+  onDelete,
+  onAddAllToCart,
+  addingToCart,
+}: ListCardProps) {
   return (
     <div className="helix-card p-5" data-testid={`list-${list.id}`}>
       <div className="flex items-start justify-between mb-3">
@@ -46,8 +53,14 @@ export default function ListCard({ list, onDelete }: ListCardProps) {
           </Link>
         </div>
       )}
-      <button className="helix-btn-secondary text-[12px] w-full py-2" disabled>
-        Add all to cart
+      <button
+        onClick={() => onAddAllToCart?.(list.id)}
+        disabled={list.item_count === 0 || addingToCart}
+        className="helix-btn-secondary text-[12px] w-full py-2 inline-flex items-center justify-center gap-1.5"
+        data-testid={`add-cart-${list.id}`}
+      >
+        <ShoppingCart size={14} />
+        {addingToCart ? 'Adding…' : 'Add all to cart'}
       </button>
     </div>
   );
