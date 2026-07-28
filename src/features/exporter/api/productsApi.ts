@@ -71,11 +71,12 @@ export const createProduct = async (
       toast.error('Please logout and login');
       return;
     }
+    console.log(form);
 
     form.append('UserId', String(id));
     form.append('Name', payload.Name);
     form.append('Category', payload.Category);
-    form.append('Unit', String(payload.Unit));
+    form.append('Unit', String(payload.quantity));
     form.append('PriceUsd', String(payload.PriceUsd));
     form.append('Moq', String(payload.Moq));
     form.append('Description', payload.Description);

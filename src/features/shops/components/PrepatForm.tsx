@@ -51,7 +51,7 @@ export function PrepayForm({ productDetails }: Props) {
 
     try {
       const postData = {
-        productId: productDetails.id,
+        productId: String(productDetails.id),
         quantity: Number(data.qty),
         deliveryDate: '2026-06-22T10:37:25.020Z',
         shipTo: data.shipping_name,

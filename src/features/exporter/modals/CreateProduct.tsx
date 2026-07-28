@@ -162,6 +162,8 @@ export default function ProductForm({
           Name: values.name,
           Category: values.category,
           Unit: values.unitId,
+          quantity: values.quantity,
+
           PriceUsd: values.price_usd,
           Moq: values.moq,
           Description: values.description,
@@ -178,6 +180,7 @@ export default function ProductForm({
       Name: values.name,
       Category: values.category,
       Unit: values.unitId,
+      quantity: Number(values.quantity),
       PriceUsd: values.price_usd,
       Moq: values.moq,
       Description: values.description,
