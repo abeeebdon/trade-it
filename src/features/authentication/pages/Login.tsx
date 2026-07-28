@@ -1,6 +1,6 @@
 'use client';
 import { useAppDispatch } from '@/hooks/store/store';
-import { login, setAuthRole } from '@/store/auth/auth.slice';
+import { login, setAuthRole, setMfaEnabled } from '@/store/auth/auth.slice';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -32,6 +32,14 @@ export default function Login() {
       const result = await loginApi(data);
       if (result.success) {
         toast.success(result.message);
+        const reqMFA = result.data.requiresMfa;
+        dispatch(setMfaEnabled(reqMFA));
+        if (reqMFA) {
+          const challenge = result.data.mfaChallengeToken || '';
+          return router.push(
+            `/mfa-auth?challenge=${encodeURIComponent(challenge)}`,
+          );
+        }
         saveCookie('token', result.data.token);
         saveCookie('refreshToken', result.data.refreshToken);
         const userDetails = {

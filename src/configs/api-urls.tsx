@@ -1,4 +1,9 @@
 export const APIENDPOINTS = {
+  // Auth
+  MFA_SETUP: '/authentication/mfa/setup',
+  MFA_VERIFY: '/authentication/mfa/verify-login',
+  MFA_ENABLE: '/authentication/mfa/enable',
+  MFA_DISABLE: '/authentication/mfa/disable',
   // Consumer
   CONSUMER_QUOTE_REQ: 'ConsumerFulfillment/quote-requests',
   CONSUMER_QUOTE: 'ConsumerFulfillment/queue',

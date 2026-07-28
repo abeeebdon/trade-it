@@ -1,44 +1,54 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Package } from 'lucide-react';
 import { formatUSD } from '@/lib/func';
-import { MOCK_ORDERS, categoryOf, FILTERS } from '../constants';
+import { categoryOf, FILTERS } from '../constants';
 import FilterBar from '../components/FilterBar';
 import OrderRow from '../components/OrderRow';
 import OrdersEmptyState from '../components/OrdersEmptyState';
 import OrdersSkeleton from '../components/OrdersSkeleton';
-import type { OrdersData, OrderStatusCategory } from '../types';
+import type { OrderCounts, OrderStatusCategory, OrderTotals } from '../types';
 import { useGetOrders } from '@/features/shops/hooks/useGetOrders';
 
-const SIMULATED_DELAY_MS = 1000;
-
 export default function ConsumerOrders() {
-  const [orders, setOrders] = useState<OrdersData['orders']>([]);
-  const [counts, setCounts] = useState<OrdersData['counts']>({
-    all: 0,
-    in_transit: 0,
-    delivered: 0,
-    processing: 0,
-  });
-  const [totals, setTotals] = useState<OrdersData['totals']>({
-    all: 0,
-    in_transit: 0,
-    delivered: 0,
-    processing: 0,
-  });
   const [filter, setFilter] = useState<OrderStatusCategory>('all');
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const t = setTimeout(() => {
-      setOrders(MOCK_ORDERS.orders);
-      setCounts(MOCK_ORDERS.counts);
-      setTotals(MOCK_ORDERS.totals);
-      setLoading(false);
-    }, SIMULATED_DELAY_MS);
-    return () => clearTimeout(t);
-  }, []);
+  const { data: orders = [], isPending } = useGetOrders();
+
+  const { counts, totals } = useMemo(() => {
+    const c: OrderCounts = {
+      all: 0,
+      in_transit: 0,
+      delivered: 0,
+      processing: 0,
+    };
+    const t: OrderTotals = {
+      all: 0,
+      in_transit: 0,
+      delivered: 0,
+      processing: 0,
+    };
+
+    for (const o of orders) {
+      const cat = categoryOf(o.status);
+      c.all += 1;
+      t.all += o.amount;
+
+      if (cat === 'in_transit') {
+        c.in_transit += 1;
+        t.in_transit += o.amount;
+      } else if (cat === 'delivered') {
+        c.delivered += 1;
+        t.delivered += o.amount;
+      } else if (cat === 'processing') {
+        c.processing += 1;
+        t.processing += o.amount;
+      }
+    }
+
+    return { counts: c, totals: t };
+  }, [orders]);
 
   const filtered = useMemo(() => {
     if (filter === 'all') return orders;
@@ -47,9 +57,7 @@ export default function ConsumerOrders() {
 
   const activeLabel = FILTERS.find((f) => f.v === filter)?.l || '';
 
-  const { data, isPending } = useGetOrders();
-
-  if (loading) return <OrdersSkeleton />;
+  if (isPending) return <OrdersSkeleton />;
 
   return (
     <main>

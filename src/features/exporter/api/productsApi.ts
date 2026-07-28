@@ -33,6 +33,7 @@ export interface ProductData {
 
   thumbnailImage: string;
   productImages: null;
+  images: { id: string; imageUrl: string }[];
 
   createdAt: string;
   updatedAt: string;
