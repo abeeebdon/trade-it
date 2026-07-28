@@ -7,6 +7,7 @@ const initialAuthState: InitialAuthStateType = {
   user: null,
   authRole: null,
   userRole: null,
+  mfaEnabled: false,
 };
 
 const authSlice = createSlice({
@@ -35,9 +36,18 @@ const authSlice = createSlice({
     setUserRole(state, action) {
       state.userRole = action.payload;
     },
+    setMfaEnabled(state, action: { payload: boolean }) {
+      state.mfaEnabled = action.payload;
+    },
   },
 });
 
-export const { login, logout, setUser, setAuthRole, setUserRole } =
-  authSlice.actions;
+export const {
+  login,
+  logout,
+  setUser,
+  setAuthRole,
+  setUserRole,
+  setMfaEnabled,
+} = authSlice.actions;
 export const authReducer = authSlice.reducer;

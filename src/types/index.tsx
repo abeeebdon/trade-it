@@ -24,6 +24,7 @@ export interface InitialAuthStateType {
   user: UserType | null;
   authRole: authRoleType | null;
   userRole: AuthRole | null;
+  mfaEnabled: boolean;
 }
 export interface RootReducerType {
   auth: InitialAuthStateType;

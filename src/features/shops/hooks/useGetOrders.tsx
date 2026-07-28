@@ -9,8 +9,9 @@ import { toast } from 'sonner';
 
 export const useGetOrders = () => {
   return useQuery({
-    queryKey: ['buyer-orders'],
+    queryKey: ['consumer-orders'],
     queryFn: getConsumerOrders,
+    staleTime: 2 * 60_000,
   });
 };
 

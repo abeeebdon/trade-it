@@ -1,6 +1,5 @@
 'use client';
 import { useState } from 'react';
-import { CATS } from '../shops/components/data';
 import { Search } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import HomePageFIlter from './components/HomePageFIlter';
