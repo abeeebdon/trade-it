@@ -25,10 +25,8 @@ export default function Profile() {
   const { mutate: disableMfa, isPending: disabling } = useDisableMfa();
 
   const profile = data?.data;
-  // Redux is the primary source — fall back to profile API if Redux not yet hydrated
   const isMfaEnabled = mfaEnabled;
 
-  // MFA disable modal state
   const [showDisableModal, setShowDisableModal] = useState(false);
   const [mfaCode, setMfaCode] = useState('');
   const [codeError, setCodeError] = useState('');
@@ -135,7 +133,7 @@ export default function Profile() {
             </div>
 
             {/* ── MFA Security section ── */}
-            <div className="rounded-md border border-[#1A7A6E]/20 bg-[#0A1628]/40 p-4">
+            <div className="rounded-md border border-[#1A7A6E]/20 bg-bg/40 p-4">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-3">
                   {isMfaEnabled ? (
