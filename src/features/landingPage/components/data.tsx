@@ -22,6 +22,7 @@ import {
   ShoppingBasket,
   ListCheck,
   Cone,
+  Hand,
 } from 'lucide-react';
 
 export const helixCards = [
@@ -139,6 +140,7 @@ export const NAV: {
     { to: '/admin/verifications', label: 'Verifications', icon: ShieldCheck },
     { to: '/admin/credit', label: 'JompStart Credit', icon: HandCoins },
     { to: '/admin/disputes', label: 'Disputes', icon: RefreshCw },
+    { to: '/admin/help', label: 'Help & FAQs', icon: Hand },
     { to: '/admin/orders', label: 'Orders', icon: ShoppingBasket },
     { to: '/admin/categories', label: 'Categories', icon: Lightbulb },
     { to: '/admin/listings', label: 'Listings', icon: ListCheck },

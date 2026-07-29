@@ -151,6 +151,10 @@ export const APIENDPOINTSTWO = {
   DIRECT_TO_CONSUMER_LISTINGS_BY_ID: (id: string | number) =>
     `/v1/Direct-to-Consumer/listings/${id}`,
 
+  // ── Help ──────────────────────────────────────────────────
+  HELP: '/Help',
+  HELP_BY_ID: (id: number) => `/Help/${id}`,
+
   // ── Exporter Onboarding ───────────────────────────────────
   EXPORTER_ONBOARDING: '/v1/ExporterOnboarding',
   EXPORTER_ONBOARDING_BUSINESS_PROFILE:
