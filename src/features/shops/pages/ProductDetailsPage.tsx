@@ -1,20 +1,12 @@
 'use client';
 import { useMemo } from 'react';
-import Autoplay from 'embla-carousel-autoplay';
-import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useGetProductById } from '@/features/exporter/hooks/useProducts';
 import { Loading } from '@/components/loading';
 import { ProductData } from '@/features/exporter/api/productsApi';
 import ProductDetailsForm from '../components/ProductDetailsForm';
+import ProductDetailsCarousel from '../components/ProductDetailsCarousel';
 import { Lock } from 'lucide-react';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
 
 const ProductDetailsPage = () => {
   const searchParams = useSearchParams();
@@ -43,49 +35,22 @@ const ProductDetailsPage = () => {
     <section className="grid lg:grid-cols-5 gap-8">
       <div className="lg:col-span-3">
         <div className="helix-card overflow-hidden">
-          <div className="aspect-4/3 bg-[#0A1628]">
-            <Carousel
-              opts={{
-                align: 'start',
-                loop: true,
-              }}
-              plugins={[
-                Autoplay({
-                  delay: 4000,
-                }),
-              ]}
-              className="w-full h-full"
-            >
-              <CarouselContent>
-                <CarouselItem>
-                  <Image
-                    src={productDetails.thumbnailImage}
-                    alt={productDetails.productName}
-                    width={600}
-                    height={450}
-                    className="w-full h-full object-cover aspect-4/3"
-                  />
-                </CarouselItem>
-                {imageUrls.map((url, index) => (
-                  <CarouselItem key={url}>
-                    <Image
-                      src={url}
-                      alt={`${productDetails.productName} - Image ${index + 1}`}
-                      width={600}
-                      height={450}
-                      className="w-full h-full object-cover aspect-4/3"
-                    />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              {imageUrls.length > 1 && (
-                <>
-                  <CarouselPrevious className="left-3" />
-                  <CarouselNext className="right-3" />
-                </>
-              )}
-            </Carousel>
-          </div>
+          <ProductDetailsCarousel
+            slides={[
+              ...(productDetails.thumbnailImage
+                ? [productDetails.thumbnailImage]
+                : []),
+              ...imageUrls.filter(
+                (url) => url !== productDetails.thumbnailImage,
+              ),
+            ]}
+            altPrefix={productDetails.productName}
+            aspectRatio="aspect-4/3"
+            options={{ align: 'start', loop: true }}
+            className="w-full"
+            showDots={true}
+            showArrows={true}
+          />
           <div className="p-6">
             <div className="flex flex-wrap gap-2 mb-4">
               {/* {isDtc ? (
@@ -114,10 +79,7 @@ const ProductDetailsPage = () => {
                 <p className="helix-label">Country of origin</p>
                 {/* <p className="mt-1">{productDetails.}</p> */}
               </div>
-              <div>
-                <p className="helix-label">Ships from</p>
-                {/* <p className="mt-1">{productDetails.}</p> */}
-              </div>
+
               <div>
                 <p className="helix-label">Seller</p>
                 <p className="mt-1">Jompshop</p>

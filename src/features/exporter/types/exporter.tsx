@@ -223,6 +223,7 @@ export type CreateProductPayload = {
   Category: string;
   Unit: number;
   PriceUsd: number;
+  quantity: number;
   Moq: number;
   Description: string;
   CurrencyId: number;

@@ -5,7 +5,7 @@ import { ListingItem } from '../types/buyers';
 import PressableBtn from '@/components/buttons/PressableBtn';
 import { useHeader } from '@/context/HeaderContext';
 import ListingForm from './components/ListingForm';
-import InventoryTableCard from './components/InventoryTableCard';
+import InventoryList from './components/InventoryList';
 import InventoryTableSkeleton from './components/InventoryTableSkeleton';
 import { useGetLocalListings } from './hooks/useGetInventory';
 
@@ -83,34 +83,13 @@ const BuyerInventorySell = () => {
             />
           </div>
         ) : (
-          <div className=" overflow-hidden">
-            <table className="helix-table">
-              <thead>
-                <tr>
-                  <th>Photo</th>
-                  <th>Title</th>
-                  <th>Category</th>
-                  <th>Price</th>
-                  <th>Stock</th>
-                  <th>Mode</th>
-                  <th>Status</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {(data?.data ?? []).map((item) => (
-                  <InventoryTableCard
-                    key={item.id}
-                    item={item}
-                    onEdit={(listing) => {
-                      setEditing(listing);
-                      setOpen(true);
-                    }}
-                  />
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <InventoryList
+            items={data?.data ?? []}
+            onEdit={(listing) => {
+              setEditing(listing);
+              setOpen(true);
+            }}
+          />
         )}
       </main>
       {open && (

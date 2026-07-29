@@ -1,4 +1,5 @@
 import api from '@/configs/api-config';
+import { APIENDPOINTSTWO } from '@/configs/api-urls';
 import { LandingPageParams, ProductsResponse } from '../types/home';
 
 export const getLandingPageProducts = async ({
@@ -9,7 +10,7 @@ export const getLandingPageProducts = async ({
 }: LandingPageParams): Promise<ProductsResponse> => {
   console.log(category, '');
   try {
-    const response = await api.get('/Product/get-landing-page-product', {
+    const response = await api.get(APIENDPOINTSTWO.PRODUCT_LANDING_PAGE, {
       params: {
         PageNumber: pageNumber,
         PageSize: pageSize,

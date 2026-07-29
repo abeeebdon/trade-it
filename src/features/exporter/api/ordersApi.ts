@@ -1,4 +1,5 @@
 import api from '@/configs/api-config';
+import { APIENDPOINTSTWO } from '@/configs/api-urls';
 import { OrderDetailData } from '../types/exporter';
 import {
   SellerOrder,
@@ -13,7 +14,7 @@ export const getSellerOrders = async ({
 }: SellerOrdersParams): Promise<SellerOrder[]> => {
   try {
     const response = await api.get(
-      `/Orders/seller?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+      `${APIENDPOINTSTWO.ORDERS_SELLER}?pageNumber=${pageNumber}&pageSize=${pageSize}`,
     );
     return response.data.data;
   } catch (error) {
@@ -23,7 +24,7 @@ export const getSellerOrders = async ({
 
 export const getOrderById = async (id: string): Promise<SellerOrder> => {
   try {
-    const response = await api.get(`/Orders/${id}`);
+    const response = await api.get(APIENDPOINTSTWO.ORDERS_BY_ID(id));
     return response.data.data;
   } catch (error) {
     throw error;
@@ -31,7 +32,7 @@ export const getOrderById = async (id: string): Promise<SellerOrder> => {
 };
 export const createOrder = async (data: CreateOrderPayload) => {
   try {
-    const response = await api.post('/Orders', data);
+    const response = await api.post(APIENDPOINTSTWO.ORDERS, data);
     return response.data;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {

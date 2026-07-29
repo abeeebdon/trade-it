@@ -1,9 +1,10 @@
 import api from '@/configs/api-config';
+import { APIENDPOINTSTWO } from '@/configs/api-urls';
 import { useGetWaitlistType } from '../hooks/useGetAdminDashboard';
 
 export const getAdminDdashboard = async () => {
   try {
-    const response = await api.get('/Admin/dashboard');
+    const response = await api.get(APIENDPOINTSTWO.ADMIN_DASHBOARD);
     return response.data.data;
   } catch (error) {
     throw error;
@@ -16,7 +17,7 @@ export const getWaitlist = async ({
 }: useGetWaitlistType) => {
   try {
     const response = await api.get(
-      `/Waitlist?pageNumber=${pageNumber}&pageSize=${pageSize}&customerType=${filter}`,
+      `${APIENDPOINTSTWO.WAITLIST}?pageNumber=${pageNumber}&pageSize=${pageSize}&customerType=${filter}`,
     );
     return response.data.data;
   } catch (error) {
@@ -25,7 +26,7 @@ export const getWaitlist = async ({
 };
 export const getWaitlistCommand = async () => {
   try {
-    const response = await api.get(`/Admin/waitlist-command`);
+    const response = await api.get(APIENDPOINTSTWO.ADMIN_WAITLIST_COMMAND);
     return response.data.data;
   } catch (error) {
     throw error;
@@ -34,19 +35,9 @@ export const getWaitlistCommand = async () => {
 
 export const getWaitlistCSV = async ({ filter }: { filter: string }) => {
   try {
-    const response = await api.get(
-      `/Admin/waitlist/export-csv?filter=${filter}`,
-    );
+    const response = await api.get(APIENDPOINTSTWO.ADMIN_WAITLIST_CSV(filter));
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-// export const loginApi = async (data: LoginFormValues) => {
-//     try {
-//         const response = await api.post('/authentication/login', data);
-//         return response.data;
-//     } catch (error) {
-//         throw error;
-//     }
-// };

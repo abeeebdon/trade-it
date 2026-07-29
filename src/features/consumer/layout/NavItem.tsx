@@ -25,7 +25,7 @@ export default function NavItem({
       className={`flex items-center gap-3 px-4 py-2 rounded-md text-[13px] transition-all border-l-2 ${
         isActive
           ? 'border-[#C9922A] text-[#C9922A] bg-[#C9922A]/10 font-semibold'
-          : 'border-transparent text-[#9CA3AF] hover:text-[#F5F5F5] hover:bg-white/5'
+          : 'border-transparent text-muted hover:text-text '
       }`}
     >
       <Icon size={16} />

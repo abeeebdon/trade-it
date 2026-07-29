@@ -1,4 +1,5 @@
 import api from '@/configs/api-config';
+import { APIENDPOINTSTWO } from '@/configs/api-urls';
 import { CreateListingPayload, EditListingPayload } from '../types/exporter';
 import { ListingsPageData, ListingsParams } from '../sell/types/sellType';
 import { getUserId } from '@/lib/helpers/TokenDetails';
@@ -10,7 +11,7 @@ export const getListings = async ({
 }: ListingsParams): Promise<ListingsPageData> => {
   try {
     const response = await api.get(
-      `/Direct-to-Consumer?PageNumber=${pageNumber}&PageSize=${pageSize}`,
+      `${APIENDPOINTSTWO.DIRECT_TO_CONSUMER}?PageNumber=${pageNumber}&PageSize=${pageSize}`,
     );
     return response.data.data;
   } catch (error) {
@@ -20,7 +21,9 @@ export const getListings = async ({
 
 export const getListingById = async ({ id }: { id?: string }) => {
   try {
-    const response = await api.get(`/Direct-to-Consumer/listings/${id}`);
+    const response = await api.get(
+      APIENDPOINTSTWO.DIRECT_TO_CONSUMER_LISTINGS_BY_ID(String(id)),
+    );
     return response.data.data;
   } catch (error) {
     throw error;
@@ -53,11 +56,15 @@ export const createListing = async (payload: CreateListingPayload) => {
   payload.Photos.forEach((photo) => {
     formData.append('Photos', photo);
   });
-  const response = await api.post('/Direct-to-Consumer/listings', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
+  const response = await api.post(
+    APIENDPOINTSTWO.DIRECT_TO_CONSUMER_LISTINGS,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     },
-  });
+  );
 
   return response.data;
 };
@@ -81,7 +88,7 @@ export const editListing = async ({ id, payload }: EditListingPayload) => {
     formData.append('Photos', photo);
   });
   const response = await api.put(
-    `/Direct-to-Consumer/listings/${id}`,
+    APIENDPOINTSTWO.DIRECT_TO_CONSUMER_LISTINGS_BY_ID(id),
     formData,
     {
       headers: {
@@ -95,7 +102,9 @@ export const editListing = async ({ id, payload }: EditListingPayload) => {
 
 export const deleteListing = async (id: string) => {
   try {
-    const response = await api.delete(`/Direct-to-Consumer/listings/${id}`);
+    const response = await api.delete(
+      APIENDPOINTSTWO.DIRECT_TO_CONSUMER_LISTINGS_BY_ID(id),
+    );
     return response.data;
   } catch (error) {
     throw error;

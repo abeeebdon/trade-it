@@ -20,7 +20,6 @@ interface Props {
 const ProductDetailsForm = ({ productDetails }: Props) => {
   const [mode, setMode] = useState<'prepay' | 'quote'>('prepay');
   const [quote] = useState<Quote | null>(null);
-
   return (
     <div className="lg:col-span-2 space-y-4">
       <div className="helix-card p-6">
@@ -31,8 +30,8 @@ const ProductDetailsForm = ({ productDetails }: Props) => {
         </p>
 
         <div className="text-[12px] text-[#9CA3AF] mt-1">
-          {productDetails.quantity > 0
-            ? `${productDetails.quantity} in stock`
+          {productDetails.unit > 0
+            ? `${productDetails.unit} in stock`
             : 'Sold out'}
         </div>
 

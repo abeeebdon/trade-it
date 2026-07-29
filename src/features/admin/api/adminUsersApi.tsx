@@ -1,10 +1,13 @@
 import api from '@/configs/api-config';
+import { APIENDPOINTSTWO } from '@/configs/api-urls';
 import { useGetAdminUsersProps } from '../types/adminuserTypes';
 import { toast } from 'sonner';
 
 export const getAdminUSers = async ({ search }: useGetAdminUsersProps) => {
   try {
-    const response = await api.get(`/Admin/users?search=${search}`);
+    const response = await api.get(
+      `${APIENDPOINTSTWO.ADMIN_USERS}?search=${search}`,
+    );
     return response.data.data;
   } catch (error) {
     throw error;
@@ -12,7 +15,7 @@ export const getAdminUSers = async ({ search }: useGetAdminUsersProps) => {
 };
 export const activateUser = async (id: number) => {
   try {
-    const response = await api.patch(`/Admin/Users/${id}/activate`);
+    const response = await api.patch(APIENDPOINTSTWO.ADMIN_USERS_ACTIVATE(id));
 
     if (response.data.success) {
       toast.success(response.data.message);
@@ -31,7 +34,7 @@ export type SuspendUserPayload = {
 
 export const suspendUser = async ({ id, reason }: SuspendUserPayload) => {
   try {
-    const response = await api.patch(`/Admin/Users/${id}/suspend`, {
+    const response = await api.patch(APIENDPOINTSTWO.ADMIN_USERS_SUSPEND(id), {
       reason,
     });
 
@@ -47,7 +50,7 @@ export const suspendUser = async ({ id, reason }: SuspendUserPayload) => {
 };
 export const resetMFA = async (id: number) => {
   try {
-    const response = await api.post(`/Admin/Users/${id}/reset-mfa`);
+    const response = await api.post(APIENDPOINTSTWO.ADMIN_USERS_RESET_MFA(id));
 
     if (response.data.success) {
       toast.success(response.data.message);
