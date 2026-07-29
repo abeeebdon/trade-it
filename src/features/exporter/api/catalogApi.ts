@@ -1,4 +1,5 @@
 import api from '@/configs/api-config';
+import { APIENDPOINTSTWO } from '@/configs/api-urls';
 import { ProductListResponse } from '../types/exporter';
 
 export type CatalogParams = {
@@ -22,7 +23,7 @@ export const getCatalogProducts = async ({
     if (country) params.append('Country', country);
 
     const response = await api.get(
-      `/Product/market-place-products?${params.toString()}`,
+      `${APIENDPOINTSTWO.PRODUCT_MARKET_PLACE}?${params.toString()}`,
     );
     return response.data.data;
   } catch (error) {

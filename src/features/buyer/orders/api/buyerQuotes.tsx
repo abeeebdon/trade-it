@@ -1,10 +1,10 @@
 import { toast } from 'sonner';
 import { QuoteRequestType } from '../types/orders';
-import { APIENDPOINTS } from '@/configs/api-urls';
+import { APIENDPOINTSTWO } from '@/configs/api-urls';
 import api from '@/configs/api-config';
 export const getBuyerQuoteRequest = async () => {
   try {
-    const response = await api.get(APIENDPOINTS.BUYER_FULFILLMENTQUEUE);
+    const response = await api.get(APIENDPOINTSTWO.BUYER_FULFILLMENT_QUEUE);
     if (response.data.success) {
       toast.success(response.data.message);
       return response.data.data;
@@ -20,7 +20,10 @@ export const getBuyerQuoteRequest = async () => {
 
 export const placeQuote = async (payload: QuoteRequestType) => {
   try {
-    const response = await api.post(APIENDPOINTS.BUYER_QUOTE_REQ, payload);
+    const response = await api.post(
+      APIENDPOINTSTWO.BUYER_QUOTE_REQUESTS,
+      payload,
+    );
 
     if (response.data.success) {
       toast.success(response.data.message);

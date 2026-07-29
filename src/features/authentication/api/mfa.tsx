@@ -1,5 +1,5 @@
 import api from '@/configs/api-config';
-import { APIENDPOINTS } from '@/configs/api-urls';
+import { APIENDPOINTSTWO as EP } from '@/configs/api-urls';
 
 export interface MfaSetupResponse {
   secret: string;
@@ -18,7 +18,7 @@ export interface MfaChallengeVerifyRequest {
 
 export const setupMfaApi = async () => {
   try {
-    const response = await api.post(APIENDPOINTS.MFA_SETUP);
+    const response = await api.post(EP.MFA_SETUP);
     return response.data as {
       success: boolean;
       message: string;
@@ -32,7 +32,7 @@ export const setupMfaApi = async () => {
 
 export const verifyMfaApi = async (data: MfaVerifyRequest) => {
   try {
-    const response = await api.post(APIENDPOINTS.MFA_ENABLE, data);
+    const response = await api.post(EP.MFA_ENABLE, data);
     return response.data as {
       success: boolean;
       message: string;
@@ -55,7 +55,7 @@ export const verifyMfaChallengeApi = async (
   data: MfaChallengeVerifyRequest,
 ) => {
   try {
-    const response = await api.post(APIENDPOINTS.MFA_VERIFY, data);
+    const response = await api.post(EP.MFA_VERIFY, data);
     return response.data as {
       success: boolean;
       message: string;
@@ -76,7 +76,7 @@ export const verifyMfaChallengeApi = async (
 
 export const disableMfaApi = async (data: { code: string }) => {
   try {
-    const response = await api.post(APIENDPOINTS.MFA_DISABLE, data);
+    const response = await api.post(EP.MFA_DISABLE, data);
     return response.data as {
       success: boolean;
       message: string;

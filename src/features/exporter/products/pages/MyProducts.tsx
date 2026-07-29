@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Plus, Pencil } from 'lucide-react';
+import { Plus, Pencil, Eye } from 'lucide-react';
 
 import { formatUSD } from '@/lib/func';
 import { StatusPill } from '@/features/shops/components/StatusPill';
@@ -10,6 +10,7 @@ import ProductForm from '../../modals/CreateProduct';
 import Image from 'next/image';
 import { ProductResponseType } from '../types/product';
 import { getStatusId } from '../components/helpers';
+import Link from 'next/link';
 
 const PAGE_SIZE = 10;
 
@@ -119,7 +120,14 @@ export default function ExporterProducts() {
                         </div>
                       )}
                     </td>
-                    <td className="max-w-xs truncate">{p.productName}</td>
+                    <td className="max-w-xs truncate">
+                      <Link
+                        className="hover:text-blue-700"
+                        href={`/exporter/my-products/details?id=${p.id}`}
+                      >
+                        {p.productName}
+                      </Link>
+                    </td>
                     <td className="text-[13px] text-[#9CA3AF]">{p.category}</td>
                     <td className="font-mono">
                       {formatUSD(p.priceUsd)}
@@ -133,12 +141,20 @@ export default function ExporterProducts() {
                       <StatusPill status={getStatusId(p.statusId) ?? 'Draft'} />
                     </td>
                     <td>
-                      <button
-                        onClick={() => openEdit(p)}
-                        className="text-[#1A7A6E] hover:text-[#C9922A]"
-                      >
-                        <Pencil size={16} />
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => openEdit(p)}
+                          className="text-[#1A7A6E] inline hover:text-[#C9922A]"
+                        >
+                          <Pencil size={20} />
+                        </button>
+                        <Link
+                          className="text-[#1A7A6E] inline hover:text-[#C9922A]"
+                          href={`/exporter/my-products/details?id=${p.id}`}
+                        >
+                          <Eye size={20} />
+                        </Link>
+                      </div>
                     </td>
                   </tr>
                 ))}

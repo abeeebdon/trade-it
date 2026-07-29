@@ -1,4 +1,5 @@
 import api from '@/configs/api-config';
+import { APIENDPOINTSTWO } from '@/configs/api-urls';
 import {
   GetMarketPlaceProductsParams,
   MarketPlaceProducts,
@@ -11,7 +12,7 @@ export const getMarketPlaceProducts = async ({
   pageSize = 10,
 }: GetMarketPlaceProductsParams): Promise<MarketPlaceProducts> => {
   try {
-    const response = await api.get('Product/market-place-products', {
+    const response = await api.get(APIENDPOINTSTWO.PRODUCT_MARKET_PLACE, {
       params: {
         category,
         search,

@@ -11,6 +11,7 @@ import {
   HelpCircle,
   MapPin,
   ShoppingBag,
+  ShoppingBasket,
 } from 'lucide-react';
 
 export interface NavItemConfig {
@@ -42,6 +43,12 @@ export const NAV_GROUPS: NavGroupConfig[] = [
         icon: ShoppingBag,
         label: 'MarketPlace',
         testid: 'cs-nav-dash',
+      },
+      {
+        href: '/consumer/cart',
+        icon: ShoppingBasket,
+        label: 'Cart',
+        testid: 'cs-nav-cart',
       },
       {
         href: '/consumer/orders',

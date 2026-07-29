@@ -1,5 +1,5 @@
 import api from '@/configs/api-config';
-import { APIENDPOINTS } from '@/configs/api-urls';
+import { APIENDPOINTSTWO } from '@/configs/api-urls';
 import { AdminListing, ModerateListingPayload } from '../types/listings';
 
 export interface GetAdminListingsParams {
@@ -10,7 +10,7 @@ export const getAdminListings = async ({
   status,
 }: GetAdminListingsParams): Promise<AdminListing[]> => {
   try {
-    const response = await api.get(APIENDPOINTS.ADMIN_LISTINGS, {
+    const response = await api.get(APIENDPOINTSTWO.ADMIN_LISTINGS, {
       params: { status },
     });
     return response.data.data;
@@ -28,7 +28,7 @@ export const moderateListing = async ({
 }) => {
   try {
     const response = await api.patch(
-      APIENDPOINTS.ADMIN_LISTINGS_MODERATE(listingId),
+      APIENDPOINTSTWO.ADMIN_LISTINGS_MODERATE(listingId),
       payload,
     );
     return response.data;

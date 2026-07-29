@@ -1,4 +1,5 @@
 import api from '@/configs/api-config';
+import { APIENDPOINTSTWO } from '@/configs/api-urls';
 import { Loader2, X } from 'lucide-react';
 import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import { toast } from 'sonner';
@@ -46,7 +47,7 @@ const WaitlistModal = ({ show, onClose }: WaitlistModalProps) => {
         role: roleValue,
         CustomerType: roleValue,
       };
-      const res = await api.post('/Waitlist', postData);
+      const res = await api.post(APIENDPOINTSTWO.WAITLIST, postData);
       if (res.data?.success) {
         setEmail('');
         setFullname('');

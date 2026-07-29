@@ -1,10 +1,10 @@
 import api from '@/configs/api-config';
+import { APIENDPOINTSTWO } from '@/configs/api-urls';
 import {
   CreateProductPayload,
   ProductListParams,
   ProductListResponse,
   ProductCategory,
-  ProductCategoryListParams,
   ProductCategoryListResponse,
   ProductCountryListResponse,
   EditProductPayload,
@@ -23,12 +23,14 @@ export interface ProductData {
   price: number;
   priceUsd: number;
   quantity: number;
+  moq: number;
   unit: number;
 
   currencyId: number;
   currency: null;
 
   productStatusId: number;
+  statusId: number;
   productStatus: null;
 
   thumbnailImage: string;
@@ -44,7 +46,7 @@ export const getProducts = async ({
 }: ProductListParams): Promise<ProductListResponse> => {
   try {
     const response = await api.get(
-      `/Product?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+      `${APIENDPOINTSTWO.PRODUCT}?pageNumber=${pageNumber}&pageSize=${pageSize}`,
     );
     return response.data.data;
   } catch (error) {
@@ -54,7 +56,7 @@ export const getProducts = async ({
 
 export const getProductById = async (id: string): Promise<ProductData> => {
   try {
-    const response = await api.get(`/Product/${id}`);
+    const response = await api.get(APIENDPOINTSTWO.PRODUCT_BY_ID(id));
     return response.data.data;
   } catch (error) {
     throw error;
@@ -91,7 +93,7 @@ export const createProduct = async (
       form.append('images', img);
     });
 
-    await api.post('/Product/create', form, {
+    await api.post(APIENDPOINTSTWO.PRODUCT_CREATE, form, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
   } catch (error) {
@@ -119,7 +121,7 @@ export const editProduct = async ({ id, payload }: EditProductPayload) => {
       form.append('images', img);
     });
 
-    await api.put(`/Product/${id}`, form, {
+    await api.put(APIENDPOINTSTWO.PRODUCT_BY_ID(id), form, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
   } catch (error) {
@@ -131,7 +133,7 @@ export const editProduct = async ({ id, payload }: EditProductPayload) => {
 export const getProductCategories =
   async (): Promise<ProductCategoryListResponse> => {
     try {
-      const response = await api.get('/ProductCategory');
+      const response = await api.get(APIENDPOINTSTWO.PRODUCT_CATEGORY);
       return response.data.data;
     } catch (error) {
       throw error;
@@ -142,7 +144,7 @@ export const getProductCategoryById = async (
   id: number,
 ): Promise<ProductCategory> => {
   try {
-    const response = await api.get(`/ProductCategory/${id}`);
+    const response = await api.get(APIENDPOINTSTWO.PRODUCT_CATEGORY_BY_ID(id));
     return response.data.data;
   } catch (error) {
     throw error;
@@ -154,7 +156,7 @@ export const createProductCategory = async (payload: {
   description: string;
 }): Promise<void> => {
   try {
-    await api.post('/ProductCategory', payload);
+    await api.post(APIENDPOINTSTWO.PRODUCT_CATEGORY, payload);
   } catch (error) {
     throw error;
   }
@@ -165,7 +167,7 @@ export const updateProductCategory = async (
   payload: { name: string; description: string },
 ): Promise<void> => {
   try {
-    await api.put(`/ProductCategory/${id}`, payload);
+    await api.put(APIENDPOINTSTWO.PRODUCT_CATEGORY_BY_ID(id), payload);
   } catch (error) {
     throw error;
   }
@@ -173,7 +175,15 @@ export const updateProductCategory = async (
 
 export const deleteProductCategory = async (id: number): Promise<void> => {
   try {
-    await api.delete(`/ProductCategory/${id}`);
+    await api.delete(APIENDPOINTSTWO.PRODUCT_CATEGORY_BY_ID(id));
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteProduct = async (id: number): Promise<void> => {
+  try {
+    await api.delete(APIENDPOINTSTWO.PRODUCT_BY_ID(id));
   } catch (error) {
     throw error;
   }
@@ -184,7 +194,7 @@ export const getProductCountries =
     try {
       // Fetch all 193 countries in one shot
       const response = await api.get(
-        `/Product/countries?PageNumber=1&PageSize=250`,
+        `${APIENDPOINTSTWO.PRODUCT_COUNTRIES}?PageNumber=1&PageSize=250`,
       );
       return response.data.data;
     } catch (error) {

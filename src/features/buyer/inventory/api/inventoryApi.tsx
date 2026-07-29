@@ -1,5 +1,5 @@
 import api from '@/configs/api-config';
-import { APIENDPOINTS } from '@/configs/api-urls';
+import { APIENDPOINTSTWO } from '@/configs/api-urls';
 import { ListingsParams } from '@/features/exporter/sell/types/sellType';
 import {
   CreateLocalListingPayload,
@@ -14,7 +14,7 @@ export const getLocalListings = async ({
 }: ListingsParams): Promise<PaginatedResponse<ListingItem>> => {
   try {
     const response = await api.get(
-      `${APIENDPOINTS.LOCAL_LISTINGS}?PageNumber=${pageNumber}&PageSize=${pageSize}`,
+      `${APIENDPOINTSTWO.LOCAL_LISTINGS}?PageNumber=${pageNumber}&PageSize=${pageSize}`,
     );
     return response.data.data;
   } catch (error) {
@@ -24,7 +24,7 @@ export const getLocalListings = async ({
 
 export const getLocalListingById = async ({ id }: { id: string }) => {
   try {
-    const response = await api.get(`${APIENDPOINTS.LOCAL_LISTINGS}/${id}`);
+    const response = await api.get(`${APIENDPOINTSTWO.LOCAL_LISTINGS}/${id}`);
     return response.data.data;
   } catch (error) {
     throw error;
@@ -53,7 +53,7 @@ export const createLocalListing = async (
     formData.append('Photos', photo);
   });
 
-  const response = await api.post(APIENDPOINTS.LOCAL_LISTINGS, formData, {
+  const response = await api.post(APIENDPOINTSTWO.LOCAL_LISTINGS, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -83,7 +83,7 @@ export const editLocalListing = async ({
   });
 
   const response = await api.put(
-    `${APIENDPOINTS.LOCAL_LISTINGS}/${id}`,
+    `${APIENDPOINTSTWO.LOCAL_LISTINGS}/${id}`,
     formData,
     {
       headers: {
@@ -97,7 +97,9 @@ export const editLocalListing = async ({
 
 export const deleteLocalListing = async (id: number) => {
   try {
-    const response = await api.delete(`${APIENDPOINTS.LOCAL_LISTINGS}/${id}`);
+    const response = await api.delete(
+      `${APIENDPOINTSTWO.LOCAL_LISTINGS}/${id}`,
+    );
     return response.data;
   } catch (error) {
     throw error;

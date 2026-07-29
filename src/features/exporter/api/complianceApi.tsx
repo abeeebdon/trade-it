@@ -1,4 +1,5 @@
 import api from '@/configs/api-config';
+import { APIENDPOINTSTWO } from '@/configs/api-urls';
 import {
   AddComplianceFormType,
   ComplianceVaultData,
@@ -6,7 +7,7 @@ import {
 
 export const getCompliance = async (): Promise<ComplianceVaultData> => {
   try {
-    const response = await api.get(`/Compliance/vault`);
+    const response = await api.get(APIENDPOINTSTWO.COMPLIANCE_VAULT);
     return response.data.data;
   } catch (error) {
     throw error;
@@ -20,11 +21,15 @@ export const addComplianceDocument = async (payload: AddComplianceFormType) => {
   formData.append('ExpiryDate', String(payload.ExpiryDate));
   formData.append('File', payload.File);
 
-  const response = await api.post('Compliance/documents', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
+  const response = await api.post(
+    APIENDPOINTSTWO.COMPLIANCE_DOCUMENTS,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     },
-  });
+  );
 
   return response.data;
 };

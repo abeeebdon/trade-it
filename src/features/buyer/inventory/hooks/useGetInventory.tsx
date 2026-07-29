@@ -89,13 +89,13 @@ export const useGetLocalListings = ({
   pageSize,
 }: ListingsParams) => {
   return useQuery<PaginatedResponse<ListingItem>>({
-    queryKey: ['dtc-listings', pageNumber, pageSize],
+    queryKey: ['local-listings', pageNumber, pageSize],
     queryFn: () => getLocalListings({ pageNumber, pageSize }),
   });
 };
 export const useGetListingById = ({ id }: { id: string }) => {
   return useQuery<ListingItem>({
-    queryKey: ['dtc-listings-details', id],
+    queryKey: ['listings-details', id],
     queryFn: () => getLocalListingById({ id }),
   });
 };

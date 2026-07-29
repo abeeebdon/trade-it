@@ -11,6 +11,7 @@ import {
   createProductCategory,
   updateProductCategory,
   deleteProductCategory,
+  deleteProduct,
 } from '../api/productsApi';
 import {
   CreateProductPayload,
@@ -133,6 +134,23 @@ export const useDeleteProductCategory = (onSuccess?: () => void) => {
     },
     onError: () => {
       toast.error('Failed to delete category. Please try again.');
+    },
+  });
+};
+
+export const useDeleteProduct = (onSuccess?: () => void) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: number) => deleteProduct(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['exporter-products'] });
+      queryClient.invalidateQueries({ queryKey: ['product-detail'] });
+      toast.success('Product deleted successfully');
+      onSuccess?.();
+    },
+    onError: () => {
+      toast.error('Failed to delete product. Please try again.');
     },
   });
 };
