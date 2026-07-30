@@ -12,10 +12,16 @@ export const productOrderSchema = z.object({
 export type ProductOrderForm = z.infer<typeof productOrderSchema>;
 export const prepayOrderSchema = z.object({
   qty: z.string(),
-  shipping_name: z.string().min(1),
-  shipping_address: z.string().min(1),
+  shipping_name: z
+    .string()
+    .min(4, 'Shipping name should not be less than 4 letters'),
+  shipping_address: z
+    .string()
+    .min(4, 'Shipping address should not be less than 4 letters'),
   shipping_email: z.string().email(),
-  shipping_phone: z.string().min(1),
+  shipping_phone: z
+    .string()
+    .min(9, 'Shipping number should not be less than 9 numbers'),
 });
 export type PrepayOrderForm = z.infer<typeof prepayOrderSchema>;
 

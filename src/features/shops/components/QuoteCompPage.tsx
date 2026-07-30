@@ -2,15 +2,13 @@ import { Lock } from 'lucide-react';
 import Link from 'next/link';
 import { StatusPill } from './StatusPill';
 import { formatUSD } from '@/lib/func';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Quote } from '../types/shops';
-import { testQuotes } from '../components/data';
 import { Loading } from '@/components/loading';
 import { useGetConsumerQuotes } from '../hooks/useGetOrders';
 
 const QuoteCompPage = () => {
   const { data, isPending } = useGetConsumerQuotes();
-  console.log(data);
   const [quotes, setQuotes] = useState<{
     as_consumer: Quote[];
     as_seller: Quote[];
@@ -20,15 +18,6 @@ const QuoteCompPage = () => {
   });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setQuotes({
-        as_consumer: testQuotes,
-        as_seller: [],
-      });
-      setLoading(false);
-    }, 800); // simulate API delay
-  }, []);
   return (
     <article className="mt-6">
       <h3 className="helix-h3 mb-3">Quote requests</h3>

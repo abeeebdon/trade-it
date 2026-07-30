@@ -23,6 +23,7 @@ import {
   ListCheck,
   Cone,
   Hand,
+  CreditCard,
 } from 'lucide-react';
 
 export const helixCards = [
@@ -176,5 +177,19 @@ export const NAV_LINKS = [
   {
     label: 'About',
     href: '/about',
+  },
+];
+export const shoppingMenu = [
+  {
+    label: 'Cart',
+    href: '/cart',
+  },
+  {
+    label: 'Checkout',
+    href: '/checkout',
+  },
+  {
+    label: 'Orders',
+    href: '/shop/orders',
   },
 ];

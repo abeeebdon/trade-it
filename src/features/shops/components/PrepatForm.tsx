@@ -4,12 +4,14 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { formatUSD } from '@/lib/func';
-import { useAppSelector } from '@/hooks/store/store';
+import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
 import { ProductData } from '@/features/exporter/api/productsApi';
-import { useCreateOrder } from '@/features/exporter/hooks/useOrders';
+import { addToCart } from '@/store/cart/cart.slice';
 import { PrepayOrderForm, prepayOrderSchema } from './validation';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import InputField from '@/components/form/InputFIeld';
+import CartSuccessModal from './CartSuccessModal';
 
 interface Props {
   productDetails: ProductData;
@@ -17,7 +19,8 @@ interface Props {
 
 export function PrepayForm({ productDetails }: Props) {
   const [placing, setPlacing] = useState(false);
-  const { mutateAsync } = useCreateOrder();
+  const [showSuccess, setShowSuccess] = useState(false);
+  const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const router = useRouter();
   const {
@@ -45,29 +48,28 @@ export function PrepayForm({ productDetails }: Props) {
     const q = Number(data.qty);
     if (q > maxQty) {
       toast.error(`Quantity exceeds available stock of ${maxQty}`);
-      return; // guard against exceeding stock
+      return;
     }
     setPlacing(true);
 
     try {
-      const postData = {
-        productId: productDetails.id,
-        quantity: Number(data.qty),
-        deliveryDate: '2026-06-22T10:37:25.020Z',
-        shipTo: data.shipping_name,
-        shippingAddress: data.shipping_address,
-        email: data.shipping_email,
-        phone: data.shipping_phone,
-        description: productDetails.description,
-        orderType: 'prepay',
-      };
+      dispatch(
+        addToCart({
+          productId: productDetails.id,
+          productName: productDetails.productName,
+          thumbnailImage: productDetails.thumbnailImage ?? '',
+          priceUsd: productDetails.priceUsd ?? productDetails.price,
+          quantity: Number(data.qty),
+          shipping_name: data.shipping_name,
+          shipping_address: data.shipping_address,
+          shipping_email: data.shipping_email,
+          shipping_phone: data.shipping_phone,
+          description: productDetails.description ?? '',
+        }),
+      );
 
-      await mutateAsync(postData, {
-        onSuccess: (response) => {
-          reset();
-          router.push(`/payment?id=${response.data.id}`);
-        },
-      });
+      reset();
+      setShowSuccess(true);
     } finally {
       setPlacing(false);
     }
@@ -77,78 +79,83 @@ export function PrepayForm({ productDetails }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="mt-5 space-y-4">
-      <div className="flex items-center gap-3">
-        <label className="helix-label mb-0">Qty</label>
-        <input
-          type="number"
-          className="helix-input w-24"
-          {...register('qty')}
-          min={1}
-          max={maxQty}
-        />
-        <div>
-          <p className="font-mono text-[14px]">= {calcAmount()}</p>
-          {qtyNum > maxQty && (
-            <p className="text-red-500 text-[10px] ">Max available: {maxQty}</p>
+    <>
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-5 space-y-4">
+        <article className="space-y-3">
+          <div className="">
+            <label className="helix-label mb-0 block">Quantity</label>
+            <input
+              type="number"
+              className="helix-input w-24"
+              {...register('qty')}
+              min={1}
+              max={maxQty}
+            />
+            <div>
+              <p className="font-mono text-[14px]">= {calcAmount()}</p>
+              {qtyNum > maxQty && (
+                <p className="text-red-500 text-[10px] ">
+                  Max available: {maxQty}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <InputField
+            label="Shipping Name"
+            placeholder="Shipping Name"
+            className="helix-input"
+            error={errors.shipping_name?.message}
+            {...register('shipping_name')}
+          />
+          <InputField
+            label="Shipping Address"
+            placeholder="Shipping Address"
+            className="helix-input"
+            error={errors.shipping_address?.message}
+            {...register('shipping_address')}
+          />
+          <InputField
+            label="Email"
+            placeholder="Email"
+            className="helix-input"
+            error={errors.shipping_email?.message}
+            {...register('shipping_email')}
+          />
+          <InputField
+            label="Phone or Contact Number"
+            placeholder="+99"
+            className="helix-input"
+            type="number"
+            error={errors.shipping_phone?.message}
+            {...register('shipping_phone')}
+          />
+        </article>
+        <article className="mt-5">
+          {user ? (
+            <button
+              disabled={placing || maxQty <= 0 || qtyNum > maxQty || qtyNum < 1}
+              className="helix-btn-primary w-full"
+              type="submit"
+            >
+              {placing ? 'Processing...' : `Add to Cart`}
+            </button>
+          ) : (
+            <button
+              onClick={() => router.push('/login')}
+              className="helix-btn-primary w-full"
+              type="button"
+            >
+              Sign in
+            </button>
           )}
-        </div>
-      </div>
-
-      <input
-        placeholder="Shipping Name"
-        className="helix-input"
-        {...register('shipping_name')}
+        </article>
+      </form>
+      <CartSuccessModal
+        open={showSuccess}
+        setOpen={setShowSuccess}
+        productName={productDetails.productName}
       />
-      {errors.shipping_name && (
-        <p className="text-red-500 text-xs">{errors.shipping_name.message}</p>
-      )}
-
-      <textarea
-        placeholder="Shipping Address"
-        className="helix-input h-20"
-        {...register('shipping_address')}
-      />
-      {errors.shipping_address && (
-        <p className="text-red-500 text-xs">
-          {errors.shipping_address.message}
-        </p>
-      )}
-
-      <input
-        placeholder="Email"
-        className="helix-input"
-        {...register('shipping_email')}
-      />
-      {errors.shipping_email && (
-        <p className="text-red-500 text-xs">{errors.shipping_email.message}</p>
-      )}
-
-      <input
-        placeholder="Phone"
-        className="helix-input"
-        {...register('shipping_phone')}
-      />
-      {errors.shipping_phone && (
-        <p className="text-red-500 text-xs">{errors.shipping_phone.message}</p>
-      )}
-      {user ? (
-        <button
-          disabled={placing || maxQty <= 0 || qtyNum > maxQty || qtyNum < 1}
-          className="helix-btn-primary w-full"
-          type="submit"
-        >
-          {placing ? 'Processing...' : `Prepay ${calcAmount()}`}
-        </button>
-      ) : (
-        <button
-          onClick={() => router.push('/login')}
-          className="helix-btn-primary w-full"
-          type="button"
-        >
-          Sign in
-        </button>
-      )}
-    </form>
+    </>
   );
 }

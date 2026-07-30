@@ -1,4 +1,6 @@
 import { AuthShell } from '@/features/authentication/components/AuthShell';
+import JompFullLogo from '@/features/authentication/components/JompFullLogo';
+import Link from 'next/link';
 
 export default function AuthLayout({
   children,
@@ -6,8 +8,9 @@ export default function AuthLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="min-h-screen  w-full  bg-bg text-[#F5F5F5] flex">
+    <main className="min-h-screen w-full  bg-bg text-[#F5F5F5] flex">
       <AuthShell />
+
       <div className=" w-full md:w-1/2 flex items-center justify-center p-6">
         {children}
       </div>
