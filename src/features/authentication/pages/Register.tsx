@@ -13,6 +13,7 @@ import { motion } from 'motion/react';
 import { registerApi } from '../api/auth';
 import { useAppSelector } from '@/hooks/store/store';
 import { toast } from 'sonner';
+import JompFullLogo from '../components/JompFullLogo';
 
 export default function Register() {
   const [loading, setLoading] = useState(false);
@@ -71,10 +72,12 @@ export default function Register() {
 
   return (
     <div className="w-full max-w-md helix-card p-8 fade-up">
+      <Link href="/" className="md:hidden flex justify-center mb-7">
+        <JompFullLogo />
+      </Link>
       <button
         onClick={() => router.push('/getstarted')}
         className="text-[12px] text-[#9CA3AF] hover:text-[#F5F5F5] inline-flex items-center gap-1.5 mb-4"
-        data-testid="back-to-roles"
       >
         <ArrowLeft size={12} /> change role
       </button>

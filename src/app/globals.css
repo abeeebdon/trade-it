@@ -208,7 +208,6 @@ body {
 
 .helix-label {
   font-size: 11px;
-  text-transform: uppercase;
   letter-spacing: 0.14em;
   color: var(--helix-text-dim);
   margin-bottom: 6px;

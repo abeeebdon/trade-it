@@ -7,6 +7,7 @@ import {
 
 import { authReducer } from './auth/auth.slice';
 import { waitlistReducer } from './waitlist/waitlist.slice';
+import { cartReducer } from './cart/cart.slice';
 import {
   FLUSH,
   PAUSE,
@@ -28,6 +29,7 @@ const persistConfig = {
 const appReducer = combineReducers({
   auth: authReducer,
   wait: waitlistReducer,
+  cart: cartReducer,
 });
 
 const rootReducer = (

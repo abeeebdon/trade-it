@@ -32,7 +32,7 @@ const Homepage = () => {
           </div>
         </div>
       )}
-      <Header className="overflow-hidden w-full dark:bg-[#0A1628]/85 bg-[#ffffffee] backdrop-blur border-b border-[#1A7A6E]/15 sticky! top-0 z-30" />
+      <Header />
       <div className="pt-6 sm:px-6 min-[500]:px-4 px-2 lg:px-10 pb-24">
         <HomePage />
       </div>
