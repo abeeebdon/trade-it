@@ -1,165 +1,64 @@
 'use client';
-import JompsShopLogo from '@/assets/jompshop_logo';
-import JompsShopLogoDark from '@/assets/JompshopLogoDark';
-import useColorScheme from '@/hooks/useColorScheme';
-import Link from 'next/link';
+import { useGetProductCategories } from '@/features/exporter/hooks/useProducts';
+import JompFullLogo from '@/features/authentication/components/JompFullLogo';
+import FooterGroup from '@/components/nav/FooterGroup';
+
+const SELLER_LINKS = [
+  { label: 'Become an exporter', href: '/register?role=exporter' },
+  { label: 'Become a retailer / importer', href: '/register?role=retailer' },
+  { label: 'For African brands', href: '/about' },
+  { label: 'Trade platform', href: '/about#modules' },
+];
+
+const COMPANY_LINKS = [
+  { label: 'About Jompshop', href: '/about' },
+  { label: 'Partners', href: '/about#partners' },
+  { label: 'Sign in', href: '/login' },
+  { label: 'Create account', href: '/getstarted' },
+];
 
 const Footer = () => {
-  const isDark: boolean = useColorScheme();
+  const { data, isPending } = useGetProductCategories();
+
+  const categories = data?.data ?? [];
+  const categoryLinks = categories.map((cat) => ({
+    label: cat.name,
+    href: `/?category=${encodeURIComponent(cat.name)}`,
+  }));
 
   return (
     <footer className="border-t border-[#1A7A6E]/15 py-10 mt-16">
       <div className="max-w-350 mx-auto px-6 lg:px-10 grid md:grid-cols-5 lg:grid-cols-6  gap-8">
         <div className="col-span-2">
-          <div className="flex items-end gap-2 mb-3">
-            {isDark ? (
-              <JompsShopLogoDark width={120} />
-            ) : (
-              <JompsShopLogo width={120} />
-            )}
-          </div>
+          <JompFullLogo />
 
-          <p className="text-[12px] text-[#9CA3AF] leading-relaxed">
+          <p className="text-[12px] mt-2 text-muted leading-relaxed">
             Africa&apos;s direct-to-shopper marketplace. Buy direct from
             verified makers. Escrow-protected by Riby Inc.
           </p>
         </div>
 
         {/* SHOP */}
-        <div>
-          <div className="text-[11px] font-mono uppercase tracking-wider text-[#1A7A6E] mb-3">
-            Shop
-          </div>
-
-          <ul className="space-y-2 text-[12px] text-[#9CA3AF]">
-            <li>
-              <Link href="/?category=fashion" className="hover:text-[#F5F5F5]">
-                Fashion &amp; Textiles
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/?category=staple-foods"
-                className="hover:text-[#F5F5F5]"
-              >
-                Staple Foods
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/?category=beauty" className="hover:text-[#F5F5F5]">
-                Beauty &amp; Cosmetics
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/?category=home-decor"
-                className="hover:text-[#F5F5F5]"
-              >
-                Home &amp; Decor
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/?category=accessories"
-                className="hover:text-[#F5F5F5]"
-              >
-                Accessories
-              </Link>
-            </li>
-          </ul>
-        </div>
+        <FooterGroup title="Shop" items={categoryLinks} isLoading={isPending} />
 
         {/* SELLERS */}
-        <div>
-          <div className="text-[11px] font-mono uppercase tracking-wider text-[#1A7A6E] mb-3">
-            Sellers
-          </div>
-
-          <ul className="space-y-2 text-[12px] text-[#9CA3AF]">
-            <li>
-              <Link
-                href="/register?role=exporter"
-                className="hover:text-[#F5F5F5]"
-              >
-                Become an exporter
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/register?role=retailer"
-                className="hover:text-[#F5F5F5]"
-              >
-                Become a retailer / importer
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/about" className="hover:text-[#F5F5F5]">
-                For African brands
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/about#modules" className="hover:text-[#F5F5F5]">
-                Trade platform
-              </Link>
-            </li>
-          </ul>
-        </div>
+        <FooterGroup title="Sellers" items={SELLER_LINKS} />
 
         {/* COMPANY */}
+        <FooterGroup title="Company" items={COMPANY_LINKS} />
         <div>
-          <div className="text-[11px] font-mono uppercase tracking-wider text-[#1A7A6E] mb-3">
-            Company
-          </div>
-
-          <ul className="space-y-2 text-[12px] text-[#9CA3AF]">
-            <li>
-              <Link href="/about" className="hover:text-[#F5F5F5]">
-                About Jompshop
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/about#partners" className="hover:text-[#F5F5F5]">
-                Partners
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/login" className="hover:text-[#F5F5F5]">
-                Sign in
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/getstarted" className="hover:text-[#F5F5F5]">
-                Create account
-              </Link>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <div className="text-[11px] font-mono uppercase tracking-wider text-[#1A7A6E] mb-3">
+          <h3 className="font-mono uppercase tracking-wider text-secondary text-lg mb-3">
             Connect
-          </div>
-          <div className="space-y-2 flex flex-col text-[12px] text-[#9CA3AF]">
-            <a
-              href="mailto:hello@jompshop.com"
-              className="hover:text-[#F5F5F5]"
-            >
+          </h3>
+          <div className="space-y-2 flex flex-col text-[12px] text-muted">
+            <a href="mailto:hello@jompshop.com" className="hover:text-text">
               hello@jompshop.com
             </a>
 
             <a
               href="https://www.instagram.com/jompshop_/"
               target="blank"
-              className="hover:text-[#F5F5F5]"
+              className="hover:text-text"
             >
               Instagram
             </a>
@@ -167,7 +66,7 @@ const Footer = () => {
             <a
               href="https://www.facebook.com/profile.php?id=61578300267978"
               target="blank"
-              className="hover:text-[#F5F5F5]"
+              className="hover:text-text"
             >
               Facebook
             </a>

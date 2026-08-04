@@ -13,7 +13,6 @@ const HomepageProducts = ({
   category,
   showCategoryGrid,
 }: HomepageProductsProps) => {
-  console.log(category, 'category');
   const {
     data,
     isPending,

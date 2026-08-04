@@ -174,10 +174,6 @@ export const NAV_LINKS = [
     label: 'US In-Stock',
     href: '/?mode=riby_dtc',
   },
-  {
-    label: 'About',
-    href: '/about',
-  },
 ];
 export const shoppingMenu = [
   {
