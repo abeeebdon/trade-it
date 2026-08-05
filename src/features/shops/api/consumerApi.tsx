@@ -1,6 +1,10 @@
 import api from '@/configs/api-config';
 import { toast } from 'sonner';
-import { ConsumerOrder, CreateConsumerQuoteRequest } from '../types/shops';
+import {
+  ConsumerOrder,
+  CreateConsumerQuoteRequest,
+  Quote,
+} from '../types/shops';
 import { APIENDPOINTSTWO } from '@/configs/api-urls';
 
 export const getConsumerOrders = async (): Promise<ConsumerOrder[]> => {
@@ -13,9 +17,9 @@ export const getConsumerOrders = async (): Promise<ConsumerOrder[]> => {
   }
 };
 
-export const getConsumerQuotes = async () => {
+export const getConsumerQuotes = async (): Promise<Quote[]> => {
   try {
-    const response = await api.get(APIENDPOINTSTWO.CONSUMER_FULFILLMENT_QUEUE);
+    const response = await api.get(APIENDPOINTSTWO.CONSUMER_FULFILLMENT_QUOTE);
     toast.success(response.data.message);
     return response.data.data;
   } catch (error) {

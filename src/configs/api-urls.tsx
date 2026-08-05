@@ -57,6 +57,7 @@ export const APIENDPOINTSTWO = {
 
   CONSUMER_QUOTE_REQUESTS: '/v1/ConsumerFulfillment/quote-requests',
   CONSUMER_FULFILLMENT_QUEUE: '/v1/ConsumerFulfillment/queue',
+  CONSUMER_FULFILLMENT_QUOTE: '/v1/ConsumerFulfillment/quote-requests/my',
 
   BUYER_QUOTE_REQUESTS: '/v1/BuyerFulfillment/quote-requests',
   BUYER_FULFILLMENT_QUEUE: '/v1/BuyerFulfillment/queue',
@@ -160,4 +161,7 @@ export const APIENDPOINTSTWO = {
   EXPORTER_ONBOARDING: '/v1/ExporterOnboarding',
   EXPORTER_ONBOARDING_BUSINESS_PROFILE:
     '/v1/ExporterOnboarding/business-profile',
+
+  // ── Exporter Fulfillment ──────────────────────────────────
+  EXPORTER_QUOTES: '/v1/exporter/quotes',
 };

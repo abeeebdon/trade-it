@@ -2,7 +2,7 @@
 
 import { formatUSD } from '@/lib/func';
 import { StatusPill } from '@/features/shops/components/StatusPill';
-import type { SellerQuote } from '../types/exporter';
+import type { SellerQuote } from '../types/fulftillment';
 
 interface QuoteCardProps {
   q: SellerQuote;

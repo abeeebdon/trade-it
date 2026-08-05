@@ -3,18 +3,23 @@ import { LucideIcon } from 'lucide-react';
 type QuoteStatus = 'pending' | 'quoted' | 'accepted' | 'declined';
 
 export interface Quote {
-  id: string;
-  quote_number: string;
-  listing_id: string;
-  listing_title: string;
+  id: number;
+  quoteNumber: string;
+  productName: string;
   quantity: number;
-  message?: string;
+  message: string;
   status: QuoteStatus;
 
-  quoted_unit_price_usd?: number;
-  quoted_total_usd?: number;
-  quote_valid_until?: string;
-  quote_note?: string;
+  consumerEmail: string;
+  consumerId: number;
+  consumerName: string;
+  sellerId: number;
+  sellerNote: string;
+  createdAt: string;
+
+  quotedUnitPriceUsd: number | null;
+  quotedTotalUsd: number | null;
+  quoteValidUntil: string | null;
 }
 
 export type OrderStatus = 'pending' | 'paid' | 'shipped' | 'delivered';

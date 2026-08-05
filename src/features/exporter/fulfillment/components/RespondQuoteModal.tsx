@@ -1,10 +1,10 @@
 'use client';
 
 import { formatUSD } from '@/lib/func';
-import type { SellerQuote, RespondForm } from '../types/exporter';
+import type { ApiQuoteRequest, RespondForm } from '../types/fulftillment';
 
 interface RespondQuoteModalProps {
-  quote: SellerQuote;
+  quote: ApiQuoteRequest;
   form: RespondForm;
   busy: boolean;
   onFormChange: (form: RespondForm) => void;
@@ -34,8 +34,8 @@ export default function RespondQuoteModal({
         onClick={(e) => e.stopPropagation()}
         className="helix-card p-6 w-full max-w-md"
       >
-        <div className="helix-kicker">Respond · {quote.quote_number}</div>
-        <h3 className="helix-h3 mt-1">{quote.listing_title}</h3>
+        <div className="helix-kicker">Respond · {quote.quoteNumber}</div>
+        <h3 className="helix-h3 mt-1">{quote.productName}</h3>
         <div className="mt-3 text-[12px] text-[#9CA3AF]">
           Qty requested:{' '}
           <span className="font-mono text-[#F5F5F5]">{quote.quantity}</span>

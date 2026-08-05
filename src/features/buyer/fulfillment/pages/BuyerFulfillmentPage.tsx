@@ -7,18 +7,18 @@ import type {
   SellerQuote,
   FulfillmentOrder,
   RespondForm,
-} from '../types/exporter';
+} from '../types/fulftillment';
 import {
   mapQuoteToSellerQuote,
   mapOrderToFulfillmentOrder,
-} from '../types/exporter';
+} from '../types/fulftillment';
 import QuoteCard from '../components/QuoteCard';
-import FulfillmentOrderCard from '../components/FulfillmentOrderCard';
-import RespondQuoteModal from '../components/RespondQuoteModal';
 import { useGetBuyerQuotes } from '@/features/buyer/orders/hooks/useGetQuoteOrders';
 import { useAppSelector } from '@/hooks/store/store';
+import RespondQuoteModal from '../components/RespondQuoteModal';
+import FulfillmentOrderCard from '../components/FulfillmentOrderCard';
 
-export default function Fulfillment() {
+export default function BuyerFulfillmentPage() {
   const { user } = useAppSelector((state) => state.auth);
   const isExporter = user?.role === 'exporter';
   const [respond, setRespond] = useState<SellerQuote | null>(null);

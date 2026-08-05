@@ -25,7 +25,7 @@ const QuoteCompPage = () => {
         <div className="flex justify-center min-h-50">
           <Loading />
         </div>
-      ) : data?.quoteRequests?.length === 0 ? (
+      ) : data?.length === 0 ? (
         <div className="helix-card p-12 text-center text-[#9CA3AF]">
           <p className="text-[14px] text-[#9CA3AF]">
             You have no quote requests at this time.
@@ -34,14 +34,14 @@ const QuoteCompPage = () => {
       ) : (
         <div className="mb-10">
           <div className="space-y-3">
-            {quotes.as_consumer.map((q) => (
+            {data?.map((q) => (
               <div key={q.id} className="helix-card p-5">
                 <div className="flex items-start justify-between flex-wrap gap-3">
                   <div>
                     <div className="text-[11px] font-mono tracking-widest text-[#1A7A6E]">
-                      {q.quote_number}
+                      {q.quoteNumber}
                     </div>
-                    <div className="helix-h3 mt-1">{q.listing_title}</div>
+                    <div className="helix-h3 mt-1">{q.productName}</div>
                     <div className="text-[12px] text-[#9CA3AF]">
                       Qty requested: {q.quantity}
                     </div>
@@ -61,7 +61,7 @@ const QuoteCompPage = () => {
                           QUOTED UNIT
                         </div>
                         <div className="font-mono text-[#C9922A]">
-                          {formatUSD(q.quoted_unit_price_usd ?? 0)}
+                          {formatUSD(q.quotedUnitPriceUsd ?? 0)}
                         </div>
                       </div>
                       <div>
@@ -69,24 +69,24 @@ const QuoteCompPage = () => {
                           QUOTED TOTAL
                         </div>
                         <div className="font-mono text-[#C9922A] text-lg">
-                          {formatUSD(q.quoted_total_usd ?? 0)}
+                          {formatUSD(q.quotedTotalUsd ?? 0)}
                         </div>
                       </div>
                       <div>
                         <div className="text-[10px] text-[#9CA3AF] tracking-widest">
                           VALID UNTIL
                         </div>
-                        <div className="font-mono">{q.quote_valid_until}</div>
+                        <div className="font-mono">{q.quoteValidUntil}</div>
                       </div>
                     </div>
-                    {q.quote_note && (
+                    {q.sellerNote && (
                       <p className="text-[12px] text-[#9CA3AF] mt-3">
-                        Seller: {q.quote_note}
+                        Seller: {q.sellerNote}
                       </p>
                     )}
                     <div className="flex gap-2 mt-4">
                       <Link
-                        href={`/shop/product/${q.listing_id}?quote=${q.id}`}
+                        href={`/shop/product/${q.sellerId}?quote=${q.id}`}
                         className="helix-btn-primary text-sm inline-flex items-center gap-2"
                       >
                         <Lock size={12} /> Accept &amp; prepay (escrow)

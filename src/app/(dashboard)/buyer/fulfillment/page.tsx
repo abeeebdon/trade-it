@@ -1,7 +1,7 @@
-import Fulfillment from '@/features/exporter/pages/Fulfillment';
+import BuyerFulfillmentPage from '@/features/buyer/fulfillment/pages/BuyerFulfillmentPage';
 
 const page = () => {
-  return <Fulfillment />;
+  return <BuyerFulfillmentPage />;
 };
 
 export default page;
