@@ -1,3 +1,4 @@
+import api from '@/configs/api-config';
 import type {
   ShoppingList,
   ShoppingListItem,
@@ -5,25 +6,16 @@ import type {
   ShoppingListApiResponse,
   SingleShoppingListApiResponse,
 } from '../types';
-import { getSavedCookie } from '@/store/auth/cookies';
-import axios from 'axios';
 
 const ENDPOINT = '/ShoppingList';
-const baseUrl = 'https://jompshop.jompstart.com/api';
-
-const authHeaders = () => {
-  const token = getSavedCookie('token');
-  return { Authorization: `Bearer ${token}` };
-};
 
 /** GET /api/ShoppingList — fetch all lists */
 export const getShoppingLists = async (
   pageNumber = 1,
   pageSize = 10,
 ): Promise<ShoppingListApiResponse> => {
-  const response = await axios.get(
-    `${baseUrl}${ENDPOINT}?pageNumber=${pageNumber}&pageSize=${pageSize}`,
-    { headers: authHeaders() },
+  const response = await api.get(
+    `${ENDPOINT}?pageNumber=${pageNumber}&pageSize=${pageSize}`,
   );
   return response.data;
 };
@@ -32,9 +24,7 @@ export const getShoppingLists = async (
 export const getShoppingList = async (
   id: string,
 ): Promise<SingleShoppingListApiResponse> => {
-  const response = await axios.get(`${baseUrl}${ENDPOINT}/${id}`, {
-    headers: authHeaders(),
-  });
+  const response = await api.get(`${ENDPOINT}/${id}`, {});
   return response.data;
 };
 
@@ -42,9 +32,7 @@ export const getShoppingList = async (
 export const createShoppingList = async (payload: {
   name: string;
 }): Promise<ShoppingList> => {
-  const response = await axios.post(`${baseUrl}${ENDPOINT}`, payload, {
-    headers: authHeaders(),
-  });
+  const response = await api.post(`${ENDPOINT}`, payload, {});
   return response.data.data;
 };
 
@@ -53,46 +41,33 @@ export const updateShoppingList = async (
   id: string,
   payload: { name: string },
 ): Promise<ShoppingList> => {
-  const response = await axios.put(`${baseUrl}${ENDPOINT}/${id}`, payload, {
-    headers: authHeaders(),
-  });
+  const response = await api.put(`${ENDPOINT}/${id}`, payload, {});
   return response.data.data;
 };
 
 /** DELETE /api/ShoppingList/{id} — delete a list */
 export const deleteShoppingList = async (id: string): Promise<void> => {
-  await axios.delete(`${baseUrl}${ENDPOINT}/${id}`, {
-    headers: authHeaders(),
-  });
+  await api.delete(`${ENDPOINT}/${id}`, {});
 };
 
-/** POST /api/ShoppingList/{shoppingListId}/items — add item to list */
 export const addItemToList = async (
   shoppingListId: string,
   payload: AddShoppingListItemPayload,
 ): Promise<ShoppingListItem> => {
-  const response = await axios.post(
-    `${baseUrl}${ENDPOINT}/${shoppingListId}/items`,
+  const response = await api.post(
+    `${ENDPOINT}/${shoppingListId}/items`,
     payload,
-    { headers: authHeaders() },
   );
   return response.data.data;
 };
 
-/** DELETE /api/ShoppingList/items/{shoppingListItemId} — remove item from list */
 export const removeItemFromList = async (
   shoppingListItemId: string,
 ): Promise<void> => {
-  await axios.delete(`${baseUrl}${ENDPOINT}/items/${shoppingListItemId}`, {
-    headers: authHeaders(),
-  });
+  await api.delete(`${ENDPOINT}/items/${shoppingListItemId}`, {});
 };
 
 /** POST /api/ShoppingList/{shoppingListId}/add-all-to-cart */
 export const addAllToCart = async (shoppingListId: string): Promise<void> => {
-  await axios.post(
-    `${baseUrl}${ENDPOINT}/${shoppingListId}/add-all-to-cart`,
-    {},
-    { headers: authHeaders() },
-  );
+  await api.post(`${ENDPOINT}/${shoppingListId}/add-all-to-cart`, {});
 };

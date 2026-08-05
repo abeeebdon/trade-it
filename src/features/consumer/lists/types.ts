@@ -1,16 +1,16 @@
 export interface ShoppingListItem {
   id: string;
-  listingId?: string;
-  listingName?: string;
+  productId?: string;
+  productName?: string;
   quantity: number;
-  photo?: string;
+  thumbnailImage?: string;
   price?: number;
 }
 
 export interface ShoppingList {
   id: string;
   name: string;
-  item_count: number;
+  itemCount: number;
   preview?: {
     id: string;
     photos?: string[];
@@ -19,7 +19,7 @@ export interface ShoppingList {
 }
 
 export interface AddShoppingListItemPayload {
-  listingId: string;
+  productId: string;
   quantity?: number;
 }
 

@@ -177,6 +177,10 @@ export const NAV_LINKS = [
 ];
 export const shoppingMenu = [
   {
+    label: 'Shopping List',
+    href: '/consumer/lists',
+  },
+  {
     label: 'Cart',
     href: '/cart',
   },

@@ -7,9 +7,6 @@ import { useState } from 'react';
 import SidebarComp from './SidebarComp';
 import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
 import { cn } from '@/lib/cn';
-import useColorScheme from '@/hooks/useColorScheme';
-import JompsShopLogoDark from '@/assets/JompshopLogoDark';
-import JompsShopLogo from '@/assets/jompshop_logo';
 import { logoutAction } from '@/features/authentication/components/helper';
 import { logout } from '@/store/auth/auth.slice';
 import { usePathname, useRouter } from 'next/navigation';
@@ -25,10 +22,8 @@ const Header = ({ className }: { className?: string }) => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  console.log(pathname);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const isDark: boolean = useColorScheme();
   const user = useAppSelector((state) => state.auth.user);
 
   const handleLogout = async () => {

@@ -37,7 +37,7 @@ export function QuoteForm({ productDetails }: Props) {
   const submitConsumer = async (data: QuoteOrderForm) => {
     try {
       const postData: CreateConsumerQuoteRequest = {
-        sellerId: productDetails.userId,
+        sellerId: productDetails.sellerId,
         productName: productDetails.productName,
         message: data.quoteMsg ?? '',
         quantity: Number(data.qty),

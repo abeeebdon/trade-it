@@ -14,6 +14,7 @@ import { toast } from 'sonner';
 export interface ProductData {
   id: number;
   userId: number;
+  sellerId: number;
   user: null;
 
   productName: string;

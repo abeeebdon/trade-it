@@ -5,13 +5,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createListSchema } from './validation';
 import type { CreateListFormValues } from './validation';
 import { useCreateShoppingList } from '../hooks/useShoppingLists';
+import Loader from '@/components/buttons/Loader';
 
 interface CreateListModalProps {
   onClose: () => void;
 }
 
 export default function CreateListModal({ onClose }: CreateListModalProps) {
-  const { mutate: submit, isPending: busy } = useCreateShoppingList(onClose);
+  const { mutate: submit, isPending } = useCreateShoppingList(onClose);
 
   const {
     register,
@@ -27,10 +28,7 @@ export default function CreateListModal({ onClose }: CreateListModalProps) {
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      data-testid="new-list-modal"
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div
         className="absolute inset-0 bg-[#0A1628]/80 backdrop-blur-sm"
         onClick={onClose}
@@ -45,7 +43,6 @@ export default function CreateListModal({ onClose }: CreateListModalProps) {
           className="helix-input"
           placeholder="Monthly Groceries"
           {...register('name')}
-          data-testid="list-name-input"
         />
         {errors.name && (
           <p className="text-[#E74C3C] text-[11px] mt-1">
@@ -62,11 +59,10 @@ export default function CreateListModal({ onClose }: CreateListModalProps) {
           </button>
           <button
             type="submit"
-            disabled={busy}
+            disabled={isPending}
             className="helix-btn-primary flex-1"
-            data-testid="list-create-btn"
           >
-            {busy ? 'Creating…' : 'Create'}
+            {isPending ? <Loader /> : 'Create'}
           </button>
         </div>
       </form>

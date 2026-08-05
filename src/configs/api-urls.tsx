@@ -119,6 +119,7 @@ export const APIENDPOINTSTWO = {
   ORDERS: '/v1/Orders',
   ORDERS_SELLER: '/v1/Orders/seller',
   ORDERS_BY_ID: (id: string | number) => `/v1/Orders/${id}`,
+  ORDERS_CHECKOUT_PAYMENT_INTENT: '/v1/Orders/checkout/payment-intent',
 
   // ── Receipts ──────────────────────────────────────────────
   RECEIPT: '/Receipt',
