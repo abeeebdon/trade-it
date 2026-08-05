@@ -50,7 +50,7 @@ const ProductDetailsForm = ({ productDetails }: Props) => {
         </div>
 
         {mode === 'prepay' ? (
-          <PrepayForm productDetails={productDetails} />
+          <PrepayForm productDetails={productDetails} setMode={setMode} />
         ) : (
           <QuoteForm productDetails={productDetails} />
         )}

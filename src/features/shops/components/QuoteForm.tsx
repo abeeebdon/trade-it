@@ -37,7 +37,7 @@ export function QuoteForm({ productDetails }: Props) {
   const submitConsumer = async (data: QuoteOrderForm) => {
     try {
       const postData: CreateConsumerQuoteRequest = {
-        sellerId: productDetails.userId,
+        sellerId: productDetails.sellerId,
         productName: productDetails.productName,
         message: data.quoteMsg ?? '',
         quantity: Number(data.qty),
@@ -96,7 +96,7 @@ export function QuoteForm({ productDetails }: Props) {
           max={productDetails.unit}
         />
         <div className="font-mono text-[14px]">
-          = {formatUSD(Number(qty) * productDetails.price)}
+          = {formatUSD(Number(qty) * productDetails.priceUsd)}
         </div>
       </div>
 

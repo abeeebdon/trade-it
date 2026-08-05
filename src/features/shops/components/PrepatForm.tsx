@@ -12,14 +12,18 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import InputField from '@/components/form/InputFIeld';
 import CartSuccessModal from './CartSuccessModal';
+import AddToShoppingListModal from './AddToShoppingListModal';
+import { FileText, Truck } from 'lucide-react';
 
 interface Props {
   productDetails: ProductData;
+  setMode?: (mode: string) => void;
 }
 
-export function PrepayForm({ productDetails }: Props) {
+export function PrepayForm({ productDetails, setMode }: Props) {
   const [placing, setPlacing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showShoppingListModal, setShowShoppingListModal] = useState(false);
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const router = useRouter();
@@ -77,7 +81,13 @@ export function PrepayForm({ productDetails }: Props) {
   const calcAmount = (): string => {
     return formatUSD(qtyNum * productDetails.priceUsd);
   };
-
+  const handleAddToShoppingList = () => {
+    setShowShoppingListModal(true);
+  };
+  const handleToggleToQuoteMode = () => {
+    setMode?.('quote');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="mt-5 space-y-4">
@@ -151,11 +161,51 @@ export function PrepayForm({ productDetails }: Props) {
           )}
         </article>
       </form>
+
+      <article className="mt-8 space-y-4">
+        {/* Quote mode toggle */}
+        <article className="space-y-3">
+          <p className="text-[13px] text-muted">
+            Wants to buy a large quantity?{' '}
+          </p>
+          <button
+            className="flex cursor-pointer items-center hover:text-primary-dim  text-primary  gap-2"
+            onClick={handleToggleToQuoteMode}
+          >
+            <FileText size={16} />
+            <span>Request a Quote (bulk order)</span>
+          </button>
+        </article>
+        <hr className="border-[#1A7A6E]/15" />
+
+        <article className="space-y-3">
+          <p className="text-[13px] text-muted">
+            You can also add this product to your shopping list for later
+          </p>
+
+          <button
+            className="flex cursor-pointer items-center hover:text-primary-dim  text-primary gap-2"
+            onClick={handleAddToShoppingList}
+          >
+            <Truck size={16} />
+            <span>Add to shopping items</span>
+          </button>
+        </article>
+      </article>
       <CartSuccessModal
         open={showSuccess}
         setOpen={setShowSuccess}
         productName={productDetails.productName}
       />
+      {showShoppingListModal && (
+        <AddToShoppingListModal
+          open={showShoppingListModal}
+          onClose={() => setShowShoppingListModal(false)}
+          productId={productDetails.id}
+          productName={productDetails.productName}
+          defaultQty={qtyNum}
+        />
+      )}
     </>
   );
 }

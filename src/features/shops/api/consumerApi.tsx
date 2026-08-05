@@ -13,7 +13,7 @@ export const getConsumerOrders = async (): Promise<ConsumerOrder[]> => {
   }
 };
 
-export const getConsumerQuotes = async (): Promise<ConsumerOrder[]> => {
+export const getConsumerQuotes = async () => {
   try {
     const response = await api.get(APIENDPOINTSTWO.CONSUMER_FULFILLMENT_QUEUE);
     toast.success(response.data.message);

@@ -19,6 +19,7 @@ export const useGetConsumerQuotes = () => {
   return useQuery({
     queryKey: ['consumer-quotes'],
     queryFn: getConsumerQuotes,
+    staleTime: 2 * 60_000,
   });
 };
 export const useGetConsumerQuoteOrder = (onSuccess?: () => void) => {

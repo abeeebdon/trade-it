@@ -116,58 +116,6 @@ export default function AdminWaitlist() {
         </div>
       </header>
 
-      {/* Mode Toggle */}
-      <div className="helix-card p-6 mb-6">
-        <div className="flex items-start justify-between flex-wrap gap-4">
-          <div className="max-w-xl">
-            <p className="helix-label">Site mode</p>
-
-            <div className="flex items-center gap-3 mt-2">
-              <span
-                className={`helix-h3 ${
-                  mode === 'live' ? 'text-[#C9922A]' : ''
-                }`}
-              >
-                {mode === 'live' ? 'LIVE marketplace' : 'COMING SOON landing'}
-              </span>
-
-              <span
-                className={`helix-status ${
-                  mode === 'live' ? 'helix-status-ok' : 'helix-status-gold'
-                }`}
-              >
-                {mode}
-              </span>
-            </div>
-
-            <p className="text-[13px] text-[#9CA3AF] mt-3 leading-relaxed">
-              When in <b>COMING SOON</b>, the public sees the waitlist landing
-              at <span className="font-mono">/</span>. Admins (you) still see
-              the full marketplace by signing in. Flip to <b>LIVE</b> to make
-              the marketplace public.
-            </p>
-          </div>
-
-          <button
-            // onClick={toggleMode}
-            className="helix-btn-primary inline-flex items-center gap-2 text-sm"
-            data-testid="toggle-mode"
-          >
-            {mode === 'live' ? (
-              <>
-                <ToggleRight size={18} />
-                Switch to COMING SOON
-              </>
-            ) : (
-              <>
-                <ToggleLeft size={18} />
-                Go LIVE
-              </>
-            )}
-          </button>
-        </div>
-      </div>
-
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <StatCard

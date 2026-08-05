@@ -30,3 +30,9 @@ export const quoteOrderSchema = z.object({
   quoteMsg: z.string().optional(),
 });
 export type QuoteOrderForm = z.infer<typeof quoteOrderSchema>;
+
+export const addToShoppingListSchema = z.object({
+  shoppingListId: z.string().min(1, 'Please select a shopping list'),
+  qty: z.number().min(1, 'Quantity must be at least 1'),
+});
+export type AddToShoppingListForm = z.infer<typeof addToShoppingListSchema>;
