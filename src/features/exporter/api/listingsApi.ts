@@ -1,9 +1,10 @@
 import api from '@/configs/api-config';
 import { APIENDPOINTSTWO } from '@/configs/api-urls';
-import { CreateListingPayload, EditListingPayload } from '../types/exporter';
+import { CreateListingPayload } from '../types/exporter';
 import { ListingsPageData, ListingsParams } from '../sell/types/sellType';
 import { getUserId } from '@/lib/helpers/TokenDetails';
 import { toast } from 'sonner';
+import { EditListingPayload } from '../fulfillment/types/fulftillment';
 
 export const getListings = async ({
   pageNumber,

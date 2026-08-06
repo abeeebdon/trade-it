@@ -1,4 +1,4 @@
-import { CreateListingPayload } from '../../types/exporter';
+import { CreateListingPayload } from '@/features/exporter/types/exporter';
 
 export type EditListingPayload = {
   payload: CreateListingPayload;
