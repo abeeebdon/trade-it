@@ -3,6 +3,7 @@
 import { formatUSD, formatDateTime } from '@/lib/func';
 import { StatusPill } from '@/features/shops/components/StatusPill';
 import { Truck, Lock, CheckCircle2 } from 'lucide-react';
+import { FulfillmentOrder } from '../types/buyerFulfillment';
 
 interface BuyerFulfillmentOrderCardProps {
   o: FulfillmentOrder;
