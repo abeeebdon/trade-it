@@ -55,7 +55,7 @@ export type FulfillmentOrder = {
 
 export type RespondForm = {
   quoted_unit_price_usd: string;
-  quote_note: string;
+  quote_note?: string;
   valid_days: number;
 };
 

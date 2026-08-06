@@ -164,4 +164,6 @@ export const APIENDPOINTSTWO = {
 
   // ── Exporter Fulfillment ──────────────────────────────────
   EXPORTER_QUOTES: '/v1/exporter/quotes',
+  EXPORTER_QUOTES_RESPOND: (quoteNumber: string) =>
+    `/v1/exporter/quotes/${quoteNumber}/respond`,
 };

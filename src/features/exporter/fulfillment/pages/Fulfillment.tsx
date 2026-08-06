@@ -3,12 +3,7 @@
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { MessageCircle } from 'lucide-react';
-import type {
-  SellerQuote,
-  FulfillmentOrder,
-  RespondForm,
-  ApiQuoteRequest,
-} from '../types/fulftillment';
+import type { FulfillmentOrder, ApiQuoteRequest } from '../types/fulftillment';
 import QuoteCard from '../components/QuoteCard';
 import RespondQuoteModal from '../components/RespondQuoteModal';
 import FulfillmentOrderCard from '../components/FulfillmentOrderCard';
@@ -16,48 +11,20 @@ import { useExporterQuotes } from '../hooks/useFulfillment';
 
 export default function Fulfillment() {
   const [respond, setRespond] = useState<ApiQuoteRequest | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [form, setForm] = useState<RespondForm>({
-    quoted_unit_price_usd: '',
-    quote_note: '',
-    valid_days: 7,
-  });
 
   const { data, isPending } = useExporterQuotes();
   const quotes = data?.data || [];
   console.log('Exporter quotes:', quotes);
   const orders: FulfillmentOrder[] = useMemo(() => [], []);
 
-  // ── Open respond modal and pre-fill if quote already has a price
+  // ── Open respond modal
   const handleRespond = (q: ApiQuoteRequest) => {
     setRespond(q);
-    setForm({
-      quoted_unit_price_usd: q.quotedUnitPriceUsd
-        ? String(q.quotedUnitPriceUsd)
-        : '',
-      quote_note: '',
-      valid_days: 7,
-    });
   };
 
-  // ── Send quote response (mock — replace with real API call)
-  const sendQuote = async () => {
-    if (!respond || !form.quoted_unit_price_usd) {
-      toast.error('Please enter a unit price');
-      return;
-    }
-    setBusy(true);
-    try {
-      // TODO: replace with real API call
-      await new Promise((res) => setTimeout(res, 600));
-      toast.success('Quote sent to consumer');
-      setRespond(null);
-      setForm({ quoted_unit_price_usd: '', quote_note: '', valid_days: 7 });
-    } catch {
-      toast.error('Failed to send quote');
-    } finally {
-      setBusy(false);
-    }
+  // ── Refresh quotes after responding
+  const handleQuoteSuccess = () => {
+    // TODO: refetch quotes via react-query invalidation
   };
 
   // ── Mark shipped (mock — replace with real API call)
@@ -145,15 +112,11 @@ export default function Fulfillment() {
         </div>
       )}
 
-      {/* ── Respond to quote modal ── */}
       {respond && (
         <RespondQuoteModal
           quote={respond}
-          form={form}
-          busy={busy}
-          onFormChange={setForm}
-          onSend={sendQuote}
           onClose={() => setRespond(null)}
+          onSuccess={handleQuoteSuccess}
         />
       )}
     </>
