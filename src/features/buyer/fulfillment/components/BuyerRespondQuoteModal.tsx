@@ -1,9 +1,9 @@
 'use client';
 
 import { formatUSD } from '@/lib/func';
-import type { SellerQuote, RespondForm } from '../types/fulftillment';
+import type { SellerQuote, RespondForm } from '../types/buyerFulfillment';
 
-interface RespondQuoteModalProps {
+interface BuyerRespondQuoteModalProps {
   quote: SellerQuote;
   form: RespondForm;
   busy: boolean;
@@ -12,14 +12,14 @@ interface RespondQuoteModalProps {
   onClose: () => void;
 }
 
-export default function RespondQuoteModal({
+export default function BuyerRespondQuoteModal({
   quote,
   form,
   busy,
   onFormChange,
   onSend,
   onClose,
-}: RespondQuoteModalProps) {
+}: BuyerRespondQuoteModalProps) {
   const estimatedTotal =
     form.quoted_unit_price_usd && Number(form.quoted_unit_price_usd) > 0
       ? Number(form.quoted_unit_price_usd) * quote.quantity

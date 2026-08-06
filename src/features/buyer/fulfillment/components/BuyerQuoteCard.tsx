@@ -2,19 +2,19 @@
 
 import { formatUSD } from '@/lib/func';
 import { StatusPill } from '@/features/shops/components/StatusPill';
-import type { SellerQuote } from '../types/fulftillment';
+import type { SellerQuote } from '../types/buyerFulfillment';
 
-interface QuoteCardProps {
+interface BuyerQuoteCardProps {
   q: SellerQuote;
   onRespond: (q: SellerQuote) => void;
   canRespond?: boolean;
 }
 
-export default function QuoteCard({
+export default function BuyerQuoteCard({
   q,
   onRespond,
   canRespond = true,
-}: QuoteCardProps) {
+}: BuyerQuoteCardProps) {
   return (
     <div className="helix-card p-5" data-testid={`seller-quote-${q.id}`}>
       <div className="flex items-start justify-between flex-wrap gap-3">

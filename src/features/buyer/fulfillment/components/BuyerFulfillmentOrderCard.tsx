@@ -3,21 +3,20 @@
 import { formatUSD, formatDateTime } from '@/lib/func';
 import { StatusPill } from '@/features/shops/components/StatusPill';
 import { Truck, Lock, CheckCircle2 } from 'lucide-react';
-import type { FulfillmentOrder } from '../../types/exporter';
 
-interface FulfillmentOrderCardProps {
+interface BuyerFulfillmentOrderCardProps {
   o: FulfillmentOrder;
   onShip: (id: string) => void;
   onDeliver: (id: string) => void;
   canAct?: boolean;
 }
 
-export default function FulfillmentOrderCard({
+export default function BuyerFulfillmentOrderCard({
   o,
   onShip,
   onDeliver,
   canAct = true,
-}: FulfillmentOrderCardProps) {
+}: BuyerFulfillmentOrderCardProps) {
   return (
     <div className="helix-card p-5" data-testid={`ff-${o.id}`}>
       {/* ── Header row ── */}
