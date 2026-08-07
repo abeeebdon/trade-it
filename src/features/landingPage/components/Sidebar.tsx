@@ -53,7 +53,7 @@ export default function Sidebar() {
         />
         <button
           onClick={() => setHideLabel((prev) => !prev)}
-          className="absolute hidden md:block -right-1 z-50 top-20 bg-bg border border-secondary/30 rounded-full p-1 shadow"
+          className="absolute block -right-1 z-50 top-20 bg-bg border border-secondary/30 rounded-full p-1 shadow"
         >
           <ChevronLast
             size={16}

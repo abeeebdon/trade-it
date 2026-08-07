@@ -80,3 +80,14 @@ export interface CreateConsumerQuoteRequest {
   consumerEmail: string;
   message: string;
 }
+
+/**
+ * Payload sent when a consumer accepts a seller's quote and prepays
+ * into escrow. The quoted amounts are fixed by the seller, so the
+ * consumer only supplies contact / delivery details.
+ */
+export interface AcceptAndPrepayQuotePayload {
+  consumerPhone: string;
+  shippingAddress: string;
+  deliveryPartner: string;
+}

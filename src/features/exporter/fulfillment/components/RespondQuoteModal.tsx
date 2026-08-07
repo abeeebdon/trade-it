@@ -1,24 +1,20 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { toast } from 'sonner';
 import { formatUSD } from '@/lib/func';
 import type { ApiQuoteRequest } from '../types/fulftillment';
-import { respondToQuote } from '../api/fulfillmentApi';
+import { useRespondToQuote } from '../hooks/useFulfillment';
+import InputField from '@/components/form/InputFIeld';
 import Loader from '@/components/buttons/Loader';
-
-// ── Zod schema ────────────────────────────────────────────────────────────────
 
 const respondQuoteSchema = z.object({
   quoted_unit_price_usd: z
-    .string()
-    .min(1, 'Unit price is required')
-    .refine((v) => !isNaN(Number(v)) && Number(v) > 0, {
-      message: 'Must be a positive number',
-    }),
+    .number()
+    .int()
+    .min(1, 'Unit price must be at least $1'),
   quote_note: z.string().optional(),
   valid_days: z
     .number()
@@ -29,22 +25,21 @@ const respondQuoteSchema = z.object({
 
 type RespondQuoteFormValues = z.infer<typeof respondQuoteSchema>;
 
-// ── Props ─────────────────────────────────────────────────────────────────────
-
 interface RespondQuoteModalProps {
   quote: ApiQuoteRequest;
   onClose: () => void;
   onSuccess?: () => void;
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
-
 export default function RespondQuoteModal({
   quote,
   onClose,
   onSuccess,
 }: RespondQuoteModalProps) {
-  const [busy, setBusy] = useState(false);
+  const respondQuote = useRespondToQuote(() => {
+    onSuccess?.();
+    onClose();
+  });
 
   const {
     register,
@@ -56,8 +51,8 @@ export default function RespondQuoteModal({
     resolver: zodResolver(respondQuoteSchema),
     defaultValues: {
       quoted_unit_price_usd: quote.quotedUnitPriceUsd
-        ? String(quote.quotedUnitPriceUsd)
-        : '',
+        ? Number(quote.quotedUnitPriceUsd)
+        : 0,
       quote_note: '',
       valid_days: 7,
     },
@@ -65,13 +60,7 @@ export default function RespondQuoteModal({
 
   // Keep defaults in sync if quote changes while modal is open
   useEffect(() => {
-    reset({
-      quoted_unit_price_usd: quote.quotedUnitPriceUsd
-        ? String(quote.quotedUnitPriceUsd)
-        : '',
-      quote_note: '',
-      valid_days: 7,
-    });
+    reset();
   }, [quote, reset]);
 
   const unitPrice = useWatch({ control, name: 'quoted_unit_price_usd' });
@@ -80,22 +69,15 @@ export default function RespondQuoteModal({
       ? Number(unitPrice) * quote.quantity
       : null;
 
-  const onSubmit = async (data: RespondQuoteFormValues) => {
-    setBusy(true);
-    try {
-      await respondToQuote(quote.quoteNumber, {
+  const onSubmit = (data: RespondQuoteFormValues) => {
+    respondQuote.mutate({
+      quoteNumber: quote.quoteNumber,
+      payload: {
         quotedUnitPriceUsd: Number(data.quoted_unit_price_usd),
         noteToConsumer: data.quote_note || undefined,
         validForDays: data.valid_days,
-      });
-      toast.success('Quote sent to consumer');
-      onSuccess?.();
-      onClose();
-    } catch {
-      toast.error('Failed to send quote');
-    } finally {
-      setBusy(false);
-    }
+      },
+    });
   };
 
   return (
@@ -121,27 +103,18 @@ export default function RespondQuoteModal({
 
         <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-3">
           {/* Quoted unit price */}
-          <div>
-            <label className="helix-label">Quoted unit price (USD)</label>
-            <input
-              type="number"
-              step="0.01"
-              min={0}
-              className="helix-input"
-              {...register('quoted_unit_price_usd')}
-              data-testid="q-unit"
-            />
-            {errors.quoted_unit_price_usd && (
-              <p className="text-red-400 text-[11px] mt-1">
-                {errors.quoted_unit_price_usd.message}
-              </p>
-            )}
-            {estimatedTotal && (
-              <div className="text-[11px] text-[#C9922A] font-mono mt-1">
-                Est. total: {formatUSD(estimatedTotal)}
-              </div>
-            )}
-          </div>
+          <InputField
+            label="Quoted unit price (USD)"
+            type="number"
+            min={1}
+            error={errors.quoted_unit_price_usd?.message}
+            {...register('quoted_unit_price_usd', { valueAsNumber: true })}
+          />
+          {estimatedTotal && (
+            <div className="text-[11px] text-[#C9922A] font-mono -mt-2">
+              Est. total: {formatUSD(estimatedTotal)}
+            </div>
+          )}
 
           {/* Note */}
           <div>
@@ -150,7 +123,6 @@ export default function RespondQuoteModal({
               className="helix-input h-20"
               placeholder="Optional note about pricing, timeline, etc."
               {...register('quote_note')}
-              data-testid="q-note"
             />
             {errors.quote_note && (
               <p className="text-red-400 text-[11px] mt-1">
@@ -160,21 +132,14 @@ export default function RespondQuoteModal({
           </div>
 
           {/* Valid days */}
-          <div>
-            <label className="helix-label">Valid for (days)</label>
-            <input
-              type="number"
-              min={1}
-              max={30}
-              className="helix-input"
-              {...register('valid_days', { valueAsNumber: true })}
-            />
-            {errors.valid_days && (
-              <p className="text-red-400 text-[11px] mt-1">
-                {errors.valid_days.message}
-              </p>
-            )}
-          </div>
+          <InputField
+            label="Valid for (days)"
+            type="number"
+            min={1}
+            max={30}
+            error={errors.valid_days?.message}
+            {...register('valid_days', { valueAsNumber: true })}
+          />
 
           {/* Actions */}
           <div className="flex gap-2 pt-1">
@@ -187,11 +152,10 @@ export default function RespondQuoteModal({
             </button>
             <button
               type="submit"
-              disabled={busy}
+              disabled={respondQuote.isPending}
               className="helix-btn-primary flex-1"
-              data-testid="q-send"
             >
-              {busy ? <Loader /> : 'Send quote'}
+              {respondQuote.isPending ? <Loader /> : 'Send quote'}
             </button>
           </div>
         </form>

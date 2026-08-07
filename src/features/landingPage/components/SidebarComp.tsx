@@ -7,12 +7,14 @@ import { useAppSelector } from '@/hooks/store/store';
 import CategoriesMenu from './CategoriesMenu';
 import ShoppingMenu from './ShoppingMenu';
 import MobileNavGroup from '@/components/nav/MobileNavGroup';
+import { getSavedCookie } from '@/store/auth/cookies';
 interface Props {
   setOpenSideBar: (open: boolean) => void;
   openSidebar: boolean;
 }
 const SidebarComp = ({ setOpenSideBar, openSidebar }: Props) => {
   const user = useAppSelector((state) => state.auth.user);
+  const token = getSavedCookie('token');
   const pathToDashboard =
     user?.role === 'retailer' ? `/buyer` : `/${user?.role}`;
 
@@ -37,7 +39,7 @@ const SidebarComp = ({ setOpenSideBar, openSidebar }: Props) => {
           </button>
         </div>
         <nav className=" flex mt-6 flex-col items-stretch w-full gap-1 text-[13px] dark:text-[#e4e8f0]">
-          {user && (
+          {user && token && (
             <Link
               href={pathToDashboard}
               className="text-muted hover:text-text text-lg"
@@ -52,7 +54,7 @@ const SidebarComp = ({ setOpenSideBar, openSidebar }: Props) => {
             onNavigate={() => setOpenSideBar(false)}
           />
 
-          {user && (
+          {user && token && (
             <ShoppingMenu
               variant="mobile"
               onNavigate={() => setOpenSideBar(false)}
@@ -68,24 +70,25 @@ const SidebarComp = ({ setOpenSideBar, openSidebar }: Props) => {
               My Orders
             </Link>
           )}
-          {!user && (
-            <>
-              <Link
-                href="/getstarted"
-                onClick={() => setOpenSideBar(false)}
-                className="text-muted hover:text-text px-1 py-3 border-b border-border/60"
-              >
-                Get Started
-              </Link>
-              <Link
-                href="/login"
-                onClick={() => setOpenSideBar(false)}
-                className="text-muted hover:text-text px-1 py-3 border-b border-border/60"
-              >
-                Signin
-              </Link>
-            </>
-          )}
+          {!user ||
+            (!token && (
+              <>
+                <Link
+                  href="/getstarted"
+                  onClick={() => setOpenSideBar(false)}
+                  className="text-muted hover:text-text px-1 py-3 border-b border-border/60"
+                >
+                  Get Started
+                </Link>
+                <Link
+                  href="/login"
+                  onClick={() => setOpenSideBar(false)}
+                  className="text-muted hover:text-text px-1 py-3 border-b border-border/60"
+                >
+                  Signin
+                </Link>
+              </>
+            ))}
           <CategoriesMenu
             variant="mobile"
             onNavigate={() => setOpenSideBar(false)}

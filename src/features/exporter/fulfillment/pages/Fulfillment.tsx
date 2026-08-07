@@ -1,31 +1,17 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { toast } from 'sonner';
-import { MessageCircle } from 'lucide-react';
-import type { FulfillmentOrder, ApiQuoteRequest } from '../types/fulftillment';
-import QuoteCard from '../components/QuoteCard';
-import RespondQuoteModal from '../components/RespondQuoteModal';
-import FulfillmentOrderCard from '../components/FulfillmentOrderCard';
+import type { FulfillmentOrder } from '../types/fulftillment';
 import { useExporterQuotes } from '../hooks/useFulfillment';
+import QuoteCard from '../components/QuoteCard';
+import FulfillmentOrderCard from '../components/FulfillmentOrderCard';
 
 export default function Fulfillment() {
-  const [respond, setRespond] = useState<ApiQuoteRequest | null>(null);
-
   const { data, isPending } = useExporterQuotes();
   const quotes = data?.data || [];
-  console.log('Exporter quotes:', quotes);
   const orders: FulfillmentOrder[] = useMemo(() => [], []);
 
-  const handleRespond = (q: ApiQuoteRequest) => {
-    setRespond(q);
-  };
-
-  const handleQuoteSuccess = () => {
-    // TODO: refetch quotes via react-query invalidation
-  };
-
-  // ── Mark shipped (mock — replace with real API call)
   const ship = async (id: string) => {
     void id; // TODO: use in real API call
     const tn = window.prompt('Tracking number (leave blank to auto-generate)');
@@ -39,7 +25,6 @@ export default function Fulfillment() {
     }
   };
 
-  // ── Mark delivered + release escrow (mock — replace with real API call)
   const deliver = async (id: string) => {
     void id; // TODO: use in real API call
     const confirmed = window.confirm(
@@ -55,39 +40,25 @@ export default function Fulfillment() {
     }
   };
 
-  // ── Loading skeleton
-  if (isPending) {
-    return (
-      <div className="space-y-4">
-        {Array.from({ length: 3 }).map((_, i) => (
-          <div
-            key={i}
-            className="helix-card p-5 h-36 animate-pulse opacity-40"
-          />
-        ))}
-      </div>
-    );
-  }
-
   return (
-    <>
-      {/* ── Quote requests ── */}
-      {quotes.length > 0 && (
-        <div className="mb-8">
-          <div className="helix-label mb-3 flex items-center gap-2">
-            <MessageCircle size={14} /> Quote requests
-          </div>
-          <div className="space-y-3">
+    <section>
+      {isPending ? (
+        <div className="space-y-4">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div
+              key={i}
+              className="helix-card p-5 h-36 animate-pulse opacity-40"
+            />
+          ))}
+        </div>
+      ) : (
+        quotes.length > 0 && (
+          <div className="space-y-3 mb-10">
             {quotes.map((q) => (
-              <QuoteCard
-                key={q.id}
-                q={q}
-                onRespond={handleRespond}
-                canRespond
-              />
+              <QuoteCard key={q.id} q={q} />
             ))}
           </div>
-        </div>
+        )
       )}
 
       {/* ── Fulfillment orders ── */}
@@ -109,14 +80,6 @@ export default function Fulfillment() {
           ))}
         </div>
       )}
-
-      {respond && (
-        <RespondQuoteModal
-          quote={respond}
-          onClose={() => setRespond(null)}
-          onSuccess={handleQuoteSuccess}
-        />
-      )}
-    </>
+    </section>
   );
 }

@@ -58,6 +58,10 @@ export const APIENDPOINTSTWO = {
   CONSUMER_QUOTE_REQUESTS: '/v1/ConsumerFulfillment/quote-requests',
   CONSUMER_FULFILLMENT_QUEUE: '/v1/ConsumerFulfillment/queue',
   CONSUMER_FULFILLMENT_QUOTE: '/v1/ConsumerFulfillment/quote-requests/my',
+  CONSUMER_QUOTE_ACCEPT_PREPAY: (quoteNumber: string) =>
+    `/v1/ConsumerFulfillment/quote-requests/${quoteNumber}/accept-and-prepay`,
+  CONSUMER_QUOTE_DECLINE: (quoteNumber: string) =>
+    `/v1/ConsumerFulfillment/quote-requests/${quoteNumber}/decline`,
 
   BUYER_QUOTE_REQUESTS: '/v1/BuyerFulfillment/quote-requests',
   BUYER_FULFILLMENT_QUEUE: '/v1/BuyerFulfillment/queue',

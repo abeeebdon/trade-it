@@ -1,6 +1,7 @@
 import api from '@/configs/api-config';
 import { toast } from 'sonner';
 import {
+  AcceptAndPrepayQuotePayload,
   ConsumerOrder,
   CreateConsumerQuoteRequest,
   Quote,
@@ -44,4 +45,28 @@ export const placeConsumerQuote = async (
   } catch (error) {
     throw error;
   }
+};
+
+/**
+ * Consumer accepts a seller's quote and prepays the quoted amount into escrow.
+ */
+export const acceptAndPrepayQuote = async (
+  quoteNumber: string,
+  payload: AcceptAndPrepayQuotePayload,
+) => {
+  const response = await api.post(
+    APIENDPOINTSTWO.CONSUMER_QUOTE_ACCEPT_PREPAY(quoteNumber),
+    payload,
+  );
+  return response.data;
+};
+
+/**
+ * Consumer declines a seller's quoted price.
+ */
+export const declineQuote = async (quoteNumber: string) => {
+  const response = await api.post(
+    APIENDPOINTSTWO.CONSUMER_QUOTE_DECLINE(quoteNumber),
+  );
+  return response.data;
 };

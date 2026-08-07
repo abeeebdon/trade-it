@@ -1,15 +1,16 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Search } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import HomePageFIlter from './components/HomePageFIlter';
-import { useDebounce } from '@/components/debounce/useDebounce';
 import HomepageProducts from './components/HomepageProducts';
 import LandingPageCatFilter from './components/LandingPageCatFilter';
 
 export default function HomePage() {
+  const [search, setSearch] = useState('');
   const searchParams = useSearchParams();
   const mode = searchParams.get('mode') ?? '';
+  const query = searchParams.get('q') ?? '';
   const category = searchParams.get('category') ?? '';
   const router = useRouter();
   const params = new URLSearchParams(searchParams.toString());
@@ -28,9 +29,6 @@ export default function HomePage() {
     });
   };
 
-  const [search, setSearch] = useState('');
-  const debouncedSearch = useDebounce(search, 500);
-
   const clearCategory = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete('category');
@@ -38,6 +36,9 @@ export default function HomePage() {
     router.push(`?${params.toString()}`, {
       scroll: false,
     });
+  };
+  const handleSetSearchParams = () => {
+    params.set('q', search);
   };
   const clearMode = () => {
     const params = new URLSearchParams(searchParams.toString());
@@ -49,6 +50,7 @@ export default function HomePage() {
   const showCategoryGrid = !category && !mode && !search;
   const submitSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    handleSetSearchParams();
   };
   return (
     <main className="min-h-screen bg-white  dark:bg-[#0A1628] w-full max-w-350 mx-auto dark:text-[#F5F5F5]">
@@ -109,7 +111,7 @@ export default function HomePage() {
       <HomepageProducts
         showCategoryGrid={showCategoryGrid}
         category={category}
-        debouncedSearch={debouncedSearch}
+        debouncedSearch={query}
       />
     </main>
   );

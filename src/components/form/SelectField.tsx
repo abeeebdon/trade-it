@@ -7,7 +7,7 @@ type SelectFieldProps = {
   name: string;
   error?: string;
   children: React.ReactNode;
-};
+} & Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'name' | 'children'>;
 
 const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
   ({ label, name, error, children, ...rest }, ref) => {

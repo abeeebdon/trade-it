@@ -60,7 +60,7 @@ const Header = ({ className }: { className?: string }) => {
             <CategoriesMenu />
             {user && <ShoppingMenu />}
             <div className="hidden lg:block">
-              {!user ? (
+              {!user || !token ? (
                 <Link
                   href="/register?role=exporter"
                   className="text-muted hover:text-text text-lg"

@@ -8,7 +8,6 @@ export const getLandingPageProducts = async ({
   search,
   category,
 }: LandingPageParams): Promise<ProductsResponse> => {
-  console.log(category, '');
   try {
     const response = await api.get(APIENDPOINTSTWO.PRODUCT_LANDING_PAGE, {
       params: {
