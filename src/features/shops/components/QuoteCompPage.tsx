@@ -1,22 +1,12 @@
 import { Lock } from 'lucide-react';
 import Link from 'next/link';
 import { StatusPill } from './StatusPill';
-import { formatUSD } from '@/lib/func';
-import { useState } from 'react';
-import { Quote } from '../types/shops';
+import { formatDateTime, formatUSD } from '@/lib/func';
 import { Loading } from '@/components/loading';
 import { useGetConsumerQuotes } from '../hooks/useGetOrders';
 
 const QuoteCompPage = () => {
   const { data, isPending } = useGetConsumerQuotes();
-  const [quotes, setQuotes] = useState<{
-    as_consumer: Quote[];
-    as_seller: Quote[];
-  }>({
-    as_consumer: [],
-    as_seller: [],
-  });
-  console.log(data);
 
   return (
     <article className="mt-6">
@@ -38,17 +28,14 @@ const QuoteCompPage = () => {
               <div key={q.id} className="helix-card p-5">
                 <div className="flex items-start justify-between flex-wrap gap-3">
                   <div>
-                    <div className="text-[11px] font-mono tracking-widest text-[#1A7A6E]">
-                      {q.quoteNumber}
-                    </div>
-                    <div className="helix-h3 mt-1">{q.productName}</div>
+                    <h2 className="helix-h3 mt-1">{q.productName}</h2>
                     <div className="text-[12px] text-[#9CA3AF]">
                       Qty requested: {q.quantity}
                     </div>
                     {q.message && (
-                      <div className="text-[12px] mt-2 italic">
+                      <p className="text-[12px] mt-2 italic">
                         &ldquo;{q.message}&rdquo;
-                      </div>
+                      </p>
                     )}
                   </div>
                   <StatusPill status={q.status} />
@@ -76,7 +63,9 @@ const QuoteCompPage = () => {
                         <div className="text-[10px] text-[#9CA3AF] tracking-widest">
                           VALID UNTIL
                         </div>
-                        <div className="font-mono">{q.quoteValidUntil}</div>
+                        <div className="font-mono">
+                          {formatDateTime(q.quoteValidUntil ?? '')}
+                        </div>
                       </div>
                     </div>
                     {q.sellerNote && (

@@ -3,7 +3,7 @@ import ThemeToggle from '@/components/buttons/ToggleButton';
 import { ChevronDown, Menu, UserCircle } from 'lucide-react';
 import Link from 'next/link';
 import { motion } from 'motion/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SidebarComp from './SidebarComp';
 import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
 import { cn } from '@/lib/cn';
@@ -17,6 +17,7 @@ import UserMenu from './UserMenu';
 import ShopMenu from './ShopMenu';
 import JompFullLogo from '@/features/authentication/components/JompFullLogo';
 import CategoriesMenu from './CategoriesMenu';
+import { getSavedCookie } from '@/store/auth/cookies';
 const Header = ({ className }: { className?: string }) => {
   const pathname = usePathname();
   const [showSidebar, setShowSidebar] = useState(false);
@@ -31,6 +32,15 @@ const Header = ({ className }: { className?: string }) => {
     dispatch(logout());
     router.push('/login');
   };
+  const pathToDashboard =
+    user?.role === 'retailer' ? `/buyer` : `/${user?.role}`;
+
+  const token = getSavedCookie('token');
+  useEffect(() => {
+    if (!token && !user) {
+      dispatch(logout());
+    }
+  }, [user, token]);
   return (
     <>
       <header
@@ -49,28 +59,29 @@ const Header = ({ className }: { className?: string }) => {
             <ShopMenu />
             <CategoriesMenu />
             {user && <ShoppingMenu />}
-
-            {!user ? (
-              <Link
-                href="/register?role=exporter"
-                className="text-muted hover:text-text text-lg"
-              >
-                Become a Seller
-              </Link>
-            ) : (
-              <Link
-                href={`/${user.role}`}
-                className="text-muted hover:text-text text-lg"
-              >
-                Dashboard
-              </Link>
-            )}
+            <div className="hidden lg:block">
+              {!user ? (
+                <Link
+                  href="/register?role=exporter"
+                  className="text-muted hover:text-text text-lg"
+                >
+                  Become a Seller
+                </Link>
+              ) : (
+                <Link
+                  href={pathToDashboard}
+                  className="text-muted hover:text-text text-lg"
+                >
+                  Dashboard
+                </Link>
+              )}
+            </div>
           </nav>
           <div className="flex items-center gap-2">
             {pathname === '/' && <SearchInput />}
             <ThemeToggle />
 
-            {user ? (
+            {user && token ? (
               <div className="relative">
                 <button
                   onClick={() => setMenuOpen((o) => !o)}

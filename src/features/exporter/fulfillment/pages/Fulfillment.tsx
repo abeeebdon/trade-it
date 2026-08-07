@@ -17,12 +17,10 @@ export default function Fulfillment() {
   console.log('Exporter quotes:', quotes);
   const orders: FulfillmentOrder[] = useMemo(() => [], []);
 
-  // ── Open respond modal
   const handleRespond = (q: ApiQuoteRequest) => {
     setRespond(q);
   };
 
-  // ── Refresh quotes after responding
   const handleQuoteSuccess = () => {
     // TODO: refetch quotes via react-query invalidation
   };

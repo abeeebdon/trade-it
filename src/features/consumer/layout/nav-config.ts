@@ -52,6 +52,11 @@ export const NAV_GROUPS: NavGroupConfig[] = [
         icon: ShoppingBagIcon,
         label: 'Checkout',
       },
+      {
+        href: '/shop/orders',
+        icon: Receipt,
+        label: 'Orders',
+      },
 
       {
         href: '/consumer/quotes',

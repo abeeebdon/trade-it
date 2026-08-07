@@ -11,7 +11,8 @@ interface UserMenuProps {
 
 const UserMenu = ({ setMenuOpen, setShowLogoutModal }: UserMenuProps) => {
   const user = useAppSelector((state) => state.auth.user);
-
+  const pathToDashboard =
+    user?.role === 'retailer' ? `/buyer` : `/${user?.role}`;
   return (
     <section
       className="fixed right-0 mt-2 w-56 helix-card p-2 shadow-2xl z-40"
@@ -26,7 +27,7 @@ const UserMenu = ({ setMenuOpen, setShowLogoutModal }: UserMenuProps) => {
         </div>
       </article>
       <Link
-        href={`/${user?.role}`}
+        href={pathToDashboard}
         className="block px-3 py-2 text-[12px] hover:bg-[#1A7A6E]/10 rounded"
       >
         Dashboard

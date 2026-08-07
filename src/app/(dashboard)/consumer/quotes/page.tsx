@@ -1,7 +1,7 @@
-import React from 'react';
+import QuotePage from '@/features/consumer/quote/pages/QuotePage';
 
 const page = () => {
-  return <div>page</div>;
+  return <QuotePage />;
 };
 
 export default page;

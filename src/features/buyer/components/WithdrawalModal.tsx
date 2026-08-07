@@ -60,7 +60,6 @@ function WithdrawModal({
               href="/buyer/finance/accounts"
               onClick={onClose}
               className="helix-btn-primary inline-flex items-center gap-1.5 mt-4 text-sm"
-              data-testid="add-account-from-withdraw"
             >
               <Plus size={13} /> Add a {currency} account
             </Link>
