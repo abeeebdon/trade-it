@@ -18,6 +18,13 @@ export const getConsumerOrders = async (): Promise<ConsumerOrder[]> => {
   }
 };
 
+export const getConsumerOrderById = async (
+  id: string | number,
+): Promise<ConsumerOrder> => {
+  const response = await api.get(APIENDPOINTSTWO.ORDERS_BY_ID(id));
+  return response.data.data;
+};
+
 export const getConsumerQuotes = async (): Promise<Quote[]> => {
   try {
     const response = await api.get(APIENDPOINTSTWO.CONSUMER_FULFILLMENT_QUOTE);

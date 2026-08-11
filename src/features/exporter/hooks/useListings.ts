@@ -49,9 +49,7 @@ export const useEditListing = (onSuccess?: () => void) => {
     onError: (error: AxiosError) => {
       console.error('API Mutation Error:', error);
       const data = error?.response?.data as { message?: string } | undefined;
-      toast.error(
-        data?.message ?? 'Failed to create listing. Please try again.',
-      );
+      toast.error(data?.message ?? 'Failed to edit listing. Please try again.');
     },
   });
 };

@@ -69,7 +69,7 @@ const CheckoutPage = () => {
 
     try {
       const response = await createPaymentIntent(postData);
-      dispatch(clearCart());
+      console.log(response.data, 'payment intent response');
       setPaymentData({
         clientSecret: response.data.clientSecret,
         publishableKey: response.data.publishableKey,
@@ -87,7 +87,6 @@ const CheckoutPage = () => {
   if (items.length === 0) {
     return <EmptyCart onBrowse={() => router.push('/')} />;
   }
-
   return (
     <>
       <section className="max-w-5xl mx-auto">

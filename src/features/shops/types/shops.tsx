@@ -71,6 +71,15 @@ export type ConsumerOrder = {
   shipTo: string;
   shippingAddress: string;
   status: string;
+  // Additional fields returned by GET /v1/Orders/{id}
+  subtotalAmount?: number;
+  shippingAmount?: number;
+  totalAmount?: number;
+  currency?: string;
+  paymentProvider?: string;
+  stripePaymentIntentId?: string;
+  stripePaymentStatus?: string;
+  paidAt?: string | null;
 };
 export interface CreateConsumerQuoteRequest {
   sellerId: number;

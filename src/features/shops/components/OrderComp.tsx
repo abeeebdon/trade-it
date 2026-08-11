@@ -1,12 +1,13 @@
-import { Link } from 'lucide-react';
+import { ArrowRight, Link } from 'lucide-react';
 import { useGetOrders } from '../hooks/useGetOrders';
 import { formatDateTime, formatUSD } from '@/lib/func';
 import { StatusPill } from './StatusPill';
 import { Loading } from '@/components/loading';
+import { useRouter } from 'next/navigation';
 
 const OrderComp = () => {
   const { data: consumerOrders, isPending } = useGetOrders();
-
+  const router = useRouter();
   return (
     <main>
       <div className="helix-h3 mb-3 mt-6">Orders</div>
@@ -65,9 +66,19 @@ const OrderComp = () => {
                   </div>
                 </div>
               </div>
-              <div className="mt-3 pt-3 border-t border-[#1A7A6E]/15 text-[12px] text-[#9CA3AF]">
-                Ship to: {o.shipTo}, {o.shippingAddress}
-              </div>
+              <article className="flex items-center justify-between flex-wrap gap-3 mt-3">
+                <p className=" border-t border-[#1A7A6E]/15 text-[12px] text-[#9CA3AF]">
+                  Ship to: {o.shipTo}, {o.shippingAddress}
+                </p>
+                <button
+                  onClick={() => router.push(`/shop/orders/details?id=${o.id}`)}
+                  className="text-primary flex items-center gap-2 cursor-pointer"
+                >
+                  View Details
+                  <ArrowRight size={16} />
+                </button>
+              </article>
+
               {/* {o.escrow_status === 'held' && (
                                     <div className="mt-3 flex items-center justify-between flex-wrap gap-2">
                                         <div className="text-[11px] text-[#9CA3AF] inline-flex items-center gap-1">

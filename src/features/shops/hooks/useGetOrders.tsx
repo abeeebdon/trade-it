@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   acceptAndPrepayQuote,
   declineQuote,
+  getConsumerOrderById,
   getConsumerOrders,
   getConsumerQuotes,
   placeConsumerQuote,
@@ -17,6 +18,14 @@ export const useGetOrders = () => {
     queryKey: ['consumer-orders'],
     queryFn: getConsumerOrders,
     staleTime: 2 * 60_000,
+  });
+};
+
+export const useGetOrderDetails = (orderId: string) => {
+  return useQuery({
+    queryKey: ['consumer-order-details', orderId],
+    queryFn: () => getConsumerOrderById(orderId),
+    enabled: !!orderId,
   });
 };
 

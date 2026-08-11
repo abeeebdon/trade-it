@@ -9,7 +9,7 @@ export const listingSchema = z.object({
   stock_qty: z.coerce.number().min(1, 'Stock quantity is required'),
   ships_from: z.string().min(1, 'Ships from is required'),
   description: z.string().min(1, 'Description is required'),
-  status: z.enum(['active', 'out_of_stock', 'archived']),
+  status: z.string(),
 });
 
 export type ListingFormValues = z.infer<typeof listingSchema>;
