@@ -65,6 +65,7 @@ const CheckoutPage = () => {
       deliveryDate: new Date().toISOString(),
       description: items[0].description ?? '',
       orderType: 'prepay',
+      PaymentType: 'stripe',
     };
 
     try {

@@ -15,4 +15,5 @@ export interface CreateCheckoutOrderPayload {
   phone: string;
   description: string;
   orderType: string;
+  PaymentType: string;
 }
