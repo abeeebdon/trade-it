@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(auth)/layout,_N_T_/(auth)/mfa-auth/layout,_N_T_/(auth)/mfa-auth/page,_N_T_/mfa-auth"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/!KGF1dGgp/mfa-auth/__PAGE__",
+    "/!KGF1dGgp/mfa-auth",
+    "/!KGF1dGgp",
+    "/_index",
+    "/_head"
+  ]
+}

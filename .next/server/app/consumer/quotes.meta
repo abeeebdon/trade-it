@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(dashboard)/layout,_N_T_/(dashboard)/consumer/layout,_N_T_/(dashboard)/consumer/quotes/layout,_N_T_/(dashboard)/consumer/quotes/page,_N_T_/consumer/quotes"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/!KGRhc2hib2FyZCk/consumer/quotes/__PAGE__",
+    "/!KGRhc2hib2FyZCk/consumer/quotes",
+    "/!KGRhc2hib2FyZCk/consumer",
+    "/!KGRhc2hib2FyZCk",
+    "/_index",
+    "/_head"
+  ]
+}

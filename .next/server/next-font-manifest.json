@@ -14,6 +14,13 @@
       "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
+    "[project]/src/app/(auth)/mfa-auth/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
     "[project]/src/app/(auth)/register/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
@@ -50,6 +57,13 @@
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
     "[project]/src/app/(dashboard)/admin/finance/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
+    "[project]/src/app/(dashboard)/admin/help/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
       "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
@@ -106,6 +120,13 @@
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
     "[project]/src/app/(dashboard)/admin/waitlist/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
+    "[project]/src/app/(dashboard)/admin/withdrawals/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
       "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
@@ -210,6 +231,13 @@
       "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
+    "[project]/src/app/(dashboard)/consumer/lists/details/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
     "[project]/src/app/(dashboard)/consumer/lists/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
@@ -218,13 +246,6 @@
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
     "[project]/src/app/(dashboard)/consumer/notifications/page": [
-      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
-      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
-      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
-      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
-    ],
-    "[project]/src/app/(dashboard)/consumer/orders/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
       "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
@@ -245,7 +266,7 @@
       "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
-    "[project]/src/app/(dashboard)/consumer/profile/page": [
+    "[project]/src/app/(dashboard)/consumer/quotes/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
       "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
@@ -288,6 +309,13 @@
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
     "[project]/src/app/(dashboard)/exporter/fulfillment/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
+    "[project]/src/app/(dashboard)/exporter/my-products/details/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
       "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
@@ -364,6 +392,13 @@
       "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
+    "[project]/src/app/(dashboard)/profile/mfa/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
     "[project]/src/app/(dashboard)/profile/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
@@ -378,7 +413,35 @@
       "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
+    "[project]/src/app/(home)/cart/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
+    "[project]/src/app/(home)/checkout/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
     "[project]/src/app/(home)/payment/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
+    "[project]/src/app/(home)/payment/success/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
+    "[project]/src/app/(home)/shop/orders/details/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
       "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",

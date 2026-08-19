@@ -87,6 +87,12 @@
       "namedRegex": "^/admin/finance(?:/)?$"
     },
     {
+      "page": "/admin/help",
+      "regex": "^/admin/help(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/help(?:/)?$"
+    },
+    {
       "page": "/admin/listings",
       "regex": "^/admin/listings(?:/)?$",
       "routeKeys": {},
@@ -127,6 +133,12 @@
       "regex": "^/admin/waitlist(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/admin/waitlist(?:/)?$"
+    },
+    {
+      "page": "/admin/withdrawals",
+      "regex": "^/admin/withdrawals(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/withdrawals(?:/)?$"
     },
     {
       "page": "/buyer",
@@ -195,6 +207,18 @@
       "namedRegex": "^/buyer/sell/details(?:/)?$"
     },
     {
+      "page": "/cart",
+      "regex": "^/cart(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/cart(?:/)?$"
+    },
+    {
+      "page": "/checkout",
+      "regex": "^/checkout(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/checkout(?:/)?$"
+    },
+    {
       "page": "/consumer",
       "regex": "^/consumer(?:/)?$",
       "routeKeys": {},
@@ -225,16 +249,16 @@
       "namedRegex": "^/consumer/lists(?:/)?$"
     },
     {
+      "page": "/consumer/lists/details",
+      "regex": "^/consumer/lists/details(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/consumer/lists/details(?:/)?$"
+    },
+    {
       "page": "/consumer/notifications",
       "regex": "^/consumer/notifications(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/consumer/notifications(?:/)?$"
-    },
-    {
-      "page": "/consumer/orders",
-      "regex": "^/consumer/orders(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/consumer/orders(?:/)?$"
     },
     {
       "page": "/consumer/payment-methods",
@@ -243,10 +267,10 @@
       "namedRegex": "^/consumer/payment\\-methods(?:/)?$"
     },
     {
-      "page": "/consumer/profile",
-      "regex": "^/consumer/profile(?:/)?$",
+      "page": "/consumer/quotes",
+      "regex": "^/consumer/quotes(?:/)?$",
       "routeKeys": {},
-      "namedRegex": "^/consumer/profile(?:/)?$"
+      "namedRegex": "^/consumer/quotes(?:/)?$"
     },
     {
       "page": "/consumer/receipts",
@@ -289,6 +313,12 @@
       "regex": "^/exporter/my\\-products(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/exporter/my\\-products(?:/)?$"
+    },
+    {
+      "page": "/exporter/my-products/details",
+      "regex": "^/exporter/my\\-products/details(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/exporter/my\\-products/details(?:/)?$"
     },
     {
       "page": "/exporter/onboarding",
@@ -363,16 +393,34 @@
       "namedRegex": "^/login(?:/)?$"
     },
     {
+      "page": "/mfa-auth",
+      "regex": "^/mfa\\-auth(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/mfa\\-auth(?:/)?$"
+    },
+    {
       "page": "/payment",
       "regex": "^/payment(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/payment(?:/)?$"
     },
     {
+      "page": "/payment/success",
+      "regex": "^/payment/success(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/payment/success(?:/)?$"
+    },
+    {
       "page": "/profile",
       "regex": "^/profile(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/profile(?:/)?$"
+    },
+    {
+      "page": "/profile/mfa",
+      "regex": "^/profile/mfa(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/profile/mfa(?:/)?$"
     },
     {
       "page": "/register",
@@ -391,6 +439,12 @@
       "regex": "^/shop/orders(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/shop/orders(?:/)?$"
+    },
+    {
+      "page": "/shop/orders/details",
+      "regex": "^/shop/orders/details(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/shop/orders/details(?:/)?$"
     },
     {
       "page": "/shop/product",

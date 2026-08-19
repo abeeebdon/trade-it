@@ -29,6 +29,10 @@
           "originalSource": "/shop/orders/:path*"
         },
         {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/mfa-auth(\\.json)?[\\/#\\?]?$",
+          "originalSource": "/mfa-auth"
+        },
+        {
           "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/login(\\.json)?[\\/#\\?]?$",
           "originalSource": "/login"
         },
