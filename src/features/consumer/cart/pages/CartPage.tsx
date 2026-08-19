@@ -6,10 +6,10 @@ import { ArrowRight } from 'lucide-react';
 import { formatUSD } from '@/lib/func';
 import { useCart, useClearCart } from '../hooks/useCart';
 import { PageLoading } from '@/components/loading';
-import CartItemList from '@/features/payment/components/CartItemList';
 import Loader from '@/components/buttons/Loader';
 import { EmptyCart } from '@/features/payment/components/EmptyCart';
 import WarningModal from '@/components/modals/WarningModal';
+import CartItemList from '@/features/payment/components/CartItemList';
 
 export default function CartPage() {
   const { data, isPending } = useCart();
