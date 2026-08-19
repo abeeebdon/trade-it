@@ -111,6 +111,13 @@ export const APIENDPOINTSTWO = {
   SHOPPING_LIST_ADD_ALL_TO_CART: (shoppingListId: string) =>
     `/v1/ShoppingList/${shoppingListId}/add-all-to-cart`,
 
+  // ── Cart ──────────────────────────────────────────────────
+  CART_ADD: '/Cart/add',
+  CART: '/Cart',
+  CART_UPDATE_QUANTITY: '/Cart/update-quantity',
+  CART_REMOVE: (cartItemId: string | number) => `/Cart/remove/${cartItemId}`,
+  CART_CLEAR: '/Cart/clear',
+
   // ── Profile ───────────────────────────────────────────────
   PROFILE: '/v1/Profile',
 

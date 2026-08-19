@@ -72,10 +72,10 @@ export const PaymentMethodsSection = ({
               </button>
               <button
                 type="button"
+                className="w-full text-sm"
                 onClick={handlePayWithStripeCheckout}
-                className="helix-btn-primary w-full flex items-center justify-center"
               >
-                Fast Checkout
+                Fast Checkout with Stripe
               </button>
             </div>
           </article>

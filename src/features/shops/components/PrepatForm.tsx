@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { formatUSD } from '@/lib/func';
-import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
+import { useAppSelector } from '@/hooks/store/store';
 import { ProductData } from '@/features/exporter/api/productsApi';
-import { addToCart } from '@/store/cart/cart.slice';
+import { useAddToCart } from '@/features/consumer/cart/hooks/useCart';
 import { PrepayOrderForm, prepayOrderSchema } from './validation';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -21,10 +21,9 @@ interface Props {
 }
 
 export function PrepayForm({ productDetails, setMode }: Props) {
-  const [placing, setPlacing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showShoppingListModal, setShowShoppingListModal] = useState(false);
-  const dispatch = useAppDispatch();
+  const { mutate: addToCart, isPending: addingToCart } = useAddToCart();
   const { user } = useAppSelector((state) => state.auth);
   const router = useRouter();
   const {
@@ -54,29 +53,23 @@ export function PrepayForm({ productDetails, setMode }: Props) {
       toast.error(`Quantity exceeds available stock of ${maxQty}`);
       return;
     }
-    setPlacing(true);
 
-    try {
-      dispatch(
-        addToCart({
-          productId: productDetails.id,
-          productName: productDetails.productName,
-          thumbnailImage: productDetails.thumbnailImage ?? '',
-          priceUsd: productDetails.priceUsd ?? productDetails.price,
-          quantity: Number(data.qty),
-          shipping_name: data.shipping_name,
-          shipping_address: data.shipping_address,
-          shipping_email: data.shipping_email,
-          shipping_phone: data.shipping_phone,
-          description: productDetails.description ?? '',
-        }),
-      );
-
-      reset();
-      setShowSuccess(true);
-    } finally {
-      setPlacing(false);
-    }
+    addToCart(
+      {
+        productId: productDetails.id,
+        quantity: Number(data.qty),
+        shipping_name: data.shipping_name,
+        shipping_address: data.shipping_address,
+        shipping_email: data.shipping_email,
+        shipping_phone: data.shipping_phone,
+      },
+      {
+        onSuccess: () => {
+          reset();
+          setShowSuccess(true);
+        },
+      },
+    );
   };
   const calcAmount = (): string => {
     return formatUSD(qtyNum * productDetails.priceUsd);
@@ -144,11 +137,13 @@ export function PrepayForm({ productDetails, setMode }: Props) {
         <article className="mt-5">
           {user ? (
             <button
-              disabled={placing || maxQty <= 0 || qtyNum > maxQty || qtyNum < 1}
+              disabled={
+                addingToCart || maxQty <= 0 || qtyNum > maxQty || qtyNum < 1
+              }
               className="helix-btn-primary w-full"
               type="submit"
             >
-              {placing ? 'Processing...' : `Add to Cart`}
+              {addingToCart ? 'Processing...' : `Add to Cart`}
             </button>
           ) : (
             <button

@@ -26,11 +26,8 @@ export interface InitialAuthStateType {
   userRole: AuthRole | null;
   mfaEnabled: boolean;
 }
-import { CartState } from '@/store/cart/cart.slice';
-
 export interface RootReducerType {
   auth: InitialAuthStateType;
-  cart: CartState;
 }
 
 export interface NavItems {
