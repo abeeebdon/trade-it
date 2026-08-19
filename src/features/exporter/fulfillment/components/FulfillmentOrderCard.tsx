@@ -9,19 +9,17 @@ interface FulfillmentOrderCardProps {
   o: FulfillmentOrder;
   onShip: (id: string) => void;
   onDeliver: (id: string) => void;
-  canAct?: boolean;
 }
 
 export default function FulfillmentOrderCard({
   o,
   onShip,
   onDeliver,
-  canAct = true,
 }: FulfillmentOrderCardProps) {
   return (
-    <div className="helix-card p-5" data-testid={`ff-${o.id}`}>
+    <section className="helix-card p-5" data-testid={`ff-${o.id}`}>
       {/* ── Header row ── */}
-      <div className="flex items-start justify-between flex-wrap gap-3">
+      <article className="flex items-start justify-between flex-wrap gap-3">
         <div className="flex-1 min-w-0">
           <div className="text-[11px] font-mono tracking-widest text-[#1A7A6E]">
             {o.order_number} ·{' '}
@@ -58,7 +56,7 @@ export default function FulfillmentOrderCard({
             {formatDateTime(o.created_at)}
           </div>
         </div>
-      </div>
+      </article>
 
       {/* ── Shipping info ── */}
       <div className="mt-4 pt-3 border-t border-[#1A7A6E]/15 text-[12px] text-[#9CA3AF] space-y-0.5">
@@ -75,30 +73,27 @@ export default function FulfillmentOrderCard({
         )}
       </div>
 
-      {/* ── Actions ── */}
-      {canAct && (
-        <div className="mt-4 flex gap-2 flex-wrap">
-          {o.status === 'paid' && (
-            <button
-              onClick={() => onShip(o.id)}
-              className="helix-btn-primary text-sm"
-              data-testid={`ship-${o.id}`}
-            >
-              Mark shipped
-            </button>
-          )}
-          {(o.status === 'shipped' ||
-            (o.status === 'paid' && o.escrow_status === 'held')) && (
-            <button
-              onClick={() => onDeliver(o.id)}
-              className="helix-btn-primary text-sm inline-flex items-center gap-1"
-              data-testid={`deliver-${o.id}`}
-            >
-              <CheckCircle2 size={14} /> Mark delivered · release escrow
-            </button>
-          )}
-        </div>
-      )}
-    </div>
+      <article className="mt-4 flex gap-2 flex-wrap">
+        {o.status === 'paid' && (
+          <button
+            onClick={() => onShip(o.id)}
+            className="helix-btn-primary text-sm"
+            data-testid={`ship-${o.id}`}
+          >
+            Mark shipped
+          </button>
+        )}
+        {(o.status === 'shipped' ||
+          (o.status === 'paid' && o.escrow_status === 'held')) && (
+          <button
+            onClick={() => onDeliver(o.id)}
+            className="helix-btn-primary text-sm inline-flex items-center gap-1"
+            data-testid={`deliver-${o.id}`}
+          >
+            <CheckCircle2 size={14} /> Mark delivered · release escrow
+          </button>
+        )}
+      </article>
+    </section>
   );
 }

@@ -75,7 +75,6 @@ export default function Fulfillment() {
               o={o}
               onShip={ship}
               onDeliver={deliver}
-              canAct
             />
           ))}
         </div>

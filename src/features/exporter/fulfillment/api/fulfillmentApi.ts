@@ -23,6 +23,10 @@ export interface RespondQuotePayload {
 export const respondToQuote = async (
   quoteNumber: string,
   payload: RespondQuotePayload,
-): Promise<void> => {
-  await api.post(APIENDPOINTSTWO.EXPORTER_QUOTES_RESPOND(quoteNumber), payload);
+) => {
+  const resp = await api.post(
+    APIENDPOINTSTWO.EXPORTER_QUOTES_RESPOND(quoteNumber),
+    payload,
+  );
+  return resp.data;
 };

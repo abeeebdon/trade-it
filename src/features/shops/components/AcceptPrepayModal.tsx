@@ -122,7 +122,7 @@ const AcceptPrepayModal = ({
             <PressableBtn
               title="Cancel"
               handleClick={onClose}
-              className="helix-btn-secondary flex-1"
+              className="helix-btn-secondary flex-1 justify-center items-center"
             />
             <button
               type="submit"
@@ -132,10 +132,7 @@ const AcceptPrepayModal = ({
               {loading ? (
                 <Loader />
               ) : (
-                <>
-                  <Lock size={14} />
-                  Prepay {formatUSD(quote.quotedTotalUsd ?? 0)} into escrow
-                </>
+                <>Prepay {formatUSD(quote.quotedTotalUsd ?? 0)} into escrow</>
               )}
             </button>
           </div>

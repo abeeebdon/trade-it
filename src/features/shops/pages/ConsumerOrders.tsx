@@ -17,8 +17,9 @@ export default function ConsumerOrders() {
   }
   return (
     <main>
-      <div className="text-primary!  helix-h3 mb-2">My orders & quotes</div>
-      <h1 className="helix-h2 mb-6">Jompshop · Order history</h1>
+      <div className="text-primary!  helix-h2 mb-4 capitalize">
+        My orders & quotes
+      </div>
       <OrderPageFilter active={filter} onChange={setFilter} />
       {filter !== '' ? (
         filter == 'orders' ? (
@@ -28,8 +29,8 @@ export default function ConsumerOrders() {
         )
       ) : (
         <>
-          <QuoteCompPage />
           <OrderComp />
+          <QuoteCompPage />
         </>
       )}
     </main>

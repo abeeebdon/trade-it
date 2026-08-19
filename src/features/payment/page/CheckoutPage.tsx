@@ -6,7 +6,6 @@ import { formatUSD } from '@/lib/func';
 import {
   removeFromCart,
   updateCartItemQuantity,
-  clearCart,
 } from '@/store/cart/cart.slice';
 import { ArrowLeft, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
@@ -22,12 +21,19 @@ import { createPaymentIntent, PaymentIntentDetails } from '../api/paymentApi';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import CheckoutForm from '../stripe/CheckoutStripe';
+import { PaymentMethodsSection } from '../components/PaymentMethodsSection';
+import SuccessModal from '@/components/modals/SuccessModal';
 const CheckoutPage = () => {
   const { items } = useAppSelector((state) => state.cart);
   const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMsg, setSuccessMsg] = useState('');
   const [paymentData, setPaymentData] = useState<PaymentIntentDetails | null>(
+    null,
+  );
+  const [selectedPaymentId, setSelectedPaymentId] = useState<number | null>(
     null,
   );
 
@@ -69,14 +75,16 @@ const CheckoutPage = () => {
 
     try {
       const response = await createPaymentIntent(postData);
-      console.log(response.data, 'payment intent response');
       setPaymentData({
         clientSecret: response.data.clientSecret,
         publishableKey: response.data.publishableKey,
         stripePaymentIntentId: response.data.stripePaymentIntentId,
         subtotalUsd: response.data.subtotalUsd,
         totalUsd: response.data.totalUsd,
+        order: response.data.order,
       });
+      setShowSuccess(true);
+      setSuccessMsg(response.message);
     } catch (err) {
       console.error('[payment-intent] error:', err);
     } finally {
@@ -84,12 +92,13 @@ const CheckoutPage = () => {
     }
   };
 
+  console.log(paymentData);
   if (items.length === 0) {
     return <EmptyCart onBrowse={() => router.push('/')} />;
   }
   return (
     <>
-      <section className="max-w-5xl mx-auto">
+      <section>
         <button
           onClick={() => router.push('/')}
           className="flex items-center gap-1 text-sm text-muted hover:text-text mb-6 transition-colors"
@@ -134,17 +143,17 @@ const CheckoutPage = () => {
               ) : (
                 <>
                   <ShieldCheck size={18} />
-                  Pay {formatUSD(total)}
+                  Order {formatUSD(total)}
                 </>
               )}
             </button>
 
-            <p className="text-[11px] text-muted text-center">
+            {/* <p className="text-[11px] text-muted text-center">
               Payments are secured and encrypted.{' '}
               {user
                 ? `Logged in as ${user.email}`
                 : 'Sign in to complete payment.'}
-            </p>
+            </p> */}
           </aside>
         </div>
 
@@ -152,7 +161,14 @@ const CheckoutPage = () => {
           <AddPaymentModal onClose={() => setShowPaymentModal(false)} />
         )}
       </section>
-      {paymentData && (
+
+      <SuccessModal
+        open={showSuccess}
+        message=""
+        onContinue={() => router.push(`/payment?id=${paymentData?.order.id}`)}
+        onCancel={() => router.refresh()}
+      />
+      {/* {paymentData && (
         <Elements
           stripe={loadStripe(paymentData.publishableKey)}
           options={{
@@ -161,7 +177,7 @@ const CheckoutPage = () => {
         >
           <CheckoutForm paymentData={paymentData} />
         </Elements>
-      )}
+      )} */}
     </>
   );
 };

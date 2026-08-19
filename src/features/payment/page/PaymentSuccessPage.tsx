@@ -24,9 +24,7 @@ const PaymentSuccessPage = () => {
       <div className="flex gap-4">
         <PressableBtn
           handleClick={() =>
-            router.push(
-              orderID ? `/consumer/orders?id=${orderID}` : '/consumer/orders',
-            )
+            router.push(orderID ? `/orders?id=${orderID}` : '/orders')
           }
           title="View Order"
           className="helix-btn-primary"

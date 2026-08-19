@@ -94,7 +94,7 @@ export const NAV_GROUPS: NavGroupConfig[] = [
     label: 'Account',
     items: [
       {
-        href: '/consumer/profile',
+        href: '/profile',
         icon: UserCircle,
         label: 'Profile',
       },
