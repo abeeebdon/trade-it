@@ -1,10 +1,11 @@
 import api from '@/configs/api-config';
+import { APIENDPOINTSTWO } from '@/configs/api-urls';
 import { ApproveVerificationPayload } from '../types/verifications';
 import { toast } from 'sonner';
 
 export const getDisputeQueue = async () => {
   try {
-    const response = await api.get('/AdminDispute/queue');
+    const response = await api.get(APIENDPOINTSTWO.ADMIN_DISPUTE_QUEUE);
     return response.data.data;
   } catch (error) {
     throw error;
@@ -12,7 +13,9 @@ export const getDisputeQueue = async () => {
 };
 export const getDisputeQueueById = async ({ id }: { id: string | number }) => {
   try {
-    const response = await api.get(`/AdminDispute/${id}`);
+    const response = await api.get(
+      APIENDPOINTSTWO.ADMIN_DISPUTE_BY_ID(String(id)),
+    );
     return response.data.data;
   } catch (error) {
     throw error;

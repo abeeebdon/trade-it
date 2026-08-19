@@ -59,14 +59,7 @@ const UserComponent = () => {
               {user?.role === 'consumer' ? 'My Orders' : 'Dashboard'}
             </Link>
           )}
-          {(user?.role === 'exporter' || user?.role === 'retailer') && (
-            <Link
-              href={`/${user?.role}`}
-              className="block px-3 py-2 text-[12px] hover:bg-[#1A7A6E]/10 rounded"
-            >
-              Business workspace
-            </Link>
-          )}
+
           <button
             onClick={() => setShowLogoutModal(true)}
             className="w-full text-left px-3 py-2 text-[12px] text-[#E74C3C] cursor-pointer hover:bg-[#E74C3C]/10 rounded inline-flex items-center gap-2"

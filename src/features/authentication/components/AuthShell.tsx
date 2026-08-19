@@ -1,22 +1,13 @@
-'use client';
-import JompsShopLogo from '@/assets/jompshop_logo';
-import JompsShopLogoDark from '@/assets/JompshopLogoDark';
-import useColorScheme from '@/hooks/useColorScheme';
 import Link from 'next/link';
+import JompFullLogo from './JompFullLogo';
 
 export function AuthShell() {
-  const isDark: boolean = useColorScheme();
-
   return (
     <div className="hidden md:flex md:w-1/2 relative overflow-hidden border-r border-secondary/20">
       <div className="absolute inset-0 helix-dot-bg" />
       <div className="relative z-10 flex flex-col justify-between p-10 py-5  w-full">
         <Link href="/" className="" data-testid="brand-auth">
-          {isDark ? (
-            <JompsShopLogoDark width={140} />
-          ) : (
-            <JompsShopLogo width={140} />
-          )}
+          <JompFullLogo />
           <p className="text-[10px] mt-2 tracking-[0.3em] dark:text-[#1A7A6E] text-[#4a2e8a] font-mono">
             DIRECT · FROM AFRICA
           </p>

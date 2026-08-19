@@ -1,12 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import Image from 'next/image';
 import { toast } from 'sonner';
 
 import { RootState } from '@/store/store';
-import { CATS } from '@/lib/constants';
 
 import type {
   FulfillmentMode,
@@ -18,7 +16,10 @@ import { useForm, type Resolver } from 'react-hook-form';
 import { ListingFormValues, listingSchema } from './validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import InputField from '@/components/form/InputFIeld';
+import SelectField from '@/components/form/SelectField';
+import ImageUploader, { type ImageItem } from '@/components/form/ImageUploader';
 import { Loader2 } from 'lucide-react';
+import { useGetProductCategories } from '../../hooks/useProducts';
 
 interface ListingFormProps {
   open: boolean;
@@ -28,6 +29,13 @@ interface ListingFormProps {
   onSave: (listing: CreateListingPayload) => void;
   isLoading?: boolean;
 }
+
+const STATUS_OPTIONS = [
+  { value: 'draft', label: 'Draft', id: 1 },
+  { value: 'active', label: 'Active', id: 2 },
+  { value: 'out_of_stock', label: 'Out of stock', id: 2 },
+  { value: 'archived', label: 'Archived', id: 3 },
+] as const;
 
 export default function ListingForm({
   open,
@@ -39,11 +47,17 @@ export default function ListingForm({
 }: ListingFormProps) {
   const user = useSelector((state: RootState) => state.auth.user);
   const mode: FulfillmentMode = isExporter ? 'riby_dtc' : 'buyer_local';
-  const [thumbNailPhotos, setThumbNailPhotos] = useState<File | null>(null);
-  const [thumbNailPreview, setThumbNailPreview] = useState<string>();
+  const [thumbnails, setThumbnails] = useState<ImageItem[]>(
+    editing?.thumbnailImage
+      ? [{ id: 'existing-thumbnail', url: editing.thumbnailImage }]
+      : [],
+  );
+  const { data: categories, isPending: catPending } = useGetProductCategories();
+  const catData = categories?.data;
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ListingFormValues>({
     resolver: zodResolver(listingSchema) as Resolver<ListingFormValues>,
@@ -56,45 +70,14 @@ export default function ListingForm({
       ships_from: editing?.shipsFrom ?? '',
     },
   });
-  const [photos, setPhotos] = useState<{ file: File; preview: string }[]>([]);
+  const [photos, setPhotos] = useState<ImageItem[]>(
+    editing?.photos?.map((p) => ({
+      id: `existing-${p.id}`,
+      url: p.imageUrl,
+    })) ?? [],
+  );
 
   if (!open) return null;
-
-  const upload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = Array.from(e.target.files || []);
-
-    if (!selectedFiles.length) return;
-
-    const newPhotos = selectedFiles.map((file) => ({
-      file,
-      preview: URL.createObjectURL(file),
-    }));
-
-    setPhotos((prev) => [...prev, ...newPhotos]);
-  };
-  const uploadThumbNail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-
-    if (!selectedFile) return;
-
-    setThumbNailPhotos(selectedFile);
-
-    const previewUrl = URL.createObjectURL(selectedFile);
-    setThumbNailPreview(previewUrl);
-  };
-  const existingPhotos = editing?.photos?.map((p) => p.imageUrl) ?? [];
-  const getProductStatusId = (status: ListingStatus) => {
-    switch (status) {
-      case 'active':
-        return 1;
-      case 'out_of_stock':
-        return 2;
-      case 'archived':
-        return 3;
-      default:
-        return 1;
-    }
-  };
 
   const onSubmit = async (data: ListingFormValues) => {
     if (!photos.length && !editing) {
@@ -104,19 +87,27 @@ export default function ListingForm({
     const payload: CreateListingPayload = {
       UserId: Number(user?.id),
       Title: data.title,
-      ThumbnailImage: thumbNailPhotos ?? null,
+      ThumbnailImage: thumbnails[0]?.file ?? null,
       Category: data.category,
       RetailPriceUsd: data.retail_price_usd,
       StockQty: data.stock_qty,
       ShipsFrom: data.ships_from,
       Description: data.description,
-      ProductStatusId: getProductStatusId(data.status),
+      ProductStatusId: Number(data.status),
       FulfillmentMode: mode,
-      Photos: photos.map((p) => p.file),
+      Photos: photos.map((p) => p.file).filter((f): f is File => Boolean(f)),
     };
 
     onSave(payload);
+    reset();
   };
+  const handleClose = () => {
+    reset();
+    setThumbnails([]);
+    setPhotos([]);
+    onClose();
+  };
+
   return (
     <div
       className="fixed inset-0 z-50 bg-[#0A1628]/80 backdrop-blur flex items-start justify-center overflow-y-auto p-4 pt-10 pb-10"
@@ -145,9 +136,9 @@ export default function ListingForm({
             <div>
               <label className="helix-label">Category</label>
               <select className="helix-input" {...register('category')}>
-                {CATS.map((c) => (
-                  <option key={c.value} value={c.value}>
-                    {c.label}
+                {catData?.map((c) => (
+                  <option key={c.name} value={c.name}>
+                    {c.name}
                   </option>
                 ))}
               </select>
@@ -166,12 +157,14 @@ export default function ListingForm({
               error={errors.stock_qty?.message}
               {...register('stock_qty')}
             />
-
-            <InputField
-              label="Ships from"
-              error={errors.ships_from?.message}
-              {...register('ships_from')}
-            />
+            <div className="md:col-span-2">
+              {' '}
+              <InputField
+                label="Ships from"
+                error={errors.ships_from?.message}
+                {...register('ships_from')}
+              />
+            </div>
 
             <div className="md:col-span-2">
               <label className="helix-label">Description</label>
@@ -186,70 +179,33 @@ export default function ListingForm({
               )}
             </div>
             <div className="md:col-span-2">
-              <label className="helix-label">ThumbNails</label>
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={uploadThumbNail}
-                className="helix-input"
+              <label className="helix-label">Thumbnail</label>
+              <ImageUploader
+                value={thumbnails}
+                onChange={setThumbnails}
+                maxImages={1}
               />
-
-              {thumbNailPreview && (
-                <div className="flex flex-wrap gap-2 mt-3">
-                  <Image
-                    src={thumbNailPreview}
-                    alt="preview"
-                    width={64}
-                    height={64}
-                    className="w-16 h-16 rounded object-cover"
-                    unoptimized
-                  />
-                </div>
-              )}
             </div>
             <div className="md:col-span-2">
               <label className="helix-label">Photos</label>
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={upload}
-                className="helix-input"
+              <ImageUploader
+                value={photos}
+                onChange={setPhotos}
+                maxImages={10}
               />
-
-              <div className="flex flex-wrap gap-2 mt-3">
-                {existingPhotos.map((photo, index) => (
-                  <Image
-                    key={`existing-${index}`}
-                    src={photo}
-                    alt={`existing-${index}`}
-                    width={64}
-                    height={64}
-                    className="w-16 h-16 rounded object-cover"
-                    unoptimized
-                  />
-                ))}
-                {photos.length > 0 &&
-                  photos.map((photo, index) => (
-                    <Image
-                      key={index}
-                      src={photo.preview}
-                      alt={`preview-${index}`}
-                      width={64}
-                      height={64}
-                      className="w-16 h-16 rounded object-cover"
-                      unoptimized
-                    />
-                  ))}
-              </div>
             </div>
 
-            <select className="helix-input" {...register('status')}>
-              <option value="active">Active</option>
-              <option value="out_of_stock">Out of stock</option>
-              <option value="archived">Archived</option>
-            </select>
+            <SelectField
+              label="Status"
+              error={errors.status?.message}
+              {...register('status')}
+            >
+              {STATUS_OPTIONS.map((option) => (
+                <option key={option.value} value={option.id}>
+                  {option.label}
+                </option>
+              ))}
+            </SelectField>
 
             <div>
               <label className="helix-label">Fulfillment mode</label>
@@ -264,7 +220,7 @@ export default function ListingForm({
           <div className="mt-6 flex gap-3">
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleClose}
               className="helix-btn-secondary flex-1"
             >
               Cancel
@@ -272,7 +228,7 @@ export default function ListingForm({
             <button
               type="submit"
               disabled={isLoading}
-              className="helix-btn-primary flex-1"
+              className="helix-btn-primary flex-1 justify-center"
             >
               {isLoading ? (
                 <Loader2 className="animate-spin" />

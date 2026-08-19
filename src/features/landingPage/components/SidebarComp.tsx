@@ -1,16 +1,22 @@
 import ThemeToggle from '@/components/buttons/ToggleButton';
 import { cn } from '@/lib/cn';
 import { X } from 'lucide-react';
-import { motion } from 'motion/react';
 import Link from 'next/link';
 import { NAV_LINKS } from './data';
 import { useAppSelector } from '@/hooks/store/store';
+import CategoriesMenu from './CategoriesMenu';
+import ShoppingMenu from './ShoppingMenu';
+import MobileNavGroup from '@/components/nav/MobileNavGroup';
+import { getSavedCookie } from '@/store/auth/cookies';
 interface Props {
   setOpenSideBar: (open: boolean) => void;
   openSidebar: boolean;
 }
 const SidebarComp = ({ setOpenSideBar, openSidebar }: Props) => {
   const user = useAppSelector((state) => state.auth.user);
+  const token = getSavedCookie('token');
+  const pathToDashboard =
+    user?.role === 'retailer' ? `/buyer` : `/${user?.role}`;
 
   return (
     <>
@@ -28,33 +34,65 @@ const SidebarComp = ({ setOpenSideBar, openSidebar }: Props) => {
       >
         <div className="flex items-center justify-between">
           <ThemeToggle />
-          <motion.button onClick={() => setOpenSideBar(false)}>
+          <button onClick={() => setOpenSideBar(false)}>
             <X className="cursor-pointer" />
-          </motion.button>
+          </button>
         </div>
-        <nav className=" flex mt-10 flex-col items-center gap-8 text-[13px] dark:text-[#e4e8f0]">
-          {NAV_LINKS.map((link) => (
+        <nav className=" flex mt-6 flex-col items-stretch w-full gap-1 text-[13px] dark:text-[#e4e8f0]">
+          {user && token && (
             <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setOpenSideBar(false)}
-              className="text-muted hover:text-text"
+              href={pathToDashboard}
+              className="text-muted hover:text-text text-lg"
             >
-              {link.label}
+              Dashboard
             </Link>
-          ))}
+          )}
+          <MobileNavGroup
+            label="Shop"
+            items={NAV_LINKS}
+            defaultOpen
+            onNavigate={() => setOpenSideBar(false)}
+          />
+
+          {user && token && (
+            <ShoppingMenu
+              variant="mobile"
+              onNavigate={() => setOpenSideBar(false)}
+            />
+          )}
 
           {user?.role === 'consumer' && (
-            <Link href="/shop/orders" className="text-muted hover:text-text">
+            <Link
+              href="/shop/orders"
+              onClick={() => setOpenSideBar(false)}
+              className="text-muted hover:text-text px-1 py-3 border-b border-border/60"
+            >
               My Orders
             </Link>
           )}
-          <Link href="/getstarted" className="text-muted hover:text-text">
-            Get Started
-          </Link>
-          <Link href="/login" className="text-muted hover:text-text">
-            Signin
-          </Link>
+          {!user ||
+            (!token && (
+              <>
+                <Link
+                  href="/getstarted"
+                  onClick={() => setOpenSideBar(false)}
+                  className="text-muted hover:text-text px-1 py-3 border-b border-border/60"
+                >
+                  Get Started
+                </Link>
+                <Link
+                  href="/login"
+                  onClick={() => setOpenSideBar(false)}
+                  className="text-muted hover:text-text px-1 py-3 border-b border-border/60"
+                >
+                  Signin
+                </Link>
+              </>
+            ))}
+          <CategoriesMenu
+            variant="mobile"
+            onNavigate={() => setOpenSideBar(false)}
+          />
         </nav>
       </article>
     </>

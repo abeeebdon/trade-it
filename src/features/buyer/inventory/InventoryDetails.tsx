@@ -109,7 +109,7 @@ const InventoryDetails = () => {
               handleClick={() => setShowDelete(true)}
               title="Delete"
               leftComponent={<Trash size={14} />}
-              className="bg-danger/60 rounded p-3 text-danger hover:bg-danger/20 gap-2"
+              className="bg-danger rounded p-3 px-4 text-white hover:bg-danger/70 gap-2"
               loading={deleting}
             />
           </div>

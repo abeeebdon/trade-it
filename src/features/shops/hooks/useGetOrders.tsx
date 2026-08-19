@@ -1,16 +1,31 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
+  acceptAndPrepayQuote,
+  declineQuote,
+  getConsumerOrderById,
   getConsumerOrders,
   getConsumerQuotes,
   placeConsumerQuote,
 } from '../api/consumerApi';
-import { CreateConsumerQuoteRequest } from '../types/shops';
+import {
+  AcceptAndPrepayQuotePayload,
+  CreateConsumerQuoteRequest,
+} from '../types/shops';
 import { toast } from 'sonner';
 
 export const useGetOrders = () => {
   return useQuery({
-    queryKey: ['buyer-orders'],
+    queryKey: ['consumer-orders'],
     queryFn: getConsumerOrders,
+    staleTime: 2 * 60_000,
+  });
+};
+
+export const useGetOrderDetails = (orderId: string) => {
+  return useQuery({
+    queryKey: ['consumer-order-details', orderId],
+    queryFn: () => getConsumerOrderById(orderId),
+    enabled: !!orderId,
   });
 };
 
@@ -18,6 +33,7 @@ export const useGetConsumerQuotes = () => {
   return useQuery({
     queryKey: ['consumer-quotes'],
     queryFn: getConsumerQuotes,
+    staleTime: 2 * 60_000,
   });
 };
 export const useGetConsumerQuoteOrder = (onSuccess?: () => void) => {
@@ -33,6 +49,44 @@ export const useGetConsumerQuoteOrder = (onSuccess?: () => void) => {
     },
     onError: () => {
       toast.error('Failed to save product. Please try again.');
+    },
+  });
+};
+
+export const useAcceptAndPrepayQuote = (onSuccess?: () => void) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      quoteNumber,
+      payload,
+    }: {
+      quoteNumber: string;
+      payload: AcceptAndPrepayQuotePayload;
+    }) => acceptAndPrepayQuote(quoteNumber, payload),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['consumer-quotes'] });
+      toast.success(data.message ?? 'Quote accepted and prepaid successfully');
+      onSuccess?.();
+    },
+    onError: () => {
+      toast.error('Failed to accept quote. Please try again.');
+    },
+  });
+};
+
+export const useDeclineQuote = (onSuccess?: () => void) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (quoteNumber: string) => declineQuote(quoteNumber),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['consumer-quotes'] });
+      toast.success(data.message ?? 'Quote declined');
+      onSuccess?.();
+    },
+    onError: () => {
+      toast.error('Failed to decline quote. Please try again.');
     },
   });
 };

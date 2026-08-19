@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 
 type UserRole = 'admin' | 'super_admin' | 'retailer' | 'exporter' | 'consumer';
 
-const AUTH_ROUTES = ['/login', '/register', '/getstarted'];
+const AUTH_ROUTES = ['/login', '/register', '/getstarted', '/mfa-auth'];
 
 const ROLE_ROUTES: Record<string, UserRole[]> = {
   '/admin': ['admin', 'super_admin'],
@@ -69,6 +69,7 @@ export const config = {
     '/exporter/:path*',
     '/dashboard/:path*',
     '/shop/orders/:path*',
+    '/mfa-auth',
     '/login',
     '/user',
     '/register',

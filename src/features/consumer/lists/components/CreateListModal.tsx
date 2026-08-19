@@ -3,34 +3,32 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createListSchema } from './validation';
+import type { CreateListFormValues } from './validation';
+import { useCreateShoppingList } from '../hooks/useShoppingLists';
+import Loader from '@/components/buttons/Loader';
 
 interface CreateListModalProps {
-  onSuccess: (name: string) => void;
   onClose: () => void;
 }
 
-export default function CreateListModal({
-  onSuccess,
-  onClose,
-}: CreateListModalProps) {
+export default function CreateListModal({ onClose }: CreateListModalProps) {
+  const { mutate: submit, isPending } = useCreateShoppingList(onClose);
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm({
+    formState: { errors },
+  } = useForm<CreateListFormValues>({
     resolver: zodResolver(createListSchema),
     defaultValues: { name: '' },
   });
 
-  const onSubmit = (data: { name: string }) => {
-    onSuccess(data.name.trim());
+  const onSubmit = (data: CreateListFormValues) => {
+    submit({ name: data.name.trim() });
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      data-testid="new-list-modal"
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div
         className="absolute inset-0 bg-[#0A1628]/80 backdrop-blur-sm"
         onClick={onClose}
@@ -45,7 +43,6 @@ export default function CreateListModal({
           className="helix-input"
           placeholder="Monthly Groceries"
           {...register('name')}
-          data-testid="list-name-input"
         />
         {errors.name && (
           <p className="text-[#E74C3C] text-[11px] mt-1">
@@ -62,11 +59,10 @@ export default function CreateListModal({
           </button>
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isPending}
             className="helix-btn-primary flex-1"
-            data-testid="list-create-btn"
           >
-            {isSubmitting ? 'Creating…' : 'Create'}
+            {isPending ? <Loader /> : 'Create'}
           </button>
         </div>
       </form>

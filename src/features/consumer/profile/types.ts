@@ -3,6 +3,7 @@ export interface ProfileData {
   fullName: string;
   email: string;
   phoneNumber: string | null;
+  isMfaEnabled: boolean;
 }
 
 /** API response wrapper. */

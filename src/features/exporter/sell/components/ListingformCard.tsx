@@ -24,9 +24,9 @@ const ListingformCard = ({ l }: ListingFormCardProps) => {
     <>
       <tr>
         <td>
-          {l.photos?.[0] ? (
+          {l.photo ? (
             <Image
-              src={l.photos[0].imageUrl}
+              src={l.photo}
               alt={l.title}
               width={56}
               height={56}

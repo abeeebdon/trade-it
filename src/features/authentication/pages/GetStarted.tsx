@@ -12,6 +12,7 @@ import RoleCardSkeleton from '../components/RoleCardKeleton';
 import { useAppDispatch } from '@/hooks/store/store';
 import { setUserRole } from '@/store/auth/auth.slice';
 import { AuthRole } from '@/types';
+import JompFullLogo from '../components/JompFullLogo';
 
 const GetStarted = () => {
   const router = useRouter();
@@ -38,7 +39,9 @@ const GetStarted = () => {
   return (
     <div className="w-full mx-auto p-6 my-6 max-w-4xl fade-up">
       <div className="text-center mb-8">
-        <div className="helix-kicker mb-2">Jompshop · Create account</div>
+        <Link href="/" className=" flex justify-center mb-4">
+          <JompFullLogo />
+        </Link>
         <h1 className="helix-h2">How would you like to use Jompshop?</h1>
         <p className="text-[#9CA3AF] text-sm mt-2">
           Pick the path that fits — you can change later in settings.

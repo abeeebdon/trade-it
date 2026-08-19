@@ -35,7 +35,7 @@ export default function Header({
           {actions}
           <ThemeToggle />
           <Link
-            href="/?beta=1"
+            href="/consumer/cart"
             className="relative text-[#9CA3AF] hover:text-[#C9922A]"
             title="Cart"
             data-testid="cs-cart"

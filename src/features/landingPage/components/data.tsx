@@ -22,6 +22,8 @@ import {
   ShoppingBasket,
   ListCheck,
   Cone,
+  Hand,
+  CreditCard,
 } from 'lucide-react';
 
 export const helixCards = [
@@ -139,6 +141,7 @@ export const NAV: {
     { to: '/admin/verifications', label: 'Verifications', icon: ShieldCheck },
     { to: '/admin/credit', label: 'JompStart Credit', icon: HandCoins },
     { to: '/admin/disputes', label: 'Disputes', icon: RefreshCw },
+    { to: '/admin/help', label: 'Help & FAQs', icon: Hand },
     { to: '/admin/orders', label: 'Orders', icon: ShoppingBasket },
     { to: '/admin/categories', label: 'Categories', icon: Lightbulb },
     { to: '/admin/listings', label: 'Listings', icon: ListCheck },
@@ -171,8 +174,22 @@ export const NAV_LINKS = [
     label: 'US In-Stock',
     href: '/?mode=riby_dtc',
   },
+];
+export const shoppingMenu = [
   {
-    label: 'About',
-    href: '/about',
+    label: 'Shopping List',
+    href: '/consumer/lists',
+  },
+  {
+    label: 'Cart',
+    href: '/cart',
+  },
+  {
+    label: 'Checkout',
+    href: '/checkout',
+  },
+  {
+    label: 'Orders',
+    href: '/shop/orders',
   },
 ];

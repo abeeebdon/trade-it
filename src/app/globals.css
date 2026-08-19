@@ -3,6 +3,74 @@
 /* Tailwind dark variant (v4) */
 @variant dark (&:is(.dark *));
 
+/* ── Embla Carousel ── */
+.embla {
+  position: relative;
+}
+.embla__viewport {
+  overflow: hidden;
+}
+.embla__container {
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+  backface-visibility: hidden;
+}
+.embla__slide {
+  transform: translate3d(0, 0, 0);
+  flex: 0 0 100%;
+  min-width: 0;
+}
+.embla__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+.embla__buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+.embla__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--helix-surface);
+  border: 1px solid var(--helix-border);
+  color: var(--helix-text);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.embla__button:disabled,
+.embla__button--disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.embla__button__svg {
+  width: 35%;
+  height: 35%;
+}
+.embla__dots {
+  display: flex;
+  gap: 0.5rem;
+}
+.embla__dot {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  border: none;
+  background: var(--helix-dot);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s;
+}
+.embla__dot--selected {
+  background: var(--helix-gold);
+}
+
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -140,7 +208,6 @@ body {
 
 .helix-label {
   font-size: 11px;
-  text-transform: uppercase;
   letter-spacing: 0.14em;
   color: var(--helix-text-dim);
   margin-bottom: 6px;

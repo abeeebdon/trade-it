@@ -3,26 +3,29 @@ import type { JourneyStep } from '../dashboard/types';
 export type { JourneyStep };
 
 export type OrderStatusCategory =
-  'all' | 'in_transit' | 'delivered' | 'processing';
+  | 'all'
+  | 'in_transit'
+  | 'delivered'
+  | 'processing';
 
 export interface Order {
-  id: string;
-  order_number: string;
-  product_name?: string;
-  listing_title?: string;
+  id: number;
+  orderNumber: string;
+  orderType: string;
+  role: string;
+  productId: number;
+  productName: string;
+  category: string;
+  quantity: number;
+  amount: number;
+  deliveryDate: string;
   status: string;
-  total_usd: number;
-  subtotal_usd?: number;
-  unit_price_usd?: number;
-  shipping_usd?: number;
-  platform_fee_usd?: number;
-  quantity?: number;
-  created_at: string;
-  delivered_at?: string;
-  tracking_number?: string;
-  delivery_partner_of_record?: string;
-  listing_photos?: string[];
-  journey: JourneyStep[];
+  paymentStatus: string;
+  shipTo: string;
+  shippingAddress: string;
+  email: string;
+  phone: string;
+  description?: string;
 }
 
 export interface OrderCounts {
@@ -37,12 +40,6 @@ export interface OrderTotals {
   in_transit: number;
   delivered: number;
   processing: number;
-}
-
-export interface OrdersData {
-  orders: Order[];
-  counts: OrderCounts;
-  totals: OrderTotals;
 }
 
 export interface FilterOption {

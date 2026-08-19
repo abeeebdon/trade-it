@@ -8,6 +8,7 @@ import {
   handleLogoutFn,
   saveCookie,
 } from '@/store/auth/cookies';
+import { APIENDPOINTSTWO } from '@/configs/api-urls';
 
 interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   __isRetryRequest?: boolean;
@@ -66,7 +67,7 @@ const refreshAccessToken = async () => {
     throw new Error('No refresh token found');
   }
 
-  const response = await refreshApi.post('/auth/refresh', {
+  const response = await refreshApi.post(APIENDPOINTSTWO.AUTH_REFRESH, {
     refreshToken,
   });
 
@@ -102,14 +103,14 @@ api.interceptors.response.use(
     }
 
     // Refresh endpoint failed → logout immediately
-    if (config?.url?.includes('/auth/refresh')) {
+    if (config?.url?.includes('auth/refresh')) {
       handleLogout();
       return Promise.reject(error);
     }
     const publicRoutes = [
-      '/authentication/login',
-      '/authentication/register',
-      '/authentication/forgot-password',
+      'authentication/login',
+      'authentication/register',
+      'authentication/forgot-password',
     ];
     if (
       config?.url &&

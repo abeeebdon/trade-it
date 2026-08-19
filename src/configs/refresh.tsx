@@ -1,4 +1,5 @@
 import { getSavedCookie, saveCookie } from '@/store/auth/cookies';
+import { APIENDPOINTSTWO } from '@/configs/api-urls';
 import api from './api-config';
 
 export const refreshAccessToken = async () => {
@@ -9,7 +10,7 @@ export const refreshAccessToken = async () => {
     refreshToken,
   };
   try {
-    const resp = await api.post('/authentication/refresh-token', data);
+    const resp = await api.post(APIENDPOINTSTWO.AUTH_REFRESH_TOKEN, data);
     if (resp.data.success) {
       const token = resp.data.token;
       const refreshAccessToken = resp.data.refreshAccessToken;

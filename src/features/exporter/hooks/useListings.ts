@@ -7,9 +7,10 @@ import {
   getListings,
 } from '../api/listingsApi';
 import { toast } from 'sonner';
-import { CreateListingPayload, EditListingPayload } from '../types/exporter';
+import { CreateListingPayload } from '../types/exporter';
 import { AxiosError } from 'axios';
 import { ListingsParams } from '../sell/types/sellType';
+import { EditListingPayload } from '../fulfillment/types/fulftillment';
 
 export const useCreateListing = (onSuccess?: () => void) => {
   const queryClient = useQueryClient();
@@ -48,9 +49,7 @@ export const useEditListing = (onSuccess?: () => void) => {
     onError: (error: AxiosError) => {
       console.error('API Mutation Error:', error);
       const data = error?.response?.data as { message?: string } | undefined;
-      toast.error(
-        data?.message ?? 'Failed to create listing. Please try again.',
-      );
+      toast.error(data?.message ?? 'Failed to edit listing. Please try again.');
     },
   });
 };

@@ -3,18 +3,23 @@ import { LucideIcon } from 'lucide-react';
 type QuoteStatus = 'pending' | 'quoted' | 'accepted' | 'declined';
 
 export interface Quote {
-  id: string;
-  quote_number: string;
-  listing_id: string;
-  listing_title: string;
+  id: number;
+  quoteNumber: string;
+  productName: string;
   quantity: number;
-  message?: string;
+  message: string;
   status: QuoteStatus;
 
-  quoted_unit_price_usd?: number;
-  quoted_total_usd?: number;
-  quote_valid_until?: string;
-  quote_note?: string;
+  consumerEmail: string;
+  consumerId: number;
+  consumerName: string;
+  sellerId: number;
+  sellerNote: string;
+  createdAt: string;
+
+  quotedUnitPriceUsd: number | null;
+  quotedTotalUsd: number | null;
+  quoteValidUntil: string | null;
 }
 
 export type OrderStatus = 'pending' | 'paid' | 'shipped' | 'delivered';
@@ -66,6 +71,15 @@ export type ConsumerOrder = {
   shipTo: string;
   shippingAddress: string;
   status: string;
+  // Additional fields returned by GET /v1/Orders/{id}
+  subtotalAmount?: number;
+  shippingAmount?: number;
+  totalAmount?: number;
+  currency?: string;
+  paymentProvider?: string;
+  stripePaymentIntentId?: string;
+  stripePaymentStatus?: string;
+  paidAt?: string | null;
 };
 export interface CreateConsumerQuoteRequest {
   sellerId: number;
@@ -74,4 +88,15 @@ export interface CreateConsumerQuoteRequest {
   consumerName: string;
   consumerEmail: string;
   message: string;
+}
+
+/**
+ * Payload sent when a consumer accepts a seller's quote and prepays
+ * into escrow. The quoted amounts are fixed by the seller, so the
+ * consumer only supplies contact / delivery details.
+ */
+export interface AcceptAndPrepayQuotePayload {
+  consumerPhone: string;
+  shippingAddress: string;
+  deliveryPartner: string;
 }

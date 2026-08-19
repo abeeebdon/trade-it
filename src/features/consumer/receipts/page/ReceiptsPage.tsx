@@ -1,32 +1,27 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Eye, Download } from 'lucide-react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 import { formatUSD, formatDateTime } from '@/lib/func';
-import { StatusPill } from '@/features/shops/components/StatusPill';
-import { MOCK_RECEIPTS } from '../constants';
+import { useGetReceipts, useDownloadReceipt } from '../hooks/useReceipts';
+import ReceiptRow from '../components/ReceiptRow';
+import ReceiptCard from '../components/ReceiptCard';
 import ReceiptPreviewModal from '../components/ReceiptPreviewModal';
 import ReceiptsEmptyState from '../components/ReceiptsEmptyState';
 import ReceiptsSkeleton from '../components/ReceiptsSkeleton';
 import type { Receipt } from '../types';
 
-const SIMULATED_DELAY_MS = 700;
-
 export default function Receipts() {
-  const [items, setItems] = useState<Receipt[]>([]);
-  const [loading, setLoading] = useState(true);
   const [preview, setPreview] = useState<Receipt | null>(null);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
-  useEffect(() => {
-    const t = setTimeout(() => {
-      setItems(MOCK_RECEIPTS);
-      setLoading(false);
-    }, SIMULATED_DELAY_MS);
-    return () => clearTimeout(t);
-  }, []);
+  const { data, isLoading } = useGetReceipts();
+  const { mutateAsync: downloadMutate } = useDownloadReceipt();
 
-  const download = (o: Receipt) => {
+  const items = data?.data?.data ?? [];
+
+  // ── Text‑based download fallback (offline / preview) ─────
+  const downloadText = (o: Receipt) => {
     const rows: [string, string][] = [
       ['Order', o.order_number],
       ['Date', formatDateTime(o.created_at)],
@@ -59,7 +54,25 @@ export default function Receipts() {
     toast.success('Receipt downloaded');
   };
 
-  if (loading) return <ReceiptsSkeleton />;
+  // ── API download handler ─────────────────────────────────
+  const handleDownload = async (o: Receipt) => {
+    setDownloadingId(o.id);
+    try {
+      await downloadMutate(o.order_number);
+    } catch {
+      // fallback to text download on error
+      downloadText(o);
+    } finally {
+      setDownloadingId(null);
+    }
+  };
+
+  // ── Preview download still uses text (no orderId needed) ─
+  const handlePreviewDownload = (o: Receipt) => {
+    downloadText(o);
+  };
+
+  if (isLoading) return <ReceiptsSkeleton />;
 
   return (
     <main>
@@ -70,59 +83,54 @@ export default function Receipts() {
       {items.length === 0 ? (
         <ReceiptsEmptyState />
       ) : (
-        <div className="helix-card overflow-x-auto">
-          <table className="helix-table w-full">
-            <thead>
-              <tr>
-                <th className="text-left">Date</th>
-                <th className="text-left">Order</th>
-                <th className="text-left">Product</th>
-                <th className="text-right">Total</th>
-                <th className="text-left">Status</th>
-                <th className="text-right">Receipt</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((o) => (
-                <tr key={o.id} data-testid={`receipt-${o.id}`}>
-                  <td>{formatDateTime(o.created_at)}</td>
-                  <td className="font-mono text-[12px]">{o.order_number}</td>
-                  <td className="max-w-70 truncate">{o.product_name}</td>
-                  <td className="text-right font-mono text-[#C9922A]">
-                    {formatUSD(o.total_usd)}
-                  </td>
-                  <td>
-                    <StatusPill status={o.status} />
-                  </td>
-                  <td className="text-right whitespace-nowrap">
-                    <button
-                      onClick={() => setPreview(o)}
-                      className="helix-btn-primary text-[11px] py-1.5 px-3 inline-flex items-center gap-1.5 mr-2"
-                      data-testid={`preview-${o.id}`}
-                    >
-                      <Eye size={12} /> Preview
-                    </button>
-                    <button
-                      onClick={() => download(o)}
-                      className="text-[#9CA3AF] hover:text-[#C9922A] inline-flex items-center gap-1 text-[12px]"
-                      title="Download as .txt"
-                      data-testid={`dl-${o.id}`}
-                    >
-                      <Download size={13} /> Download
-                    </button>
-                  </td>
+        <>
+          {/* ── Desktop table ─────────────────────────────── */}
+          <div className="hidden md:block helix-card overflow-x-auto">
+            <table className="helix-table w-full">
+              <thead>
+                <tr>
+                  <th className="text-left">Date</th>
+                  <th className="text-left">Order</th>
+                  <th className="text-left">Product</th>
+                  <th className="text-right">Total</th>
+                  <th className="text-left">Status</th>
+                  <th className="text-right">Receipt</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {items.map((o) => (
+                  <ReceiptRow
+                    key={o.id}
+                    receipt={o}
+                    onPreview={setPreview}
+                    onDownload={handleDownload}
+                    isDownloading={downloadingId === o.id}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* ── Mobile cards ──────────────────────────────── */}
+          <div className="md:hidden space-y-3">
+            {items.map((o) => (
+              <ReceiptCard
+                key={o.id}
+                receipt={o}
+                onPreview={setPreview}
+                onDownload={handleDownload}
+                isDownloading={downloadingId === o.id}
+              />
+            ))}
+          </div>
+        </>
       )}
 
       {preview && (
         <ReceiptPreviewModal
           receipt={preview}
           onClose={() => setPreview(null)}
-          onDownload={download}
+          onDownload={handlePreviewDownload}
         />
       )}
     </main>

@@ -30,7 +30,6 @@ export default function Compliance() {
         <button
           onClick={() => setOpen(true)}
           className="helix-btn-primary inline-flex items-center gap-2"
-          data-testid="add-doc-btn"
         >
           <Plus size={14} />
           <span className="hidden sm:inline">Add document</span>

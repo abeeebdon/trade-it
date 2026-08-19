@@ -1,4 +1,4 @@
-import Fulfillment from '@/features/exporter/pages/Fulfillment';
+import Fulfillment from '@/features/exporter/fulfillment/pages/Fulfillment';
 
 const page = () => {
   return <Fulfillment />;

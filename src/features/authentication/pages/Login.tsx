@@ -1,6 +1,6 @@
 'use client';
 import { useAppDispatch } from '@/hooks/store/store';
-import { login, setAuthRole } from '@/store/auth/auth.slice';
+import { login, setAuthRole, setMfaEnabled } from '@/store/auth/auth.slice';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -12,6 +12,7 @@ import Loader from '@/components/buttons/Loader';
 import { toast } from 'sonner';
 import { loginApi } from '../api/auth';
 import { saveCookie } from '@/store/auth/cookies';
+import JompFullLogo from '../components/JompFullLogo';
 
 export default function Login() {
   const router = useRouter();
@@ -32,6 +33,14 @@ export default function Login() {
       const result = await loginApi(data);
       if (result.success) {
         toast.success(result.message);
+        const reqMFA = result.data.requiresMfa;
+        dispatch(setMfaEnabled(reqMFA));
+        if (reqMFA) {
+          const challenge = result.data.mfaChallengeToken || '';
+          return router.push(
+            `/mfa-auth?challenge=${encodeURIComponent(challenge)}`,
+          );
+        }
         saveCookie('token', result.data.token);
         saveCookie('refreshToken', result.data.refreshToken);
         const userDetails = {
@@ -79,8 +88,12 @@ export default function Login() {
 
   return (
     <div className="w-full border max-w-md mx-auto helix-card p-8 fade-up">
-      <h1 className="helix-kicker mb-2">Jomp Trade · Sign in</h1>
-      <h1 className="helix-h2">Access your command center</h1>
+      <Link href="/" className="md:hidden flex justify-center mb-4">
+        <JompFullLogo />
+      </Link>
+      <h1 className="helix-h2 text-center md:text-left">
+        Access your command center
+      </h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="mt-7 space-y-4">
         {/* EMAIL */}

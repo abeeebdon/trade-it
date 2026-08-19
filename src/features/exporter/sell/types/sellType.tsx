@@ -20,6 +20,7 @@ export type ProductListingTypes = {
   status: string;
   mode: string;
   deliveryPartnerOfRecord: string;
+  thumbnailImage: string;
   photos: ProductPhoto[];
 };
 export type ListingsPageData = {

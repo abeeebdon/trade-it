@@ -19,7 +19,7 @@ const DashboardHeader = () => {
     kicker: customKicker,
     badge,
     action,
-  } = useHeader(); // ← action added
+  } = useHeader();
 
   const [showSidebar, setShowSidebar] = useState(false);
 
@@ -38,7 +38,7 @@ const DashboardHeader = () => {
     <>
       <header className="lg:sticky top-0 z-30 w-full border bg-bg backdrop-blur border-b border-[#1A7A6E]/15">
         <article className="flex flex-col-reverse md:block ">
-          <div className="max-w-350 mx-auto px-6 lg:px-10 py-6 flex items-start justify-between gap-4 flex-wrap">
+          <div className=" px-6 lg:px-10 py-6 flex items-start justify-between gap-4 flex-wrap">
             {/* LEFT: Kicker + Title */}
             <div>
               <p className="helix-kicker mb-2">{kicker}</p>
@@ -65,6 +65,8 @@ const DashboardHeader = () => {
               </div>
             </div>
           </div>
+
+          {/* mobile */}
           <article className="flex sm:hidden p-3 justify-between items-center my-2">
             {isDark ? (
               <JompsShopLogoDark width={140} />

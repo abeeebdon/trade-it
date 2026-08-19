@@ -1,44 +1,46 @@
 'use client';
 import ThemeToggle from '@/components/buttons/ToggleButton';
-import { ChevronDown, LogOut, Menu, UserCircle } from 'lucide-react';
+import { ChevronDown, Menu, UserCircle } from 'lucide-react';
 import Link from 'next/link';
 import { motion } from 'motion/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SidebarComp from './SidebarComp';
-import { NAV_LINKS } from './data';
 import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
 import { cn } from '@/lib/cn';
-import useColorScheme from '@/hooks/useColorScheme';
-import JompsShopLogoDark from '@/assets/JompshopLogoDark';
-import JompsShopLogo from '@/assets/jompshop_logo';
 import { logoutAction } from '@/features/authentication/components/helper';
 import { logout } from '@/store/auth/auth.slice';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import LogoutModal from './LogoutModal';
+import SearchInput from './SearchInput';
+import ShoppingMenu from './ShoppingMenu';
+import UserMenu from './UserMenu';
+import ShopMenu from './ShopMenu';
+import JompFullLogo from '@/features/authentication/components/JompFullLogo';
+import CategoriesMenu from './CategoriesMenu';
+import { getSavedCookie } from '@/store/auth/cookies';
 const Header = ({ className }: { className?: string }) => {
+  const pathname = usePathname();
   const [showSidebar, setShowSidebar] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-
   const dispatch = useAppDispatch();
   const router = useRouter();
   const user = useAppSelector((state) => state.auth.user);
-  const isDark: boolean = useColorScheme();
-  const dashHome =
-    user?.role === 'consumer'
-      ? '/consumer/orders'
-      : user?.role === 'super_admin'
-        ? '/admin/credit'
-        : user?.role === 'retailer'
-          ? '/buyer'
-          : user
-            ? `/${user?.role}`
-            : null;
+
   const handleLogout = async () => {
     await logoutAction();
     dispatch(logout());
     router.push('/login');
   };
+  const pathToDashboard =
+    user?.role === 'retailer' ? `/buyer` : `/${user?.role}`;
+
+  const token = getSavedCookie('token');
+  useEffect(() => {
+    if (!token && !user) {
+      dispatch(logout());
+    }
+  }, [user, token]);
   return (
     <>
       <header
@@ -49,43 +51,37 @@ const Header = ({ className }: { className?: string }) => {
           className)
         }
       >
-        <div className="max-w-350 mx-auto px-6 lg:px-10 py-2 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            {isDark ? (
-              <JompsShopLogoDark width={120} />
-            ) : (
-              <JompsShopLogo width={120} />
-            )}
+        <div className="max-w-350 mx-auto px-6 lg:px-10 py-4 flex  items-center justify-between">
+          <Link href="/" className="outline-none flex items-center gap-2">
+            <JompFullLogo />
           </Link>
-          <nav className="hidden md:flex items-center lg:gap-8 gap-2 md:gap-4 text-[13px] text-[#9CA3AF]">
-            {NAV_LINKS.map((link, i) => (
-              <Link
-                key={i}
-                href={link.href}
-                className="text-muted hover:text-text"
-              >
-                {link.label}
-              </Link>
-            ))}
-            {!user && (
-              <Link
-                href="/register?role=exporter"
-                className="text-muted hover:text-text"
-              >
-                Become a Seller
-              </Link>
-            )}
-
-            {user?.role === 'consumer' && (
-              <Link href="/shop/orders" className="text-muted hover:text-text">
-                My Orders
-              </Link>
-            )}
+          <nav className="hidden md:flex basis-1/2 justify-center h-full items-center lg:gap-8 gap-2 md:gap-4 text-[13px] text-[#9CA3AF]">
+            <ShopMenu />
+            <CategoriesMenu />
+            {user && <ShoppingMenu />}
+            <div className="hidden lg:block">
+              {!user || !token ? (
+                <Link
+                  href="/register?role=exporter"
+                  className="text-muted hover:text-text text-lg"
+                >
+                  Become a Seller
+                </Link>
+              ) : (
+                <Link
+                  href={pathToDashboard}
+                  className="text-muted hover:text-text text-lg"
+                >
+                  Dashboard
+                </Link>
+              )}
+            </div>
           </nav>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            {pathname === '/' && <SearchInput />}
             <ThemeToggle />
 
-            {user ? (
+            {user && token ? (
               <div className="relative">
                 <button
                   onClick={() => setMenuOpen((o) => !o)}
@@ -129,41 +125,10 @@ const Header = ({ className }: { className?: string }) => {
         setOpenSideBar={() => setShowSidebar(!showSidebar)}
       />
       {menuOpen && (
-        <div
-          className="fixed right-0 mt-2 w-56 helix-card p-2 shadow-2xl z-40"
-          onMouseLeave={() => setMenuOpen(false)}
-        >
-          <div className="px-3 py-2 border-b border-[#1A7A6E]/20 mb-1">
-            <div className="text-[12px] font-semibold truncate">
-              {user?.fullName}
-            </div>
-            <div className="text-[10px] font-mono uppercase tracking-wider text-[#1A7A6E]">
-              {user?.role?.replace('_', ' ')}
-            </div>
-          </div>
-          {dashHome && (
-            <Link
-              href={dashHome}
-              className="block px-3 py-2 text-[12px] hover:bg-[#1A7A6E]/10 rounded"
-            >
-              {user?.role === 'consumer' ? 'My Orders' : 'Dashboard'}
-            </Link>
-          )}
-          {(user?.role === 'exporter' || user?.role === 'retailer') && (
-            <Link
-              href={`/${user?.role}`}
-              className="block px-3 py-2 text-[12px] hover:bg-[#1A7A6E]/10 rounded"
-            >
-              Business workspace
-            </Link>
-          )}
-          <button
-            onClick={() => setShowLogoutModal(true)}
-            className="w-full text-left px-3 py-2 text-[12px] text-[#E74C3C] cursor-pointer hover:bg-[#E74C3C]/10 rounded inline-flex items-center gap-2"
-          >
-            <LogOut size={12} /> Sign out
-          </button>
-        </div>
+        <UserMenu
+          setMenuOpen={setMenuOpen}
+          setShowLogoutModal={setShowLogoutModal}
+        />
       )}
       <LogoutModal
         open={showLogoutModal}

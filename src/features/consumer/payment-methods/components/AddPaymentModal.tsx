@@ -1,54 +1,25 @@
 'use client';
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'sonner';
 import { PAYMENT_KINDS } from '../constants';
-import { addPaymentSchema } from './validation';
+import AddCardModal from './AddCardModal';
+import AddAchModal from './AddAchModal';
+import AddZelleModal from './AddZelleModal';
+import { useState } from 'react';
 
 interface AddPaymentModalProps {
   onClose: () => void;
 }
 
 export default function AddPaymentModal({ onClose }: AddPaymentModalProps) {
-  const [busy, setBusy] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(addPaymentSchema),
-    defaultValues: { kind: 'card', is_default: false },
-  });
-
-  const kind = watch('kind');
-
-  const onSubmit = () => {
-    setBusy(true);
-    setTimeout(() => {
-      toast.success('Payment method added');
-      setBusy(false);
-      onClose();
-    }, 600);
-  };
+  const [modalKind, setModalKind] = useState('card');
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      data-testid="add-pm-modal"
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div
         className="absolute inset-0 bg-[#0A1628]/80 backdrop-blur-sm"
         onClick={onClose}
       />
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="relative helix-card p-6 w-full max-w-md mx-4"
-      >
+      <div className="relative helix-card p-6 w-full max-w-md mx-4">
         <h3 className="helix-h3 mb-4">Add payment method</h3>
 
         {/* Kind selector */}
@@ -57,10 +28,9 @@ export default function AddPaymentModal({ onClose }: AddPaymentModalProps) {
             <button
               key={k.v}
               type="button"
-              onClick={() => setValue('kind', k.v)}
-              data-testid={`pm-kind-${k.v}`}
+              onClick={() => setModalKind(k.v)}
               className={`flex-1 px-3 py-2 rounded-md text-[12px] border ${
-                kind === k.v
+                modalKind === k.v
                   ? 'bg-[#C9922A] text-[#0A1628] border-[#C9922A] font-semibold'
                   : 'border-[#1A7A6E]/40 text-[#9CA3AF] hover:border-[#1A7A6E]'
               }`}
@@ -71,155 +41,10 @@ export default function AddPaymentModal({ onClose }: AddPaymentModalProps) {
         </div>
 
         {/* Hidden kind field for RHF tracking */}
-        <input type="hidden" {...register('kind')} />
-
-        {/* Card fields */}
-        {kind === 'card' && (
-          <div className="space-y-3">
-            <div>
-              <label className="helix-label">Card number</label>
-              <input
-                className="helix-input"
-                placeholder="4242 4242 4242 4242"
-                {...register('card_number')}
-                data-testid="pm-card-number"
-              />
-              {errors.card_number && (
-                <p className="text-[#E74C3C] text-[11px] mt-1">
-                  {errors.card_number.message}
-                </p>
-              )}
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="helix-label">Exp month</label>
-                <input
-                  className="helix-input"
-                  placeholder="12"
-                  {...register('exp_month')}
-                  data-testid="pm-exp-month"
-                />
-                {errors.exp_month && (
-                  <p className="text-[#E74C3C] text-[11px] mt-1">
-                    {errors.exp_month.message}
-                  </p>
-                )}
-              </div>
-              <div>
-                <label className="helix-label">Exp year</label>
-                <input
-                  className="helix-input"
-                  placeholder="2029"
-                  {...register('exp_year')}
-                  data-testid="pm-exp-year"
-                />
-                {errors.exp_year && (
-                  <p className="text-[#E74C3C] text-[11px] mt-1">
-                    {errors.exp_year.message}
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Zelle fields */}
-        {kind === 'zelle' && (
-          <div>
-            <label className="helix-label">Zelle email or phone</label>
-            <input
-              className="helix-input"
-              placeholder="you@example.com"
-              {...register('zelle_target')}
-              data-testid="pm-zelle"
-            />
-            {errors.zelle_target && (
-              <p className="text-[#E74C3C] text-[11px] mt-1">
-                {errors.zelle_target.message}
-              </p>
-            )}
-          </div>
-        )}
-
-        {/* ACH fields */}
-        {kind === 'ach' && (
-          <div className="space-y-3">
-            <div>
-              <label className="helix-label">Bank name</label>
-              <input
-                className="helix-input"
-                placeholder="Chase"
-                {...register('bank_name')}
-                data-testid="pm-bank"
-              />
-              {errors.bank_name && (
-                <p className="text-[#E74C3C] text-[11px] mt-1">
-                  {errors.bank_name.message}
-                </p>
-              )}
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="helix-label">Routing number</label>
-                <input
-                  className="helix-input"
-                  placeholder="9 digits"
-                  {...register('routing_number')}
-                  data-testid="pm-routing"
-                />
-                {errors.routing_number && (
-                  <p className="text-[#E74C3C] text-[11px] mt-1">
-                    {errors.routing_number.message}
-                  </p>
-                )}
-              </div>
-              <div>
-                <label className="helix-label">Account number</label>
-                <input
-                  className="helix-input"
-                  placeholder="Account #"
-                  {...register('account_number')}
-                  data-testid="pm-account"
-                />
-                {errors.account_number && (
-                  <p className="text-[#E74C3C] text-[11px] mt-1">
-                    {errors.account_number.message}
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Default checkbox */}
-        <label className="flex items-center gap-2 mt-4 text-[12px] text-[#9CA3AF]">
-          <input
-            type="checkbox"
-            {...register('is_default')}
-            data-testid="pm-default"
-          />{' '}
-          Set as default
-        </label>
-
-        {/* Actions */}
-        <div className="flex gap-2 mt-5">
-          <button
-            type="button"
-            onClick={onClose}
-            className="helix-btn-secondary flex-1"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={busy}
-            className="helix-btn-primary flex-1"
-            data-testid="pm-save"
-          >
-            {busy ? 'Saving…' : 'Save'}
-          </button>
-        </div>
-      </form>
+        {modalKind === 'card' && <AddCardModal onClose={onClose} />}
+        {modalKind === 'zelle' && <AddZelleModal onClose={onClose} />}
+        {modalKind === 'ach' && <AddAchModal onClose={onClose} />}
+      </div>
     </div>
   );
 }
