@@ -1,6 +1,7 @@
 import api from '@/configs/api-config';
 import { APIENDPOINTSTWO } from '@/configs/api-urls';
 import type { CreateCheckoutOrderPayload } from '../types/types';
+import { Order } from '@/features/consumer/orders/types';
 
 export interface PaymentIntentDetails {
   clientSecret: string;
@@ -8,6 +9,7 @@ export interface PaymentIntentDetails {
   stripePaymentIntentId: string;
   subtotalUsd: number;
   totalUsd: number;
+  order: Order;
 }
 export interface PaymentIntentResponse {
   data: PaymentIntentDetails;

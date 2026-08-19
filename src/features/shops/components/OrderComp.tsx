@@ -2,7 +2,7 @@ import { ArrowRight, Link } from 'lucide-react';
 import { useGetOrders } from '../hooks/useGetOrders';
 import { formatDateTime, formatUSD } from '@/lib/func';
 import { StatusPill } from './StatusPill';
-import { Loading } from '@/components/loading';
+import { OrdersSkeleton } from './OrdersSkeleton';
 import { useRouter } from 'next/navigation';
 
 const OrderComp = () => {
@@ -12,9 +12,7 @@ const OrderComp = () => {
     <main>
       <div className="helix-h3 mb-3 mt-6">Orders</div>
       {isPending ? (
-        <div className="flex justify-center">
-          <Loading />
-        </div>
+        <OrdersSkeleton />
       ) : consumerOrders?.length === 0 ? (
         <div className="helix-card p-12 text-center text-[#9CA3AF]">
           No orders yet.{' '}

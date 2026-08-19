@@ -13,7 +13,7 @@ export const useExporterQuotes = () => {
   });
 };
 
-export const useRespondToQuote = (onSuccess?: () => void) => {
+export const useRespondToQuote = (onSuccess?: (data?: unknown) => void) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -24,9 +24,9 @@ export const useRespondToQuote = (onSuccess?: () => void) => {
       quoteNumber: string;
       payload: RespondQuotePayload;
     }) => respondToQuote(quoteNumber, payload),
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['exporter-quotes'] });
-      onSuccess?.();
+      onSuccess?.(data);
     },
     onError: () => {
       toast.error('Failed to send quote');

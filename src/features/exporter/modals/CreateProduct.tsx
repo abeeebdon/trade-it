@@ -3,7 +3,6 @@
 import { useEffect, useMemo } from 'react';
 import { useForm, useWatch, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Image from 'next/image';
 import { useSelector } from 'react-redux';
 
 import {
@@ -17,6 +16,7 @@ import {
 } from '../hooks/useProducts';
 import { RootState } from '@/store/store';
 import InputField from '@/components/form/InputFIeld';
+import ImageUploader, { type ImageItem } from '@/components/form/ImageUploader';
 import { UNITS, STATUSES, DEFAULT_CURRENCY_ID } from '@/lib/constants';
 import { ProductResponseType } from '../products/types/product';
 
@@ -116,39 +116,37 @@ export default function ProductForm({
 
   // File handlers
 
-  const handleThumbnail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setValue('thumbnail', file, { shouldValidate: true });
-    setValue('thumbnailPreview', URL.createObjectURL(file));
+  const thumbnailItems: ImageItem[] = thumbnailPreview
+    ? [
+        {
+          id: 'thumbnail',
+          url: thumbnailPreview,
+          file: getValues('thumbnail') ?? undefined,
+        },
+      ]
+    : [];
+
+  const handleThumbnailChange = (items: ImageItem[]) => {
+    const item = items[0];
+    setValue('thumbnail', item?.file ?? null, { shouldValidate: true });
+    setValue('thumbnailPreview', item?.url ?? null);
   };
 
-  const handleImages = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files ?? []);
-    if (!files.length) return;
+  const imageItems: ImageItem[] = imagePreviews.map((url, i) => ({
+    id: `image-${i}`,
+    url,
+    file: getValues('images')?.[i] ?? undefined,
+  }));
 
-    const currentImages = getValues('images') ?? [];
-    const currentPreviews = getValues('imagePreviews') ?? [];
-
-    setValue('images', [...currentImages, ...files], { shouldValidate: true });
-    setValue('imagePreviews', [
-      ...currentPreviews,
-      ...files.map((f) => URL.createObjectURL(f)),
-    ]);
-  };
-
-  const removeImage = (index: number) => {
-    const currentImages = getValues('images') ?? [];
-    const currentPreviews = getValues('imagePreviews') ?? [];
-
+  const handleImagesChange = (items: ImageItem[]) => {
     setValue(
       'images',
-      currentImages.filter((_, i) => i !== index),
+      items.map((i) => i.file).filter((f): f is File => !!f),
       { shouldValidate: true },
     );
     setValue(
       'imagePreviews',
-      currentPreviews.filter((_, i) => i !== index),
+      items.map((i) => i.url),
     );
   };
 
@@ -192,7 +190,7 @@ export default function ProductForm({
   };
 
   return (
-    <div
+    <section
       className="fixed inset-0 z-50 bg-[#0A1628]/80 backdrop-blur flex items-start justify-center pt-16 pb-10 overflow-y-auto p-4"
       onClick={onClose}
     >
@@ -355,65 +353,25 @@ export default function ProductForm({
           {/* Thumbnail */}
           <div className="md:col-span-2">
             <label className="helix-label">Thumbnail Image</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleThumbnail}
-              className="helix-input"
-              data-testid="pf-thumbnail"
+            <ImageUploader
+              value={thumbnailItems}
+              onChange={handleThumbnailChange}
+              maxImages={1}
             />
-            {thumbnailPreview && (
-              <div className="mt-2">
-                <Image
-                  src={thumbnailPreview}
-                  alt="Thumbnail preview"
-                  width={80}
-                  height={80}
-                  className="w-20 h-20 rounded object-cover"
-                  unoptimized
-                />
-              </div>
-            )}
           </div>
 
           {/* Additional Images */}
           <div className="md:col-span-2">
             <label className="helix-label">Additional Images</label>
-            <input
-              type="file"
-              multiple
-              accept="image/*"
-              onChange={handleImages}
-              className="helix-input"
-              data-testid="pf-images"
+            <ImageUploader
+              value={imageItems}
+              onChange={handleImagesChange}
+              maxImages={5}
             />
             {errors.images && (
               <p className="text-red-500 text-xs mt-1">
                 {errors.images.message}
               </p>
-            )}
-            {imagePreviews.length > 0 && (
-              <div className="flex gap-2 mt-2 flex-wrap">
-                {imagePreviews.map((src, i) => (
-                  <div key={i} className="relative">
-                    <Image
-                      src={src}
-                      alt={`Product image ${i + 1}`}
-                      width={64}
-                      height={64}
-                      className="w-16 h-16 rounded object-cover"
-                      unoptimized
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeImage(i)}
-                      className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#E74C3C] text-white text-[10px] flex items-center justify-center"
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-              </div>
             )}
           </div>
 
@@ -441,6 +399,6 @@ export default function ProductForm({
           </div>
         </form>
       </div>
-    </div>
+    </section>
   );
 }
