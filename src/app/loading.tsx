@@ -1,9 +1,15 @@
 import { Loading } from '@/components/loading';
+import Header from '@/features/landingPage/components/Header';
 
 export default function AppLoading() {
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-bg/80 backdrop-blur-sm gap-5">
-      <Loading size="lg" />
-    </div>
+    <main className="min-h-screen">
+      <Header />
+      <div className="sm:pt-10 pt-5 px-4 sm:px-6 lg:px-10 pb-24">
+        <div className="flex flex-col w-full items-center justify-center min-h-[60vh] gap-4">
+          <Loading size="lg" />
+        </div>
+      </div>
+    </main>
   );
 }
