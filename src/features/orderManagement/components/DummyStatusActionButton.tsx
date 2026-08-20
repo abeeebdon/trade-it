@@ -39,10 +39,10 @@ export function DummyStatusActionButton({
   function handleClick() {
     setIsSubmitting(true);
     // Simulate a short async call, then advance the local status.
-    window.setTimeout(() => {
-      onStatusChanged(transition.to);
-      setIsSubmitting(false);
-    }, 450);
+    // window.setTimeout(() => {
+    //   onStatusChanged(transition?.to??'');
+    //   setIsSubmitting(false);
+    // }, 450);
   }
 
   return (
