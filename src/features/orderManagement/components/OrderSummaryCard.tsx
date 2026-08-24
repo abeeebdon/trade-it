@@ -20,7 +20,7 @@ export function OrderSummaryCard({ items, total }: OrderSummaryCardProps) {
     <div className="helix-card rounded-xl p-4 flex flex-col gap-3">
       {items.map((item) => (
         <div key={item.id} className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-lg bg-white/5 overflow-hidden shrink-0">
+          <div className="w-12 h-12 rounded-lg bg-bg border border-border-soft overflow-hidden shrink-0">
             {item.imageUrl && (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -31,17 +31,17 @@ export function OrderSummaryCard({ items, total }: OrderSummaryCardProps) {
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm text-white/90 truncate">{item.name}</p>
-            <p className="text-xs text-white/40">Qty {item.quantity}</p>
+            <p className="text-sm text-text truncate">{item.name}</p>
+            <p className="text-xs text-muted">Qty {item.quantity}</p>
           </div>
-          <p className="text-sm text-white/70">
+          <p className="text-sm text-text">
             ₦{(item.price * item.quantity).toLocaleString()}
           </p>
         </div>
       ))}
-      <div className="border-t border-white/10 pt-3 flex items-center justify-between">
-        <p className="text-sm text-white/60">Total</p>
-        <p className="text-base font-semibold text-[#C9922A]">
+      <div className="border-t border-border pt-3 flex items-center justify-between">
+        <p className="text-sm text-muted">Total</p>
+        <p className="text-base font-semibold text-primary">
           ₦{total.toLocaleString()}
         </p>
       </div>

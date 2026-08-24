@@ -1,15 +1,5 @@
-'use client';
-
-import { useParams } from 'next/navigation';
-import OrderManagementDetail from '@/features/orderManagement/pages/OrderManagementDetail';
+import OrdersManagementDetail from '@/features/orderManagement/pages/OrdersManagementDetail';
 
 export default function RetailerOrderDemoDetailPage() {
-  const { id } = useParams<{ id: string }>();
-  return (
-    <OrderManagementDetail
-      role="vendor"
-      orderId={id}
-      basePath="/buyer/orders-demo"
-    />
-  );
+  return <OrdersManagementDetail />;
 }

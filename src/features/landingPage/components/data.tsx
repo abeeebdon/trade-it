@@ -24,6 +24,7 @@ import {
   Cone,
   Hand,
   CreditCard,
+  Car,
 } from 'lucide-react';
 
 export const helixCards = [
@@ -104,6 +105,7 @@ export const NAV: {
     { to: '/exporter', label: 'Command Center', icon: LayoutDashboard },
     { to: '/exporter/my-products', label: 'My Products', icon: Package },
     { to: '/exporter/orders', label: 'Orders', icon: Receipt },
+    { to: '/exporter/delivery', label: 'Delivery', icon: Car },
     { to: '/exporter/sell', label: 'Sell Direct (DTC)', icon: Truck },
     { to: '/exporter/fulfillment', label: 'Fulfillment', icon: ShoppingCart },
     { to: '/exporter/compliance', label: 'Compliance', icon: ShieldCheck },
@@ -142,6 +144,7 @@ export const NAV: {
     { to: '/admin/disputes', label: 'Disputes', icon: RefreshCw },
     { to: '/admin/help', label: 'Help & FAQs', icon: Hand },
     { to: '/admin/orders', label: 'Orders', icon: ShoppingBasket },
+    { to: '/admin/delivery', label: 'Delivery Management', icon: Car },
     { to: '/admin/categories', label: 'Categories', icon: Lightbulb },
     { to: '/admin/listings', label: 'Listings', icon: ListCheck },
     {
