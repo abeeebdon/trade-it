@@ -50,12 +50,12 @@ export function DummyStatusActionButton({
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="flex flex-wrap items-center mt-6 gap-2">
       {transitions.map((t) => (
         <button
           key={t.to}
           onClick={() => handleTransition(t.to)}
-          className="helix-button flex items-center justify-center gap-2 bg-primary text-[#0A1628] font-semibold rounded-lg px-4 py-2.5 w-full sm:w-auto"
+          className="helix-button flex items-center justify-center gap-2 bg-primary text-[#0A1628] cursor-pointer font-semibold rounded-lg px-4 py-2.5 w-full sm:w-auto"
         >
           {t.to === OrderStatus.ACCEPTED && <CircleCheck size={16} />}
           {t.to === OrderStatus.DECLINED && <CircleX size={16} />}
