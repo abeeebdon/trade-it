@@ -103,7 +103,6 @@ export const NAV: {
   exporter: [
     { to: '/exporter', label: 'Command Center', icon: LayoutDashboard },
     { to: '/exporter/my-products', label: 'My Products', icon: Package },
-    { to: '/', label: 'Marketplace', icon: Store },
     { to: '/exporter/orders', label: 'Orders', icon: Receipt },
     { to: '/exporter/sell', label: 'Sell Direct (DTC)', icon: Truck },
     { to: '/exporter/fulfillment', label: 'Fulfillment', icon: ShoppingCart },
