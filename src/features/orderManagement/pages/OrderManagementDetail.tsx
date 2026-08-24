@@ -11,7 +11,7 @@ import { OrderStatusTracker } from '@/features/orderManagement/components/OrderS
 import { OrderSummaryCard } from '@/features/orderManagement/components/OrderSummaryCard';
 import { DummyStatusActionButton } from '@/features/orderManagement/components/DummyStatusActionButton';
 import { formatDateTime } from '@/lib/func';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAppSelector } from '@/hooks/store/store';
 import { selectOrderById } from '@/store/orders/orders.slice';
 
@@ -23,12 +23,12 @@ interface OrderManagementDetailProps {
 
 export default function OrderManagementDetail({
   role,
-  basePath,
   orderId,
 }: OrderManagementDetailProps) {
   const searchParams = useSearchParams();
   const queryId = searchParams.get('id');
   const resolvedId = orderId ?? queryId;
+  const router = useRouter();
   const order = useAppSelector((state) => selectOrderById(state, resolvedId));
   console.log(order);
   if (!order) {
@@ -48,13 +48,13 @@ export default function OrderManagementDetail({
 
   return (
     <div className="flex flex-col gap-4 p-4 max-w-3xl">
-      <Link
-        href={basePath}
-        className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-text"
+      <button
+        className="inline-flex cursor-pointer items-center gap-1.5 text-sm text-muted hover:text-text"
+        onClick={() => router.back()}
       >
         <ArrowLeft size={16} />
         Back to orders
-      </Link>
+      </button>
 
       <div className="flex items-center gap-2">
         <ShoppingBag size={18} className="text-primary" />

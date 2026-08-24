@@ -8,6 +8,8 @@ import {
   groupOf,
   type TabKey,
 } from '@/features/orderManagement/components/CardMeta';
+import { useAppSelector } from '@/hooks/store/store';
+import { useRouter } from 'next/navigation';
 
 const ACTIONS: Record<TabKey, string[]> = {
   completed: ['Feedback', 'Track order', 'Review'],
@@ -20,10 +22,6 @@ const ACTIONS: Record<TabKey, string[]> = {
 
 export interface OrderCardProps {
   order: ConsumerOrder;
-  /**
-   * Builds the detail-page URL for a given order id.
-   * Defaults to the consumer details route (`/consumer/orders/details?id=...`).
-   */
   detailsHref?: (orderId: number) => string;
 }
 
@@ -36,23 +34,25 @@ export function OrderCard({
 }: OrderCardProps) {
   const meta = cardMeta(order.status);
   const { Icon } = meta;
+  const router = useRouter();
   const actions = ACTIONS[groupOf(order.status)] ?? [];
   const total = order.totalAmount ?? order.amount;
+  const { user } = useAppSelector((state) => state.auth);
 
   return (
     <article className="helix-card rounded-xl overflow-hidden">
       {/* Status header */}
       <div className="flex items-center justify-between gap-3 px-4 pt-3.5 pb-2">
-        <span
+        <div
           className={`inline-flex items-center gap-2 text-[13px] font-medium ${meta.color}`}
         >
           <span
-            className={`w-7 h-7 rounded-full inline-flex items-center justify-center ${meta.bg}`}
+            className={`size-7 rounded-full inline-flex items-center justify-center ${meta.bg}`}
           >
             <Icon size={15} />
           </span>
           {meta.title}
-        </span>
+        </div>
         <span className="text-[11px] text-muted font-mono">
           {formatDateTime(order.deliveryDate)}
         </span>
@@ -92,19 +92,27 @@ export function OrderCard({
       </div>
 
       {/* Action buttons */}
-      {actions.length > 0 && (
-        <div className="flex items-center gap-2 px-4 pb-3.5 pt-1 flex-wrap">
-          {actions.map((label) => (
+      <div className="flex items-center gap-2 px-4 pb-3.5 pt-1 flex-wrap">
+        {user?.role === 'exporter' ? (
+          <button
+            onClick={() => router.push(detailsHref(order.id))}
+            className="helix-btn-secondary text-sm!"
+          >
+            View Details
+          </button>
+        ) : (
+          actions.length > 0 &&
+          actions.map((label) => (
             <button
+              onClick={() => router.push(detailsHref(order.id))}
               key={label}
-              onClick={() => toast.info(`${label} — coming soon`)}
-              className="rounded-full border border-border px-4 py-1.5 text-[12px] text-muted hover:text-text hover:border-primary/40 transition-colors"
+              className="helix-btn-secondary text-sm!"
             >
               {label}
             </button>
-          ))}
-        </div>
-      )}
+          ))
+        )}
+      </div>
     </article>
   );
 }
