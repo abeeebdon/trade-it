@@ -28,3 +28,5 @@ export function OrdersSkeleton({ count = 3 }: { count?: number }) {
     </div>
   );
 }
+
+export default OrdersSkeleton;

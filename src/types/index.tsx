@@ -1,4 +1,5 @@
 import { LucideIcon } from 'lucide-react';
+import type { OrdersState } from '@/store/orders/orders.slice';
 export type UserRole =
   | 'exporter'
   | 'retailer'
@@ -28,6 +29,7 @@ export interface InitialAuthStateType {
 }
 export interface RootReducerType {
   auth: InitialAuthStateType;
+  orders: OrdersState;
 }
 
 export interface NavItems {

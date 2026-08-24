@@ -56,15 +56,15 @@ export default function HomePage() {
     <main className="min-h-screen bg-white  dark:bg-[#0A1628] w-full max-w-350 mx-auto dark:text-[#F5F5F5]">
       {/* Hero */}
       <section className="mb-4 relative">
-        <div className="helix-card p-6  md:px-12 relative overflow-hidden">
-          <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-[#C9922A]/15 blur-3xl pointer-events-none" />
+        <div className="helix-card p-6 md:px-12 relative overflow-hidden">
+          <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-[#C9902A]/35 blur-3xl pointer-events-none" />
           <p className="helix-kicker mb-3" data-aos="fade-down">
             Africa&apos;s marketplace · From maker to your door
           </p>
           <h1 className="helix-h2 max-w-4xl">
             Shop authentic African goods. Direct from makers.
           </h1>
-          <p className="text-sm text-[#9CA3AF] mt-1 max-w-2xl leading-relaxed">
+          <p className="text-sm text-muted mt-1 max-w-2xl leading-relaxed">
             Fashion, food, beauty, art &amp; home — sourced direct from verified
             African makers. Buy from US warehouses for 48-hour delivery, or
             order direct with <span className="font-bold">Riby Inc</span> as

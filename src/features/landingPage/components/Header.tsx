@@ -46,7 +46,7 @@ const Header = ({ className }: { className?: string }) => {
       <header
         className={
           (cn(
-            'fixed top-0 inset-x-0 z-30  dark:bg-[#0A1628]/85 bg-[#ffffffee] backdrop-blur border-b border-[#1A7A6E]/15',
+            'fixed top-0 inset-x-0 z-30  bg-bg backdrop-blur border-b border-[#1A7A6E]/15',
           ),
           className)
         }
@@ -55,7 +55,7 @@ const Header = ({ className }: { className?: string }) => {
           <Link href="/" className="outline-none flex items-center gap-2">
             <JompFullLogo />
           </Link>
-          <nav className="hidden md:flex basis-1/2 justify-center h-full items-center lg:gap-8 gap-2 md:gap-4 text-[13px] text-[#9CA3AF]">
+          <nav className="hidden md:flex basis-1/2 justify-center h-full items-center lg:gap-8 gap-2 md:gap-4 text-[13px] text-muted">
             <ShopMenu />
             <CategoriesMenu />
             {user && <ShoppingMenu />}

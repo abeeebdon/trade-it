@@ -114,10 +114,10 @@ export default function Login() {
           error={errors.password?.message}
           name="password"
         />
-        <div className="flex items-center py-2 justify-end">
+        <div className="flex items-center  py-2 justify-end">
           <Link
             href="/forgot-password "
-            className="font-semibold text-sm hover:underline"
+            className="font-semibold text-sm text-secondary hover:underline"
           >
             Forgot Password?
           </Link>

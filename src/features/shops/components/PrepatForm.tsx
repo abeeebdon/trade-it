@@ -17,10 +17,9 @@ import { FileText, Truck } from 'lucide-react';
 
 interface Props {
   productDetails: ProductData;
-  setMode?: (mode: string) => void;
 }
 
-export function PrepayForm({ productDetails, setMode }: Props) {
+export function PrepayForm({ productDetails }: Props) {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showShoppingListModal, setShowShoppingListModal] = useState(false);
   const { mutate: addToCart, isPending: addingToCart } = useAddToCart();
@@ -77,10 +76,7 @@ export function PrepayForm({ productDetails, setMode }: Props) {
   const handleAddToShoppingList = () => {
     setShowShoppingListModal(true);
   };
-  const handleToggleToQuoteMode = () => {
-    setMode?.('quote');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="mt-5 space-y-4">
@@ -159,18 +155,7 @@ export function PrepayForm({ productDetails, setMode }: Props) {
 
       <article className="mt-8 space-y-4">
         {/* Quote mode toggle */}
-        <article className="space-y-3">
-          <p className="text-[13px] text-muted">
-            Wants to buy a large quantity?{' '}
-          </p>
-          <button
-            className="flex cursor-pointer items-center hover:text-primary-dim  text-primary  gap-2"
-            onClick={handleToggleToQuoteMode}
-          >
-            <FileText size={16} />
-            <span>Request a Quote (bulk order)</span>
-          </button>
-        </article>
+
         <hr className="border-[#1A7A6E]/15" />
 
         <article className="space-y-3">

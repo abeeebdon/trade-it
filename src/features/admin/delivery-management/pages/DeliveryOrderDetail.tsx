@@ -3,13 +3,17 @@
 import { useParams } from 'next/navigation';
 import OrderManagementDetail from '@/features/orderManagement/pages/OrderManagementDetail';
 
-export default function ExporterOrderDemoDetailPage() {
+/**
+ * Admin delivery detail — wraps the shared detail page with the
+ * admin role and back-link so this feature owns its own page.
+ */
+export default function DeliveryOrderDetail() {
   const { id } = useParams<{ id: string }>();
   return (
     <OrderManagementDetail
-      role="vendor"
+      role="admin"
       orderId={id}
-      basePath="/exporter/orders-demo"
+      basePath="/admin/delivery"
     />
   );
 }
