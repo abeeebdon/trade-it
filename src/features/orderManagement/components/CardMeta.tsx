@@ -49,6 +49,38 @@ export function groupOf(status: string): TabKey {
   return 'all';
 }
 
+// ---- Payment / delivery filter grouping (used by OrderFilter) -----------
+export type PaymentGroup = 'Paid' | 'Pending' | 'Failed' | 'Refunded';
+export type DeliveryGroup =
+  | 'Processing'
+  | 'Shipped'
+  | 'Out for delivery'
+  | 'Delivered'
+  | 'Returned';
+
+/** Fold an order's payment status into a payment-filter bucket. */
+export function paymentGroupOf(
+  paymentStatus?: string | null,
+  status?: string | null,
+): PaymentGroup {
+  const s = (paymentStatus ?? status ?? '').toLowerCase();
+  if (['refunded', 'refund'].includes(s)) return 'Refunded';
+  if (['failed', 'declined', 'cancelled', 'canceled'].includes(s))
+    return 'Failed';
+  if (UNPAID_STATUSES.includes(s)) return 'Pending';
+  return 'Paid';
+}
+
+/** Fold an order's delivery status into a delivery-filter bucket. */
+export function deliveryGroupOf(status?: string | null): DeliveryGroup {
+  const s = (status ?? '').toLowerCase();
+  if (s === 'shipped') return 'Shipped';
+  if (s === 'out_for_delivery') return 'Out for delivery';
+  if (s === 'delivered' || s === 'received') return 'Delivered';
+  if (groupOf(s) === 'cancelled') return 'Returned';
+  return 'Processing';
+}
+
 interface CardMeta {
   title: string;
   Icon: LucideIcon;
