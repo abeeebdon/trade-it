@@ -50,9 +50,9 @@ const onboardingSlice = createSlice({
     },
     updateKycDetails(state, action: PayloadAction<Partial<KycSaveData>>) {
       state.kycProfile = {
-        ...(state.kycProfile ?? {}),
+        ...(state.kycProfile ?? ({} as KycSaveData)),
         ...action.payload,
-      };
+      } as KycSaveData;
     },
     setOnboardingStep(state, action: PayloadAction<number>) {
       state.currentStep = action.payload;
