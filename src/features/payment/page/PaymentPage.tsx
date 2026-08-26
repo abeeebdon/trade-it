@@ -28,9 +28,7 @@ const PaymentPage = () => {
 
   const { data: order, isPending } = useGetOrderDetails(orderID);
 
-  const [selectedPaymentId, setSelectedPaymentId] = useState<number | null>(
-    null,
-  );
+  const [selectedPaymentId, setSelectedPaymentId] = useState<string>('');
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [paying, setPaying] = useState(false);
 
