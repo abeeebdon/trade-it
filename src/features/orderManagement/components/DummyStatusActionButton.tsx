@@ -38,11 +38,7 @@ export function DummyStatusActionButton({
         </p>
       );
     }
-    return (
-      <p className="text-xs text-muted">
-        No action is available for your role at this status.
-      </p>
-    );
+    return <p className="text-xs text-muted"></p>;
   }
 
   function handleTransition(to: OrderStatus) {

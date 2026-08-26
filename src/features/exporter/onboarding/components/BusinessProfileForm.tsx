@@ -4,42 +4,56 @@ import { ArrowRight } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import InputField from '@/components/form/InputFIeld';
+import CustomSelectField from '@/components/form/CustomSelectField';
 import { useGetProductCategories } from '../../hooks/useProducts';
-import { useMemo } from 'react';
+import { Dispatch, SetStateAction, useMemo } from 'react';
+import { useDispatch } from 'react-redux';
+import {
+  setOnboardingDetails,
+  setOnboardingStep,
+} from '@/store/onboarding/onboarding.slice';
 import { useSubmitOnboardingDetails } from '../../hooks/useGetOnboarding';
 import { BusinessFormValues, businessSchema } from '../types/validation';
-
-function Field({
-  label,
-  children,
-  full,
-}: {
-  label: string;
-  children: React.ReactNode;
-  full?: boolean;
-}) {
-  return (
-    <div className={full ? 'md:col-span-2' : ''}>
-      <label className="helix-label">{label}</label>
-      {children}
-    </div>
-  );
+import { countries } from './constants';
+import { OnboardingRespType } from '../types/exporterOnboardingtypes';
+interface BusinessProfileFormProps {
+  setCurrentStep: Dispatch<SetStateAction<number>>;
+  biz: OnboardingRespType;
 }
 
-export default function BusinessProfileForm() {
+export default function BusinessProfileForm({
+  setCurrentStep,
+  biz,
+}: BusinessProfileFormProps) {
+  const defaultValues: BusinessFormValues = {
+    businessName: biz?.businessProfile?.businessName ?? '',
+    businessType: (biz?.businessProfile?.businessType === 'individual'
+      ? 'individual'
+      : 'business') as 'business' | 'individual',
+    country: biz?.businessProfile?.country ?? 'Nigeria',
+    sector: biz?.businessProfile?.sector ?? 'fashion',
+    contact_phone: biz?.businessProfile?.contact_phone ?? '',
+    contact_email: biz?.businessProfile?.contact_email ?? '',
+    address: biz?.businessProfile?.address ?? '',
+    cacNumber: biz?.businessProfile?.cacNumber ?? '',
+    tin: biz?.businessProfile?.tin ?? '',
+    director_name: biz?.businessProfile?.director_name ?? '',
+    bvn: biz?.businessProfile?.bvn ?? '',
+    nin: biz?.businessProfile?.nin ?? '',
+    ein: biz?.businessProfile?.ein ?? '',
+  };
+
   const {
     register,
     handleSubmit,
     watch,
+    control,
     formState: { errors },
   } = useForm<BusinessFormValues>({
     resolver: zodResolver(businessSchema),
-    defaultValues: {
-      businessType: 'business',
-      country: 'Nigeria',
-      sector: 'fashion',
-    },
+    defaultValues,
   });
+  const dispatch = useDispatch();
   const { data } = useGetProductCategories();
   const SECTORS = useMemo(() => {
     return data
@@ -61,18 +75,18 @@ export default function BusinessProfileForm() {
   const isUS = country === 'United States';
   const { mutate } = useSubmitOnboardingDetails();
   const onSubmit = (data: BusinessFormValues) => {
-    console.log(data);
-    const postData = {};
-    mutate({
-      data: data,
-    });
+    dispatch(setOnboardingDetails(data));
+    dispatch(setOnboardingStep(2));
+    setCurrentStep(2);
+    // mutate({
+    //   data: data,
+    // });
   };
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="helix-card p-6 space-y-5 fade-up"
-      data-testid="biz-create-form"
     >
       <h2 className="helix-h3">Create your business profile</h2>
 
@@ -83,32 +97,32 @@ export default function BusinessProfileForm() {
           error={errors.businessName?.message}
         />
 
-        <Field label="Registration type">
-          <select className="helix-input" {...register('businessType')}>
-            <option value="business">Business Entity</option>
-            <option value="individual">Individual</option>
-          </select>
-        </Field>
+        <CustomSelectField
+          label="Registration type"
+          name="businessType"
+          control={control}
+          error={errors.businessType?.message}
+          options={[
+            { label: 'Business Entity', value: 'business' },
+            { label: 'Individual', value: 'individual' },
+          ]}
+        />
 
-        <Field label="Country">
-          <select className="helix-input" {...register('country')}>
-            <option>Nigeria</option>
-            <option>United States</option>
-            <option>Ghana</option>
-            <option>Kenya</option>
-            <option>South Africa</option>
-          </select>
-        </Field>
+        <CustomSelectField
+          label="Country"
+          name="country"
+          control={control}
+          error={errors.country?.message}
+          options={countries}
+        />
 
-        <Field label="Sector">
-          <select className="helix-input" {...register('sector')}>
-            {SECTORS.map((s) => (
-              <option key={s.value} value={s.value}>
-                {s.label}
-              </option>
-            ))}
-          </select>
-        </Field>
+        <CustomSelectField
+          label="Sector"
+          name="sector"
+          control={control}
+          error={errors.sector?.message}
+          options={SECTORS}
+        />
 
         <InputField
           label="Contact phone"
@@ -184,7 +198,6 @@ export default function BusinessProfileForm() {
       </div>
 
       <button
-        data-testid="biz-submit"
         type="submit"
         className="helix-btn-primary inline-flex items-center gap-2"
       >

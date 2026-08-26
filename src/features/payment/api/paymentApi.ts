@@ -24,3 +24,22 @@ export const createPaymentIntent = async (
   );
   return response.data;
 };
+
+export interface PaymentProvider {
+  id: number;
+  name: string;
+}
+
+export interface PaymentProvidersResponse {
+  success: boolean;
+  message: string;
+  data: PaymentProvider[];
+  statusCode: number;
+}
+
+/** GET /PaymentMethod/providers — the available payment providers. */
+export const getPaymentProviders =
+  async (): Promise<PaymentProvidersResponse> => {
+    const response = await api.get(APIENDPOINTSTWO.PAYMENT_PROVIDERS);
+    return response.data;
+  };

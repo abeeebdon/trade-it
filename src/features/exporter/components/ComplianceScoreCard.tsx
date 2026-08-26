@@ -15,13 +15,13 @@ export default function ComplianceScoreCard({
   return (
     <div className="helix-card p-6">
       <div className="helix-label">Compliance Score</div>
-      <div className="font-mono text-5xl font-bold mt-2 text-[#F5F5F5]">
+      <div className="font-mono text-5xl font-bold mt-2 text-text">
         {score?.complianceScore ?? '—'}
-        <span className="text-[#9CA3AF] text-xl">/100</span>
+        <span className="text-muted text-xl">/100</span>
       </div>
 
       {/* Progress bar */}
-      <div className="mt-4 h-2 bg-[#0A1628] rounded-full overflow-hidden">
+      <div className="mt-4 h-2 bg-bg rounded-full overflow-hidden">
         <div
           className="h-full rounded-full transition-all duration-700"
           style={{ width: `${value}%`, backgroundColor: color }}
@@ -34,14 +34,14 @@ export default function ComplianceScoreCard({
           {score?.sectorScores?.map(({ sector, score, maxScore }) => (
             <div key={sector}>
               <div className="flex justify-between text-[11px] mb-1">
-                <span className="uppercase tracking-wider text-[#9CA3AF]">
+                <span className="uppercase tracking-wider text-muted">
                   {sector.replace('-', ' ')}
                 </span>
-                <span className="font-mono text-[#F5F5F5]">
+                <span className="font-mono text-text">
                   {score}/{maxScore}
                 </span>
               </div>
-              <div className="h-1 bg-[#0A1628] rounded-full overflow-hidden">
+              <div className="h-1 bg-bg rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full"
                   style={{

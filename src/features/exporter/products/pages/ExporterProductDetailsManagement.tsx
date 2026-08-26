@@ -201,6 +201,9 @@ export const ExporterProductDetailsManagement = () => {
               />
             </div>
           </div>
+          <article className="helix-card mt-6">
+            <h3></h3>
+          </article>
         </div>
       </div>
 
