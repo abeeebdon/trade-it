@@ -190,8 +190,4 @@ export const shoppingMenu = [
     label: 'Checkout',
     href: '/checkout',
   },
-  {
-    label: 'Orders',
-    href: '/shop/orders',
-  },
 ];
