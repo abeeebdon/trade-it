@@ -8,6 +8,7 @@ import {
 import { authReducer } from './auth/auth.slice';
 import { waitlistReducer } from './waitlist/waitlist.slice';
 import { ordersReducer } from './orders/orders.slice';
+import { onboardingReducer } from './onboarding/onboarding.slice';
 import {
   FLUSH,
   PAUSE,
@@ -30,6 +31,7 @@ const appReducer = combineReducers({
   auth: authReducer,
   wait: waitlistReducer,
   orders: ordersReducer,
+  onboarding: onboardingReducer,
 });
 
 const rootReducer = (

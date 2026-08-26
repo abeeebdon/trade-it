@@ -17,6 +17,9 @@ import { createPaymentIntent, PaymentIntentDetails } from '../api/paymentApi';
 import SuccessModal from '@/components/modals/SuccessModal';
 import { PaymentMethodsSection } from '../components/PaymentMethodsSection';
 import CartItemList from '../components/CartItemList';
+import { Elements } from '@stripe/react-stripe-js';
+import CheckoutForm from '../stripe/CheckoutStripe';
+import { loadStripe } from '@stripe/stripe-js';
 const CheckoutPage = () => {
   const { data, isPending } = useCart();
   const { user } = useAppSelector((state) => state.auth);
@@ -63,8 +66,8 @@ const CheckoutPage = () => {
         totalUsd: response.data.totalUsd,
         order: response.data.order,
       });
-      setShowSuccess(true);
-      setSuccessMsg(response.message);
+      // setShowSuccess(true);
+      // setSuccessMsg(response.message);
     } catch (err) {
       console.error('[payment-intent] error:', err);
     } finally {
@@ -139,7 +142,7 @@ const CheckoutPage = () => {
         onContinue={() => router.push(`/payment?id=${paymentData?.order.id}`)}
         onCancel={() => router.refresh()}
       />
-      {/* {paymentData && (
+      {paymentData && (
         <Elements
           stripe={loadStripe(paymentData.publishableKey)}
           options={{
@@ -148,7 +151,7 @@ const CheckoutPage = () => {
         >
           <CheckoutForm paymentData={paymentData} />
         </Elements>
-      )} */}
+      )}
     </article>
   );
 };

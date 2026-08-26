@@ -54,6 +54,7 @@ export const APIENDPOINTSTWO = {
   PAYMENT_METHOD_CARD: '/PaymentMethod/card',
   PAYMENT_METHOD_ZELLE: '/PaymentMethod/zelle',
   PAYMENT_METHOD_ACH: '/PaymentMethod/ach',
+  PAYMENT_PROVIDERS: '/PaymentMethod/providers',
 
   CONSUMER_QUOTE_REQUESTS: '/v1/ConsumerFulfillment/quote-requests',
   CONSUMER_FULFILLMENT_QUEUE: '/v1/ConsumerFulfillment/queue',

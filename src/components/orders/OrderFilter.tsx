@@ -26,8 +26,6 @@ export const DELIVERY_FILTERS: DeliveryFilter[] = [
   'Returned',
 ];
 
-// Semantic status colors — fixed values so they read the same in both
-// light and dark mode (green / amber / red / blue).
 const PAYMENT_COLORS: Partial<Record<PaymentFilter, string>> = {
   Paid: '#00D639',
   Pending: '#FFB800',
