@@ -21,9 +21,7 @@ const CheckoutPage = () => {
   const { data, isPending } = useCart();
   const { user } = useAppSelector((state) => state.auth);
   const router = useRouter();
-  const [selectedPaymentId, setSelectedPaymentId] = useState<number | null>(
-    null,
-  );
+  const [selectedPaymentId, setSelectedPaymentId] = useState<string>('');
   const items = data?.items ?? [];
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
@@ -52,7 +50,7 @@ const CheckoutPage = () => {
       deliveryDate: new Date().toISOString(),
       description: '',
       orderType: 'prepay',
-      PaymentType: 'stripe',
+      PaymentType: selectedPaymentId,
     };
 
     try {
@@ -127,13 +125,6 @@ const CheckoutPage = () => {
                 </>
               )}
             </button>
-
-            {/* <p className="text-[11px] text-muted text-center">
-              Payments are secured and encrypted.{' '}
-              {user
-                ? `Logged in as ${user.email}`
-                : 'Sign in to complete payment.'}
-            </p> */}
           </aside>
         </div>
 

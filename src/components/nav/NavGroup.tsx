@@ -25,7 +25,7 @@ const NavGroup = ({ label, items }: NavGroupProps) => {
       </button>
 
       <div className="absolute -left-2 top-full opacity-0 invisible translate-y-2 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 z-9999">
-        <div className="w-56  bg-bg shadow-lg overflow-hidden">
+        <div className="w-56  bg-bg pt-4 shadow-lg overflow-hidden">
           {items.map(({ label, href }) => (
             <Link
               key={href}
