@@ -3,15 +3,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { useHeader } from '@/context/HeaderContext';
+import { useAppSelector } from '@/hooks/store/store';
 import BalanceBlock from '../components/BalanceBlock';
 import FinanceHeaderActions from '../components/FinanceHeaderActions';
 import WithdrawModal from '../modals/WithdrawModal';
 
-import {
-  FinanceDashboard,
-  Transaction,
-  WithdrawalAccount,
-} from '../types/finance';
+import { FinanceDashboard, Transaction } from '../types/finance';
 
 import { formatDateTime, formatNGN, formatUSD } from '@/lib/func';
 
@@ -69,28 +66,7 @@ export default function Finance() {
       ] as Transaction[],
   );
 
-  const [accounts, setAccounts] = useState<WithdrawalAccount[]>(
-    () =>
-      [
-        {
-          id: '1',
-          currency: 'USD',
-          bank_name: 'Bank of America',
-          account_number_masked: '****9087',
-          label: 'Primary USD',
-          is_default: true,
-        },
-
-        {
-          id: '2',
-          currency: 'NGN',
-          bank_name: 'GTBank',
-          account_number_masked: '****2211',
-          label: 'Main NGN',
-          is_default: true,
-        },
-      ] as WithdrawalAccount[],
-  );
+  const accounts = useAppSelector((state) => state.withdrawalAccounts.accounts);
 
   const [currencyFilter, setCurrencyFilter] = useState('');
 
@@ -102,12 +78,7 @@ export default function Finance() {
 
       kicker: 'NGN · USD · Anchor',
 
-      action: (
-        <FinanceHeaderActions
-          onWithdrawNGN={() => setOpen('NGN')}
-          onWithdrawUSD={() => setOpen('USD')}
-        />
-      ),
+      action: <FinanceHeaderActions onWithdrawNGN={() => setOpen('NGN')} />,
     });
 
     return () => setHeader(null);

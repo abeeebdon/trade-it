@@ -12,15 +12,13 @@ import { StatusPill } from '@/features/shops/components/StatusPill';
 import { getStatusId } from '../components/helpers';
 import { formatUSD, formatDateTime } from '@/lib/func';
 import WarningModal from '@/components/modals/WarningModal';
-import ProductForm from '../../modals/CreateProduct';
-import { ProductResponseType } from '../types/product';
+import BackButton from '@/components/buttons/BackButton';
 
 export const ExporterProductDetailsManagement = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
 
-  const [formOpen, setFormOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   const { data, isPending, isError } = useGetProductById(id ?? '');
@@ -44,26 +42,6 @@ export const ExporterProductDetailsManagement = () => {
     if (!product.id) return;
     deleteMutation.mutate(product.id);
   };
-
-  // Convert ProductData to ProductResponseType shape for the edit form
-  const editingProduct: ProductResponseType | null = useMemo(() => {
-    if (!product.id) return null;
-    return {
-      id: product.id,
-      productName: product.productName,
-      category: product.category,
-      currencyId: product.currencyId,
-      description: product.description,
-      images: imageUrls,
-      moq: product.moq ?? product.quantity ?? 0,
-      amountInUsd: product.priceUsd,
-      amountInNaira: 0,
-      priceUsd: product.priceUsd,
-      statusId: product.statusId ?? product.productStatusId ?? 1,
-      thumbnailImage: product.thumbnailImage,
-      unit: product.unit,
-    };
-  }, [product, imageUrls]);
 
   if (isPending) {
     return (
@@ -92,19 +70,12 @@ export const ExporterProductDetailsManagement = () => {
 
   return (
     <>
-      {/* Back + Actions */}
       <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <button
-          onClick={() => router.push('/exporter/my-products')}
-          className="inline-flex items-center gap-1.5 text-sm text-[#9CA3AF] hover:text-[#1A7A6E] transition-colors"
-        >
-          <ArrowLeft size={16} />
-          Back to products
-        </button>
+        <BackButton path="/exporter/my-products" title="Back to products" />
 
         <div className="flex items-center gap-2">
           <button
-            onClick={() => setFormOpen(true)}
+            onClick={() => router.push(`/exporter/my-products/edit?id=${id}`)}
             className="helix-btn-primary inline-flex items-center gap-2"
           >
             <Pencil size={14} /> Edit
@@ -206,14 +177,6 @@ export const ExporterProductDetailsManagement = () => {
           </article>
         </div>
       </div>
-
-      {/* Edit Modal */}
-      {formOpen && (
-        <ProductForm
-          onClose={() => setFormOpen(false)}
-          editing={editingProduct}
-        />
-      )}
 
       {/* Delete Confirmation */}
       <WarningModal

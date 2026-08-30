@@ -1,62 +1,120 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Plus, Pencil, Eye } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
-import { formatUSD } from '@/lib/func';
-import { StatusPill } from '@/features/shops/components/StatusPill';
-import { useGetProducts } from '../../hooks/useProducts';
-import ProductForm from '../../modals/CreateProduct';
-import Image from 'next/image';
+import {
+  useGetProductCategories,
+  useGetProducts,
+} from '../../hooks/useProducts';
 import { ProductResponseType } from '../types/product';
-import { getStatusId } from '../components/helpers';
-import Link from 'next/link';
+import Pagination from '../../components/pagination';
+import ProductCard, { ProductTableRow } from '../components/ProductCard';
+import MyProductHead from '../components/MyProductHead';
 
 const PAGE_SIZE = 10;
 
 export default function ExporterProducts() {
+  const router = useRouter();
   const [page, setPage] = useState(1);
-  const [formOpen, setFormOpen] = useState(false);
-  const [editing, setEditing] = useState<ProductResponseType | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   const { data, isPending, isError } = useGetProducts({
     pageNumber: page,
     pageSize: PAGE_SIZE,
   });
+  const { data: categoriesData, isPending: categoriesLoading } =
+    useGetProductCategories();
   const products: ProductResponseType[] = useMemo(() => {
     return data?.data ?? [];
   }, [data]);
+  const categoryOptions = categoriesData?.data ?? [];
   const totalPages = data?.totalPages ?? 1;
 
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      const matchesCategory =
+        selectedCategory === 'all' ||
+        product.category?.toLowerCase() === selectedCategory.toLowerCase();
+
+      const matchesStatus =
+        selectedStatus === 'all' || String(product.statusId) === selectedStatus;
+
+      if (!matchesCategory || !matchesStatus) return false;
+
+      if (!startDate && !endDate) return true;
+
+      const createdAt = product.createdAt
+        ? new Date(product.createdAt).getTime()
+        : null;
+
+      if (!createdAt) return false;
+
+      if (startDate) {
+        const from = new Date(`${startDate}T00:00:00`).getTime();
+        if (createdAt < from) return false;
+      }
+
+      if (endDate) {
+        const to = new Date(`${endDate}T23:59:59.999`).getTime();
+        if (createdAt > to) return false;
+      }
+
+      return true;
+    });
+  }, [products, selectedCategory, selectedStatus, startDate, endDate]);
+
   const openCreate = () => {
-    setEditing(null);
-    setFormOpen(true);
+    router.push('/exporter/my-products/create');
   };
 
-  const openEdit = (product: ProductResponseType) => {
-    setEditing(product);
-    setFormOpen(true);
+  const handleCategoryChange = (value: string) => {
+    setSelectedCategory(value);
+    setPage(1);
   };
 
-  const handleFormClose = () => {
-    setFormOpen(false);
-    setEditing(null);
+  const handleStatusChange = (value: string) => {
+    setSelectedStatus(value);
+    setPage(1);
+  };
+
+  const handleStartDateChange = (value: string) => {
+    setStartDate(value);
+    setPage(1);
+  };
+
+  const handleEndDateChange = (value: string) => {
+    setEndDate(value);
+    setPage(1);
+  };
+
+  const resetFilters = () => {
+    setSelectedCategory('all');
+    setSelectedStatus('all');
+    setStartDate('');
+    setEndDate('');
+    setPage(1);
   };
 
   return (
-    <>
-      {/* Header */}
-      <div className="flex justify-end mb-6">
-        <button
-          onClick={openCreate}
-          className="helix-btn-primary inline-flex items-center gap-2"
-          data-testid="create-product-btn"
-        >
-          <Plus size={14} /> New product
-        </button>
-      </div>
-
-      {/* Loading */}
+    <section>
+      <MyProductHead
+        selectedCategory={selectedCategory}
+        categoryOptions={categoryOptions}
+        categoriesLoading={categoriesLoading}
+        selectedStatus={selectedStatus}
+        startDate={startDate}
+        endDate={endDate}
+        onCreate={openCreate}
+        onCategoryChange={handleCategoryChange}
+        onStatusChange={handleStatusChange}
+        onStartDateChange={handleStartDateChange}
+        onEndDateChange={handleEndDateChange}
+        onReset={resetFilters}
+      />
       {isPending && (
         <div className="space-y-3">
           {[0, 1, 2].map((i) => (
@@ -65,132 +123,76 @@ export default function ExporterProducts() {
         </div>
       )}
 
-      {/* Error */}
       {isError && (
-        <div className="helix-card p-8 text-center text-[#9CA3AF] text-sm">
+        <div className="helix-card p-8 text-center text-muted text-sm">
           Failed to load products. Please refresh.
         </div>
       )}
 
       {/* Empty */}
-      {!isPending && !isError && products.length === 0 && (
+      {!isPending && !isError && filteredProducts.length < 1 && (
         <div className="helix-card p-10 text-center">
-          <div className="text-[#9CA3AF]">
-            No products yet. Create your first listing to appear in the
-            marketplace.
-          </div>
-          <button onClick={openCreate} className="helix-btn-primary mt-4">
-            Create product
-          </button>
-        </div>
-      )}
-
-      {/* Table */}
-      {!isPending && !isError && products.length > 0 && (
-        <div className="helix-card overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="helix-table">
-              <thead>
-                <tr>
-                  <th>Photo</th>
-                  <th>Name</th>
-                  <th>Category</th>
-                  <th>Price</th>
-                  <th>MOQ</th>
-                  <th>Unit</th>
-                  <th>Status</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map((p) => (
-                  <tr key={p.id}>
-                    <td>
-                      {p.thumbnailImage ? (
-                        <Image
-                          src={p.thumbnailImage}
-                          alt={p.productName}
-                          className="w-14 h-14 rounded object-cover"
-                          width={20}
-                          height={20}
-                        />
-                      ) : (
-                        <div className="w-14 h-14 rounded bg-[#1A7A6E]/10 flex items-center justify-center text-[#1A7A6E] text-[10px] font-mono">
-                          NO IMG
-                        </div>
-                      )}
-                    </td>
-                    <td className="max-w-xs truncate">
-                      <Link
-                        className="hover:text-blue-700"
-                        href={`/exporter/my-products/details?id=${p.id}`}
-                      >
-                        {p.productName}
-                      </Link>
-                    </td>
-                    <td className="text-[13px] text-[#9CA3AF]">{p.category}</td>
-                    <td className="font-mono">
-                      {formatUSD(p.priceUsd)}
-                      {/* <div className="text-[11px] text-[#9CA3AF]">
-                        {formatNGN(p.priceUsd)}
-                      </div> */}
-                    </td>
-                    <td className="font-mono">{p.moq}</td>
-                    <td className="font-mono">{p.unit}</td>
-                    <td>
-                      <StatusPill status={getStatusId(p.statusId) ?? 'Draft'} />
-                    </td>
-                    <td>
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => openEdit(p)}
-                          className="text-[#1A7A6E] inline hover:text-[#C9922A]"
-                        >
-                          <Pencil size={20} />
-                        </button>
-                        <Link
-                          className="text-[#1A7A6E] inline hover:text-[#C9922A]"
-                          href={`/exporter/my-products/details?id=${p.id}`}
-                        >
-                          <Eye size={20} />
-                        </Link>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="px-5 py-4 border-t border-[#1A7A6E]/20 flex items-center justify-between">
-              <span className="text-[12px] text-[#9CA3AF] font-mono">
-                Page {page} of {totalPages}
-              </span>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                  className="helix-btn-secondary text-[12px] disabled:opacity-40 disabled:cursor-not-allowed"
-                >
-                  Previous
-                </button>
-                <button
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={page === totalPages}
-                  className="helix-btn-secondary text-[12px] disabled:opacity-40 disabled:cursor-not-allowed"
-                >
-                  Next
-                </button>
+          {products.length === 0 ? (
+            <>
+              <div className="text-muted">
+                No products yet. Create your first listing to appear in the
+                marketplace.
               </div>
+              <button onClick={openCreate} className="helix-btn-primary mt-4">
+                Create product
+              </button>
+            </>
+          ) : (
+            <div className="text-muted">
+              No products match the selected filters.
             </div>
           )}
         </div>
       )}
 
-      {/* Modal */}
-      {formOpen && <ProductForm onClose={handleFormClose} editing={editing} />}
-    </>
+      {/* Table / Cards */}
+      {!isPending && !isError && filteredProducts.length > 0 && (
+        <>
+          <div className="hidden md:block helix-card overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="helix-table">
+                <thead>
+                  <tr>
+                    <th>Photo</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>MOQ</th>
+                    <th>Unit</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredProducts.map((product) => (
+                    <ProductTableRow key={product.id} product={product} />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="md:hidden space-y-3">
+            {filteredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+
+          {/* Pagination */}
+          <div className="px-5 py-4 border-t border-border">
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              onChange={setPage}
+            />
+          </div>
+        </>
+      )}
+    </section>
   );
 }

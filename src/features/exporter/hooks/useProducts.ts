@@ -18,6 +18,8 @@ import {
   ProductListParams,
   EditProductPayload,
 } from '../types/exporter';
+import { router } from 'next/client';
+import { useRouter } from 'next/navigation';
 
 export const useGetProducts = ({ pageNumber, pageSize }: ProductListParams) => {
   return useQuery({
@@ -34,15 +36,16 @@ export const useGetProductById = (id: string) => {
   });
 };
 
-export const useCreateProduct = (onSuccess?: () => void) => {
+export const useCreateProduct = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   return useMutation({
     mutationFn: (payload: CreateProductPayload) => createProduct(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['exporter-products'] });
       toast.success('Product created successfully');
-      onSuccess?.();
+      router.push('/exporter/my-products');
     },
     onError: () => {
       toast.error('Failed to save product. Please try again.');
