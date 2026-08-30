@@ -25,6 +25,7 @@ import {
   Hand,
   CreditCard,
   Car,
+  DollarSignIcon,
 } from 'lucide-react';
 
 export const helixCards = [
@@ -105,13 +106,12 @@ export const NAV: {
     { to: '/exporter', label: 'Command Center', icon: LayoutDashboard },
     { to: '/exporter/my-products', label: 'My Products', icon: Package },
     { to: '/exporter/orders', label: 'Orders', icon: Receipt },
-    // { to: '/exporter/sell', label: 'Sell Direct (DTC)', icon: Truck },
     { to: '/exporter/fulfillment', label: 'Fulfillment', icon: Car },
     { to: '/exporter/account', label: 'Account', icon: Wallet },
     {
-      to: '/exporter/withdrawal-accounts',
+      to: '/exporter/account/withdrawal-accounts',
       label: 'Withdrawal Accounts',
-      icon: Wallet,
+      icon: DollarSignIcon,
     },
     { to: '/exporter/credit', label: 'Business Credit', icon: HandCoins },
     { to: '/exporter/compliance', label: 'Compliance', icon: ShieldCheck },

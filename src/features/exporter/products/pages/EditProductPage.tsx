@@ -4,28 +4,29 @@ import { useEffect, useMemo } from 'react';
 import { useForm, useWatch, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSelector } from 'react-redux';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import {
   productSchema,
   ProductFormValues,
 } from '@/features/authentication/components/validation';
 import {
-  useCreateProduct,
   useEditProduct,
+  useGetProductById,
   useGetProductCategories,
-} from '../hooks/useProducts';
+} from '../../hooks/useProducts';
 import { RootState } from '@/store/store';
 import InputField from '@/components/form/InputFIeld';
 import ImageUploader, { type ImageItem } from '@/components/form/ImageUploader';
 import { UNITS, STATUSES, DEFAULT_CURRENCY_ID } from '@/lib/constants';
-import { ProductResponseType } from '../products/types/product';
+import { ProductResponseType } from '../types/product';
+import BackButton from '@/components/buttons/BackButton';
 
-// Helpers
-
-const defaultValues = () => ({
+const defaultValues = (): ProductFormValues => ({
   name: '',
   category: '',
   unitId: 1,
+  quantity: 0,
   price_usd: 50,
   moq: 10,
   description: '',
@@ -37,10 +38,11 @@ const defaultValues = () => ({
   imagePreviews: [],
 });
 
-const valuesFromProduct = (p: ProductResponseType) => ({
+const valuesFromProduct = (p: ProductResponseType): ProductFormValues => ({
   name: p.productName,
   category: p.category,
   unitId: p.unit,
+  quantity: p.moq ?? 0,
   price_usd: p.priceUsd,
   moq: p.moq,
   description: p.description,
@@ -48,25 +50,25 @@ const valuesFromProduct = (p: ProductResponseType) => ({
   statusId: STATUSES.find((s) => s.value === String(p.statusId))?.id ?? 1,
   thumbnail: null,
   images: [],
-  thumbnailPreview: p.thumbnailImage?.[0] ?? null,
-  imagePreviews: p.images?.slice(1) ?? [],
+  thumbnailPreview: p.thumbnailImage ?? null,
+  imagePreviews: p.images ?? [],
 });
 
-//  Props
-interface ProductFormProps {
-  onClose: () => void;
-  editing: ProductResponseType | null;
-  fxRate?: number;
-}
-
-//  Component
-
-export default function ProductForm({
-  onClose,
-  editing,
-  fxRate,
-}: ProductFormProps) {
+export default function EditProductPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
   const user = useSelector((state: RootState) => state.auth.user);
+
+  const { data: product, isPending, isError } = useGetProductById(id ?? '');
+  const { data: categoryData, isPending: categoriesLoading } =
+    useGetProductCategories();
+  const { mutate: editProduct, isPending: isSubmitting } = useEditProduct();
+
+  const categories = useMemo(
+    () => categoryData?.data ?? [],
+    [categoryData?.data],
+  );
 
   const {
     register,
@@ -74,47 +76,53 @@ export default function ProductForm({
     control,
     setValue,
     getValues,
+    reset,
     formState: { errors },
   } = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
-    defaultValues: editing ? valuesFromProduct(editing) : defaultValues(),
+    defaultValues: defaultValues(),
   });
 
-  const isEditMode = !!editing;
-
-  const { mutate: submitProduct, isPending } = useCreateProduct(onClose);
-  const { mutate: editProduct } = useEditProduct(onClose);
-
-  const { data: categoryData, isPending: categoriesLoading } =
-    useGetProductCategories();
-
-  const categories = useMemo(
-    () => categoryData?.data ?? [],
-    [categoryData?.data],
-  );
-
-  // Seed first category once API responds, but only in create mode
   useEffect(() => {
-    if (editing || !categories.length) return;
+    if (!product) return;
+
+    const productFormData: ProductResponseType = {
+      id: product.id,
+      productName: product.productName,
+      category: product.category,
+      currencyId: product.currencyId,
+      description: product.description,
+      images: product.images?.map((img) => img.imageUrl ?? '') ?? [],
+      moq: product.moq ?? product.quantity ?? 0,
+      amountInUsd: product.priceUsd,
+      amountInNaira: 0,
+      priceUsd: product.priceUsd,
+      statusId: product.statusId ?? product.productStatusId ?? 1,
+      thumbnailImage: product.thumbnailImage ?? '',
+      unit: product.unit,
+      createdAt: product.createdAt,
+    };
+
+    reset(valuesFromProduct(productFormData));
+  }, [product, reset]);
+
+  useEffect(() => {
+    if (!product || !categories.length) return;
     const current = getValues('category');
     if (!current) {
       setValue('category', categories[0].name);
     }
-  }, [categories, editing, getValues, setValue]);
+  }, [categories, product, getValues, setValue]);
 
-  // Watched values for live UI updates
   const priceUsd = useWatch({ control, name: 'price_usd' });
   const thumbnailPreview =
     useWatch({ control, name: 'thumbnailPreview' }) ?? null;
   const imagePreviews = useWatch({ control, name: 'imagePreviews' }) ?? [];
 
   const ngnEstimate = useMemo(
-    () =>
-      fxRate && priceUsd ? `₦${(priceUsd * fxRate).toLocaleString()}` : null,
-    [fxRate, priceUsd],
+    () => (priceUsd ? `₦${(priceUsd * 1500).toLocaleString()}` : null),
+    [priceUsd],
   );
-
-  // File handlers
 
   const thumbnailItems: ImageItem[] = thumbnailPreview
     ? [
@@ -150,65 +158,59 @@ export default function ProductForm({
     );
   };
 
-  // Submit
   const onSubmit = (values: ProductFormValues) => {
-    if (isEditMode && editing) {
-      editProduct({
-        id: editing.id,
-        payload: {
-          UserId: user?.id ? Number(user.id) : undefined,
-          Name: values.name,
-          Category: values.category,
-          Unit: values.unitId,
-          quantity: values.quantity,
+    if (!product) return;
 
-          PriceUsd: values.price_usd,
-          Moq: values.moq,
-          Description: values.description,
-          CurrencyId: values.currencyId,
-          StatusId: values.statusId,
-          ThumbnailImage: values.thumbnail ?? null,
-          Images: values.images,
-        },
-      });
-      return;
-    }
-    submitProduct({
-      UserId: user?.id ? Number(user.id) : undefined,
-      Name: values.name,
-      Category: values.category,
-      Unit: values.unitId,
-      quantity: Number(values.quantity),
-      PriceUsd: values.price_usd,
-      Moq: values.moq,
-      Description: values.description,
-      CurrencyId: values.currencyId,
-      StatusId: values.statusId,
-      ThumbnailImage: values.thumbnail ?? null,
-      Images: values.images,
+    editProduct({
+      id: product.id,
+      payload: {
+        UserId: user?.id ? Number(user.id) : undefined,
+        Name: values.name,
+        Category: values.category,
+        Unit: values.unitId,
+        quantity: values.quantity,
+        PriceUsd: values.price_usd,
+        Moq: values.moq,
+        Description: values.description,
+        CurrencyId: values.currencyId,
+        StatusId: values.statusId,
+        ThumbnailImage: values.thumbnail ?? null,
+        Images: values.images,
+      },
     });
   };
 
-  return (
-    <section
-      className="fixed inset-0 z-50 bg-[#0A1628]/80 backdrop-blur flex items-start justify-center pt-16 pb-10 overflow-y-auto p-4"
-      onClick={onClose}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="helix-card w-full max-w-2xl p-6 fade-up max-h-[90vh] overflow-y-auto"
-        data-testid="product-form"
-      >
-        <h2 className="helix-h3">
-          {editing ? 'Edit product' : 'Create product'}
-        </h2>
+  const handleClose = () => router.push('/exporter/my-products');
 
+  if (isPending) {
+    return (
+      <div className="flex h-[60vh] items-center justify-center text-muted">
+        Loading product...
+      </div>
+    );
+  }
+
+  if (isError || !product) {
+    return (
+      <div className="py-10 text-center">
+        <p className="text-muted">Could not load product details.</p>
+        <button onClick={handleClose} className="helix-btn-primary mt-4">
+          Back to products
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <section className="w-full max-w-2xl  py-6">
+      <BackButton />
+
+      <div className="mt-5 w-full  fade-up">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="mt-5 grid md:grid-cols-2 gap-4"
           noValidate
         >
-          {/* Name */}
           <div className="md:col-span-2">
             <InputField
               label="Name"
@@ -219,7 +221,6 @@ export default function ProductForm({
             />
           </div>
 
-          {/* Category */}
           <div>
             <label className="helix-label">Category</label>
             {categoriesLoading ? (
@@ -250,7 +251,6 @@ export default function ProductForm({
             )}
           </div>
 
-          {/* Unit */}
           <div>
             <label className="helix-label">Unit</label>
             <Controller
@@ -276,6 +276,7 @@ export default function ProductForm({
               </p>
             )}
           </div>
+
           <div>
             <InputField
               label="Quantity"
@@ -286,7 +287,6 @@ export default function ProductForm({
             />
           </div>
 
-          {/* Price */}
           <div>
             <InputField
               label="Price (USD)"
@@ -296,13 +296,12 @@ export default function ProductForm({
               {...register('price_usd', { valueAsNumber: true })}
             />
             {ngnEstimate && (
-              <p className="text-[11px] text-[#9CA3AF] font-mono mt-1">
+              <p className="text-[11px] text-muted font-mono mt-1">
                 ≈ {ngnEstimate} at current rate
               </p>
             )}
           </div>
 
-          {/* MOQ */}
           <InputField
             label="Minimum Order Quantity (MOQ)"
             type="number"
@@ -311,7 +310,6 @@ export default function ProductForm({
             {...register('moq', { valueAsNumber: true })}
           />
 
-          {/* Status */}
           <div>
             <label className="helix-label">Status</label>
             <Controller
@@ -333,7 +331,6 @@ export default function ProductForm({
             />
           </div>
 
-          {/* Description */}
           <div className="md:col-span-2">
             <label className="helix-label">Description</label>
             <textarea
@@ -350,7 +347,6 @@ export default function ProductForm({
             )}
           </div>
 
-          {/* Thumbnail */}
           <div className="md:col-span-2">
             <label className="helix-label">Thumbnail Image</label>
             <ImageUploader
@@ -360,7 +356,6 @@ export default function ProductForm({
             />
           </div>
 
-          {/* Additional Images */}
           <div className="md:col-span-2">
             <label className="helix-label">Additional Images</label>
             <ImageUploader
@@ -375,26 +370,13 @@ export default function ProductForm({
             )}
           </div>
 
-          {/* Actions */}
-          <div className="md:col-span-2 flex gap-3 mt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="helix-btn-secondary flex-1"
-            >
-              Cancel
-            </button>
+          <div className="md:col-span-2 flex justify-end gap-3 mt-4">
             <button
               type="submit"
-              disabled={isPending}
-              className="helix-btn-primary flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
-              data-testid="pf-save"
+              disabled={isSubmitting}
+              className="helix-btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isPending
-                ? 'Saving…'
-                : editing
-                  ? 'Save changes'
-                  : 'Create product'}
+              {isSubmitting ? 'Saving…' : 'Save changes'}
             </button>
           </div>
         </form>

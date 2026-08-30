@@ -22,16 +22,6 @@ const AccountSectionCard = ({
               <Star size={9} className="fill-current" /> Default
             </span>
           )}
-          {a.approval_status === 'approved' && (
-            <span className="helix-status helix-status-ok text-[9px] py-0.5 px-2 inline-flex items-center gap-1">
-              <Check size={9} /> Approved
-            </span>
-          )}
-          {a.approval_status === 'pending' && (
-            <span className="helix-status helix-status-expiring text-[9px] py-0.5 px-2">
-              Pending
-            </span>
-          )}
         </div>
         <p className="text-[12px] text-muted mt-1 truncate">{a.bank_name}</p>
         <p className="text-[12px] text-muted font-mono mt-1">

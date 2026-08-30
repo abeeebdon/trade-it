@@ -465,39 +465,13 @@ export const mockListings: Listing[] = [
 // Withdrawal Accounts Mock Data
 export const mockWithdrawalAccounts: WithdrawalAccount[] = [
   {
-    id: 'wa-001',
-    label: 'Chase Business · Primary',
-    currency: 'USD',
-    bank_name: 'JPMorgan Chase',
-    account_number_masked: '••••••4821',
-    account_name: 'Callistus Exports Ltd',
-    account_type: 'checking',
-    routing_number: '021000021',
-    swift_code: 'CHASUS33',
-    is_default: true,
-    approval_status: 'approved',
-  },
-  {
-    id: 'wa-002',
-    label: 'Bank of America · Backup',
-    currency: 'USD',
-    bank_name: 'Bank of America',
-    account_number_masked: '••••••9134',
-    account_name: 'Callistus Exports Ltd',
-    account_type: 'checking',
-    routing_number: '026009593',
-    is_default: false,
-    approval_status: 'approved',
-  },
-  {
     id: 'wa-003',
     label: 'GTBank Lagos · Operations',
     currency: 'NGN',
     bank_name: 'Guaranty Trust Bank',
     account_number_masked: '••••••7723',
-    account_name: 'Callistus Nwosu',
+    account_name: 'Jompshop',
     is_default: true,
-    approval_status: 'approved',
   },
   {
     id: 'wa-004',
@@ -505,9 +479,8 @@ export const mockWithdrawalAccounts: WithdrawalAccount[] = [
     currency: 'NGN',
     bank_name: 'Zenith Bank Plc',
     account_number_masked: '••••••3341',
-    account_name: 'Callistus Nwosu',
+    account_name: 'Jompshop',
     is_default: false,
-    approval_status: 'pending',
   },
 ];
 
