@@ -14,6 +14,8 @@ import { formatDateTime } from '@/lib/func';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAppSelector } from '@/hooks/store/store';
 import { selectOrderById } from '@/store/orders/orders.slice';
+import { DUMMY_ORDERS } from '../data/dummyOrders';
+import BackButton from '@/components/buttons/BackButton';
 
 interface OrderManagementDetailProps {
   role: OrderRole;
@@ -29,8 +31,9 @@ export default function OrderManagementDetail({
   const queryId = searchParams.get('id');
   const resolvedId = orderId ?? queryId;
   const router = useRouter();
-  const order = useAppSelector((state) => selectOrderById(state, resolvedId));
-  console.log(order);
+  const order =
+    useAppSelector((state) => selectOrderById(state, resolvedId)) ??
+    DUMMY_ORDERS[0];
   if (!order) {
     return <p className="text-sm text-danger px-4 py-6">Order not found.</p>;
   }
@@ -48,15 +51,9 @@ export default function OrderManagementDetail({
 
   return (
     <div className="flex flex-col gap-4 p-4 max-w-3xl">
-      <button
-        className="inline-flex cursor-pointer items-center gap-1.5 text-sm text-muted hover:text-text"
-        onClick={() => router.back()}
-      >
-        <ArrowLeft size={16} />
-        Back to orders
-      </button>
+      <BackButton title="Back to orders" />
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center ,t-4 gap-2">
         <ShoppingBag size={18} className="text-primary" />
         <h1 className="text-lg font-semibold text-text">
           Order #{order.orderNumber}

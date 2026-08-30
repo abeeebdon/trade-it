@@ -71,6 +71,8 @@ export type ConsumerOrder = {
   shipTo: string;
   shippingAddress: string;
   status: string;
+  declineReason?: string;
+  trackingCode?: string;
   // Additional fields returned by GET /v1/Orders/{id}
   subtotalAmount?: number;
   shippingAmount?: number;

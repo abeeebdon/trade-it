@@ -1,13 +1,3 @@
-// store/orders/orders.slice.ts
-// Global order-management & delivery store. Holds every order and its
-// lifecycle status so the consumer (pays), exporter (accepts/declines,
-// packs, makes ready) and admin (ships → out for delivery → delivered)
-// all read and write the SAME order state.
-//
-// Demo mode: orders are seeded from DUMMY_ORDERS. When the real
-// endpoints land, replace the initial state with an async fetch and
-// dispatch `seedOrders` / `setOrders` instead.
-
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { ConsumerOrder } from '@/features/shops/types/shops';
 import { DUMMY_ORDERS } from '@/features/orderManagement/data/dummyOrders';
@@ -32,12 +22,25 @@ const ordersSlice = createSlice({
     /** Move an order to a new lifecycle status. */
     setOrderStatus(
       state,
-      action: PayloadAction<{ id: number | string; status: OrderStatus }>,
+      action: PayloadAction<{
+        id: number | string;
+        status: OrderStatus;
+        declineReason?: string;
+        trackingCode?: string;
+      }>,
     ) {
-      const { id, status } = action.payload;
+      const { id, status, declineReason, trackingCode } = action.payload;
       const order = state.orders.find((o) => String(o.id) === String(id));
       if (order) {
         order.status = status;
+
+        if (declineReason !== undefined) {
+          order.declineReason = declineReason;
+        }
+
+        if (trackingCode !== undefined) {
+          order.trackingCode = trackingCode;
+        }
       }
     },
     /** Reset the demo store back to the seeded orders. */

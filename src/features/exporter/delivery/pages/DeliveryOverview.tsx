@@ -8,7 +8,7 @@ export default function ExporterDeliveryOverview() {
       role="vendor"
       title="Order Management"
       subtitle="Pack and hand off confirmed export orders to the platform for shipping."
-      detailsHref={(id) => `/exporter/delivery/details?id=${id}`}
+      detailsHref={(id) => `/exporter/fulfillment/details?id=${id}`}
     />
   );
 }
