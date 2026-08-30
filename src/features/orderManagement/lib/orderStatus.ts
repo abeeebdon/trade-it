@@ -56,7 +56,6 @@ export interface Transition {
 }
 
 export const ORDER_TRANSITIONS: Transition[] = [
-  // Exporter (vendor) — accept or decline a paid order, then pack → ready.
   {
     role: 'vendor',
     from: OrderStatus.PAID,

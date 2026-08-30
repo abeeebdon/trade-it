@@ -5,7 +5,6 @@ import {
   ArrowUpRight,
   Coins,
   Receipt,
-  Package,
   ShieldAlert,
   ArrowRight,
 } from 'lucide-react';
@@ -20,8 +19,6 @@ import { CommandCenterWallet } from '../types/command-center';
 import { useHeader } from '@/context/HeaderContext';
 import { Transaction } from '../types/exporter';
 import DashboardOrderOverview from '../components/DashboardOrderOverview';
-
-// Helpers
 
 function walletToVa(wallet: CommandCenterWallet | undefined) {
   if (!wallet) return undefined;
@@ -118,7 +115,7 @@ export default function Dashboard() {
           sub="Available · NGN"
           va={walletToVa(ngnWallet)}
         />
-        <div className="helix-card p-5">
+        <article className="helix-card p-5">
           <div className="flex justify-between items-start">
             <div>
               <span className="helix-label">USD / NGN Rate</span>
@@ -140,14 +137,14 @@ export default function Dashboard() {
               Manage funds <ArrowUpRight size={14} />
             </Link>
           )}
-        </div>
+        </article>
       </section>
 
       {/* Orders + Compliance */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
+      <section className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
         <DashboardOrderOverview data={data} orders={orders} />
 
-        <div className="helix-card p-5">
+        <article className="helix-card p-5">
           <div className="flex items-start justify-between">
             <div>
               <div className="helix-label">Compliance Score</div>
@@ -188,8 +185,8 @@ export default function Dashboard() {
           >
             Manage vault <ArrowUpRight size={14} />
           </Link>
-        </div>
-      </div>
+        </article>
+      </section>
 
       {/* Recent Transactions */}
       <section className="helix-card overflow-hidden">
@@ -207,7 +204,7 @@ export default function Dashboard() {
         </div>
 
         {transactions.length ? (
-          <div className="overflow-x-auto">
+          <section className="overflow-x-auto">
             <table className="helix-table">
               <thead>
                 <tr>
@@ -251,7 +248,7 @@ export default function Dashboard() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </section>
         ) : (
           <div className="p-10 text-center text-[#9CA3AF] text-sm">
             <Receipt size={34} className="mx-auto mb-3 text-[#1A7A6E]" />
