@@ -12,7 +12,6 @@ export function OrdersTable({ orders }: { orders: AdminOrder[] }) {
         <thead>
           <tr>
             <th>Order #</th>
-            <th>Product</th>
             <th>Qty</th>
             <th>Amount</th>
             <th>Status</th>
@@ -29,14 +28,7 @@ export function OrdersTable({ orders }: { orders: AdminOrder[] }) {
               <td className="font-mono text-[13px] text-[#C9922A]">
                 {order.orderNumber}
               </td>
-              <td>
-                <span className="font-medium text-[#F5F5F5] hover:text-[#C9922A] transition-colors">
-                  {order.productName}
-                </span>
-                <span className="block text-[11px] text-[#9CA3AF]">
-                  {categoryLabel(order.category)}
-                </span>
-              </td>
+
               <td>{order.quantity}</td>
               <td className="font-mono text-[#C9922A]">
                 {formatUSD(order.amount)}

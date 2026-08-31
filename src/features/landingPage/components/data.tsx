@@ -114,9 +114,9 @@ export const NAV: {
       label: 'Withdrawal Accounts',
       icon: DollarSignIcon,
     },
-    { to: '/exporter/credit', label: 'Business Credit', icon: HandCoins },
     { to: '/exporter/compliance', label: 'Compliance', icon: ShieldCheck },
     { to: '/exporter/onboarding', label: 'Business Profile', icon: FileText },
+    { to: '/exporter/credit', label: 'Business Credit', icon: HandCoins },
   ],
 
   retailer: [
@@ -139,20 +139,21 @@ export const NAV: {
   admin: [
     { to: '/admin', label: 'Admin Overview', icon: LayoutDashboard },
     { to: '/admin/verifications', label: 'Verifications', icon: ShieldCheck },
-    { to: '/admin/credit', label: 'JompStart Credit', icon: HandCoins },
-    { to: '/admin/disputes', label: 'Disputes', icon: RefreshCw },
-    { to: '/admin/help', label: 'Help & FAQs', icon: Hand },
     { to: '/admin/orders', label: 'Orders', icon: ShoppingBasket },
     { to: '/admin/tracking_id', label: 'Tracking ID', icon: Radical },
     { to: '/admin/delivery', label: 'Delivery Management', icon: Car },
+    { to: '/admin/disputes', label: 'Disputes', icon: RefreshCw },
     { to: '/admin/categories', label: 'Categories', icon: Lightbulb },
     { to: '/admin/listings', label: 'Listings', icon: ListCheck },
+    { to: '/admin/credit', label: 'JompStart Credit', icon: HandCoins },
+
+    { to: '/admin/help', label: 'Help & FAQs', icon: Hand },
+
     {
       to: '/admin/finance',
       label: 'Financial Overview',
       icon: DollarSign,
     },
-    { to: '/', label: 'Marketplace', icon: Store },
     { to: '/admin/waitlist', label: 'Waitlist', icon: BookAIcon },
     { to: '/admin/users', label: 'Users', icon: User },
     { to: '/admin/management', label: 'Management', icon: Cone },
