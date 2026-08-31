@@ -108,7 +108,7 @@ export const NAV: {
     { to: '/exporter/my-products', label: 'My Products', icon: Package },
     { to: '/exporter/orders', label: 'Orders', icon: Receipt },
     { to: '/exporter/fulfillment', label: 'Fulfillment', icon: Car },
-    { to: '/exporter/account', label: 'Account', icon: Wallet },
+    { to: '/exporter/account', label: 'Payments', icon: Wallet },
     {
       to: '/exporter/account/withdrawal-accounts',
       label: 'Withdrawal Accounts',
