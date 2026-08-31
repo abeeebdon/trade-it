@@ -8,13 +8,21 @@ import InputField from '@/components/form/InputFIeld';
 import SelectField from '@/components/form/SelectField';
 import Modal from '@/components/ui/Modal';
 import PressableBtn from '@/components/buttons/PressableBtn';
-import type { TrackingId, TrackingIdFormValues } from '../types/trackingId';
+import type {
+  TrackingId,
+  TrackingIdFormValues,
+  TrackingStatus,
+} from '../types/trackingId';
 import { TRACKING_STATUSES } from '../constants';
+
+const trackingStatusValues = TRACKING_STATUSES.map(
+  (status) => status.value,
+) as [TrackingStatus, ...TrackingStatus[]];
 
 const trackingIdSchema = z.object({
   orderNumber: z.string().min(1, 'Order number is required'),
   trackingNumber: z.string().min(1, 'Tracking number is required'),
-  status: z.enum(['pending', 'in_transit', 'delivered', 'exception']),
+  status: z.enum(trackingStatusValues),
 });
 
 interface TrackingIdModalProps {
@@ -44,7 +52,7 @@ export default function TrackingIdModal({
           trackingNumber: editing.trackingNumber,
           status: editing.status,
         }
-      : { orderNumber: '', trackingNumber: '', status: 'pending' },
+      : { orderNumber: '', trackingNumber: '', status: 'received' },
   });
 
   if (!open) return null;

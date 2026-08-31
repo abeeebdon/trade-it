@@ -19,14 +19,14 @@ export const mockTrackingIds: TrackingId[] = [
     id: 'trk-003',
     orderNumber: 'JM-1044',
     trackingNumber: 'JMP202608220003',
-    status: 'pending',
+    status: 'received',
     createdAt: '2026-08-22',
   },
   {
     id: 'trk-004',
     orderNumber: 'JM-1045',
     trackingNumber: 'JMP202608230004',
-    status: 'exception',
+    status: 'received',
     createdAt: '2026-08-23',
   },
   {
