@@ -48,7 +48,7 @@ const FAQSection: FC = () => {
                       onClick={() => toggleFAQ(index)}
                       className="flex w-full items-center justify-between p-4 text-left font-medium transition"
                     >
-                      <span className="text-base font-semibold text-purple-100/90 ">
+                      <span className="text-base font-semibold text-muted ">
                         {faq.question}
                       </span>
                       {openIndex !== index ? (
@@ -58,7 +58,7 @@ const FAQSection: FC = () => {
                       )}
                     </button>
                     {openIndex === index && (
-                      <p className=" px-4 py-3 text-sm text-white">
+                      <p className=" px-4 py-3 text-sm text-text">
                         {faq.answer}
                       </p>
                     )}

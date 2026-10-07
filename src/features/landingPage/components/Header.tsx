@@ -55,30 +55,28 @@ const Header = ({ className }: { className?: string }) => {
           <Link href="/" className="outline-none flex items-center gap-2">
             <JompFullLogo />
           </Link>
-          <nav className="hidden md:flex basis-1/2 justify-center h-full items-center lg:gap-8 gap-2 md:gap-4 text-[13px] text-muted">
-            <ShopMenu />
-            <CategoriesMenu />
-            {user && <ShoppingMenu />}
-            <div className="hidden lg:block">
-              {!user || !token ? (
-                <Link
-                  href="/register?role=exporter"
-                  className="text-muted hover:text-text text-lg"
-                >
-                  Become a Seller
-                </Link>
-              ) : (
-                <Link
-                  href={pathToDashboard}
-                  className="text-muted hover:text-text text-lg"
-                >
-                  Dashboard
-                </Link>
-              )}
-            </div>
+          <nav className="hidden items-center gap-8 md:flex">
+            <a
+              href="#benefits"
+              className="text-sm text-text/65 transition hover:text-text"
+            >
+              Benefits
+            </a>
+            <a
+              href="#how-it-works"
+              className="text-sm text-text/65 transition hover:text-text"
+            >
+              How it works
+            </a>
+            <a
+              href="#faq"
+              className="text-sm text-text/65 transition hover:text-text"
+            >
+              FAQ
+            </a>
           </nav>
           <div className="flex items-center gap-2">
-            {pathname === '/' && <SearchInput />}
+            {/* {pathname === '/' && <SearchInput />} */}
             <ThemeToggle />
 
             {user && token ? (

@@ -9,9 +9,7 @@ export default function MainLayout({
   return (
     <main className="w-full">
       <Header />
-      <div className="sm:pt-10 pt-5 px-4 sm:px-6 lg:px-10 pb-24">
-        {children}
-      </div>
+      <div>{children}</div>
       <Footer />
     </main>
   );
