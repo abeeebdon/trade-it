@@ -133,7 +133,7 @@ export default function Login() {
       </form>
       <div className="mt-8 text-center text-[13px] text-[#9CA3AF]">
         New to Jompshop?{' '}
-        <Link href="/getstarted" className="text-[#C9922A] font-semibold">
+        <Link href="/register" className="text-[#C9922A] font-semibold">
           Create an account
         </Link>
       </div>

@@ -13,7 +13,7 @@ const FAQSection: FC = () => {
   };
 
   return (
-    <section id="faq" className="my-15 px-4 py-20  text-center md:px-6">
+    <section id="faq" className="my-15 px-4 py-20 text-center md:px-6">
       <div className="text-center">
         <p className="mb-2 text-lg font-semibold text-primary-300 md:text-2xl ">
           Let’s Answer Your

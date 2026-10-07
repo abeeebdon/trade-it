@@ -92,7 +92,7 @@ const Header = ({ className }: { className?: string }) => {
                 >
                   Sign in
                 </Link>
-                <Link href="/getstarted" className="helix-btn-primary text-sm">
+                <Link href="/register" className="helix-btn-primary text-sm">
                   Get Started
                 </Link>
               </div>

@@ -7,31 +7,43 @@ import {
   Receipt,
   ShieldAlert,
   ArrowRight,
+  Package,
+  ShoppingCart,
+  CoinsIcon,
 } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
 import { formatUSD, formatNGN, formatDateTime } from '@/lib/func';
 import { StatusPill } from '@/features/shops/components/StatusPill';
-import BalanceCard from '../components/BalanceCard';
 import { useGetCommandCenter } from '../hooks/useGetCommandCenter';
-import { CommandCenterWallet } from '../types/command-center';
 import { useHeader } from '@/context/HeaderContext';
 import { Transaction } from '../types/exporter';
 import DashboardOrderOverview from '../components/DashboardOrderOverview';
 
-function walletToVa(wallet: CommandCenterWallet | undefined) {
-  if (!wallet) return undefined;
-  return {
-    account_number: wallet.accountNumber,
-    bank: wallet.bankName,
-  };
-}
-
 export default function Dashboard() {
   const user = useSelector((state: RootState) => state.auth.user);
   const { setHeader } = useHeader();
-
+  const stats = [
+    {
+      value: '42',
+      label: 'Products',
+      Icon: Package,
+      path: '/exporter/products',
+    },
+    {
+      value: '128',
+      label: 'Orders',
+      Icon: ShoppingCart,
+      path: '/exporter/orders',
+    },
+    {
+      value: '$200',
+      label: 'Revenue',
+      Icon: CoinsIcon,
+      path: '/exporter/account',
+    },
+  ];
   const { data, isPending, isError } = useGetCommandCenter();
 
   useEffect(() => {
@@ -59,14 +71,7 @@ export default function Dashboard() {
     );
   }
 
-  const usdWallet = data?.wallets.find(
-    (w: CommandCenterWallet) => w.currency === 'USD',
-  );
-  const ngnWallet = data?.wallets.find(
-    (w: CommandCenterWallet) => w.currency === 'NGN',
-  );
   const compliance = data?.compliance;
-  const fxRate = data?.fxRate;
   const orders = data?.recentOrders?.items ?? [];
   const transactions = data?.recentTransactions ?? [];
 
@@ -102,42 +107,28 @@ export default function Dashboard() {
 
       {/* Balances  */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <BalanceCard
-          label="USD Balance"
-          value={formatUSD(usdWallet?.availableBalance ?? 0)}
-          sub="Available · USD"
-          va={walletToVa(usdWallet)}
-          accent
-        />
-        <BalanceCard
-          label="NGN Balance"
-          value={formatNGN(ngnWallet?.availableBalance ?? 0)}
-          sub="Available · NGN"
-          va={walletToVa(ngnWallet)}
-        />
-        <article className="helix-card p-5">
-          <div className="flex justify-between items-start">
-            <div>
-              <span className="helix-label">USD / NGN Rate</span>
-              <div className="font-mono text-3xl font-bold text-primary mt-2 tracking-tight">
-                ₦{fxRate ? Number(fxRate.rate).toLocaleString() : '—'}
-              </div>
-            </div>
-            <Coins size={22} className="text-[#1A7A6E]" />
-          </div>
-          <div className="mt-4 text-[11px] font-mono text-[#9CA3AF] tracking-wider">
-            {fxRate?.source?.toUpperCase()} ·{' '}
-            {fxRate ? formatDateTime(fxRate.updatedAt) : ''}
-          </div>
-          {user?.role === 'exporter' && (
-            <Link
-              href="/finance"
-              className="mt-4 inline-flex items-center gap-1 text-[#C9922A] text-[12px] hover:gap-2 transition-all"
+        {stats.map(({ label, Icon, path, value }) => {
+          return (
+            <article
+              key={label}
+              className="rounded-2xl border border-text/10 bg-text/4 p-4 flex justify-between gap-2"
             >
-              Manage funds <ArrowUpRight size={14} />
-            </Link>
-          )}
-        </article>
+              <div>
+                <span className="helix-label">{label}</span>
+                <div className="font-mono text-3xl font-bold text-primary mt-2 tracking-tight">
+                  {value}
+                </div>
+                <Link
+                  href={path}
+                  className="mt-4 inline-flex items-center gap-1 text-[#C9922A] text-[12px] hover:gap-2 transition-all"
+                >
+                  View All <ArrowUpRight size={14} />
+                </Link>
+              </div>
+              {<Icon size={22} className="text-[#1A7A6E]" />}
+            </article>
+          );
+        })}
       </section>
 
       {/* Orders + Compliance */}

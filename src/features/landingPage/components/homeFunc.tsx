@@ -34,7 +34,7 @@ export const getKicker = (path: string, product?: ProductMeta): string => {
       return 'Exporter · Compliance';
     case '/exporter/onboarding':
       return 'Exporter · Onboarding';
-    case '/exporter/my-products':
+    case '/exporter/products':
       return 'Exporter · Catalog Management';
     case '/exporter/catalog':
       return 'Verified African Suppliers';
@@ -92,7 +92,7 @@ export const getTitle = (path: string, product?: ProductMeta): string => {
       return 'Onboarding';
     case '/exporter/catalog':
       return 'Marketplace';
-    case '/exporter/my-products':
+    case '/exporter/products':
       return 'My Products';
     case '/exporter/fulfillment':
       return 'Fulfillment Queue';

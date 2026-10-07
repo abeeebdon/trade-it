@@ -127,7 +127,7 @@ const NewExporterLandingPage = () => {
       </section>
 
       {/* How it works */}
-      <section id="how-it-works" className="bg-slate-50 py-24 sm:py-28">
+      <section id="how-it-works" className="bg-bg-soft py-24 sm:py-28">
         <div className="mx-auto  px-5 sm:px-8 lg:px-10">
           <div className="mx-auto  text-center">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary-dim">
@@ -311,7 +311,7 @@ const NewExporterLandingPage = () => {
       </section>
 
       {/* Trust */}
-      <section className="border-b border-border-soft bg-bg-soft  py-24 sm:py-28">
+      <section className="border-b border-border-soft bg-bg  py-24 sm:py-28">
         <div className="mx-auto  px-5 text-center sm:px-8">
           <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-primary text-muted">
             <ShieldCheck className="size-7" />
@@ -357,7 +357,7 @@ const NewExporterLandingPage = () => {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className=" py-10 sm:py-14">
+      <section id="faq" className="py-10 bg-bg-soft sm:py-14">
         <FAQSection />
       </section>
 
