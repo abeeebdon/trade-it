@@ -8,7 +8,7 @@ import {
 import { DotButton, useDotButton } from '@/components/ui/EmblaCarouselDotBtn';
 import useEmblaCarousel from 'embla-carousel-react';
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
 type CarouselPlugin = NonNullable<Parameters<typeof useEmblaCarousel>[1]>;
@@ -23,6 +23,12 @@ interface ProductDetailsCarouselProps {
   aspectRatio?: string;
   showArrows?: boolean;
   showDots?: boolean;
+  /** Controlled active slide. When set, the carousel scrolls to it. */
+  index?: number;
+  /** Called whenever the active slide changes (swipe, arrows, dots). */
+  onSelect?: (index: number) => void;
+  /** Called when a slide itself is clicked (e.g. to open a zoom viewer). */
+  onSlideClick?: (index: number) => void;
 }
 
 const ProductDetailsCarousel: React.FC<ProductDetailsCarouselProps> = ({
@@ -35,6 +41,9 @@ const ProductDetailsCarousel: React.FC<ProductDetailsCarouselProps> = ({
   aspectRatio = 'aspect-4/3',
   showArrows = true,
   showDots = true,
+  index,
+  onSelect,
+  onSlideClick,
 }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(options, plugins);
   const { selectedIndex, scrollSnaps, onDotButtonClick } =
@@ -46,6 +55,25 @@ const ProductDetailsCarousel: React.FC<ProductDetailsCarouselProps> = ({
     onNextButtonClick,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } = usePrevNextButtons(emblaApi as any);
+
+  // Keep the carousel in sync with the controlled index.
+  useEffect(() => {
+    if (!emblaApi || index === undefined) return;
+    if (emblaApi.selectedScrollSnap() !== index) emblaApi.scrollTo(index);
+  }, [emblaApi, index]);
+
+  // Report the active slide back up to the parent.
+  useEffect(() => {
+    if (!emblaApi || !onSelect) return;
+
+    const handleSelect = () => onSelect(emblaApi.selectedScrollSnap());
+
+    emblaApi.on('select', handleSelect).on('reInit', handleSelect);
+
+    return () => {
+      emblaApi.off('select', handleSelect).off('reInit', handleSelect);
+    };
+  }, [emblaApi, onSelect]);
 
   const hasMultiple = slides.length > 1;
 
@@ -69,13 +97,30 @@ const ProductDetailsCarousel: React.FC<ProductDetailsCarouselProps> = ({
         <div className="embla__container flex ">
           {slides.map((slide, index) => (
             <div className="embla__slide flex-[0_0_100%] min-w-0" key={slide}>
-              <div className={cn('relative bg-[#0A1628]', aspectRatio)}>
+              <div
+                role={onSlideClick ? 'button' : undefined}
+                tabIndex={onSlideClick ? 0 : undefined}
+                onClick={() => onSlideClick?.(index)}
+                onKeyDown={(e) => {
+                  if (!onSlideClick) return;
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onSlideClick(index);
+                  }
+                }}
+                className={cn(
+                  'relative  border p-5 bg-white',
+                  aspectRatio,
+                  onSlideClick && 'cursor-zoom-in',
+                )}
+              >
                 <Image
                   src={slide}
                   alt={`${altPrefix} ${index + 1}`}
-                  fill
-                  className={cn('object-cover', imageClassName)}
-                  sizes="(max-width: 768px) 100vw, 60vw"
+                  width={200}
+                  height={200}
+                  className="object-center border size-full"
+                  // sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
             </div>

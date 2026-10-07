@@ -180,7 +180,7 @@ export default function EditProductPage() {
     });
   };
 
-  const handleClose = () => router.push('/exporter/my-products');
+  const handleClose = () => router.push('/exporter/products');
 
   if (isPending) {
     return (

@@ -1,6 +1,4 @@
 import { AuthShell } from '@/features/authentication/components/AuthShell';
-import JompFullLogo from '@/features/authentication/components/JompFullLogo';
-import Link from 'next/link';
 
 export default function AuthLayout({
   children,

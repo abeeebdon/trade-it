@@ -45,7 +45,7 @@ export const useCreateProduct = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['exporter-products'] });
       toast.success('Product created successfully');
-      router.push('/exporter/my-products');
+      router.push('/exporter/products');
     },
     onError: () => {
       toast.error('Failed to save product. Please try again.');

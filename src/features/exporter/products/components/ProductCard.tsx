@@ -35,7 +35,7 @@ export function ProductTableRow({ product }: ProductCardProps) {
       <td className="max-w-xs truncate">
         <Link
           className="hover:text-primary"
-          href={`/exporter/my-products/details?id=${product.id}`}
+          href={`/exporter/products/details?id=${product.id}`}
         >
           {product.productName}
         </Link>
@@ -51,7 +51,7 @@ export function ProductTableRow({ product }: ProductCardProps) {
         <div className="flex items-center gap-2">
           <button
             onClick={() =>
-              router.push(`/exporter/my-products/edit?id=${product.id}`)
+              router.push(`/exporter/products/edit?id=${product.id}`)
             }
             className="text-text inline cursor-pointer hover:text-gold"
             title="Edit product"
@@ -60,7 +60,7 @@ export function ProductTableRow({ product }: ProductCardProps) {
           </button>
           <Link
             className="text-text inline hover:text-primary"
-            href={`/exporter/my-products/details?id=${product.id}`}
+            href={`/exporter/products/details?id=${product.id}`}
             title="View product"
           >
             <Eye size={20} />
@@ -94,7 +94,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         <div className="min-w-0 flex-1">
           <Link
-            href={`/exporter/my-products/details?id=${product.id}`}
+            href={`/exporter/products/details?id=${product.id}`}
             className="block truncate text-sm font-semibold hover:text-blue-700"
           >
             {product.productName}
@@ -122,7 +122,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="flex items-center gap-2">
           <button
             onClick={() =>
-              router.push(`/exporter/my-products/edit?id=${product.id}`)
+              router.push(`/exporter/products/edit?id=${product.id}`)
             }
             className="text-text cursor-pointer hover:text-primary"
             title="Edit product"
@@ -131,7 +131,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </button>
           <Link
             className="text-text hover:text-primary"
-            href={`/exporter/my-products/details?id=${product.id}`}
+            href={`/exporter/products/details?id=${product.id}`}
             title="View product"
           >
             <Eye size={17} />

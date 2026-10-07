@@ -25,12 +25,8 @@ export default function Register() {
 
   const role =
     ROLES.find((r) => r.value.toLowerCase() === roleFromQuery?.toLowerCase()) ??
-    null;
-  useEffect(() => {
-    if (!roleFromQuery || !role) {
-      router.replace('/getstarted');
-    }
-  }, [roleFromQuery, role, router]);
+    ROLES[2]; // Default to the third role if not found
+
   const {
     register,
     handleSubmit,
@@ -75,14 +71,14 @@ export default function Register() {
       <Link href="/" className="md:hidden flex justify-center mb-7">
         <JompFullLogo />
       </Link>
-      <button
+      {/* <button
         onClick={() => router.push('/getstarted')}
         className="text-[12px] text-[#9CA3AF] hover:text-[#F5F5F5] inline-flex items-center gap-1.5 mb-4"
       >
         <ArrowLeft size={12} /> change role
-      </button>
+      </button> */}
       <h2 className="helix-kicker mb-2">Sign up · {role?.title}</h2>
-      <h1 className="helix-h2">
+      <h1 className="helix-h2 capitalize">
         {role?.value === 'consumer'
           ? 'Start shopping in seconds'
           : 'Create your business profile'}
@@ -129,9 +125,9 @@ export default function Register() {
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.9 }}
           disabled={loading}
-          className="helix-btn-primary w-full"
+          className="helix-btn-primary capitalize w-full"
         >
-          {loading ? <Loader /> : `Create my ${roleFromQuery} account`}
+          {loading ? <Loader /> : `Create my ${role?.value} account`}
         </motion.button>
       </form>
       <div className="mt-8 text-center text-[13px] text-[#9CA3AF]">

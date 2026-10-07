@@ -68,7 +68,7 @@ export default function ExporterProducts() {
   }, [products, selectedCategory, selectedStatus, startDate, endDate]);
 
   const openCreate = () => {
-    router.push('/exporter/my-products/create');
+    router.push('/exporter/products/create');
   };
 
   const handleCategoryChange = (value: string) => {

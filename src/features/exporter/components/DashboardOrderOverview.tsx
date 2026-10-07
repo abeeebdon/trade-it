@@ -35,11 +35,9 @@ const DashboardOrderOverview = ({
             <thead>
               <tr>
                 <th>Order</th>
-                <th>Product</th>
                 <th>Qty</th>
                 <th>Amount</th>
                 <th>Status</th>
-                <th>Payment</th>
               </tr>
             </thead>
             <tbody>
@@ -50,14 +48,10 @@ const DashboardOrderOverview = ({
                       {o.orderNumber}
                     </Link>
                   </td>
-                  <td className="max-w-55 truncate">{o.productName}</td>
                   <td className="font-mono">{o.quantity}</td>
                   <td className="font-mono">{formatUSD(o.amount ?? 0)}</td>
                   <td>
                     <StatusPill status={o.status} />
-                  </td>
-                  <td>
-                    <StatusPill status={o.paymentStatus} />
                   </td>
                 </tr>
               ))}

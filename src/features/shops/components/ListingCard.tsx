@@ -12,7 +12,7 @@ export default function ListingCard({ l }: { l: Product }) {
   return (
     <Link
       href={{
-        pathname: '/shop/product',
+        pathname: '/shop/products/details',
         query: { id: l.id },
       }}
       className="helix-card group overflow-hidden flex flex-col"

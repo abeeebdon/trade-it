@@ -35,7 +35,7 @@ export const ExporterProductDetailsManagement = () => {
   }, [product]);
 
   const deleteMutation = useDeleteProduct(() => {
-    router.push('/exporter/my-products');
+    router.push('/exporter/products');
   });
 
   const handleDelete = () => {
@@ -59,7 +59,7 @@ export const ExporterProductDetailsManagement = () => {
           invalid.
         </p>
         <button
-          onClick={() => router.push('/exporter/my-products')}
+          onClick={() => router.push('/exporter/products')}
           className="helix-btn-primary mt-4"
         >
           Back to products
@@ -71,11 +71,11 @@ export const ExporterProductDetailsManagement = () => {
   return (
     <>
       <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <BackButton path="/exporter/my-products" title="Back to products" />
+        <BackButton path="/exporter/products" title="Back to products" />
 
         <div className="flex items-center gap-2">
           <button
-            onClick={() => router.push(`/exporter/my-products/edit?id=${id}`)}
+            onClick={() => router.push(`/exporter/products/edit?id=${id}`)}
             className="helix-btn-primary inline-flex items-center gap-2"
           >
             <Pencil size={14} /> Edit
