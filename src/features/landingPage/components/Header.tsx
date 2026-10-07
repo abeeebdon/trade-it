@@ -9,17 +9,19 @@ import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
 import { cn } from '@/lib/cn';
 import { logoutAction } from '@/features/authentication/components/helper';
 import { logout } from '@/store/auth/auth.slice';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import LogoutModal from './LogoutModal';
-import SearchInput from './SearchInput';
-import ShoppingMenu from './ShoppingMenu';
 import UserMenu from './UserMenu';
-import ShopMenu from './ShopMenu';
 import JompFullLogo from '@/features/authentication/components/JompFullLogo';
-import CategoriesMenu from './CategoriesMenu';
 import { getSavedCookie } from '@/store/auth/cookies';
+
+const navLinks = [
+  { label: 'Benefits', href: '#benefits' },
+  { label: 'How it works', href: '#how-it-works' },
+  { label: 'FAQ', href: '#faq' },
+];
+
 const Header = ({ className }: { className?: string }) => {
-  const pathname = usePathname();
   const [showSidebar, setShowSidebar] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -56,27 +58,17 @@ const Header = ({ className }: { className?: string }) => {
             <JompFullLogo />
           </Link>
           <nav className="hidden items-center gap-8 md:flex">
-            <a
-              href="#benefits"
-              className="text-sm text-text/65 transition hover:text-text"
-            >
-              Benefits
-            </a>
-            <a
-              href="#how-it-works"
-              className="text-sm text-text/65 transition hover:text-text"
-            >
-              How it works
-            </a>
-            <a
-              href="#faq"
-              className="text-sm text-text/65 transition hover:text-text"
-            >
-              FAQ
-            </a>
+            {navLinks.map(({ label, href }) => (
+              <a
+                key={href}
+                href={href}
+                className=" text-text/65 transition hover:text-text"
+              >
+                {label}
+              </a>
+            ))}
           </nav>
           <div className="flex items-center gap-2">
-            {/* {pathname === '/' && <SearchInput />} */}
             <ThemeToggle />
 
             {user && token ? (

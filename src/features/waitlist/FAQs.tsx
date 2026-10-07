@@ -21,7 +21,7 @@ const FAQSection: FC = () => {
         <h2
           data-aos="fade-down"
           data-aos-easing="linear"
-          data-aos-duration="600"
+          data-aos-duration="300"
           className="mb-10 text-xl font-bold text-primary md:text-3xl"
         >
           Frequently Asked Question
