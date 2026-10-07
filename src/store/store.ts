@@ -7,6 +7,9 @@ import {
 
 import { authReducer } from './auth/auth.slice';
 import { waitlistReducer } from './waitlist/waitlist.slice';
+import { ordersReducer } from './orders/orders.slice';
+import { onboardingReducer } from './onboarding/onboarding.slice';
+import { withdrawalAccountsReducer } from './withdrawalAccounts/withdrawalAccounts.slice';
 import {
   FLUSH,
   PAUSE,
@@ -28,6 +31,9 @@ const persistConfig = {
 const appReducer = combineReducers({
   auth: authReducer,
   wait: waitlistReducer,
+  orders: ordersReducer,
+  onboarding: onboardingReducer,
+  withdrawalAccounts: withdrawalAccountsReducer,
 });
 
 const rootReducer = (

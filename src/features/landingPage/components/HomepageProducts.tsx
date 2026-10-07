@@ -1,3 +1,4 @@
+'use client';
 import { ListingCardSkeleton } from '@/features/shops/components/ListingCardSkeleton';
 import { useGetLandingProductsInfinite } from '../hooks/useGetLandingProductsInfinite';
 import { useMemo, useEffect, useRef, useCallback } from 'react';

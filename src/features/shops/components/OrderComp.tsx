@@ -2,7 +2,7 @@ import { ArrowRight, Link } from 'lucide-react';
 import { useGetOrders } from '../hooks/useGetOrders';
 import { formatDateTime, formatUSD } from '@/lib/func';
 import { StatusPill } from './StatusPill';
-import { OrdersSkeleton } from './OrdersSkeleton';
+import { OrdersSkeleton } from '@/components/orders/OrdersSkeleton';
 import { useRouter } from 'next/navigation';
 
 const OrderComp = () => {

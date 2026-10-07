@@ -1,6 +1,5 @@
 import api from '@/configs/api-config';
 import { APIENDPOINTSTWO } from '@/configs/api-urls';
-import { OrderDetailData } from '../types/exporter';
 import {
   SellerOrder,
   SellerOrdersParams,

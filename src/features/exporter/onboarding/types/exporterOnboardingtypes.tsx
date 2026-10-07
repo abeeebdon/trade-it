@@ -11,6 +11,15 @@ export type BusinessProfile = {
   businessType: string;
   sector: string;
   country: string;
+  contact_phone?: string;
+  contact_email?: string;
+  address?: string;
+  cacNumber?: string;
+  tin?: string;
+  director_name?: string;
+  bvn?: string;
+  nin?: string;
+  ein?: string;
 };
 
 type Verification = {
@@ -38,9 +47,12 @@ export interface BusinessProfilePayload {
   businessType: string;
   country: string;
   sector: string;
+  contact_phone: string;
+  contact_email: string;
+  address: string;
   cacNumber: string;
   bvn: string;
   tin: string;
   ein: string;
-  directorName: string;
+  director_name: string;
 }

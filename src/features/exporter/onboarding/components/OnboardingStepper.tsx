@@ -1,43 +1,52 @@
 'use client';
 
-import { CheckCircle2 } from 'lucide-react';
+import { Check } from 'lucide-react';
 import type { OnboardingStep } from '../../types/exporter';
+import { Dispatch, SetStateAction } from 'react';
 
 interface OnboardingStepperProps {
   steps: OnboardingStep[];
   currentStep: number;
+  setCurrentStep: Dispatch<SetStateAction<number>>;
 }
 
 export default function OnboardingStepper({
   steps,
   currentStep,
+  setCurrentStep,
 }: OnboardingStepperProps) {
   return (
-    <div className="flex items-center gap-4 mb-10 overflow-x-auto pb-2">
+    <article className="flex flex-col w-full h-fit pb-20 pt-5 gap-6 md:max-w-70  mb-10 border bg-surface rounded border-border p-4">
       {steps.map((s, i) => (
-        <div key={s.n} className="flex items-center gap-3 shrink-0">
+        <button
+          key={s.n}
+          type="button"
+          onClick={() => setCurrentStep(i + 1)}
+          className="flex items-center cursor-pointer justify-between gap-3 shrink-0"
+        >
           {/* Step circle */}
-          <div
-            className={`w-8 h-8 rounded-full flex items-center justify-center font-mono text-sm shrink-0 ${
-              s.done
-                ? 'bg-primary text-bg'
-                : currentStep === s.n
-                  ? 'bg-secondary text-white'
-                  : 'bg-surface border border-secondary/30 text-muted'
-            }`}
-          >
-            {s.done ? <CheckCircle2 size={16} /> : s.n}
+          <div className="flex items-center gap-3">
+            <p
+              className={`w-8 h-8 rounded-full flex items-center justify-center font-mono text-sm shrink-0 ${
+                s.done
+                  ? 'bg-primary text-bg'
+                  : currentStep === s.n
+                    ? 'bg-secondary text-white'
+                    : 'bg-surface border border-secondary/30 text-muted'
+              }`}
+            >
+              {s.n}
+            </p>
+
+            <p className="text-[13px] font-medium text-text">{s.label}</p>
           </div>
-
-          {/* Label */}
-          <div className="text-[13px] font-medium text-text">{s.label}</div>
-
-          {/* Connector line */}
-          {i < steps.length - 1 && (
-            <div className="w-10 h-px bg-secondary/30" />
-          )}
-        </div>
+          <div
+            className={`${s.done ? 'bg-green-500' : ' border border-surface'}  p-1 rounded-full`}
+          >
+            <Check size={16} color="white" />
+          </div>
+        </button>
       ))}
-    </div>
+    </article>
   );
 }

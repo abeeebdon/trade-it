@@ -1,12 +1,13 @@
 type Props = {
   className?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
 };
 
 const sizeMap = {
   sm: 'w-6 h-6 border-2',
   md: 'w-10 h-10 border-[3px]',
   lg: 'w-16 h-16 border-4',
+  xl: 'w-30 h-30 border-8',
 };
 
 export const Loading = ({ className, size = 'lg' }: Props) => {

@@ -13,7 +13,6 @@ export default function Modal({
   onClose,
   title,
   children,
-  testid,
   maxWidth = 'max-w-md',
 }: ModalProps) {
   useEffect(() => {
@@ -37,9 +36,8 @@ export default function Modal({
 
   return (
     <aside
-      className="fixed inset-0 z-60 bg-[#0A1628]/85 backdrop-blur-sm overflow-y-auto"
+      className="fixed inset-0 z-60  backdrop-blur-sm overflow-y-auto"
       onClick={onClose}
-      data-testid={testid || 'modal-backdrop'}
       aria-labelledby="modal-title"
     >
       {/* Modal positioning wrapper */}
@@ -51,7 +49,7 @@ export default function Modal({
           aria-modal="true"
         >
           {/* Modal Header */}
-          <header className="flex items-center justify-between px-6 py-4 border-b border-[#1A7A6E]/20">
+          <header className="flex items-center justify-between px-6 py-4 border-b border-bg/20">
             <h2 id="modal-title" className="helix-h3">
               {title}
             </h2>
@@ -59,7 +57,7 @@ export default function Modal({
             <button
               type="button"
               onClick={onClose}
-              className="text-[#9CA3AF] hover:text-[#F5F5F5] transition-colors"
+              className="text-muted hover:text-text transition-colors"
               aria-label="Close modal"
               data-testid="modal-close"
             >

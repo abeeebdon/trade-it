@@ -13,7 +13,7 @@ interface Props {
 }
 
 const ProductDetailsForm = ({ productDetails }: Props) => {
-  const [mode, setMode] = useState('prepay');
+  // const [mode, setMode] = useState('prepay');
   return (
     <section className="lg:col-span-2 space-y-4">
       <article className="border border-border rounded p-6">
@@ -29,7 +29,7 @@ const ProductDetailsForm = ({ productDetails }: Props) => {
             : 'Sold out'}
         </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-2">
+        {/* <div className="mt-4 grid grid-cols-2 gap-2">
           {orderModes.map(({ label, value, icon: Icon }) => (
             <button
               key={value}
@@ -47,13 +47,9 @@ const ProductDetailsForm = ({ productDetails }: Props) => {
               </div>
             </button>
           ))}
-        </div>
+        </div> */}
 
-        {mode === 'prepay' ? (
-          <PrepayForm productDetails={productDetails} setMode={setMode} />
-        ) : (
-          <QuoteForm productDetails={productDetails} />
-        )}
+        <PrepayForm productDetails={productDetails} />
       </article>
 
       {/* SHIPPING INFO (unchanged) */}

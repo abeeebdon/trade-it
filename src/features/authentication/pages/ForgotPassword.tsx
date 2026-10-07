@@ -38,7 +38,7 @@ const ForgotPassword = () => {
         <h1 className="text-2xl helix-h1 text-primary font-semibold tracking-tight">
           Forgot your password?
         </h1>
-        <p className="mt-2 ">
+        <p className="mt-2 text-muted">
           Enter your email address and we&apos;ll send you a one-time
           verification code to reset your password.
         </p>
@@ -64,7 +64,7 @@ const ForgotPassword = () => {
           )}
         </button>
       </form>
-      <div className="flex justify-center items-center gap-2 mt-4 text-sm">
+      <div className="flex justify-center items-center gap-2 mt-4 text-sm text-text">
         <span>Remember your password?</span>
         <Link
           href="/login"

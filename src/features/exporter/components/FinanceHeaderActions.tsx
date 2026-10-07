@@ -5,17 +5,13 @@ import { Banknote, WalletCards } from 'lucide-react';
 
 interface Props {
   onWithdrawNGN: () => void;
-  onWithdrawUSD: () => void;
 }
 
-export default function FinanceHeaderActions({
-  onWithdrawNGN,
-  onWithdrawUSD,
-}: Props) {
+export default function FinanceHeaderActions({ onWithdrawNGN }: Props) {
   return (
     <div className="flex items-center gap-2 flex-wrap">
       <Link
-        href="/exporter/withdrawal-accounts"
+        href="/exporter/account/withdrawal-accounts"
         className="helix-btn-secondary inline-flex items-center gap-2"
       >
         <WalletCards size={15} />
@@ -28,15 +24,6 @@ export default function FinanceHeaderActions({
       >
         <Banknote size={15} />
         <span className="hidden sm:inline">Withdraw NGN</span>
-      </button>
-
-      <button
-        onClick={onWithdrawUSD}
-        className="helix-btn-primary inline-flex items-center gap-2"
-      >
-        <Banknote size={15} />
-
-        <span className="hidden sm:inline">Withdraw USD</span>
       </button>
     </div>
   );

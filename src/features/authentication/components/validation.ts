@@ -41,6 +41,36 @@ export const registerSchema = z.object({
 
 export type RegisterFormValues = z.infer<typeof registerSchema>;
 
+// Shipping / packaging schema
+
+export const shippingSchema = z.object({
+  isPhysical: z.boolean(),
+  packageId: z.string(),
+  length: z.number().nonnegative(),
+  width: z.number().nonnegative(),
+  height: z.number().nonnegative(),
+  dimensionUnit: z.string(),
+  weight: z.number().nonnegative(),
+  weightUnit: z.string(),
+  countryOfOrigin: z.string(),
+  hsCode: z.string(),
+});
+
+export type ShippingFormValues = z.infer<typeof shippingSchema>;
+
+export const shippingDefaults: ShippingFormValues = {
+  isPhysical: true,
+  packageId: 'store-default-sample-box',
+  length: 0,
+  width: 0,
+  height: 0,
+  dimensionUnit: 'in',
+  weight: 0,
+  weightUnit: 'lb',
+  countryOfOrigin: '',
+  hsCode: '',
+};
+
 // Product validation schema
 
 export const productSchema = z.object({
@@ -69,6 +99,9 @@ export const productSchema = z.object({
     .min(1, 'At least one product image is required'),
   thumbnailPreview: z.string().nullable().optional(),
   imagePreviews: z.array(z.string()).optional(),
+
+  // Captured in form state only — not sent to the API yet.
+  shipping: shippingSchema.optional(),
 });
 
 export type ProductFormValues = z.infer<typeof productSchema>;

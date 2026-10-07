@@ -1,7 +1,5 @@
-import Fulfillment from '@/features/exporter/fulfillment/pages/Fulfillment';
+import DeliveryOverview from '@/features/exporter/delivery/pages/DeliveryOverview';
 
-const page = () => {
-  return <Fulfillment />;
-};
-
-export default page;
+export default function ExporterOrdersDemoPage() {
+  return <DeliveryOverview />;
+}

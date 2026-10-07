@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 import PressableBtn from '@/components/buttons/PressableBtn';
 import Loader from '@/components/buttons/Loader';
 import { useGetOrderDetails } from '@/features/shops/hooks/useGetOrders';
-import { OrdersSkeleton } from '@/features/shops/components/OrdersSkeleton';
+import { OrdersSkeleton } from '@/components/orders/OrdersSkeleton';
 import OrderNotFound from '@/features/shops/components/OrderNotFound';
 import OrderDetailsHeader from '@/features/shops/components/OrderDetailsHeader';
 import OrderProductCard from '@/features/shops/components/OrderProductCard';
@@ -28,9 +28,7 @@ const PaymentPage = () => {
 
   const { data: order, isPending } = useGetOrderDetails(orderID);
 
-  const [selectedPaymentId, setSelectedPaymentId] = useState<number | null>(
-    null,
-  );
+  const [selectedPaymentId, setSelectedPaymentId] = useState<string>('');
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [paying, setPaying] = useState(false);
 

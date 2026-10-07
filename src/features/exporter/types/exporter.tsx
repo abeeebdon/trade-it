@@ -394,7 +394,6 @@ export type WithdrawalAccount = {
   routing_number?: string;
   swift_code?: string;
   is_default: boolean;
-  approval_status: ApprovalStatus;
 };
 
 export type NgnBank = {
@@ -582,16 +581,6 @@ export interface BalanceCardProps {
   sub: string;
   va?: AccountDetails;
   accent?: boolean;
-}
-
-export interface AccountSectionProps {
-  title: string;
-  icon: LucideIcon;
-  items: WithdrawalAccount[];
-  loading: boolean;
-  empty: string;
-  onDefault: (id: string) => void;
-  onRemove: (id: string) => void;
 }
 
 export interface AccountSectionCardProps {

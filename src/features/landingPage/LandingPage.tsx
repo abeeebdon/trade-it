@@ -17,7 +17,7 @@ export default function Landing() {
   const router = useRouter();
 
   return (
-    <main className="min-h-screen bg-white text-[] dark:bg-[#0A1628] dark:text-[#F5F5F5]">
+    <main className="min-h-screen bg-white  dark:bg-[#0A1628] dark:text-[#F5F5F5]">
       {/* HERO */}
       <HeroComponent />
 

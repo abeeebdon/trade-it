@@ -21,7 +21,7 @@ export function AuthShell() {
             data-aos="fade-up"
             data-aos-duration="700"
           >
-            One login. Every trade in one command center.
+            Everything you need to sell and grow.
           </h2>
           <p
             className="text-[#9CA3AF] mt-4 text-sm max-w-md"
@@ -33,7 +33,7 @@ export function AuthShell() {
           </p>
         </div>
         <div className="font-mono text-[11px] text-[#1A7A6E] tracking-widest">
-          © {new Date().getFullYear()} · JOMP TRADE v1.1
+          © {new Date().getFullYear()} · JOMPSHOP v1.1
         </div>
       </div>
     </div>

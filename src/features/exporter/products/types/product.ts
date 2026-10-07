@@ -12,4 +12,5 @@ export interface ProductResponseType {
   statusId: number;
   thumbnailImage: string;
   unit: number;
+  createdAt?: string;
 }

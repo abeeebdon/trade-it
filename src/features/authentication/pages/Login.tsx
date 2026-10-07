@@ -114,10 +114,10 @@ export default function Login() {
           error={errors.password?.message}
           name="password"
         />
-        <div className="flex items-center py-2 justify-end">
+        <div className="flex items-center  py-2 justify-end">
           <Link
             href="/forgot-password "
-            className="font-semibold text-sm hover:underline"
+            className="font-semibold text-sm text-secondary hover:underline"
           >
             Forgot Password?
           </Link>
@@ -133,7 +133,7 @@ export default function Login() {
       </form>
       <div className="mt-8 text-center text-[13px] text-[#9CA3AF]">
         New to Jompshop?{' '}
-        <Link href="/getstarted" className="text-[#C9922A] font-semibold">
+        <Link href="/register" className="text-[#C9922A] font-semibold">
           Create an account
         </Link>
       </div>

@@ -3,7 +3,6 @@
 import { useMemo, useState } from 'react';
 import { useGetAdminOrders } from '../../hooks/useGetAdminOrders';
 import { AdminOrder } from '../../types/orders';
-import Pagination, { paginate } from '@/components/ui/Pagination';
 import SelectDropDown from '@/components/SelectDropDown';
 import {
   OrderRowSkeleton,
@@ -15,6 +14,7 @@ import { FilterBarSkeleton } from '../../adminListing/components/ListingsSkeleto
 import { OrderMobileCard } from '../components/OrderMobileCard';
 import { OrdersFilterBar, StatusFilter } from '../components/OrdersFilterBar';
 import { OrdersTable } from '../components/OrdersTable';
+import Pagination from '@/features/exporter/components/pagination';
 
 const AdminOrders = () => {
   const [status, setStatus] = useState<StatusFilter>('');
@@ -25,10 +25,8 @@ const AdminOrders = () => {
     status: status || undefined,
   });
 
-  const orders: AdminOrder[] = useMemo(() => data ?? [], [data]);
-
-  const { items, totalPages } = paginate(orders, page, pageSize);
-  const totalRecords = orders.length;
+  const items: AdminOrder[] = useMemo(() => data ?? [], [data]);
+  const totalRecords = items.length;
 
   // ── Loading ────────────────────────────────────────
   if (isPending) {
@@ -42,7 +40,6 @@ const AdminOrders = () => {
             <thead>
               <tr>
                 <th>Order #</th>
-                <th>Product</th>
                 <th>Qty</th>
                 <th>Amount</th>
                 <th>Status</th>
@@ -74,7 +71,7 @@ const AdminOrders = () => {
   }
 
   // ── Empty ──────────────────────────────────────────
-  if (orders.length === 0) {
+  if (items.length === 0) {
     return (
       <div className="space-y-6">
         <OrdersFilterBar
@@ -99,6 +96,11 @@ const AdminOrders = () => {
           setPage(1);
         }}
       />
+      <div className="flex items-center gap-2 text-[13px] text-muted">
+        <span>
+          Total records: <strong className="text-text">{totalRecords}</strong>
+        </span>
+      </div>
 
       {/* Desktop table */}
       <OrdersTable orders={items} />
@@ -111,24 +113,16 @@ const AdminOrders = () => {
       </div>
 
       {/* Pagination + page size */}
-      <article className="flex flex-col sm:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-2 text-[13px] text-[#9CA3AF]">
-          <span>
-            Total records:{' '}
-            <strong className="text-[#F5F5F5]">{totalRecords}</strong>
-          </span>
-        </div>
-        <div className="flex items-center  gap-4">
-          <Pagination page={page} totalPages={totalPages} onChange={setPage} />
-          <SelectDropDown
-            pageNum={pageSize}
-            setPageNum={(n) => {
-              setPageSize(n);
-              setPage(1);
-            }}
-          />
-        </div>
-      </article>
+      <div className="flex items-center mt-10 justify-between gap-4">
+        <Pagination page={page} totalPages={2} onChange={setPage} />
+        <SelectDropDown
+          pageNum={pageSize}
+          setPageNum={(n) => {
+            setPageSize(n);
+            setPage(1);
+          }}
+        />
+      </div>
     </div>
   );
 };

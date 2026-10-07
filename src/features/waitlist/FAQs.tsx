@@ -13,7 +13,7 @@ const FAQSection: FC = () => {
   };
 
   return (
-    <section id="faq" className="my-15 px-4 py-20  text-center md:px-6">
+    <section id="faq" className="my-15 px-4 py-20 text-center md:px-6">
       <div className="text-center">
         <p className="mb-2 text-lg font-semibold text-primary-300 md:text-2xl ">
           Let’s Answer Your
@@ -21,7 +21,7 @@ const FAQSection: FC = () => {
         <h2
           data-aos="fade-down"
           data-aos-easing="linear"
-          data-aos-duration="600"
+          data-aos-duration="300"
           className="mb-10 text-xl font-bold text-primary md:text-3xl"
         >
           Frequently Asked Question
@@ -48,7 +48,7 @@ const FAQSection: FC = () => {
                       onClick={() => toggleFAQ(index)}
                       className="flex w-full items-center justify-between p-4 text-left font-medium transition"
                     >
-                      <span className="text-base font-semibold text-purple-100/90 ">
+                      <span className="text-base font-semibold text-muted ">
                         {faq.question}
                       </span>
                       {openIndex !== index ? (
@@ -58,7 +58,7 @@ const FAQSection: FC = () => {
                       )}
                     </button>
                     {openIndex === index && (
-                      <p className=" px-4 py-3 text-sm text-white">
+                      <p className=" px-4 py-3 text-sm text-text">
                         {faq.answer}
                       </p>
                     )}

@@ -9,17 +9,19 @@ import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
 import { cn } from '@/lib/cn';
 import { logoutAction } from '@/features/authentication/components/helper';
 import { logout } from '@/store/auth/auth.slice';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import LogoutModal from './LogoutModal';
-import SearchInput from './SearchInput';
-import ShoppingMenu from './ShoppingMenu';
 import UserMenu from './UserMenu';
-import ShopMenu from './ShopMenu';
 import JompFullLogo from '@/features/authentication/components/JompFullLogo';
-import CategoriesMenu from './CategoriesMenu';
 import { getSavedCookie } from '@/store/auth/cookies';
+
+const navLinks = [
+  { label: 'Benefits', href: '#benefits' },
+  { label: 'How it works', href: '#how-it-works' },
+  { label: 'FAQ', href: '#faq' },
+];
+
 const Header = ({ className }: { className?: string }) => {
-  const pathname = usePathname();
   const [showSidebar, setShowSidebar] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -46,7 +48,7 @@ const Header = ({ className }: { className?: string }) => {
       <header
         className={
           (cn(
-            'fixed top-0 inset-x-0 z-30  dark:bg-[#0A1628]/85 bg-[#ffffffee] backdrop-blur border-b border-[#1A7A6E]/15',
+            'fixed top-0 inset-x-0 z-30  bg-bg backdrop-blur border-b border-[#1A7A6E]/15',
           ),
           className)
         }
@@ -55,30 +57,18 @@ const Header = ({ className }: { className?: string }) => {
           <Link href="/" className="outline-none flex items-center gap-2">
             <JompFullLogo />
           </Link>
-          <nav className="hidden md:flex basis-1/2 justify-center h-full items-center lg:gap-8 gap-2 md:gap-4 text-[13px] text-[#9CA3AF]">
-            <ShopMenu />
-            <CategoriesMenu />
-            {user && <ShoppingMenu />}
-            <div className="hidden lg:block">
-              {!user || !token ? (
-                <Link
-                  href="/register?role=exporter"
-                  className="text-muted hover:text-text text-lg"
-                >
-                  Become a Seller
-                </Link>
-              ) : (
-                <Link
-                  href={pathToDashboard}
-                  className="text-muted hover:text-text text-lg"
-                >
-                  Dashboard
-                </Link>
-              )}
-            </div>
+          <nav className="hidden items-center gap-8 md:flex">
+            {navLinks.map(({ label, href }) => (
+              <a
+                key={href}
+                href={href}
+                className=" text-text/65 transition hover:text-text"
+              >
+                {label}
+              </a>
+            ))}
           </nav>
           <div className="flex items-center gap-2">
-            {pathname === '/' && <SearchInput />}
             <ThemeToggle />
 
             {user && token ? (
@@ -102,7 +92,7 @@ const Header = ({ className }: { className?: string }) => {
                 >
                   Sign in
                 </Link>
-                <Link href="/getstarted" className="helix-btn-primary text-sm">
+                <Link href="/register" className="helix-btn-primary text-sm">
                   Get Started
                 </Link>
               </div>

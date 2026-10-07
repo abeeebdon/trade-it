@@ -2,33 +2,37 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { toast } from 'sonner';
-import { Plus, Globe, Building2 } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useHeader } from '@/context/HeaderContext';
+import { useAppDispatch, useAppSelector } from '@/hooks/store/store';
 import type { WithdrawalAccount, NgnBank } from '../types/exporter';
-import { mockWithdrawalAccounts, mockNgnBanks } from '../components/data';
+import { mockNgnBanks } from '../components/data';
 import AccountSection from '../components/AccountSection';
 import AddAccountModal from '../modals/AddAccountModal';
+import {
+  addWithdrawalAccount,
+  setWithdrawalAccounts,
+} from '@/store/withdrawalAccounts/withdrawalAccounts.slice';
+import BackButton from '@/components/buttons/BackButton';
 
 // WithdrawalAccounts
 export default function WithdrawalAccounts() {
   const { setHeader } = useHeader();
-
-  const [accounts, setAccounts] = useState<WithdrawalAccount[]>([]);
-  const [banks, setBanks] = useState<NgnBank[]>([]);
-  const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
-
+  const [banks, setBanks] = useState<NgnBank[]>([]);
+  const dispatch = useAppDispatch();
+  const accounts = useAppSelector((state) => state.withdrawalAccounts.accounts);
   useEffect(() => {
     const timer = setTimeout(() => {
-      setAccounts(mockWithdrawalAccounts);
+      dispatch(setWithdrawalAccounts(accounts.length ? accounts : []));
       setBanks(mockNgnBanks);
-      setLoading(false);
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, []);
-
+  }, [dispatch]);
+  const handleSaved = (account: WithdrawalAccount) => {
+    dispatch(addWithdrawalAccount(account));
+  };
   // Dynamic header with CTA button
   useEffect(() => {
     setHeader({
@@ -38,7 +42,6 @@ export default function WithdrawalAccounts() {
         <button
           onClick={() => setOpen(true)}
           className="helix-btn-primary inline-flex items-center gap-2"
-          data-testid="add-account-btn"
         >
           <Plus size={14} />
           <span className="hidden sm:inline">Add account</span>
@@ -53,82 +56,18 @@ export default function WithdrawalAccounts() {
   }, [setHeader]);
 
   // Set as default
-  const setDefault = (id: string) => {
-    setAccounts((prev) => {
-      const target = prev.find((a) => a.id === id);
-      if (!target) return prev;
-      return prev.map((a) =>
-        a.currency === target.currency ? { ...a, is_default: a.id === id } : a,
-      );
-    });
-    toast.success('Set as default');
-  };
-
-  // Remove / deactivate
-  const remove = (id: string) => {
-    setAccounts((prev) => prev.filter((a) => a.id !== id));
-    toast.success('Account deactivated');
-  };
-
-  // Save new account from modal
-  const handleSaved = (account: WithdrawalAccount) => {
-    setAccounts((prev) => {
-      // If new account is default, unset others in same currency
-      if (account.is_default) {
-        return [
-          ...prev.map((a) =>
-            a.currency === account.currency ? { ...a, is_default: false } : a,
-          ),
-          account,
-        ];
-      }
-      return [...prev, account];
-    });
-  };
-
-  const usdAccounts = accounts.filter((a) => a.currency === 'USD');
-  const ngnAccounts = accounts.filter((a) => a.currency === 'NGN');
 
   return (
-    <main className="overflow-auto w-full h-full">
-      {/* Intro text */}
-      <p className="text-[13px] text-muted mb-6 max-w-2xl leading-relaxed">
-        Save your destination bank accounts once. Add multiple in NGN and USD,
-        mark a default per currency, and then withdraw to them with a single
-        click — no need to retype routing numbers each time.
+    <main className="overflow-auto w-full h-full max-w-2xl">
+      <BackButton title="Back to Finance" path="/exporter/finance" />
+      <p className="text-[13px] text-muted my-4 leading-relaxed">
+        Save your destination bank accounts once.{' '}
       </p>
 
-      {/* USD accounts */}
-      <AccountSection
-        title="USD accounts"
-        icon={Globe}
-        items={usdAccounts}
-        loading={loading}
-        empty="No USD accounts. Add one to receive USD payouts."
-        onDefault={setDefault}
-        onRemove={remove}
-      />
-
       {/* NGN accounts */}
-      <AccountSection
-        title="NGN accounts"
-        icon={Building2}
-        items={ngnAccounts}
-        loading={loading}
-        empty="No NGN accounts. Add one to withdraw via NIP."
-        onDefault={setDefault}
-        onRemove={remove}
-      />
+      <AccountSection />
 
       {/* Back link */}
-      <div className="mt-8 flex items-center justify-between">
-        <Link
-          href="/exporter/finance"
-          className="text-[12px] text-[#9CA3AF] hover:text-[#F5F5F5] transition-colors"
-        >
-          ← Back to Finance
-        </Link>
-      </div>
 
       {/* Add account modal */}
       {open && (

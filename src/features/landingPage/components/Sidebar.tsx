@@ -41,19 +41,19 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`relative h-screen overflow-y-auto hide-scrollbar hidden sm:flex bg-bg border-r border-secondary/20  flex-col z-40 ${hideLabel ? 'w-20' : 'max-w-60'}`}
+      className={`relative h-screen overflow-y-auto hide-scrollbar hidden sm:flex bg-bg-soft border-r border-secondary/20  flex-col z-40 ${hideLabel ? 'w-20' : 'max-w-60'}`}
     >
       <div className="px-4 py-5 border-b border-[#1A7A6E]/15 flex items-center gap-2">
         <JompShopLogo
           primaryColor={isDark ? 'white' : '#31005C'}
           secondaryColor={isDark ? '#EFA005' : '#EFA005'}
           width={40}
-          height={60}
+          height={40}
           className=""
         />
         <button
           onClick={() => setHideLabel((prev) => !prev)}
-          className="absolute block -right-1 z-50 top-20 bg-bg border border-secondary/30 rounded-full p-1 shadow"
+          className="absolute cursor-pointer block -right-1 z-50 top-20 bg-bg border border-secondary/30 rounded-full p-1 shadow"
         >
           <ChevronLast
             size={16}
@@ -65,10 +65,10 @@ export default function Sidebar() {
         </button>
         {!hideLabel && (
           <div className="hidden md:flex flex-col ">
-            <span className="font-bold text-secondary tracking-widest text-lg">
+            <span className="font-bold  text-secondary tracking-wide text-lg">
               JOMPSHOP
             </span>
-            <span className="text-xs ml-0.5  dark:text-[#1A7A6E] text-[#4a2e8a]  font-mono">
+            <span className="text-xs ml-0.5   dark:text-[#1A7A6E] text-[#4a2e8a]  font-mono">
               EXPORT OS v1.1
             </span>
           </div>
@@ -96,8 +96,8 @@ export default function Sidebar() {
                   href={item.to}
                   className={`flex items-center gap-3 px-4  py-3 border-l-2 ${
                     isActive
-                      ? 'border-[#C9922A] bg-[#C9922A]/6 text-[#C9922A]'
-                      : 'border-transparent text-[#9CA3AF] hover:text-[#F5F5F5] hover:bg-secondary/50'
+                      ? 'border-[#C9922A] bg-primary-dim/50 text-[#C9922A]'
+                      : 'border-transparent text-[#9CA3AF] hover:text-[#F5F5F5] hover:bg-secondary/20'
                   }`}
                 >
                   {<Icon size={18} />}
@@ -108,7 +108,7 @@ export default function Sidebar() {
                   )}
                 </Link>
                 {hideLabel && (
-                  <p className="absolute left-full z-[9999] top-1/2 -translate-y-1/2 text-text whitespace-nowrap  text-xs hidden group-hover:block transition pointer-events-none">
+                  <p className="absolute left-full z-9999 top-1/2 -translate-y-1/2 text-text whitespace-nowrap  text-xs hidden group-hover:block transition pointer-events-none">
                     {item.label}
                   </p>
                 )}

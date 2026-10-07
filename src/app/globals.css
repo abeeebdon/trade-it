@@ -71,20 +71,20 @@
   background: var(--helix-gold);
 }
 
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
 /* Hide arrows in Firefox */
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 :root {
   /* Core palette 
   */
-  --helix-navy: #ffffff;
+  --helix-navy: white;
   --helix-primeBackground: #fffdfd;
   --helix-surface: #f4f2ee;
   --helix-gold: #f39c12;

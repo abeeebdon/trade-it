@@ -12,7 +12,7 @@ const SelectDropDown: React.FC<SelectDropDownProps> = ({
   const pageNumberOptions = [5, 10, 20, 50];
 
   return (
-    <div className="flex gap-2 text-text items-center justify-self-end">
+    <section className="flex gap-2 text-text items-center justify-self-end">
       <span>Per Page:</span>
       <select
         value={pageNum}
@@ -25,7 +25,7 @@ const SelectDropDown: React.FC<SelectDropDownProps> = ({
           </option>
         ))}
       </select>
-    </div>
+    </section>
   );
 };
 

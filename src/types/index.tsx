@@ -1,4 +1,7 @@
 import { LucideIcon } from 'lucide-react';
+import type { OrdersState } from '@/store/orders/orders.slice';
+import type { OnboardingState } from '@/store/onboarding/onboarding.slice';
+import type { WithdrawalAccountsState } from '@/store/withdrawalAccounts/withdrawalAccounts.slice';
 export type UserRole =
   | 'exporter'
   | 'retailer'
@@ -28,6 +31,9 @@ export interface InitialAuthStateType {
 }
 export interface RootReducerType {
   auth: InitialAuthStateType;
+  orders: OrdersState;
+  onboarding: OnboardingState;
+  withdrawalAccounts: WithdrawalAccountsState;
 }
 
 export interface NavItems {

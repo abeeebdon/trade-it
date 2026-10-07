@@ -2,8 +2,10 @@ import { Loading } from '@/components/loading';
 
 export default function AppLoading() {
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-bg/80 backdrop-blur-sm gap-5">
-      <Loading size="lg" />
-    </div>
+    <main className="min-h-screen w-full">
+      <div className="flex flex-col w-full items-center justify-center h-full gap-4">
+        <Loading size="xl" />
+      </div>
+    </main>
   );
 }

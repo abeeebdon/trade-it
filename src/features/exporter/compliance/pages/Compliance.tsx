@@ -10,7 +10,7 @@ import MissingDocsCard from '../components/MissingDocsCard';
 import RequirementsCard from '../../components/RequirementsCard';
 import AddDocModal from '../components/AddDocModal';
 import { useGetCOmplianceStatus } from '../hooks/useGetCompliance';
-import { ComplianceDocument, ComplianceVaultData } from '../types/compliance';
+import { ComplianceVaultData } from '../types/compliance';
 import { Loading } from '@/components/loading';
 
 export default function Compliance() {
@@ -54,19 +54,15 @@ export default function Compliance() {
 
   return (
     <>
-      <div className="grid lg:grid-cols-3 gap-6">
+      <article className="flex md:flex-row flex-col gap-6">
         {/* ── Left col: score + missing + guides ── */}
-        <div className="lg:col-span-1 space-y-4">
+        <div className="w-full md:max-w-75 space-y-4 h-full">
           <ComplianceScoreCard score={complianceData} />
-          <MissingDocsCard score={complianceData?.missingDocuments ?? []} />
-          {complianceData?.importGuides?.map((cat) => (
-            <RequirementsCard key={cat.title} cat={cat} />
-          ))}
         </div>
 
         {/* ── Right col: document vault ── */}
-        <div className="lg:col-span-2">
-          <div className="helix-card overflow-hidden">
+        <div className="w-full border-border rounded  border">
+          <div className=" overflow-hidden">
             <div className="px-5 py-4 border-b border-[#1A7A6E]/20">
               <div className="helix-label">Document Vault</div>
               <div className="helix-h3 mt-1">
@@ -75,8 +71,16 @@ export default function Compliance() {
             </div>
 
             {complianceData.documents.length === 0 ? (
-              <div className="p-10 text-center text-[#9CA3AF]">
-                No documents uploaded yet.
+              <div className="p-10 space-y-5 text-center text-muted">
+                <p>No documents uploaded yet.</p>
+                <button
+                  onClick={() => setOpen(true)}
+                  className="helix-btn-primary inline-flex items-center gap-2"
+                >
+                  <Plus size={14} />
+                  <span className="hidden sm:inline">Add document</span>
+                  <span className="sm:hidden">Add</span>
+                </button>
               </div>
             ) : (
               <>
@@ -100,13 +104,13 @@ export default function Compliance() {
                             <div className="flex items-center gap-2">
                               <FileText
                                 size={16}
-                                className="text-[#C9922A] shrink-0"
+                                className="text-primary shrink-0"
                               />
                               <span>{d.documentType}</span>
                             </div>
                           </td>
                           <td className="text-[12px]">{d.issuingAuthority}</td>
-                          <td className="font-mono text-[12px] text-[#9CA3AF]">
+                          <td className="font-mono text-[12px] text-muted">
                             {formatDateToMM(d.issuedDate)}
                           </td>
                           <td className="font-mono text-[12px]">
@@ -129,45 +133,38 @@ export default function Compliance() {
                 {/* Mobile cards */}
                 <div className="sm:hidden divide-y divide-[#1A7A6E]/10">
                   {complianceData.documents.map((d) => (
-                    <div
-                      key={d.id}
-                      className="p-4 space-y-2"
-                      data-testid={`doc-${d.id}`}
-                    >
+                    <div key={d.id} className="p-4 space-y-2">
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-start gap-2 min-w-0">
                           <FileText
                             size={16}
-                            className="text-[#C9922A] shrink-0 mt-0.5"
+                            className="text-primary shrink-0 mt-0.5"
                           />
                           <div className="min-w-0">
                             <div className="font-medium text-[13px] truncate">
                               {d.documentType}
                             </div>
-                            <div className="text-[11px] text-[#9CA3AF] truncate">
+                            <div className="text-[11px] text-muted truncate">
                               {d.fileName}
                             </div>
                           </div>
                         </div>
-                        <button
-                          className="text-[#E74C3C] hover:text-[#ff8e82] shrink-0"
-                          data-testid={`del-doc-${d.id}`}
-                        >
+                        <button className="text-[#E74C3C] hover:text-[#ff8e82] shrink-0">
                           <Trash2 size={14} />
                         </button>
                       </div>
 
                       <div className="flex items-center justify-between pl-6">
-                        <div className="text-[12px] text-[#9CA3AF]">
+                        <div className="text-[12px] text-muted">
                           {d.issuingAuthority}
                         </div>
                         <StatusPill status={d.status} />
                       </div>
 
-                      <div className="flex gap-4 pl-6 text-[11px] font-mono text-[#9CA3AF]">
+                      <div className="flex gap-4 pl-6 text-[11px] font-mono text-muted">
                         <span>
                           Issued:{' '}
-                          <span className="text-[#F5F5F5]">
+                          <span className="text-text">
                             {formatDateToMM(d.issuedDate)}
                           </span>
                         </span>
@@ -178,8 +175,8 @@ export default function Compliance() {
                               d.status === 'expired'
                                 ? 'text-[#E74C3C]'
                                 : d.status === 'expiring_soon'
-                                  ? 'text-[#C9922A]'
-                                  : 'text-[#F5F5F5]'
+                                  ? 'text-primary'
+                                  : 'text-text'
                             }
                           >
                             {formatDateToMM(d.expiryDate)}
@@ -193,7 +190,13 @@ export default function Compliance() {
             )}
           </div>
         </div>
-      </div>
+      </article>
+      <article className="grid md:grid-cols-2 gap-5 mt-6">
+        <MissingDocsCard score={complianceData?.missingDocuments ?? []} />
+        {complianceData?.importGuides?.map((cat) => (
+          <RequirementsCard key={cat.title} cat={cat} />
+        ))}
+      </article>
 
       {/* ── Add document modal ── */}
       {open && <AddDocModal onClose={() => setOpen(false)} />}

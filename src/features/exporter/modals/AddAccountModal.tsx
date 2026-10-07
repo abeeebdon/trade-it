@@ -1,14 +1,31 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
+import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import type {
-  AccountCurrency,
-  //   AccountType,
-  NgnBank,
-  WithdrawalAccount,
-  WithdrawalAccountForm,
-} from '../types/exporter';
+import { z } from 'zod';
+
+import InputField from '@/components/form/InputFIeld';
+import SelectField from '@/components/form/SelectField';
+import type { NgnBank, WithdrawalAccount } from '../types/exporter';
+
+const addAccountSchema = z.object({
+  label: z.string().optional(),
+  account_name: z.string().min(1, 'Account holder name is required'),
+  is_default: z.boolean(),
+  bank_code: z.string().min(1, 'Select a bank'),
+  account_number: z
+    .string()
+    .regex(/^\d{10}$/, 'Account number must be 10 digits'),
+  bank_name: z.string().optional(),
+  routing_number: z.string().optional(),
+  account_type: z.enum(['checking', 'savings']),
+  swift_code: z.string().optional(),
+});
+
+type AddAccountFormValues = z.infer<typeof addAccountSchema>;
 
 interface AddAccountModalProps {
   banks: NgnBank[];
@@ -16,7 +33,7 @@ interface AddAccountModalProps {
   onSaved: (account: WithdrawalAccount) => void;
 }
 
-const defaultForm: WithdrawalAccountForm = {
+const defaultValues: AddAccountFormValues = {
   label: '',
   account_name: '',
   is_default: true,
@@ -28,260 +45,203 @@ const defaultForm: WithdrawalAccountForm = {
   swift_code: '',
 };
 
+const makeAccountId = () => `wa-${Math.random().toString(36).slice(2, 10)}`;
+
 export default function AddAccountModal({
   banks,
   onClose,
   onSaved,
 }: AddAccountModalProps) {
-  const [currency, setCurrency] = useState<AccountCurrency>('USD');
-  const [form, setForm] = useState<WithdrawalAccountForm>(defaultForm);
-  const [busy, setBusy] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [verificationMessage, setVerificationMessage] = useState('');
+  const verificationTimer = useRef<number | null>(null);
 
-  const upd =
-    (k: keyof WithdrawalAccountForm) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
-      setForm({ ...form, [k]: e.target.value });
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    getValues,
+    formState: { isSubmitting },
+  } = useForm<AddAccountFormValues>({
+    resolver: zodResolver(addAccountSchema),
+    defaultValues,
+  });
 
-  const save = async () => {
-    if (!form.account_name.trim()) {
-      toast.error('Account holder name is required');
-      return;
-    }
-    if (currency === 'NGN' && form.account_number.length !== 10) {
-      toast.error('NGN account number must be 10 digits');
-      return;
-    }
-    if (currency === 'USD' && !form.bank_name.trim()) {
-      toast.error('Bank name is required');
-      return;
-    }
-
-    setBusy(true);
-    try {
-      await new Promise((res) => setTimeout(res, 600));
-
-      // Build the saved account object
-      const bankName =
-        currency === 'NGN'
-          ? (banks.find((b) => b.code === form.bank_code)?.name ?? '')
-          : form.bank_name;
-
-      const saved: WithdrawalAccount = {
-        id: `wa-${Date.now()}`,
-        label:
-          form.label || (currency === 'USD' ? 'USD Account' : 'NGN Account'),
-        currency,
-        bank_name: bankName,
-        account_number_masked: `••••••${form.account_number.slice(-4)}`,
-        account_name: form.account_name,
-        account_type: currency === 'USD' ? form.account_type : undefined,
-        routing_number: currency === 'USD' ? form.routing_number : undefined,
-        swift_code:
-          currency === 'USD' && form.swift_code ? form.swift_code : undefined,
-        is_default: form.is_default,
-        approval_status: 'approved',
-      };
-
-      onSaved(saved);
-      toast.success('Account added & approved');
-      onClose();
-    } catch {
-      toast.error('Failed to add account');
-    } finally {
-      setBusy(false);
+  const clearVerificationTimer = () => {
+    if (verificationTimer.current !== null) {
+      window.clearTimeout(verificationTimer.current);
+      verificationTimer.current = null;
     }
   };
 
+  const verifyAccount = (nextBankCode: string, nextAccountNumber: string) => {
+    clearVerificationTimer();
+
+    const normalized = nextAccountNumber.replace(/\D/g, '').slice(0, 10);
+
+    if (!nextBankCode || normalized.length !== 10) {
+      setVerificationMessage('');
+      setIsVerifying(false);
+      setValue('account_name', '', { shouldValidate: true });
+      return;
+    }
+
+    setIsVerifying(true);
+    setVerificationMessage('');
+
+    verificationTimer.current = window.setTimeout(() => {
+      const bankIndex = banks.findIndex((bank) => bank.code === nextBankCode);
+      const seed =
+        nextBankCode
+          .split('')
+          .reduce((sum, char) => sum + char.charCodeAt(0), 0) +
+        normalized.length +
+        (bankIndex >= 0 ? bankIndex : 0);
+
+      const verifiedNames = [
+        'Jompshop Okafor',
+        'Jompstart Adebayo',
+        'Jomp Eze',
+        'Jompp Adeyemi',
+      ];
+
+      const verifiedName =
+        verifiedNames[Math.abs(seed) % verifiedNames.length] ?? 'Ade';
+
+      setValue('account_name', verifiedName, { shouldValidate: true });
+      setValue(
+        'bank_name',
+        banks.find((bank) => bank.code === nextBankCode)?.name ?? '',
+        { shouldValidate: true },
+      );
+      setVerificationMessage(`Verified account holder: ${verifiedName}`);
+      setIsVerifying(false);
+      verificationTimer.current = null;
+    }, 1200);
+  };
+
+  const handleBankChange = (value: string) => {
+    setValue('bank_code', value, { shouldValidate: true });
+    verifyAccount(value, getValues('account_number'));
+  };
+
+  const handleAccountNumberChange = (value: string) => {
+    const nextValue = value.replace(/\D/g, '').slice(0, 10);
+    setValue('account_number', nextValue, { shouldValidate: true });
+    verifyAccount(getValues('bank_code'), nextValue);
+  };
+
+  const onSubmit = async (values: AddAccountFormValues) => {
+    if (isVerifying) {
+      toast.error('Account is still being verified');
+      return;
+    }
+
+    const selectedBank = banks.find((bank) => bank.code === values.bank_code);
+
+    const saved: WithdrawalAccount = {
+      id: makeAccountId(),
+      label: values.label || 'NGN Account',
+      currency: 'NGN',
+      bank_name: selectedBank?.name ?? values.bank_name ?? 'Bank account',
+      account_number_masked: `••••••${values.account_number.slice(-4)}`,
+      account_name: values.account_name,
+      account_type: values.account_type,
+      routing_number: values.routing_number || undefined,
+      swift_code: values.swift_code || undefined,
+      is_default: values.is_default,
+    };
+
+    onSaved(saved);
+    toast.success('Account added & approved');
+    onClose();
+  };
+
   return (
-    <div
-      className="fixed inset-0 bg-[#0A1628]/80 backdrop-blur flex items-start justify-center pt-16 pb-10 overflow-y-auto z-50 p-4"
-      onClick={onClose}
-    >
+    <section className="fixed inset-0 bg-bg/80 backdrop-blur flex items-center justify-center pt-16 pb-10 overflow-y-auto z-50 p-4">
       <div
         onClick={(e) => e.stopPropagation()}
         className="helix-card p-6 w-full max-w-md"
-        data-testid="add-account-modal"
       >
         <h3 className="helix-h3">Add withdrawal account</h3>
 
-        {/* Currency toggle */}
-        <div className="grid grid-cols-2 gap-2 mt-4">
-          <button
-            onClick={() => setCurrency('USD')}
-            className={`p-3 border rounded text-[13px] transition ${
-              currency === 'USD'
-                ? 'border-[#C9922A] bg-[#C9922A]/8 text-[#F5F5F5]'
-                : 'border-[#1A7A6E]/30 text-[#9CA3AF]'
-            }`}
-            data-testid="ccy-USD"
-          >
-            USD · ACH / Wire
-          </button>
-          <button
-            onClick={() => setCurrency('NGN')}
-            className={`p-3 border rounded text-[13px] transition ${
-              currency === 'NGN'
-                ? 'border-[#C9922A] bg-[#C9922A]/8 text-[#F5F5F5]'
-                : 'border-[#1A7A6E]/30 text-[#9CA3AF]'
-            }`}
-            data-testid="ccy-NGN"
-          >
-            NGN · NIP
-          </button>
-        </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-3">
+          <Controller
+            name="bank_code"
+            control={control}
+            render={({ field, fieldState }) => (
+              <SelectField
+                label="Bank"
+                name={field.name}
+                value={field.value}
+                onChange={(event) => {
+                  field.onChange(event.target.value);
+                  handleBankChange(event.target.value);
+                }}
+                error={fieldState.error?.message}
+              >
+                {banks.map((bank) => (
+                  <option key={bank.code} value={bank.code}>
+                    {bank.name}
+                  </option>
+                ))}
+              </SelectField>
+            )}
+          />
 
-        <div className="mt-4 space-y-3">
-          {/* Nickname */}
-          <div>
-            <label className="helix-label">Nickname</label>
-            <input
-              className="helix-input"
-              placeholder={
-                currency === 'USD' ? 'Chase business · primary' : 'GTBank Lagos'
-              }
-              value={form.label}
-              onChange={upd('label')}
-              data-testid="acc-label"
-            />
-          </div>
+          <Controller
+            name="account_number"
+            control={control}
+            render={({ field, fieldState }) => (
+              <InputField
+                label="Account number (10 digits)"
+                name={field.name}
+                value={field.value}
+                maxLength={10}
+                placeholder="Enter 10 digits"
+                onChange={(event) => {
+                  const nextValue = event.target.value
+                    .replace(/\D/g, '')
+                    .slice(0, 10);
+                  field.onChange(nextValue);
+                  handleAccountNumberChange(nextValue);
+                }}
+                error={fieldState.error?.message}
+              />
+            )}
+          />
 
-          {/* Account holder */}
-          <div>
-            <label className="helix-label">Account holder name</label>
-            <input
-              className="helix-input"
-              value={form.account_name}
-              onChange={upd('account_name')}
-              required
-              data-testid="acc-name"
-            />
-          </div>
-
-          {/* NGN fields */}
-          {currency === 'NGN' ? (
-            <>
-              <div>
-                <label className="helix-label">Bank</label>
-                <select
-                  className="helix-input"
-                  value={form.bank_code}
-                  onChange={upd('bank_code')}
-                  data-testid="acc-bank-code"
-                >
-                  {banks.map((b) => (
-                    <option key={b.code} value={b.code}>
-                      {b.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="helix-label">
-                  Account number (10 digits)
-                </label>
-                <input
-                  className="helix-input"
-                  maxLength={10}
-                  value={form.account_number}
-                  onChange={upd('account_number')}
-                  required
-                  data-testid="acc-number"
-                />
-              </div>
-            </>
-          ) : (
-            <>
-              {/* USD fields */}
-              <div>
-                <label className="helix-label">Bank name</label>
-                <input
-                  className="helix-input"
-                  placeholder="Chase, Bank of America, Wells Fargo…"
-                  value={form.bank_name}
-                  onChange={upd('bank_name')}
-                  required
-                  data-testid="acc-usd-bank"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="helix-label">
-                    Routing # (9 digits ACH)
-                  </label>
-                  <input
-                    className="helix-input"
-                    maxLength={9}
-                    value={form.routing_number}
-                    onChange={upd('routing_number')}
-                    data-testid="acc-routing"
-                  />
-                </div>
-                <div>
-                  <label className="helix-label">Account type</label>
-                  <select
-                    className="helix-input"
-                    value={form.account_type}
-                    onChange={upd('account_type')}
-                    data-testid="acc-type"
-                  >
-                    <option value="checking">Checking</option>
-                    <option value="savings">Savings</option>
-                  </select>
-                </div>
-              </div>
-              <div>
-                <label className="helix-label">Account number</label>
-                <input
-                  className="helix-input"
-                  value={form.account_number}
-                  onChange={upd('account_number')}
-                  required
-                  data-testid="acc-number"
-                />
-              </div>
-              <div>
-                <label className="helix-label">
-                  SWIFT (optional, for wires)
-                </label>
-                <input
-                  className="helix-input"
-                  maxLength={11}
-                  value={form.swift_code}
-                  onChange={upd('swift_code')}
-                  data-testid="acc-swift"
-                />
-              </div>
-            </>
+          {isVerifying && (
+            <div className="flex items-center gap-2 text-[11px] text-muted">
+              <Loader2 className="size-4 animate-spin" />
+              Verifying account details...
+            </div>
           )}
 
-          {/* Default checkbox */}
-          <label className="flex items-center gap-2 text-[12px] text-[#9CA3AF] cursor-pointer">
-            <input
-              type="checkbox"
-              checked={form.is_default}
-              onChange={(e) =>
-                setForm({ ...form, is_default: e.target.checked })
-              }
-            />
-            Set as default {currency} destination
-          </label>
+          {!isVerifying && verificationMessage && (
+            <div className="text-[11px] text-primary">
+              {verificationMessage}
+            </div>
+          )}
 
-          {/* Actions */}
-          <div className="flex gap-2 pt-1">
-            <button onClick={onClose} className="helix-btn-secondary flex-1">
+          <div className="flex gap-2 w-full mt-8 justify-between">
+            <button
+              type="button"
+              onClick={onClose}
+              className="helix-btn-secondary w-1/2"
+            >
               Cancel
             </button>
             <button
-              onClick={save}
-              disabled={busy}
-              className="helix-btn-primary flex-1"
-              data-testid="acc-save"
+              type="submit"
+              disabled={isSubmitting || isVerifying}
+              className="helix-btn-primary w-1/2"
             >
-              {busy ? 'Saving…' : 'Add account'}
+              {isSubmitting ? 'Saving…' : 'Add account'}
             </button>
           </div>
-        </div>
+        </form>
       </div>
-    </div>
+    </section>
   );
 }

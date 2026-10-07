@@ -41,7 +41,7 @@ const DashboardHeader = () => {
           <div className=" px-6 lg:px-10 py-6 flex items-start justify-between gap-4 flex-wrap">
             {/* LEFT: Kicker + Title */}
             <div>
-              <p className="helix-kicker mb-2">{kicker}</p>
+              {/* <p className="helix-kicker mb-2">{kicker}</p> */}
               <h1 className="helix-h2">{title}</h1>
             </div>
 

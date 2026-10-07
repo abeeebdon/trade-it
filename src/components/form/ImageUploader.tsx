@@ -109,12 +109,12 @@ export default function ImageUploader({
         className="hidden"
       />
 
-      <div className="flex justify-between text-xs text-gray-500">
+      <div className="flex gap-6 items-center text-xs text-gray-500">
         <span>
           {value.length} / {maxImages} images
         </span>
 
-        <span>PNG, JPG, JPEG</span>
+        <span className="text-[10px]">PNG, JPG, JPEG</span>
       </div>
     </div>
   );

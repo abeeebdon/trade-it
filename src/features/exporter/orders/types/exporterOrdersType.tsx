@@ -4,8 +4,8 @@ export type SellerOrdersParams = {
 };
 export interface SellerOrder {
   id: number;
-  orderNumber: string;
   productId: number;
+  orderNumber: string;
   productName: string;
   category: string;
   description: string;

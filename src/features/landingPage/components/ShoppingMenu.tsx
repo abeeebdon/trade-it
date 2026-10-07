@@ -3,9 +3,7 @@ import MobileNavGroup from '@/components/nav/MobileNavGroup';
 import { shoppingMenu } from './data';
 
 interface ShoppingMenuProps {
-  /** 'desktop' renders the hover dropdown; 'mobile' renders the collapsible sidebar variant. */
   variant?: 'desktop' | 'mobile';
-  /** Called after a link is selected — e.g. to close a mobile sidebar. */
   onNavigate?: () => void;
 }
 

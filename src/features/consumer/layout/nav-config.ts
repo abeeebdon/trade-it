@@ -53,7 +53,7 @@ export const NAV_GROUPS: NavGroupConfig[] = [
         label: 'Checkout',
       },
       {
-        href: '/shop/orders',
+        href: '/consumer/orders',
         icon: Receipt,
         label: 'Orders',
       },

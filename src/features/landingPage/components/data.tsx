@@ -24,6 +24,9 @@ import {
   Cone,
   Hand,
   CreditCard,
+  Car,
+  DollarSignIcon,
+  Radical,
 } from 'lucide-react';
 
 export const helixCards = [
@@ -102,21 +105,18 @@ export const NAV: {
 } = {
   exporter: [
     { to: '/exporter', label: 'Command Center', icon: LayoutDashboard },
-    { to: '/exporter/my-products', label: 'My Products', icon: Package },
-    { to: '/', label: 'Marketplace', icon: Store },
+    { to: '/exporter/products', label: 'My Products', icon: Package },
     { to: '/exporter/orders', label: 'Orders', icon: Receipt },
-    { to: '/exporter/sell', label: 'Sell Direct (DTC)', icon: Truck },
-    { to: '/exporter/fulfillment', label: 'Fulfillment', icon: ShoppingCart },
-    { to: '/exporter/compliance', label: 'Compliance', icon: ShieldCheck },
-    { to: '/exporter/finance', label: 'Finance', icon: Wallet },
+    { to: '/exporter/fulfillment', label: 'Fulfillment', icon: Car },
+    { to: '/exporter/account', label: 'Payments', icon: Wallet },
     {
-      to: '/exporter/withdrawal-accounts',
+      to: '/exporter/account/withdrawal-accounts',
       label: 'Withdrawal Accounts',
-      icon: HandCoins,
+      icon: DollarSignIcon,
     },
-    { to: '/exporter/credit', label: 'Business Credit', icon: HandCoins },
-    { to: '/exporter/repayment', label: 'Repayments', icon: RefreshCw },
+    { to: '/exporter/compliance', label: 'Compliance', icon: ShieldCheck },
     { to: '/exporter/onboarding', label: 'Business Profile', icon: FileText },
+    { to: '/exporter/credit', label: 'Business Credit', icon: HandCoins },
   ],
 
   retailer: [
@@ -139,18 +139,21 @@ export const NAV: {
   admin: [
     { to: '/admin', label: 'Admin Overview', icon: LayoutDashboard },
     { to: '/admin/verifications', label: 'Verifications', icon: ShieldCheck },
-    { to: '/admin/credit', label: 'JompStart Credit', icon: HandCoins },
-    { to: '/admin/disputes', label: 'Disputes', icon: RefreshCw },
-    { to: '/admin/help', label: 'Help & FAQs', icon: Hand },
     { to: '/admin/orders', label: 'Orders', icon: ShoppingBasket },
+    { to: '/admin/tracking_id', label: 'Tracking ID', icon: Radical },
+    { to: '/admin/delivery', label: 'Delivery Management', icon: Car },
+    { to: '/admin/disputes', label: 'Disputes', icon: RefreshCw },
     { to: '/admin/categories', label: 'Categories', icon: Lightbulb },
     { to: '/admin/listings', label: 'Listings', icon: ListCheck },
+    { to: '/admin/credit', label: 'JompStart Credit', icon: HandCoins },
+
+    { to: '/admin/help', label: 'Help & FAQs', icon: Hand },
+
     {
       to: '/admin/finance',
       label: 'Financial Overview',
       icon: DollarSign,
     },
-    { to: '/', label: 'Marketplace', icon: Store },
     { to: '/admin/waitlist', label: 'Waitlist', icon: BookAIcon },
     { to: '/admin/users', label: 'Users', icon: User },
     { to: '/admin/management', label: 'Management', icon: Cone },
@@ -187,9 +190,5 @@ export const shoppingMenu = [
   {
     label: 'Checkout',
     href: '/checkout',
-  },
-  {
-    label: 'Orders',
-    href: '/shop/orders',
   },
 ];
