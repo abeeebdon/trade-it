@@ -23,6 +23,22 @@
   },
   "dynamicRoutes": [
     {
+      "page": "/admin/delivery/[id]",
+      "regex": "^/admin/delivery/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/admin/delivery/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/buyer/orders-demo/[id]",
+      "regex": "^/buyer/orders\\-demo/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/buyer/orders\\-demo/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
       "page": "/exporter/credit/[id]",
       "regex": "^/exporter/credit/([^/]+?)(?:/)?$",
       "routeKeys": {
@@ -75,6 +91,12 @@
       "namedRegex": "^/admin/credit(?:/)?$"
     },
     {
+      "page": "/admin/delivery",
+      "regex": "^/admin/delivery(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/delivery(?:/)?$"
+    },
+    {
       "page": "/admin/disputes",
       "regex": "^/admin/disputes(?:/)?$",
       "routeKeys": {},
@@ -115,6 +137,12 @@
       "regex": "^/admin/product\\-details(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/admin/product\\-details(?:/)?$"
+    },
+    {
+      "page": "/admin/tracking_id",
+      "regex": "^/admin/tracking_id(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/tracking_id(?:/)?$"
     },
     {
       "page": "/admin/users",
@@ -189,6 +217,12 @@
       "namedRegex": "^/buyer/orders/details(?:/)?$"
     },
     {
+      "page": "/buyer/orders-demo",
+      "regex": "^/buyer/orders\\-demo(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/buyer/orders\\-demo(?:/)?$"
+    },
+    {
       "page": "/buyer/product-details",
       "regex": "^/buyer/product\\-details(?:/)?$",
       "routeKeys": {},
@@ -261,6 +295,18 @@
       "namedRegex": "^/consumer/notifications(?:/)?$"
     },
     {
+      "page": "/consumer/orders",
+      "regex": "^/consumer/orders(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/consumer/orders(?:/)?$"
+    },
+    {
+      "page": "/consumer/orders/details",
+      "regex": "^/consumer/orders/details(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/consumer/orders/details(?:/)?$"
+    },
+    {
       "page": "/consumer/payment-methods",
       "regex": "^/consumer/payment\\-methods(?:/)?$",
       "routeKeys": {},
@@ -285,6 +331,18 @@
       "namedRegex": "^/exporter(?:/)?$"
     },
     {
+      "page": "/exporter/account",
+      "regex": "^/exporter/account(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/exporter/account(?:/)?$"
+    },
+    {
+      "page": "/exporter/account/withdrawal-accounts",
+      "regex": "^/exporter/account/withdrawal\\-accounts(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/exporter/account/withdrawal\\-accounts(?:/)?$"
+    },
+    {
       "page": "/exporter/compliance",
       "regex": "^/exporter/compliance(?:/)?$",
       "routeKeys": {},
@@ -297,28 +355,16 @@
       "namedRegex": "^/exporter/credit(?:/)?$"
     },
     {
-      "page": "/exporter/finance",
-      "regex": "^/exporter/finance(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/exporter/finance(?:/)?$"
-    },
-    {
       "page": "/exporter/fulfillment",
       "regex": "^/exporter/fulfillment(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/exporter/fulfillment(?:/)?$"
     },
     {
-      "page": "/exporter/my-products",
-      "regex": "^/exporter/my\\-products(?:/)?$",
+      "page": "/exporter/fulfillment/details",
+      "regex": "^/exporter/fulfillment/details(?:/)?$",
       "routeKeys": {},
-      "namedRegex": "^/exporter/my\\-products(?:/)?$"
-    },
-    {
-      "page": "/exporter/my-products/details",
-      "regex": "^/exporter/my\\-products/details(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/exporter/my\\-products/details(?:/)?$"
+      "namedRegex": "^/exporter/fulfillment/details(?:/)?$"
     },
     {
       "page": "/exporter/onboarding",
@@ -345,6 +391,30 @@
       "namedRegex": "^/exporter/product\\-details(?:/)?$"
     },
     {
+      "page": "/exporter/products",
+      "regex": "^/exporter/products(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/exporter/products(?:/)?$"
+    },
+    {
+      "page": "/exporter/products/create",
+      "regex": "^/exporter/products/create(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/exporter/products/create(?:/)?$"
+    },
+    {
+      "page": "/exporter/products/details",
+      "regex": "^/exporter/products/details(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/exporter/products/details(?:/)?$"
+    },
+    {
+      "page": "/exporter/products/edit",
+      "regex": "^/exporter/products/edit(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/exporter/products/edit(?:/)?$"
+    },
+    {
       "page": "/exporter/repayment",
       "regex": "^/exporter/repayment(?:/)?$",
       "routeKeys": {},
@@ -361,12 +431,6 @@
       "regex": "^/exporter/sell/details(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/exporter/sell/details(?:/)?$"
-    },
-    {
-      "page": "/exporter/withdrawal-accounts",
-      "regex": "^/exporter/withdrawal\\-accounts(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/exporter/withdrawal\\-accounts(?:/)?$"
     },
     {
       "page": "/favicon.ico",
@@ -447,10 +511,16 @@
       "namedRegex": "^/shop/orders/details(?:/)?$"
     },
     {
-      "page": "/shop/product",
-      "regex": "^/shop/product(?:/)?$",
+      "page": "/shop/products",
+      "regex": "^/shop/products(?:/)?$",
       "routeKeys": {},
-      "namedRegex": "^/shop/product(?:/)?$"
+      "namedRegex": "^/shop/products(?:/)?$"
+    },
+    {
+      "page": "/shop/products/details",
+      "regex": "^/shop/products/details(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/shop/products/details(?:/)?$"
     },
     {
       "page": "/unauthorized",
@@ -463,6 +533,12 @@
       "regex": "^/user(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/user(?:/)?$"
+    },
+    {
+      "page": "/wait-list",
+      "regex": "^/wait\\-list(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/wait\\-list(?:/)?$"
     }
   ],
   "dataRoutes": [],

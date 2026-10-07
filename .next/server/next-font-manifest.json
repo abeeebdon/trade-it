@@ -49,6 +49,20 @@
       "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
+    "[project]/src/app/(dashboard)/admin/delivery/[id]/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
+    "[project]/src/app/(dashboard)/admin/delivery/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
     "[project]/src/app/(dashboard)/admin/disputes/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
@@ -99,6 +113,13 @@
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
     "[project]/src/app/(dashboard)/admin/product-details/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
+    "[project]/src/app/(dashboard)/admin/tracking_id/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
       "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
@@ -162,6 +183,20 @@
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
     "[project]/src/app/(dashboard)/buyer/onboarding/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
+    "[project]/src/app/(dashboard)/buyer/orders-demo/[id]/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
+    "[project]/src/app/(dashboard)/buyer/orders-demo/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
       "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
@@ -252,6 +287,20 @@
       "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
+    "[project]/src/app/(dashboard)/consumer/orders/details/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
+    "[project]/src/app/(dashboard)/consumer/orders/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
     "[project]/src/app/(dashboard)/consumer/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
@@ -280,6 +329,20 @@
       "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
+    "[project]/src/app/(dashboard)/exporter/account/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
+    "[project]/src/app/(dashboard)/exporter/account/withdrawal-accounts/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
     "[project]/src/app/(dashboard)/exporter/compliance/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
@@ -301,7 +364,7 @@
       "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
-    "[project]/src/app/(dashboard)/exporter/finance/page": [
+    "[project]/src/app/(dashboard)/exporter/fulfillment/details/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
       "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
@@ -309,20 +372,6 @@
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
     "[project]/src/app/(dashboard)/exporter/fulfillment/page": [
-      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
-      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
-      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
-      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
-    ],
-    "[project]/src/app/(dashboard)/exporter/my-products/details/page": [
-      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
-      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
-      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
-      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
-    ],
-    "[project]/src/app/(dashboard)/exporter/my-products/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
       "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
@@ -364,6 +413,34 @@
       "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
+    "[project]/src/app/(dashboard)/exporter/products/create/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
+    "[project]/src/app/(dashboard)/exporter/products/details/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
+    "[project]/src/app/(dashboard)/exporter/products/edit/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
+    "[project]/src/app/(dashboard)/exporter/products/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
     "[project]/src/app/(dashboard)/exporter/repayment/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
@@ -379,13 +456,6 @@
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
     "[project]/src/app/(dashboard)/exporter/sell/page": [
-      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
-      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
-      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
-      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
-    ],
-    "[project]/src/app/(dashboard)/exporter/withdrawal-accounts/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
       "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
@@ -427,6 +497,13 @@
       "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
+    "[project]/src/app/(home)/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
     "[project]/src/app/(home)/payment/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
@@ -455,14 +532,14 @@
       "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
-    "[project]/src/app/(home)/shop/product/page": [
+    "[project]/src/app/(home)/shop/products/details/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
       "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
       "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
-    "[project]/src/app/(wait-list)/page": [
+    "[project]/src/app/(home)/shop/products/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
       "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
@@ -491,6 +568,13 @@
       "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
     ],
     "[project]/src/app/user/page": [
+      "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+      "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+      "static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2",
+      "static/media/797e433ab948586e-s.p.08e28id.o-okb.woff2"
+    ],
+    "[project]/src/app/wait-list/page": [
       "static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
       "static/media/dc6d2a64e9dbf3bc-s.p.11~i--ovv74c_.woff2",
       "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",

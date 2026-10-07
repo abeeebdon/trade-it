@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(dashboard)/layout,_N_T_/(dashboard)/admin/layout,_N_T_/(dashboard)/admin/tracking_id/layout,_N_T_/(dashboard)/admin/tracking_id/page,_N_T_/admin/tracking_id"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/!KGRhc2hib2FyZCk/admin/tracking_id/__PAGE__",
+    "/!KGRhc2hib2FyZCk/admin/tracking_id",
+    "/!KGRhc2hib2FyZCk/admin",
+    "/!KGRhc2hib2FyZCk",
+    "/_index",
+    "/_head"
+  ]
+}
