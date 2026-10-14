@@ -1,3 +1,4 @@
+'use client';
 import FAQSection from '@/features/waitlist/FAQs';
 import {
   ArrowRight,
@@ -9,10 +10,30 @@ import {
   Zap,
 } from 'lucide-react';
 import Link from 'next/link';
-import { benefits, steps } from '../components/constants';
+import { benefits, steps, toastProxyMessages } from '../components/constants';
 import DashboardPreview from '../components/DashboardPreview';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
+import { toast } from 'sonner';
 
 const NewExporterLandingPage = () => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  useEffect(() => {
+    const m = searchParams.get('m');
+    if (m && [toastProxyMessages[parseInt(m)]]) {
+      toast.error(toastProxyMessages[parseInt(m)] ?? 'Oops');
+
+      // Remove the message from the URL after displaying it
+      const url = new URL(window.location.href);
+      url.searchParams.delete('m');
+
+      router.replace(url.pathname + url.search, {
+        scroll: false,
+      });
+    }
+  }, [searchParams, router]);
   return (
     <main className="">
       {/* Hero */}

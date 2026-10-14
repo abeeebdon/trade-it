@@ -7,6 +7,8 @@ export type KycSaveData = Omit<KycForm, 'docs'>;
 export interface OnboardingState {
   businessProfile: Partial<BusinessFormValues> | null;
   kycProfile: KycSaveData | null;
+  /** When the KYC/KYB documents were submitted — drives the mock review clock. */
+  kycSubmittedAt: number | null;
   currentStep: number;
   isSubmitted: boolean;
 }
@@ -14,6 +16,7 @@ export interface OnboardingState {
 const initialState: OnboardingState = {
   businessProfile: null,
   kycProfile: null,
+  kycSubmittedAt: null,
   currentStep: 1,
   isSubmitted: false,
 };
@@ -46,6 +49,7 @@ const onboardingSlice = createSlice({
         ...(state.kycProfile ?? {}),
         ...action.payload,
       };
+      state.kycSubmittedAt = Date.now();
       state.isSubmitted = true;
     },
     updateKycDetails(state, action: PayloadAction<Partial<KycSaveData>>) {

@@ -2,8 +2,8 @@
 import { useAppDispatch } from '@/hooks/store/store';
 import { login, setAuthRole, setMfaEnabled } from '@/store/auth/auth.slice';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import InputField from '@/components/form/InputFIeld';
 import { LoginFormValues, loginSchema } from '../components/validation';
 import { useForm } from 'react-hook-form';
@@ -13,11 +13,28 @@ import { toast } from 'sonner';
 import { loginApi } from '../api/auth';
 import { saveCookie } from '@/store/auth/cookies';
 import JompFullLogo from '../components/JompFullLogo';
+import { toastProxyMessages } from '@/features/exporter-landing/components/constants';
 
 export default function Login() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const m = searchParams.get('m');
+    if (m && [toastProxyMessages[parseInt(m)]]) {
+      toast.error(toastProxyMessages[parseInt(m)] ?? 'Oops');
+
+      // Remove the message from the URL after displaying it
+      const url = new URL(window.location.href);
+      url.searchParams.delete('m');
+
+      router.replace(url.pathname + url.search, {
+        scroll: false,
+      });
+    }
+  }, [searchParams, router]);
   const {
     register,
     handleSubmit,

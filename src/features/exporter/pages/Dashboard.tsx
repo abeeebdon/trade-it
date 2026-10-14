@@ -111,7 +111,7 @@ export default function Dashboard() {
           return (
             <article
               key={label}
-              className="rounded-2xl border border-text/10 bg-text/4 p-4 flex justify-between gap-2"
+              className="rounded-2xl border border-text/10 bg-bg-soft p-4 flex justify-between gap-2"
             >
               <div>
                 <span className="helix-label">{label}</span>

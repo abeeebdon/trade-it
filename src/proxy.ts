@@ -27,12 +27,18 @@ export async function proxy(req: NextRequest) {
 
   // No token → protected route
   if (!token && isProtected) {
-    return NextResponse.redirect(new URL('/login', req.url));
+    const url = new URL('/login', req.url);
+
+    url.searchParams.set('m', '3');
+    return NextResponse.redirect(url);
   }
 
   // Logged in user → auth page
   if (token && isAuthRoute) {
-    return NextResponse.redirect(new URL('/', req.url));
+    const url = new URL('/', req.url);
+
+    url.searchParams.set('m', '4');
+    return NextResponse.redirect(url);
   }
 
   // Protected route role check

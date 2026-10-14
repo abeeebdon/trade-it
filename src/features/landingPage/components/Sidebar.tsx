@@ -65,7 +65,7 @@ export default function Sidebar() {
         </button>
         {!hideLabel && (
           <div className="hidden md:flex flex-col ">
-            <span className="font-bold  text-secondary tracking-wide text-lg">
+            <span className="font-bold  text-secondary tracking-wider text-xl">
               JOMPSHOP
             </span>
             <span className="text-xs ml-0.5   dark:text-[#1A7A6E] text-[#4a2e8a]  font-mono">
@@ -97,7 +97,7 @@ export default function Sidebar() {
                   className={`flex items-center gap-3 px-4  py-3 border-l-2 ${
                     isActive
                       ? 'border-[#C9922A] bg-primary-dim/50 text-[#C9922A]'
-                      : 'border-transparent text-[#9CA3AF] hover:text-[#F5F5F5] hover:bg-secondary/20'
+                      : 'border-transparent text-muted hover:text-text hover:bg-secondary/20'
                   }`}
                 >
                   {<Icon size={18} />}
@@ -121,7 +121,7 @@ export default function Sidebar() {
       <div className="border-t border-[#1A7A6E]/15 px-3 py-3">
         <div className="hidden md:flex items-center gap-2 mb-3 px-2">
           <button
-            className="w-8 cursor-pointer h-8 rounded-full bg-[#C9922A]/20 border border-[#C9922A]/40 flex items-center justify-center text-[#C9922A] font-bold text-xs"
+            className="w-8 cursor-pointer h-8 rounded-full bg-[#C9922A]/20 border border-[#C9922A]/40 flex items-center justify-center text-primary font-bold text-xs"
             onClick={() => router.push('/profile')}
           >
             {user?.fullName[0] || 'H'}
@@ -139,7 +139,7 @@ export default function Sidebar() {
         </div>
         <button
           onClick={() => setShowLogoutModal(true)}
-          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded text-[#9CA3AF] hover:text-[#F5F5F5] hover:bg-secondary/50 text-[12px] transition-colors"
+          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded text-muted hover:text-text hover:bg-secondary/50 text-[12px] transition-colors"
         >
           <LogOut size={16} />
           {!hideLabel && <span className="hidden md:inline">Sign out</span>}
