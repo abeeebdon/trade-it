@@ -3,7 +3,7 @@ import { stats } from './constants';
 
 export default function DashboardPreview() {
   return (
-    <div className="relative mx-auto w-full max-w-155">
+    <div className="relative mx-auto w-full max-w-155 hidden md:block">
       <div className="absolute -inset-10 rounded-full bg-primary/10 blur-3xl" />
 
       <div className="relative overflow-hidden rounded-3xl border border-border/10 bg-border-soft shadow-2xl shadow-black/30">

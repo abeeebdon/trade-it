@@ -15,7 +15,7 @@ import UserMenu from './UserMenu';
 import JompFullLogo from '@/features/authentication/components/JompFullLogo';
 import { getSavedCookie } from '@/store/auth/cookies';
 
-const navLinks = [
+export const newNavLinks = [
   { label: 'Benefits', href: '#benefits' },
   { label: 'How it works', href: '#how-it-works' },
   { label: 'FAQ', href: '#faq' },
@@ -34,8 +34,6 @@ const Header = ({ className }: { className?: string }) => {
     dispatch(logout());
     router.push('/login');
   };
-  const pathToDashboard =
-    user?.role === 'retailer' ? `/buyer` : `/${user?.role}`;
 
   const token = getSavedCookie('token');
   useEffect(() => {
@@ -58,7 +56,7 @@ const Header = ({ className }: { className?: string }) => {
             <JompFullLogo />
           </Link>
           <nav className="hidden items-center gap-8 md:flex">
-            {navLinks.map(({ label, href }) => (
+            {newNavLinks.map(({ label, href }) => (
               <a
                 key={href}
                 href={href}
