@@ -80,3 +80,9 @@ export const faqs = [
       'Yes. The exporter portal is designed to work responsively across desktop, tablet, and mobile devices.',
   },
 ];
+export const toastProxyMessages: Record<number, string> = {
+  1: 'Please log in to access this page.',
+  2: "You don't have permission to access this page.",
+  3: 'Your session has expired. Please log in again.',
+  4: 'You are currently logged in',
+};

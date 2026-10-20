@@ -6,18 +6,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import InputField from '@/components/form/InputFIeld';
 import CustomSelectField from '@/components/form/CustomSelectField';
 import { useGetProductCategories } from '../../hooks/useProducts';
-import { Dispatch, SetStateAction, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
-import {
-  setOnboardingDetails,
-  setOnboardingStep,
-} from '@/store/onboarding/onboarding.slice';
+import { setOnboardingDetails } from '@/store/onboarding/onboarding.slice';
 import { useSubmitOnboardingDetails } from '../../hooks/useGetOnboarding';
 import { BusinessFormValues, businessSchema } from '../types/validation';
 import { countries } from './constants';
 import { OnboardingRespType } from '../types/exporterOnboardingtypes';
 interface BusinessProfileFormProps {
-  setCurrentStep: Dispatch<SetStateAction<number>>;
+  /** Advances the wizard; navigation state is owned by the page. */
+  setCurrentStep: (n: number) => void;
   biz: OnboardingRespType;
 }
 
@@ -76,11 +74,8 @@ export default function BusinessProfileForm({
   const { mutate } = useSubmitOnboardingDetails();
   const onSubmit = (data: BusinessFormValues) => {
     dispatch(setOnboardingDetails(data));
-    dispatch(setOnboardingStep(2));
     setCurrentStep(2);
-    // mutate({
-    //   data: data,
-    // });
+    // mutate({ data });
   };
 
   return (

@@ -14,15 +14,14 @@ import { OnboardingRespType } from '../types/exporterOnboardingtypes';
 
 interface KycKybFormProps {
   biz: OnboardingRespType;
-  kycForm: KycForm;
-  onChange: (form: KycForm) => void;
+  /** Restores saved KYC values; the form owns its state from there. */
+  initialValues: KycForm;
   onSubmit: () => void;
 }
 
 export default function KycKybForm({
   biz,
-  kycForm,
-  onChange,
+  initialValues,
   onSubmit,
 }: KycKybFormProps) {
   const dispatch = useDispatch();
@@ -47,12 +46,12 @@ export default function KycKybForm({
   } = useForm<KycForm>({
     resolver: zodResolver(schema),
     mode: 'onChange',
-    defaultValues: kycForm,
+    defaultValues: initialValues,
   });
 
   useEffect(() => {
-    reset(kycForm);
-  }, [kycForm, reset]);
+    reset(initialValues);
+  }, [initialValues, reset]);
 
   const uploadDoc = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -63,7 +62,6 @@ export default function KycKybForm({
       ...files.map((f) => `uploads/kyc/${Date.now()}-${f.name}`),
     ];
     setValue('docs', nextDocs, { shouldValidate: true, shouldDirty: true });
-    onChange({ ...watch(), docs: nextDocs });
 
     files.forEach((f) => {
       toast.success(`Uploaded ${f.name}`);
@@ -73,7 +71,6 @@ export default function KycKybForm({
   const onFormSubmit = (values: KycForm) => {
     const { docs: _docs, ...savedValues } = values;
     dispatch(setKycDetails(savedValues));
-    onChange(values);
     onSubmit();
   };
 

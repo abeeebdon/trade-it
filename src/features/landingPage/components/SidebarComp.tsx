@@ -2,12 +2,10 @@ import ThemeToggle from '@/components/buttons/ToggleButton';
 import { cn } from '@/lib/cn';
 import { X } from 'lucide-react';
 import Link from 'next/link';
-import { NAV_LINKS } from './data';
 import { useAppSelector } from '@/hooks/store/store';
-import CategoriesMenu from './CategoriesMenu';
-import ShoppingMenu from './ShoppingMenu';
 import MobileNavGroup from '@/components/nav/MobileNavGroup';
 import { getSavedCookie } from '@/store/auth/cookies';
+import { newNavLinks } from './Header';
 interface Props {
   setOpenSideBar: (open: boolean) => void;
   openSidebar: boolean;
@@ -17,7 +15,6 @@ const SidebarComp = ({ setOpenSideBar, openSidebar }: Props) => {
   const token = getSavedCookie('token');
   const pathToDashboard =
     user?.role === 'retailer' ? `/buyer` : `/${user?.role}`;
-
   return (
     <>
       {openSidebar && (
@@ -39,60 +36,36 @@ const SidebarComp = ({ setOpenSideBar, openSidebar }: Props) => {
           </button>
         </div>
         <nav className=" flex mt-6 flex-col items-stretch w-full gap-1 text-[13px] dark:text-[#e4e8f0]">
-          {user && token && (
-            <Link
-              href={pathToDashboard}
-              className="text-muted hover:text-text text-lg"
-            >
-              Dashboard
-            </Link>
-          )}
+          {!user || (!token && <Link href={pathToDashboard}>Dashboard</Link>)}
           <MobileNavGroup
-            label="Shop"
-            items={NAV_LINKS}
+            label="Home"
+            items={newNavLinks}
             defaultOpen
             onNavigate={() => setOpenSideBar(false)}
           />
-
-          {user && token && (
-            <ShoppingMenu
-              variant="mobile"
-              onNavigate={() => setOpenSideBar(false)}
-            />
+          {!user && !token && (
+            <>
+              <Link
+                href="/getstarted"
+                onClick={() => setOpenSideBar(false)}
+                className="text-muted hover:text-text px-1 py-3 border-b border-border/60"
+              >
+                Get Started
+              </Link>
+              <Link
+                href="/login"
+                onClick={() => setOpenSideBar(false)}
+                className="text-muted hover:text-text px-1 py-3 border-b border-border/60"
+              >
+                Signin
+              </Link>
+            </>
           )}
 
-          {user?.role === 'consumer' && (
-            <Link
-              href="/shop/orders"
-              onClick={() => setOpenSideBar(false)}
-              className="text-muted hover:text-text px-1 py-3 border-b border-border/60"
-            >
-              My Orders
-            </Link>
-          )}
-          {!user ||
-            (!token && (
-              <>
-                <Link
-                  href="/getstarted"
-                  onClick={() => setOpenSideBar(false)}
-                  className="text-muted hover:text-text px-1 py-3 border-b border-border/60"
-                >
-                  Get Started
-                </Link>
-                <Link
-                  href="/login"
-                  onClick={() => setOpenSideBar(false)}
-                  className="text-muted hover:text-text px-1 py-3 border-b border-border/60"
-                >
-                  Signin
-                </Link>
-              </>
-            ))}
-          <CategoriesMenu
+          {/* <CategoriesMenu
             variant="mobile"
             onNavigate={() => setOpenSideBar(false)}
-          />
+          /> */}
         </nav>
       </article>
     </>

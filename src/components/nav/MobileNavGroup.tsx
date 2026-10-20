@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import type { NavGroupItem } from './NavGroup';
 
 interface MobileNavGroupProps {
-  label: string;
+  label?: string;
   items: NavGroupItem[];
   defaultOpen?: boolean;
   onNavigate?: () => void;

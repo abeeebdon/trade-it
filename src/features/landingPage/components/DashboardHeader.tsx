@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { getKicker, getTitle } from './homeFunc';
+import { getTitle } from './homeFunc';
 import { useHeader } from '@/context/HeaderContext';
 import ThemeToggle from '@/components/buttons/ToggleButton';
 import { motion } from 'motion/react';
@@ -24,15 +24,10 @@ const DashboardHeader = () => {
   const [showSidebar, setShowSidebar] = useState(false);
 
   const fallbackTitle = getTitle(pathname);
-  const fallbackKicker = getKicker(pathname);
 
   const title = customTitle ?? fallbackTitle;
-  const kicker = customKicker ?? fallbackKicker;
-
-  const isExporter = pathname.startsWith('/exporter');
 
   // ANCHOR badge only when on exporter pages with no dynamic badge or action
-  const showAnchorBadge = isExporter && !badge && !action; // ← also suppress when action present
   const isDark: boolean = useColorScheme();
   return (
     <>
@@ -49,17 +44,14 @@ const DashboardHeader = () => {
             <div className="flex items-center gap-3 flex-wrap">
               {action ? (
                 <>{action}</>
-              ) : badge ? (
-                <div className="flex items-center gap-2 text-[11px] font-mono tracking-widest text-[#C9922A]">
-                  {badge}
-                  <span className="w-2 h-2 rounded-full bg-[#C9922A] inline-block animate-pulse" />
-                </div>
-              ) : showAnchorBadge ? (
-                <div className="flex items-center gap-2 text-[11px] font-mono tracking-widest text-[#1A7A6E]">
-                  ANCHOR · SANDBOX · MOCK
-                  <span className="w-2 h-2 rounded-full bg-[#1A7A6E] inline-block animate-pulse" />
-                </div>
-              ) : null}
+              ) : (
+                badge && (
+                  <div className="flex items-center gap-2 text-[11px] font-mono tracking-widest text-[#C9922A]">
+                    {badge}
+                    <span className="w-2 h-2 rounded-full bg-[#C9922A] inline-block animate-pulse" />
+                  </div>
+                )
+              )}
               <div className="hidden sm:flex items-center">
                 <ThemeToggle />
               </div>
