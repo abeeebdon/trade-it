@@ -88,22 +88,23 @@ export default function CreateProduct() {
       items.map((i) => i.url),
     );
   };
-
+  console.log('here');
   // Submit
   const onSubmit = (values: ProductFormValues) => {
-    submitProduct({
-      Name: values.name,
-      Category: values.category,
-      Unit: values.unitId,
-      quantity: Number(values.quantity),
-      PriceUsd: values.price_usd,
-      Moq: values.moq,
-      Description: values.description,
-      CurrencyId: values.currencyId,
-      StatusId: values.statusId,
-      ThumbnailImage: values.thumbnail ?? null,
-      Images: values.images,
-    });
+    console.log(values);
+    // submitProduct({
+    //   Name: values.name,
+    //   Category: values.category,
+    //   Unit: values.unitId,
+    //   quantity: Number(values.quantity),
+    //   PriceUsd: values.price_usd,
+    //   Moq: values.moq,
+    //   Description: values.description,
+    //   CurrencyId: values.currencyId,
+    //   StatusId: values.statusId,
+    //   ThumbnailImage: values.thumbnail ?? null,
+    //   Images: values.images,
+    // });
   };
   return (
     <section className="w-full max-w-2xl">
