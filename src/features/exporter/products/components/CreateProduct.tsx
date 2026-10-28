@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm, useWatch, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -15,12 +15,48 @@ import {
 } from '../../hooks/useProducts';
 import InputField from '@/components/form/InputFIeld';
 import ImageUploader, { type ImageItem } from '@/components/form/ImageUploader';
-import { UNITS, STATUSES } from '@/lib/constants';
+import { STATUSES } from '@/lib/constants';
 import BackButton from '@/components/buttons/BackButton';
 import Loader from '@/components/buttons/Loader';
 import DescriptionEditor from './DescriptionEditor';
 import FormSection from './FormSection';
 import ShippingForm from './ShippingForm';
+import VariantComponent, {
+  variantDefaults,
+  type VariantFormValues,
+} from './VariantComponent';
+import type { VariantJson } from '../../types/exporter';
+
+const slug = (value: string) =>
+  value
+    .trim()
+    .replace(/[^a-zA-Z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .toUpperCase();
+
+const capitalize = (value: string) =>
+  value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
+
+const toVariantsJson = (
+  productName: string,
+  form: VariantFormValues,
+): string[] =>
+  form.variants.map((variant) => {
+    const entries = Object.entries(variant.combination);
+    const suffix = entries.map(([, value]) => slug(value)).join('-');
+
+    const payload: VariantJson = {
+      sku: ['JOMP', slug(productName), suffix].filter(Boolean).join('-'),
+      price: variant.price,
+      quantity: variant.available,
+      options: entries.map(([optionName, name]) => ({
+        optionName: capitalize(optionName),
+        name,
+      })),
+    };
+
+    return JSON.stringify(payload);
+  });
 
 export default function CreateProduct() {
   const {
@@ -40,6 +76,9 @@ export default function CreateProduct() {
 
   const { mutate: submitProduct, isPending } = useCreateProduct();
 
+  const [variantForm, setVariantForm] =
+    useState<VariantFormValues>(variantDefaults);
+
   const { data: categoryData, isPending: categoriesLoading } =
     useGetProductCategories();
 
@@ -48,12 +87,9 @@ export default function CreateProduct() {
     [categoryData?.data],
   );
 
-  // Watched values for live UI updates
   const thumbnailPreview =
     useWatch({ control, name: 'thumbnailPreview' }) ?? null;
   const imagePreviews = useWatch({ control, name: 'imagePreviews' }) ?? [];
-
-  // File handlers
 
   const thumbnailItems: ImageItem[] = thumbnailPreview
     ? [
@@ -88,23 +124,25 @@ export default function CreateProduct() {
       items.map((i) => i.url),
     );
   };
-  console.log('here');
-  // Submit
   const onSubmit = (values: ProductFormValues) => {
-    console.log(values);
-    // submitProduct({
-    //   Name: values.name,
-    //   Category: values.category,
-    //   Unit: values.unitId,
-    //   quantity: Number(values.quantity),
-    //   PriceUsd: values.price_usd,
-    //   Moq: values.moq,
-    //   Description: values.description,
-    //   CurrencyId: values.currencyId,
-    //   StatusId: values.statusId,
-    //   ThumbnailImage: values.thumbnail ?? null,
-    //   Images: values.images,
-    // });
+    submitProduct({
+      Name: values.name,
+      Category: values.category,
+      quantity: Number(values.quantity),
+      PriceUsd: values.price_usd,
+      Moq: values.moq,
+      Description: values.description,
+      CurrencyId: values.currencyId,
+      StatusId: values.statusId,
+      ThumbnailImage: values.thumbnail ?? null,
+      Images: values.images,
+      OptionNames: variantForm.options.length
+        ? variantForm.options.map((option) => capitalize(option.name))
+        : null,
+      VariantsJson: variantForm.variants.length
+        ? toVariantsJson(values.name, variantForm)
+        : null,
+    });
   };
   return (
     <section className="w-full max-w-2xl">
@@ -112,9 +150,7 @@ export default function CreateProduct() {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        autoComplete="off"
         className="mt-5 flex flex-col gap-4"
-        noValidate
       >
         {/* Product details */}
         <FormSection title="Product details">
@@ -122,9 +158,8 @@ export default function CreateProduct() {
             <div className="md:col-span-2">
               <InputField
                 label="Name"
-                placeholder="e.g. Premium Sesame Seeds"
+                placeholder="e.g. Alo vera Seeds"
                 error={errors.name?.message}
-                data-testid="pf-name"
                 {...register('name')}
               />
             </div>
@@ -138,11 +173,7 @@ export default function CreateProduct() {
                   name="category"
                   control={control}
                   render={({ field }) => (
-                    <select
-                      {...field}
-                      className="helix-input"
-                      data-testid="pf-cat"
-                    >
+                    <select {...field} className="helix-input">
                       {categories.map((c) => (
                         <option key={c.id} value={c.name}>
                           {c.name}
@@ -153,34 +184,8 @@ export default function CreateProduct() {
                 />
               )}
               {errors.category && (
-                <p className="text-red-500 text-xs mt-1">
+                <p className="text-danger text-xs mt-1">
                   {errors.category.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label className="helix-label">Unit</label>
-              <Controller
-                name="unitId"
-                control={control}
-                render={({ field }) => (
-                  <select
-                    {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                    className="helix-input"
-                  >
-                    {UNITS.map((u) => (
-                      <option key={u.id} value={u.id}>
-                        {u.label}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              />
-              {errors.unitId && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.unitId.message}
                 </p>
               )}
             </div>
@@ -260,6 +265,7 @@ export default function CreateProduct() {
           />
         </FormSection>
 
+        <VariantComponent value={variantForm} onChange={setVariantForm} />
         {/* Media */}
         <FormSection title="Media">
           <div className="flex flex-col gap-4">

@@ -304,6 +304,27 @@ body {
   animation: fadeUp 500ms ease 240ms both;
 }
 
+/* Loading logo — expanding border rings */
+@keyframes logoRipple {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.55;
+  }
+  70% {
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.75);
+    opacity: 0;
+  }
+}
+.logo-ripple {
+  animation: logoRipple 2s cubic-bezier(0.22, 0.61, 0.36, 1) infinite both;
+}
+.logo-ripple-delay {
+  animation-delay: -1s;
+}
+
 /* Buttons */
 .helix-btn-primary {
   background: var(--helix-gold);

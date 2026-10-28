@@ -93,6 +93,14 @@ export const createProduct = async (
       form.append('images', img);
     });
 
+    payload.OptionNames?.forEach((name) => {
+      form.append('OptionNames', name);
+    });
+
+    payload.VariantsJson?.forEach((variant) => {
+      form.append('VariantsJson', variant);
+    });
+
     await api.post(APIENDPOINTSTWO.PRODUCT_CREATE, form, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
@@ -106,7 +114,7 @@ export const editProduct = async ({ id, payload }: EditProductPayload) => {
 
     form.append('Name', payload.Name);
     form.append('Category', payload.Category);
-    form.append('Unit', String(payload.Unit));
+    form.append('Unit', String(payload.quantity));
     form.append('PriceUsd', String(payload.PriceUsd));
     form.append('Moq', String(payload.Moq));
     form.append('Description', payload.Description);
@@ -119,6 +127,18 @@ export const editProduct = async ({ id, payload }: EditProductPayload) => {
 
     payload.Images.forEach((img) => {
       form.append('images', img);
+    });
+
+    payload.ExistingImageUrls?.forEach((url) => {
+      form.append('ExistingImageUrls', url);
+    });
+
+    payload.OptionNames?.forEach((name) => {
+      form.append('OptionNames', name);
+    });
+
+    payload.VariantsJson?.forEach((variant) => {
+      form.append('VariantsJson', variant);
     });
 
     await api.put(APIENDPOINTSTWO.PRODUCT_BY_ID(id), form, {

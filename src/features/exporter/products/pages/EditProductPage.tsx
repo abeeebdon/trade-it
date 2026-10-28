@@ -176,6 +176,11 @@ export default function EditProductPage() {
         StatusId: values.statusId,
         ThumbnailImage: values.thumbnail ?? null,
         Images: values.images,
+        ExistingImageUrls:
+          values.imagePreviews?.filter((url) => !url.startsWith('blob:')) ??
+          null,
+        OptionNames: null,
+        VariantsJson: null,
       },
     });
   };

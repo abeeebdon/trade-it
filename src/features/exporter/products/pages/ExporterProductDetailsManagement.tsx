@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Pencil, Trash2, ArrowLeft } from 'lucide-react';
+import { Pencil, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 
 import { useGetProductById, useDeleteProduct } from '../../hooks/useProducts';
@@ -10,9 +10,10 @@ import { ProductData } from '../../api/productsApi';
 import { Loading } from '@/components/loading';
 import { StatusPill } from '@/features/shops/components/StatusPill';
 import { getStatusId } from '../components/helpers';
-import { formatUSD, formatDateTime } from '@/lib/func';
+import { formatUSD } from '@/lib/func';
 import WarningModal from '@/components/modals/WarningModal';
 import BackButton from '@/components/buttons/BackButton';
+import { HtmlContent } from '@/components/dompurify/DomPurifyCOmponent';
 
 export const ExporterProductDetailsManagement = () => {
   const router = useRouter();
@@ -137,9 +138,7 @@ export const ExporterProductDetailsManagement = () => {
                 />
               </div>
               <h1 className="helix-h2">{product.productName}</h1>
-              <p className="text-[15px] text-[#9CA3AF] mt-4 leading-relaxed">
-                {product.description || 'No description provided.'}
-              </p>
+              <HtmlContent html={product.description} />
             </div>
           </div>
         </div>
