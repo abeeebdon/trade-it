@@ -18,14 +18,13 @@ import {
 import { RootState } from '@/store/store';
 import InputField from '@/components/form/InputFIeld';
 import ImageUploader, { type ImageItem } from '@/components/form/ImageUploader';
-import { UNITS, STATUSES, DEFAULT_CURRENCY_ID } from '@/lib/constants';
+import { STATUSES, DEFAULT_CURRENCY_ID } from '@/lib/constants';
 import { ProductResponseType } from '../types/product';
 import BackButton from '@/components/buttons/BackButton';
 
 const defaultValues = (): ProductFormValues => ({
   name: '',
   category: '',
-  unitId: 1,
   quantity: 0,
   price_usd: 50,
   moq: 10,
@@ -41,7 +40,6 @@ const defaultValues = (): ProductFormValues => ({
 const valuesFromProduct = (p: ProductResponseType): ProductFormValues => ({
   name: p.productName,
   category: p.category,
-  unitId: p.unit,
   quantity: p.moq ?? 0,
   price_usd: p.priceUsd,
   moq: p.moq,
@@ -167,7 +165,6 @@ export default function EditProductPage() {
         UserId: user?.id ? Number(user.id) : undefined,
         Name: values.name,
         Category: values.category,
-        Unit: values.unitId,
         quantity: values.quantity,
         PriceUsd: values.price_usd,
         Moq: values.moq,
@@ -252,32 +249,6 @@ export default function EditProductPage() {
             {errors.category && (
               <p className="text-red-500 text-xs mt-1">
                 {errors.category.message}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label className="helix-label">Unit</label>
-            <Controller
-              name="unitId"
-              control={control}
-              render={({ field }) => (
-                <select
-                  {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                  className="helix-input"
-                >
-                  {UNITS.map((u) => (
-                    <option key={u.id} value={u.id}>
-                      {u.label}
-                    </option>
-                  ))}
-                </select>
-              )}
-            />
-            {errors.unitId && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.unitId.message}
               </p>
             )}
           </div>
