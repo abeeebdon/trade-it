@@ -104,3 +104,19 @@ export const productSchema = z.object({
 });
 
 export type ProductFormValues = z.infer<typeof productSchema>;
+
+// Editing may keep already-uploaded images instead of requiring new files.
+export const productEditSchema = productSchema
+  .extend({
+    images: z.array(z.instanceof(File)),
+  })
+  .refine(
+    (values) =>
+      values.images.length > 0 || (values.imagePreviews?.length ?? 0) > 0,
+    {
+      message: 'At least one product image is required',
+      path: ['images'],
+    },
+  );
+
+export type ProductEditFormValues = z.infer<typeof productEditSchema>;

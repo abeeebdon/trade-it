@@ -25,38 +25,7 @@ import VariantComponent, {
   variantDefaults,
   type VariantFormValues,
 } from './VariantComponent';
-import type { VariantJson } from '../../types/exporter';
-
-const slug = (value: string) =>
-  value
-    .trim()
-    .replace(/[^a-zA-Z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .toUpperCase();
-
-const capitalize = (value: string) =>
-  value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
-
-const toVariantsJson = (
-  productName: string,
-  form: VariantFormValues,
-): string[] =>
-  form.variants.map((variant) => {
-    const entries = Object.entries(variant.combination);
-    const suffix = entries.map(([, value]) => slug(value)).join('-');
-
-    const payload: VariantJson = {
-      sku: ['JOMP', slug(productName), suffix].filter(Boolean).join('-'),
-      price: variant.price,
-      quantity: variant.available,
-      options: entries.map(([optionName, name]) => ({
-        optionName: capitalize(optionName),
-        name,
-      })),
-    };
-
-    return JSON.stringify(payload);
-  });
+import { toOptionNames, toVariantsJson } from '../utils/productForm';
 
 export default function CreateProduct() {
   const {
@@ -90,6 +59,12 @@ export default function CreateProduct() {
   const thumbnailPreview =
     useWatch({ control, name: 'thumbnailPreview' }) ?? null;
   const imagePreviews = useWatch({ control, name: 'imagePreviews' }) ?? [];
+  const priceUsd = useWatch({ control, name: 'price_usd' });
+
+  const ngnEstimate = useMemo(
+    () => (priceUsd ? `₦${(priceUsd * 1500).toLocaleString()}` : null),
+    [priceUsd],
+  );
 
   const thumbnailItems: ImageItem[] = thumbnailPreview
     ? [
@@ -136,12 +111,8 @@ export default function CreateProduct() {
       StatusId: values.statusId,
       ThumbnailImage: values.thumbnail ?? null,
       Images: values.images,
-      OptionNames: variantForm.options.length
-        ? variantForm.options.map((option) => capitalize(option.name))
-        : null,
-      VariantsJson: variantForm.variants.length
-        ? toVariantsJson(values.name, variantForm)
-        : null,
+      OptionNames: toOptionNames(variantForm),
+      VariantsJson: toVariantsJson(values.name, variantForm),
     });
   };
   return (
@@ -213,6 +184,11 @@ export default function CreateProduct() {
                 error={errors.price_usd?.message}
                 {...register('price_usd', { valueAsNumber: true })}
               />
+              {ngnEstimate && (
+                <p className="text-[11px] text-muted font-mono mt-1">
+                  ≈ {ngnEstimate} at current rate
+                </p>
+              )}
             </div>
 
             <div>
@@ -286,7 +262,7 @@ export default function CreateProduct() {
                 maxImages={5}
               />
               {errors.images && (
-                <p className="text-red-500 text-xs mt-1">
+                <p className="text-danger text-xs mt-1">
                   {errors.images.message}
                 </p>
               )}
