@@ -9,10 +9,14 @@ import { Loading } from '@/components/loading';
 import Pagination from '../../components/pagination';
 import SelectDropDown from '@/components/SelectDropDown';
 import ExporterOrderCard from '../../orders/components/ExporterOrderCard';
-import OrderListFilters, {
-  toStatusOptions,
-} from '@/components/orders/OrderListFilters';
+import CustomSelect from '@/components/form/CustomSelect';
+import { CustomSearchInput } from '@/components/form/CustomSearchInput';
 import { deliveryGroupOf } from '@/features/orderManagement/components/CardMeta';
+import {
+  ALL_FILTER,
+  DELIVERY_FILTER_OPTIONS,
+  toStatusOptions,
+} from '@/lib/orderFilters';
 import { StatusPill } from '@/features/shops/components/StatusPill';
 import { formatDateTime, formatUSD } from '@/lib/func';
 
@@ -81,14 +85,6 @@ export default function Orders() {
       : 1;
   }, [filteredOrders, pageSize]);
 
-  const clearFilters = () => {
-    setSearch('');
-    setProduct('');
-    setStatus('');
-    setDelivery('');
-    setPage(1);
-  };
-
   const handlePageSizeChange = (value: number) => {
     setPageSize(value);
     setPage(1);
@@ -123,33 +119,68 @@ export default function Orders() {
 
   return (
     <section className="space-y-4">
-      <OrderListFilters
-        search={search}
-        onSearchChange={(value) => {
-          setSearch(value);
-          setPage(1);
-        }}
-        product={product}
-        products={products}
-        onProductChange={(value) => {
-          setProduct(value);
-          setPage(1);
-        }}
-        status={status}
-        statusOptions={statusOptions}
-        onStatusChange={(value) => {
-          setStatus(value);
-          setPage(1);
-        }}
-        delivery={delivery}
-        onDeliveryChange={(value) => {
-          setDelivery(value);
-          setPage(1);
-        }}
-        onClear={clearFilters}
-        resultCount={filteredOrders.length}
-        totalCount={orders.length}
-      />
+      <section className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2 justify-between sm:flex-row lg:items-center">
+          <CustomSearchInput
+            className="lg:flex-1"
+            value={search}
+            onChange={(value) => {
+              setSearch(value);
+              setPage(1);
+            }}
+            placeholder="Search by order, product or customer..."
+          />
+
+          <div className="basis-2/3 flex justify-end gap-2">
+            <CustomSelect
+              className="w-full max-w-40"
+              placeholder="All products"
+              value={product === '' ? ALL_FILTER : product}
+              onValueChange={(value) => {
+                setProduct(value === ALL_FILTER ? '' : value);
+                setPage(1);
+              }}
+              options={[
+                { label: 'All products', value: ALL_FILTER },
+                ...products.map((name) => ({ label: name, value: name })),
+              ]}
+            />
+
+            <CustomSelect
+              className="w-full max-w-40"
+              placeholder="All statuses"
+              value={status === '' ? ALL_FILTER : status}
+              onValueChange={(value) => {
+                setStatus(value === ALL_FILTER ? '' : value);
+                setPage(1);
+              }}
+              options={[
+                { label: 'All statuses', value: ALL_FILTER },
+                ...statusOptions,
+              ]}
+            />
+
+            <CustomSelect
+              className="w-full max-w-40"
+              placeholder="All deliveries"
+              value={delivery === '' ? ALL_FILTER : delivery}
+              onValueChange={(value) => {
+                setDelivery(value === ALL_FILTER ? '' : value);
+                setPage(1);
+              }}
+              options={[
+                { label: 'All deliveries', value: ALL_FILTER },
+                ...DELIVERY_FILTER_OPTIONS,
+              ]}
+            />
+          </div>
+        </div>
+
+        <p className="text-[12px] text-muted">
+          Showing <strong className="text-text">{filteredOrders.length}</strong>{' '}
+          of <strong className="text-text">{orders.length}</strong> orders
+        </p>
+      </section>
 
       {filteredOrders.length === 0 ? (
         <div className="helix-card p-12 text-center text-[#9CA3AF]">

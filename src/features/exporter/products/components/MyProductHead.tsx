@@ -40,10 +40,10 @@ const MyProductHead = ({
 
   return (
     <section className="mb-6">
-      <article className="flex gap-4 items-center  justify-between ">
+      <article className="flex gap-4 items-center   justify-between ">
         <CustomSearchInput
           id="header-search"
-          className="max-w-md"
+          className="md:max-w-xs"
           inputClassName="text-[13px]"
           placeholder="Search products…"
         />
@@ -57,9 +57,11 @@ const MyProductHead = ({
       </article>
 
       <section className=" flex justify-between items-center mt-4">
-        <article className="hidden md:grid gap-3 w-full md:grid-cols-[1fr_1fr_180px_180px_auto] items-end">
+        <article className="hidden md:flex items-center gap-3 w-full ">
           <CustomSelect
             label="Category"
+            className="w-full max-w-40"
+            placeholder="All categories"
             value={selectedCategory}
             onValueChange={onCategoryChange}
             disabled={categoriesLoading}
@@ -74,6 +76,8 @@ const MyProductHead = ({
 
           <CustomSelect
             label="Status"
+            className="w-full max-w-40"
+            placeholder="All categories"
             value={selectedStatus}
             onValueChange={onStatusChange}
             options={[
@@ -85,7 +89,7 @@ const MyProductHead = ({
             ]}
           />
         </article>
-        <div className=" flex justify-end">
+        <div className="flex self-end ">
           <button
             type="button"
             onClick={() => setMobileOpen(true)}

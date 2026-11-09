@@ -6,7 +6,9 @@ import OrderFilter, {
   type DeliveryFilter,
   type PaymentFilter,
 } from './OrderFilter';
-import OrderListFilters, { toStatusOptions } from './OrderListFilters';
+import CustomSelect from '@/components/form/CustomSelect';
+import { CustomSearchInput } from '@/components/form/CustomSearchInput';
+import { ALL_FILTER, toStatusOptions } from '@/lib/orderFilters';
 import { useAppSelector } from '@/hooks/store/store';
 import { selectOrders } from '@/store/orders/orders.slice';
 import {
@@ -112,16 +114,6 @@ export function OrderManagementList({
     search,
   ]);
 
-  const clearFilters = () => {
-    setFilter('all');
-    setPaymentStatus('All');
-    setDeliveryStatus('All');
-    setSearch('');
-    setProduct('');
-    setStatus('');
-    setDelivery('');
-  };
-
   return (
     <article className="flex flex-col gap-5">
       {/* Header */}
@@ -133,22 +125,49 @@ export function OrderManagementList({
       </div>
 
       {/* Search + product / status filters */}
-      <OrderListFilters
-        search={search}
-        onSearchChange={setSearch}
-        searchPlaceholder="Search by order, product or customer..."
-        product={product}
-        products={products}
-        onProductChange={setProduct}
-        status={status}
-        statusOptions={statusOptions}
-        onStatusChange={setStatus}
-        delivery={delivery}
-        onDeliveryChange={setDelivery}
-        onClear={clearFilters}
-        resultCount={visibleOrders.length}
-        totalCount={allOrders.length}
-      />
+      <section className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2 justify-between sm:flex-row lg:items-center">
+          <CustomSearchInput
+            className="lg:flex-1"
+            value={search}
+            onChange={setSearch}
+            placeholder="Search by order, product or customer..."
+          />
+
+          <div className="basis-2/3 flex justify-end gap-2">
+            <CustomSelect
+              className="w-full max-w-40"
+              placeholder="All products"
+              value={product === '' ? ALL_FILTER : product}
+              onValueChange={(value) =>
+                setProduct(value === ALL_FILTER ? '' : value)
+              }
+              options={[
+                { label: 'All products', value: ALL_FILTER },
+                ...products.map((name) => ({ label: name, value: name })),
+              ]}
+            />
+
+            <CustomSelect
+              className="w-full max-w-40"
+              placeholder="All statuses"
+              value={status === '' ? ALL_FILTER : status}
+              onValueChange={(value) =>
+                setStatus(value === ALL_FILTER ? '' : value)
+              }
+              options={[
+                { label: 'All statuses', value: ALL_FILTER },
+                ...statusOptions,
+              ]}
+            />
+          </div>
+        </div>
+
+        <p className="text-[12px] text-muted">
+          Showing <strong className="text-text">{visibleOrders.length}</strong>{' '}
+          of <strong className="text-text">{allOrders.length}</strong> orders
+        </p>
+      </section>
 
       {/* Payment + delivery filters */}
       <OrderFilter
