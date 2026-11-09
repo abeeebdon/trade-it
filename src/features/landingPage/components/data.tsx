@@ -139,7 +139,9 @@ export const NAV: {
   admin: [
     { to: '/admin', label: 'Admin Overview', icon: LayoutDashboard },
     { to: '/admin/verifications', label: 'Verifications', icon: ShieldCheck },
+    { to: '/admin/products', label: 'Products', icon: Package },
     { to: '/admin/orders', label: 'Orders', icon: ShoppingBasket },
+    { to: '/admin/order-d', label: 'Order D', icon: Truck },
     { to: '/admin/tracking_id', label: 'Tracking ID', icon: Radical },
     { to: '/admin/delivery', label: 'Delivery Management', icon: Car },
     { to: '/admin/disputes', label: 'Disputes', icon: RefreshCw },

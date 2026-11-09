@@ -217,11 +217,24 @@ export type ProductStatusOption = {
   value: string;
 };
 
+// A single option of a submitted variant, e.g. { optionName: 'Size', name: 'Small' }
+export type VariantJsonOption = {
+  optionName: string;
+  name: string;
+};
+
+// One variant as submitted: { sku, price, quantity, options }
+export type VariantJson = {
+  sku: string;
+  price: number;
+  quantity: number;
+  options: VariantJsonOption[];
+};
+
 export type CreateProductPayload = {
   UserId?: number;
   Name: string;
   Category: string;
-  Unit: number;
   PriceUsd: number;
   quantity: number;
   Moq: number;
@@ -230,9 +243,14 @@ export type CreateProductPayload = {
   StatusId: number;
   ThumbnailImage: File | null;
   Images: File[];
+  OptionNames: string[] | null;
+  /** Each item is JSON.stringify(VariantJson) for one variant. */
+  VariantsJson: string[] | null;
 };
 export type EditProductPayload = {
-  payload: CreateProductPayload;
+  payload: CreateProductPayload & {
+    ExistingImageUrls?: string[] | null;
+  };
   id: string | number;
 };
 

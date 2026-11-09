@@ -16,18 +16,18 @@ interface ProductCardProps {
 export function ProductTableRow({ product }: ProductCardProps) {
   const router = useRouter();
   return (
-    <tr className="hidden md:table-row">
+    <tr className="hidden md:table-row ">
       <td>
         {product.thumbnailImage ? (
           <Image
             src={product.thumbnailImage}
             alt={product.productName}
-            className="w-14 h-14 rounded object-cover"
+            className="size-10 rounded  object-cover"
             width={20}
             height={20}
           />
         ) : (
-          <div className="w-14 h-14 rounded bg-muted flex items-center justify-center text-text text-[10px] font-mono">
+          <div className="size-10 rounded bg-muted flex items-center justify-center text-text text-[10px] font-mono">
             NO IMG
           </div>
         )}

@@ -4,16 +4,10 @@ import { cn } from '@/lib/utils';
 
 type FormSectionProps = {
   title: string;
-  /** Optional helper text shown under the title. */
   description?: string;
   children: ReactNode;
   className?: string;
 };
-
-/**
- * Bordered form section — visually matches the Shipping panel
- * (`ShippingForm`) so grouped fields stay consistent.
- */
 export default function FormSection({
   title,
   description,

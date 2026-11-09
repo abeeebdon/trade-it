@@ -1,4 +1,4 @@
-import SelectField from '@/components/form/SelectField';
+import CustomSelect from '@/components/form/CustomSelect';
 import { STATUSES } from '@/lib/constants';
 
 type MyProductFilterControlsProps = {
@@ -30,36 +30,32 @@ const MyProductFilterControls = ({
 }: MyProductFilterControlsProps) => {
   return (
     <div className="space-y-4">
-      <SelectField
+      <CustomSelect
         label="Category"
-        name="category"
         value={selectedCategory}
-        onChange={(e) => onCategoryChange(e.target.value)}
+        onValueChange={onCategoryChange}
         disabled={categoriesLoading}
-        className="helix-input w-full"
-      >
-        <option value="all">All categories</option>
-        {categoryOptions.map((category) => (
-          <option key={category.id} value={category.name}>
-            {category.name}
-          </option>
-        ))}
-      </SelectField>
+        options={[
+          { label: 'All categories', value: 'all' },
+          ...categoryOptions.map((category) => ({
+            label: category.name,
+            value: category.name,
+          })),
+        ]}
+      />
 
-      <SelectField
+      <CustomSelect
         label="Status"
-        name="status"
         value={selectedStatus}
-        onChange={(e) => onStatusChange(e.target.value)}
-        className="helix-input w-full"
-      >
-        <option value="all">All statuses</option>
-        {STATUSES.map((status) => (
-          <option key={status.id} value={String(status.id)}>
-            {status.label}
-          </option>
-        ))}
-      </SelectField>
+        onValueChange={onStatusChange}
+        options={[
+          { label: 'All statuses', value: 'all' },
+          ...STATUSES.map((status) => ({
+            label: status.label,
+            value: String(status.id),
+          })),
+        ]}
+      />
 
       <div>
         <label className="mb-1 block text-[11px] uppercase tracking-[0.16em] text-muted">

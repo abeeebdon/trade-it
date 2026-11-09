@@ -46,7 +46,7 @@ const Header = ({ className }: { className?: string }) => {
       <header
         className={
           (cn(
-            'fixed top-0 inset-x-0 z-30  bg-bg backdrop-blur border-b border-[#1A7A6E]/15',
+            'fixed top-0 inset-x-0 z-30  bg-bg backdrop-blur border-b border-bg/50 shadow',
           ),
           className)
         }

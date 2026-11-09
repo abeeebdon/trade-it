@@ -11,35 +11,48 @@ import {
 } from '../types/exporter';
 import { getUserId } from '@/lib/helpers/TokenDetails';
 import { toast } from 'sonner';
+export interface ProductVariantOption {
+  id: number;
+  optionName: string;
+  optionValue: string;
+}
+
+export interface ProductVariant {
+  id: number;
+  sku: string;
+  price: number;
+  quantity: number;
+  shopifyVariantId: number | null;
+  options: ProductVariantOption[];
+}
+
+export interface ProductImage {
+  id: number;
+  imageUrl: string;
+}
+
 export interface ProductData {
   id: number;
-  userId: number;
   sellerId: number;
-  user: null;
-
   productName: string;
   description: string;
   category: string;
-
-  price: number;
-  priceUsd: number;
-  quantity: number;
-  moq: number;
   unit: number;
-
+  priceUsd: number;
+  moq: number;
   currencyId: number;
-  currency: null;
-
-  productStatusId: number;
   statusId: number;
-  productStatus: null;
-
+  sourceType: string;
   thumbnailImage: string;
-  productImages: null;
-  images: { id: string; imageUrl: string }[];
+  images: ProductImage[];
+  variants: ProductVariant[];
 
-  createdAt: string;
-  updatedAt: string;
+  /* ---- Legacy fields kept for older responses ---- */
+  price?: number;
+  quantity?: number;
+  productStatusId?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 export const getProducts = async ({
   pageNumber,
@@ -59,6 +72,19 @@ export const getProductById = async (id: string): Promise<ProductData> => {
   try {
     const response = await api.get(APIENDPOINTSTWO.PRODUCT_BY_ID(id));
     return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const publishProductToShopify = async (
+  id: number | string,
+): Promise<{ message?: string }> => {
+  try {
+    const response = await api.put(
+      APIENDPOINTSTWO.PRODUCT_PUBLISH_TO_SHOPIFY(id),
+    );
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -93,6 +119,14 @@ export const createProduct = async (
       form.append('images', img);
     });
 
+    payload.OptionNames?.forEach((name) => {
+      form.append('OptionNames', name);
+    });
+
+    payload.VariantsJson?.forEach((variant) => {
+      form.append('VariantsJson', variant);
+    });
+
     await api.post(APIENDPOINTSTWO.PRODUCT_CREATE, form, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
@@ -106,7 +140,7 @@ export const editProduct = async ({ id, payload }: EditProductPayload) => {
 
     form.append('Name', payload.Name);
     form.append('Category', payload.Category);
-    form.append('Unit', String(payload.Unit));
+    form.append('Unit', String(payload.quantity));
     form.append('PriceUsd', String(payload.PriceUsd));
     form.append('Moq', String(payload.Moq));
     form.append('Description', payload.Description);
@@ -119,6 +153,18 @@ export const editProduct = async ({ id, payload }: EditProductPayload) => {
 
     payload.Images.forEach((img) => {
       form.append('images', img);
+    });
+
+    payload.ExistingImageUrls?.forEach((url) => {
+      form.append('ExistingImageUrls', url);
+    });
+
+    payload.OptionNames?.forEach((name) => {
+      form.append('OptionNames', name);
+    });
+
+    payload.VariantsJson?.forEach((variant) => {
+      form.append('VariantsJson', variant);
     });
 
     await api.put(APIENDPOINTSTWO.PRODUCT_BY_ID(id), form, {

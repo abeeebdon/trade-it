@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Search } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useDebounce } from '@/components/debounce/useDebounce';
+import { CustomSearchInput } from '@/components/form/CustomSearchInput';
 
 const SearchInput = () => {
   const router = useRouter();
@@ -37,18 +37,14 @@ const SearchInput = () => {
 
   return (
     <form onSubmit={submitSearch} className="hidden sm:flex items-center gap-2">
-      <div className="flex items-center h-9 gap-2 rounded-full border border-[#1A7A6E]/30 px-3 bg-transparent focus-within:border-[#C9922A]/50 transition-colors">
-        <label htmlFor="header-search">
-          <Search size={14} className="text-[#9CA3AF]" />
-        </label>
-        <input
-          id="header-search"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search products…"
-          className="w-30 lg:w-40 text-[13px] bg-transparent border-none outline-none text-text text-xs placeholder:text-[#9CA3AF]"
-        />
-      </div>
+      <CustomSearchInput
+        id="header-search"
+        className="h-9 gap-2 rounded-full border-[#1A7A6E]/30 bg-transparent px-3 focus-within:border-[#C9922A]/50"
+        inputClassName="w-30 lg:w-40 text-xs text-[13px]"
+        value={search}
+        onChange={setSearch}
+        placeholder="Search products…"
+      />
     </form>
   );
 };

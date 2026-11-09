@@ -1,73 +1,125 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm, useWatch, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSelector } from 'react-redux';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import {
-  productSchema,
-  ProductFormValues,
+  productEditSchema,
+  ProductEditFormValues,
+  shippingDefaults,
 } from '@/features/authentication/components/validation';
 import {
   useEditProduct,
   useGetProductById,
   useGetProductCategories,
 } from '../../hooks/useProducts';
-import { RootState } from '@/store/store';
 import InputField from '@/components/form/InputFIeld';
 import ImageUploader, { type ImageItem } from '@/components/form/ImageUploader';
-import { UNITS, STATUSES, DEFAULT_CURRENCY_ID } from '@/lib/constants';
-import { ProductResponseType } from '../types/product';
+import { STATUSES, DEFAULT_CURRENCY_ID } from '@/lib/constants';
+import type { ProductCategory } from '../../types/exporter';
 import BackButton from '@/components/buttons/BackButton';
+import Loader from '@/components/buttons/Loader';
+import type { ProductData } from '../../api/productsApi';
+import DescriptionEditor from '../components/DescriptionEditor';
+import FormSection from '../components/FormSection';
+import ShippingForm from '../components/ShippingForm';
+import VariantComponent, {
+  type VariantFormValues,
+} from '../components/VariantComponent';
+import {
+  toExistingImageUrls,
+  toOptionNames,
+  toVariantsJson,
+  toVariantForm,
+} from '../utils/productForm';
 
-const defaultValues = (): ProductFormValues => ({
-  name: '',
-  category: '',
-  unitId: 1,
-  quantity: 0,
-  price_usd: 50,
-  moq: 10,
-  description: '',
-  currencyId: DEFAULT_CURRENCY_ID,
-  statusId: 1,
-  thumbnail: null,
-  images: [],
-  thumbnailPreview: null,
-  imagePreviews: [],
-});
+const statusIdFor = (p: ProductData) => {
+  const raw = p.statusId ?? p.productStatusId;
+  return STATUSES.some((s) => s.id === raw) ? raw : STATUSES[0].id;
+};
 
-const valuesFromProduct = (p: ProductResponseType): ProductFormValues => ({
+const valuesFromProduct = (p: ProductData): ProductEditFormValues => ({
   name: p.productName,
   category: p.category,
-  unitId: p.unit,
-  quantity: p.moq ?? 0,
+  quantity: p.unit ?? 0,
   price_usd: p.priceUsd,
-  moq: p.moq,
+  moq: p.moq ?? 0,
   description: p.description,
-  currencyId: DEFAULT_CURRENCY_ID,
-  statusId: STATUSES.find((s) => s.value === String(p.statusId))?.id ?? 1,
+  currencyId: p.currencyId ?? DEFAULT_CURRENCY_ID,
+  statusId: statusIdFor(p),
   thumbnail: null,
   images: [],
-  thumbnailPreview: p.thumbnailImage ?? null,
-  imagePreviews: p.images ?? [],
+  thumbnailPreview: p.thumbnailImage || null,
+  imagePreviews: p.images?.map((image) => image.imageUrl) ?? [],
+  shipping: shippingDefaults,
 });
 
 export default function EditProductPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
-  const user = useSelector((state: RootState) => state.auth.user);
 
   const { data: product, isPending, isError } = useGetProductById(id ?? '');
   const { data: categoryData, isPending: categoriesLoading } =
     useGetProductCategories();
-  const { mutate: editProduct, isPending: isSubmitting } = useEditProduct();
 
   const categories = useMemo(
     () => categoryData?.data ?? [],
     [categoryData?.data],
+  );
+
+  if (isError) {
+    return (
+      <div className="py-10 text-center">
+        <p className="text-muted">Could not load product details.</p>
+        <button
+          onClick={() => router.push('/exporter/products')}
+          className="helix-btn-primary mt-4"
+        >
+          Back to products
+        </button>
+      </div>
+    );
+  }
+
+  if (isPending || !product) {
+    return (
+      <div className="flex h-[60vh] items-center justify-center text-muted">
+        Loading product...
+      </div>
+    );
+  }
+
+  return (
+    <EditProductForm
+      key={product.id}
+      product={product}
+      categories={categories}
+      categoriesLoading={categoriesLoading}
+    />
+  );
+}
+
+type EditProductFormProps = {
+  product: ProductData;
+  categories: ProductCategory[];
+  categoriesLoading: boolean;
+};
+
+function EditProductForm({
+  product,
+  categories,
+  categoriesLoading,
+}: EditProductFormProps) {
+  const router = useRouter();
+  const { mutate: editProduct, isPending: isSubmitting } = useEditProduct(() =>
+    router.push('/exporter/products'),
+  );
+
+  const [variantForm, setVariantForm] = useState<VariantFormValues>(() =>
+    toVariantForm(product.variants),
   );
 
   const {
@@ -76,43 +128,16 @@ export default function EditProductPage() {
     control,
     setValue,
     getValues,
-    reset,
     formState: { errors },
-  } = useForm<ProductFormValues>({
-    resolver: zodResolver(productSchema),
-    defaultValues: defaultValues(),
+  } = useForm<ProductEditFormValues>({
+    resolver: zodResolver(productEditSchema),
+    defaultValues: valuesFromProduct(product),
   });
 
   useEffect(() => {
-    if (!product) return;
-
-    const productFormData: ProductResponseType = {
-      id: product.id,
-      productName: product.productName,
-      category: product.category,
-      currencyId: product.currencyId,
-      description: product.description,
-      images: product.images?.map((img) => img.imageUrl ?? '') ?? [],
-      moq: product.moq ?? product.quantity ?? 0,
-      amountInUsd: product.priceUsd,
-      amountInNaira: 0,
-      priceUsd: product.priceUsd,
-      statusId: product.statusId ?? product.productStatusId ?? 1,
-      thumbnailImage: product.thumbnailImage ?? '',
-      unit: product.unit,
-      createdAt: product.createdAt,
-    };
-
-    reset(valuesFromProduct(productFormData));
-  }, [product, reset]);
-
-  useEffect(() => {
-    if (!product || !categories.length) return;
-    const current = getValues('category');
-    if (!current) {
-      setValue('category', categories[0].name);
-    }
-  }, [categories, product, getValues, setValue]);
+    if (!categories.length) return;
+    if (!getValues('category')) setValue('category', categories[0].name);
+  }, [categories, getValues, setValue]);
 
   const priceUsd = useWatch({ control, name: 'price_usd' });
   const thumbnailPreview =
@@ -158,16 +183,12 @@ export default function EditProductPage() {
     );
   };
 
-  const onSubmit = (values: ProductFormValues) => {
-    if (!product) return;
-
+  const onSubmit = (values: ProductEditFormValues) => {
     editProduct({
       id: product.id,
       payload: {
-        UserId: user?.id ? Number(user.id) : undefined,
         Name: values.name,
         Category: values.category,
-        Unit: values.unitId,
         quantity: values.quantity,
         PriceUsd: values.price_usd,
         Moq: values.moq,
@@ -176,211 +197,196 @@ export default function EditProductPage() {
         StatusId: values.statusId,
         ThumbnailImage: values.thumbnail ?? null,
         Images: values.images,
+        ExistingImageUrls: toExistingImageUrls(values.imagePreviews),
+        OptionNames: toOptionNames(variantForm),
+        VariantsJson: toVariantsJson(values.name, variantForm),
       },
     });
   };
 
-  const handleClose = () => router.push('/exporter/products');
-
-  if (isPending) {
-    return (
-      <div className="flex h-[60vh] items-center justify-center text-muted">
-        Loading product...
-      </div>
-    );
-  }
-
-  if (isError || !product) {
-    return (
-      <div className="py-10 text-center">
-        <p className="text-muted">Could not load product details.</p>
-        <button onClick={handleClose} className="helix-btn-primary mt-4">
-          Back to products
-        </button>
-      </div>
-    );
-  }
-
   return (
-    <section className="w-full max-w-2xl  py-6">
+    <section className="w-full max-w-2xl py-6">
       <BackButton />
 
-      <div className="mt-5 w-full  fade-up">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="mt-5 grid md:grid-cols-2 gap-4"
-          noValidate
-        >
-          <div className="md:col-span-2">
-            <InputField
-              label="Name"
-              placeholder="e.g. Premium Sesame Seeds"
-              error={errors.name?.message}
-              data-testid="pf-name"
-              {...register('name')}
-            />
-          </div>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="mt-5 flex flex-col gap-4 fade-up"
+        noValidate
+      >
+        {/* Product details */}
+        <FormSection title="Product details">
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="md:col-span-2">
+              <InputField
+                label="Name"
+                placeholder="e.g. Alo vera Seeds"
+                error={errors.name?.message}
+                data-testid="pf-name"
+                {...register('name')}
+              />
+            </div>
 
-          <div>
-            <label className="helix-label">Category</label>
-            {categoriesLoading ? (
-              <div className="helix-input h-10 animate-pulse opacity-40" />
-            ) : (
+            <div>
+              <label className="helix-label">Category</label>
+              {categoriesLoading ? (
+                <div className="helix-input h-10 animate-pulse opacity-40" />
+              ) : (
+                <Controller
+                  name="category"
+                  control={control}
+                  render={({ field }) => (
+                    <select
+                      {...field}
+                      className="helix-input"
+                      data-testid="pf-cat"
+                    >
+                      {categories.map((c) => (
+                        <option key={c.id} value={c.name}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                />
+              )}
+              {errors.category && (
+                <p className="text-danger text-xs mt-1">
+                  {errors.category.message}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <InputField
+                label="Quantity"
+                type="number"
+                placeholder="Enter the quantity available"
+                error={errors.quantity?.message}
+                {...register('quantity', { valueAsNumber: true })}
+              />
+            </div>
+          </div>
+        </FormSection>
+
+        {/* Pricing & availability */}
+        <FormSection title="Pricing & availability">
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <InputField
+                label="Price (USD)"
+                type="number"
+                placeholder="0.00"
+                error={errors.price_usd?.message}
+                {...register('price_usd', { valueAsNumber: true })}
+              />
+              {ngnEstimate && (
+                <p className="text-[11px] text-muted font-mono mt-1">
+                  ≈ {ngnEstimate} at current rate
+                </p>
+              )}
+            </div>
+
+            <div>
+              <InputField
+                label="Minimum Order Quantity (MOQ)"
+                type="number"
+                placeholder="10"
+                error={errors.moq?.message}
+                {...register('moq', { valueAsNumber: true })}
+              />
+            </div>
+
+            <div>
+              <label className="helix-label">Status</label>
               <Controller
-                name="category"
+                name="statusId"
                 control={control}
                 render={({ field }) => (
                   <select
                     {...field}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
                     className="helix-input"
-                    data-testid="pf-cat"
                   >
-                    {categories.map((c) => (
-                      <option key={c.id} value={c.name}>
-                        {c.name}
+                    {STATUSES.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.label}
                       </option>
                     ))}
                   </select>
                 )}
               />
-            )}
-            {errors.category && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.category.message}
-              </p>
-            )}
+            </div>
           </div>
+        </FormSection>
 
-          <div>
-            <label className="helix-label">Unit</label>
-            <Controller
-              name="unitId"
-              control={control}
-              render={({ field }) => (
-                <select
-                  {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                  className="helix-input"
-                >
-                  {UNITS.map((u) => (
-                    <option key={u.id} value={u.id}>
-                      {u.label}
-                    </option>
-                  ))}
-                </select>
-              )}
-            />
-            {errors.unitId && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.unitId.message}
-              </p>
+        {/* Description */}
+        <FormSection title="Description">
+          <Controller
+            key={product.id}
+            name="description"
+            control={control}
+            render={({ field }) => (
+              <DescriptionEditor
+                label=""
+                value={field.value}
+                onChange={field.onChange}
+                error={errors.description?.message}
+                placeholder="Describe your product for international buyers..."
+              />
             )}
-          </div>
-
-          <div>
-            <InputField
-              label="Quantity"
-              type="number"
-              placeholder="Enter the quantity available"
-              error={errors.quantity?.message}
-              {...register('quantity', { valueAsNumber: true })}
-            />
-          </div>
-
-          <div>
-            <InputField
-              label="Price (USD)"
-              type="number"
-              placeholder="0.00"
-              error={errors.price_usd?.message}
-              {...register('price_usd', { valueAsNumber: true })}
-            />
-            {ngnEstimate && (
-              <p className="text-[11px] text-muted font-mono mt-1">
-                ≈ {ngnEstimate} at current rate
-              </p>
-            )}
-          </div>
-
-          <InputField
-            label="Minimum Order Quantity (MOQ)"
-            type="number"
-            placeholder="10"
-            error={errors.moq?.message}
-            {...register('moq', { valueAsNumber: true })}
           />
+        </FormSection>
 
-          <div>
-            <label className="helix-label">Status</label>
-            <Controller
-              name="statusId"
-              control={control}
-              render={({ field }) => (
-                <select
-                  {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                  className="helix-input"
-                >
-                  {STATUSES.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.label}
-                    </option>
-                  ))}
-                </select>
+        <VariantComponent value={variantForm} onChange={setVariantForm} />
+
+        {/* Media */}
+        <FormSection title="Media">
+          <div className="flex flex-col gap-4">
+            <div>
+              <label className="helix-label">Thumbnail Image</label>
+              <ImageUploader
+                value={thumbnailItems}
+                onChange={handleThumbnailChange}
+                maxImages={1}
+              />
+            </div>
+
+            <div>
+              <label className="helix-label">Additional Images</label>
+              <ImageUploader
+                value={imageItems}
+                onChange={handleImagesChange}
+                maxImages={5}
+              />
+              {errors.images && (
+                <p className="text-danger text-xs mt-1">
+                  {errors.images.message}
+                </p>
               )}
-            />
+            </div>
           </div>
+        </FormSection>
 
-          <div className="md:col-span-2">
-            <label className="helix-label">Description</label>
-            <textarea
-              className={`helix-input h-24 ${
-                errors.description ? 'border-red-500' : ''
-              }`}
-              placeholder="Describe your product for international buyers..."
-              {...register('description')}
-            />
-            {errors.description && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.description.message}
-              </p>
-            )}
-          </div>
+        {/* Shipping */}
+        <Controller
+          name="shipping"
+          control={control}
+          render={({ field }) => (
+            <ShippingForm value={field.value} onChange={field.onChange} />
+          )}
+        />
 
-          <div className="md:col-span-2">
-            <label className="helix-label">Thumbnail Image</label>
-            <ImageUploader
-              value={thumbnailItems}
-              onChange={handleThumbnailChange}
-              maxImages={1}
-            />
-          </div>
-
-          <div className="md:col-span-2">
-            <label className="helix-label">Additional Images</label>
-            <ImageUploader
-              value={imageItems}
-              onChange={handleImagesChange}
-              maxImages={5}
-            />
-            {errors.images && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.images.message}
-              </p>
-            )}
-          </div>
-
-          <div className="md:col-span-2 flex justify-end gap-3 mt-4">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="helix-btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isSubmitting ? 'Saving…' : 'Save changes'}
-            </button>
-          </div>
-        </form>
-      </div>
+        {/* Actions */}
+        <div className="flex justify-end gap-3">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="helix-btn-primary w-1/2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isSubmitting ? <Loader /> : 'Save changes'}
+          </button>
+        </div>
+      </form>
     </section>
   );
 }

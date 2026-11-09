@@ -5,8 +5,7 @@ import { useForm } from 'react-hook-form';
 import { RegisterFormValues, registerSchema } from '../components/validation';
 import InputField from '@/components/form/InputFIeld';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ROLES } from '../components/data';
 import Loader from '@/components/buttons/Loader';
 import { motion } from 'motion/react';
@@ -71,12 +70,7 @@ export default function Register() {
       <Link href="/" className="md:hidden flex justify-center mb-7">
         <JompFullLogo />
       </Link>
-      {/* <button
-        onClick={() => router.push('/getstarted')}
-        className="text-[12px] text-[#9CA3AF] hover:text-[#F5F5F5] inline-flex items-center gap-1.5 mb-4"
-      >
-        <ArrowLeft size={12} /> change role
-      </button> */}
+
       <h2 className="helix-kicker mb-2">Sign up · {role?.title}</h2>
       <h1 className="helix-h2 capitalize">
         {role?.value === 'consumer'

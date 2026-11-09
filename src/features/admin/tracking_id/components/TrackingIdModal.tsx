@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import InputField from '@/components/form/InputFIeld';
-import SelectField from '@/components/form/SelectField';
+import CustomSelect from '@/components/form/CustomSelect';
 import Modal from '@/components/ui/Modal';
 import PressableBtn from '@/components/buttons/PressableBtn';
 import type {
@@ -43,6 +43,7 @@ export default function TrackingIdModal({
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<TrackingIdFormValues>({
     resolver: zodResolver(trackingIdSchema),
@@ -75,17 +76,16 @@ export default function TrackingIdModal({
           {...register('trackingNumber')}
           error={errors.trackingNumber?.message}
         />
-        <SelectField
+        <CustomSelect
+          control={control}
+          name="status"
           label="Status"
-          {...register('status')}
+          options={TRACKING_STATUSES.map((status) => ({
+            label: status.label,
+            value: status.value,
+          }))}
           error={errors.status?.message}
-        >
-          {TRACKING_STATUSES.map((status) => (
-            <option key={status.value} value={status.value}>
-              {status.label}
-            </option>
-          ))}
-        </SelectField>
+        />
 
         <div className="flex gap-3 pt-2">
           <button

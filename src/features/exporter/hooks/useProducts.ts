@@ -8,6 +8,7 @@ import {
   getProductCategoryById,
   getProductCountries,
   editProduct,
+  publishProductToShopify,
   createProductCategory,
   updateProductCategory,
   deleteProductCategory,
@@ -18,13 +19,13 @@ import {
   ProductListParams,
   EditProductPayload,
 } from '../types/exporter';
-import { router } from 'next/client';
 import { useRouter } from 'next/navigation';
 
 export const useGetProducts = ({ pageNumber, pageSize }: ProductListParams) => {
   return useQuery({
     queryKey: ['exporter-products', pageNumber, pageSize],
     queryFn: () => getProducts({ pageNumber, pageSize }),
+    staleTime: 60 * 1000,
   });
 };
 
@@ -33,6 +34,7 @@ export const useGetProductById = (id: string) => {
     queryKey: ['product-detail', id],
     queryFn: () => getProductById(id),
     enabled: !!id,
+    staleTime: 60 * 1000,
   });
 };
 
@@ -69,12 +71,39 @@ export const useEditProduct = (onSuccess?: () => void) => {
   });
 };
 
+export const usePublishProductToShopify = (
+  id: number | string,
+  onSuccess?: () => void,
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => publishProductToShopify(id),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ['product-detail', String(id)],
+      });
+      queryClient.invalidateQueries({ queryKey: ['exporter-products'] });
+      toast.success(data?.message ?? 'Product published to Shopify');
+      onSuccess?.();
+    },
+    onError: (error: unknown) => {
+      const message =
+        (error as { response?: { data?: { message?: string } } })?.response
+          ?.data?.message ??
+        'Failed to publish product to Shopify. Please try again.';
+      toast.error(message);
+    },
+  });
+};
+
 //Product Categories hooks
 
 export const useGetProductCategories = () => {
   return useQuery({
     queryKey: ['product-categories'],
     queryFn: () => getProductCategories(),
+    staleTime: 60 * 1000,
   });
 };
 
@@ -83,6 +112,7 @@ export const useGetProductCategoryById = (id: number) => {
     queryKey: ['product-category', id],
     queryFn: () => getProductCategoryById(id),
     enabled: !!id,
+    staleTime: 60 * 1000,
   });
 };
 

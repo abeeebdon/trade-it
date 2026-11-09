@@ -50,7 +50,7 @@ const ResetPassword = () => {
           Create a new password
         </h1>
 
-        <p className="mt-2 text-muted-foreground">
+        <p className="mt-2 text-muted">
           Enter and confirm your new password below to regain access to your
           account.
         </p>
@@ -78,7 +78,7 @@ const ResetPassword = () => {
           {isPending ? <Loader /> : 'Continue'}
         </button>
       </form>
-      <div className="flex justify-center items-center gap-2 mt-4 text-sm">
+      <div className="flex justify-center items-center text-text gap-2 mt-4 text-sm">
         <span>Remember your password?</span>
         <Link
           href="/login"

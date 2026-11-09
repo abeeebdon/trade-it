@@ -9,7 +9,14 @@ import { Loading } from '@/components/loading';
 import Pagination from '../../components/pagination';
 import SelectDropDown from '@/components/SelectDropDown';
 import ExporterOrderCard from '../../orders/components/ExporterOrderCard';
-import ExporterOrderSearchFilter from '../../orders/components/ExporterOrderSearchFilter';
+import CustomSelect from '@/components/form/CustomSelect';
+import { CustomSearchInput } from '@/components/form/CustomSearchInput';
+import { deliveryGroupOf } from '@/features/orderManagement/components/CardMeta';
+import {
+  ALL_FILTER,
+  DELIVERY_FILTER_OPTIONS,
+  toStatusOptions,
+} from '@/lib/orderFilters';
 import { StatusPill } from '@/features/shops/components/StatusPill';
 import { formatDateTime, formatUSD } from '@/lib/func';
 
@@ -17,8 +24,10 @@ export default function Orders() {
   const user = useSelector((state: RootState) => state.auth.user);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [productName, setProductName] = useState('');
+  const [search, setSearch] = useState('');
+  const [product, setProduct] = useState('');
   const [status, setStatus] = useState('');
+  const [delivery, setDelivery] = useState('');
 
   const { data, isPending, isError } = useGetSellerOrders({
     pageNumber: page,
@@ -26,31 +35,55 @@ export default function Orders() {
   });
 
   const orders = useMemo(() => {
-    return data ? data : [];
+    return data ?? [];
   }, [data]);
 
+  const products = useMemo(
+    () =>
+      Array.from(new Set(orders.map((order) => order.productName)))
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b)),
+    [orders],
+  );
+
+  const statusOptions = useMemo(
+    () => toStatusOptions(orders.map((order) => order.status)),
+    [orders],
+  );
+
   const filteredOrders = useMemo(() => {
+    const term = search.trim().toLowerCase();
+
     return orders.filter((order) => {
-      const matchesProduct = order.productName
-        .toLowerCase()
-        .includes(productName.trim().toLowerCase());
+      const matchesProduct = !product || order.productName === product;
       const matchesStatus =
         !status || order.status.toLowerCase() === status.toLowerCase();
+      const matchesDelivery =
+        !delivery || deliveryGroupOf(order.status) === delivery;
+      const matchesSearch =
+        !term ||
+        [
+          order.orderNumber,
+          order.productName,
+          order.category,
+          order.email,
+          order.shipTo,
+        ]
+          .join(' ')
+          .toLowerCase()
+          .includes(term);
 
-      return matchesProduct && matchesStatus;
+      return (
+        matchesProduct && matchesStatus && matchesDelivery && matchesSearch
+      );
     });
-  }, [orders, productName, status]);
+  }, [orders, search, product, status, delivery]);
 
   const totalPages = useMemo(() => {
     return filteredOrders.length
       ? Math.ceil(filteredOrders.length / pageSize)
       : 1;
   }, [filteredOrders, pageSize]);
-
-  const clearFilters = () => {
-    setProductName('');
-    setStatus('');
-  };
 
   const handlePageSizeChange = (value: number) => {
     setPageSize(value);
@@ -86,13 +119,68 @@ export default function Orders() {
 
   return (
     <section className="space-y-4">
-      <ExporterOrderSearchFilter
-        productName={productName}
-        status={status}
-        onProductNameChange={setProductName}
-        onStatusChange={setStatus}
-        onClear={clearFilters}
-      />
+      <section className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2 justify-between sm:flex-row lg:items-center">
+          <CustomSearchInput
+            className="lg:flex-1"
+            value={search}
+            onChange={(value) => {
+              setSearch(value);
+              setPage(1);
+            }}
+            placeholder="Search by order, product or customer..."
+          />
+
+          <div className="basis-2/3 flex justify-end gap-2">
+            <CustomSelect
+              className="w-full max-w-40"
+              placeholder="All products"
+              value={product === '' ? ALL_FILTER : product}
+              onValueChange={(value) => {
+                setProduct(value === ALL_FILTER ? '' : value);
+                setPage(1);
+              }}
+              options={[
+                { label: 'All products', value: ALL_FILTER },
+                ...products.map((name) => ({ label: name, value: name })),
+              ]}
+            />
+
+            <CustomSelect
+              className="w-full max-w-40"
+              placeholder="All statuses"
+              value={status === '' ? ALL_FILTER : status}
+              onValueChange={(value) => {
+                setStatus(value === ALL_FILTER ? '' : value);
+                setPage(1);
+              }}
+              options={[
+                { label: 'All statuses', value: ALL_FILTER },
+                ...statusOptions,
+              ]}
+            />
+
+            <CustomSelect
+              className="w-full max-w-40"
+              placeholder="All deliveries"
+              value={delivery === '' ? ALL_FILTER : delivery}
+              onValueChange={(value) => {
+                setDelivery(value === ALL_FILTER ? '' : value);
+                setPage(1);
+              }}
+              options={[
+                { label: 'All deliveries', value: ALL_FILTER },
+                ...DELIVERY_FILTER_OPTIONS,
+              ]}
+            />
+          </div>
+        </div>
+
+        <p className="text-[12px] text-muted">
+          Showing <strong className="text-text">{filteredOrders.length}</strong>{' '}
+          of <strong className="text-text">{orders.length}</strong> orders
+        </p>
+      </section>
 
       {filteredOrders.length === 0 ? (
         <div className="helix-card p-12 text-center text-[#9CA3AF]">

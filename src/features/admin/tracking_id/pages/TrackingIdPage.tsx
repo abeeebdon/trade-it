@@ -3,7 +3,8 @@
 import { useMemo, useState } from 'react';
 import { Plus } from 'lucide-react';
 
-import SelectField from '@/components/form/SelectField';
+import CustomSelect from '@/components/form/CustomSelect';
+import { CustomSearchInput } from '@/components/form/CustomSearchInput';
 import PressableBtn from '@/components/buttons/PressableBtn';
 import WarningModal from '@/components/modals/WarningModal';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -114,30 +115,28 @@ const TrackingIdPage = () => {
 
       {/* Filter bar */}
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div className="relative w-full sm:max-w-xs">
-          <input
-            id="tracking-search"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by order or tracking number…"
-            className="helix-input w-full pl-9 text-[13px]"
-          />
-        </div>
+        <CustomSearchInput
+          id="tracking-search"
+          className="w-full sm:max-w-xs"
+          inputClassName="text-[13px]"
+          value={search}
+          onChange={setSearch}
+          placeholder="Search by order or tracking number…"
+        />
 
-        <SelectField
+        <CustomSelect
           label="Status"
-          name="status-filter"
+          className="w-full sm:w-48"
           value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="helix-input w-full sm:w-48"
-        >
-          <option value="all">All statuses</option>
-          {TRACKING_STATUSES.map((status) => (
-            <option key={status.value} value={status.value}>
-              {status.label}
-            </option>
-          ))}
-        </SelectField>
+          onValueChange={setStatusFilter}
+          options={[
+            { label: 'All statuses', value: 'all' },
+            ...TRACKING_STATUSES.map((status) => ({
+              label: status.label,
+              value: status.value,
+            })),
+          ]}
+        />
       </div>
 
       {/* Content */}

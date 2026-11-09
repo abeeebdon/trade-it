@@ -11,12 +11,14 @@ import { ProductResponseType } from '../types/product';
 import Pagination from '../../components/pagination';
 import ProductCard, { ProductTableRow } from '../components/ProductCard';
 import MyProductHead from '../components/MyProductHead';
+import SelectDropDown from '@/components/SelectDropDown';
 
-const PAGE_SIZE = 10;
+const DEFAULT_PAGE_SIZE = 10;
 
 export default function ExporterProducts() {
   const router = useRouter();
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [startDate, setStartDate] = useState('');
@@ -24,7 +26,7 @@ export default function ExporterProducts() {
 
   const { data, isPending, isError } = useGetProducts({
     pageNumber: page,
-    pageSize: PAGE_SIZE,
+    pageSize,
   });
   const { data: categoriesData, isPending: categoriesLoading } =
     useGetProductCategories();
@@ -99,6 +101,11 @@ export default function ExporterProducts() {
     setPage(1);
   };
 
+  const handlePageSizeChange = (value: number) => {
+    setPageSize(value);
+    setPage(1);
+  };
+
   return (
     <section>
       <MyProductHead
@@ -153,9 +160,9 @@ export default function ExporterProducts() {
       {/* Table / Cards */}
       {!isPending && !isError && filteredProducts.length > 0 && (
         <>
-          <div className="hidden md:block helix-card overflow-hidden">
+          <div className="hidden md:block  overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="helix-table">
+              <table className="helix-table border border-border rounded">
                 <thead>
                   <tr>
                     <th>Photo</th>
@@ -165,7 +172,7 @@ export default function ExporterProducts() {
                     <th>MOQ</th>
                     <th>Unit</th>
                     <th>Status</th>
-                    <th></th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -177,18 +184,21 @@ export default function ExporterProducts() {
             </div>
           </div>
 
-          <div className="md:hidden space-y-3">
+          <div className="md:hidden space-y-1">
             {filteredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
 
-          {/* Pagination */}
-          <div className="px-5 py-4 border-t border-border">
+          <div className="px-5 py-4 border-t border-border flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3">
             <Pagination
               page={page}
               totalPages={totalPages}
               onChange={setPage}
+            />
+            <SelectDropDown
+              pageNum={pageSize}
+              setPageNum={handlePageSizeChange}
             />
           </div>
         </>
