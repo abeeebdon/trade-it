@@ -9,7 +9,10 @@ import { Loading } from '@/components/loading';
 import Pagination from '../../components/pagination';
 import SelectDropDown from '@/components/SelectDropDown';
 import ExporterOrderCard from '../../orders/components/ExporterOrderCard';
-import ExporterOrderSearchFilter from '../../orders/components/ExporterOrderSearchFilter';
+import OrderListFilters, {
+  toStatusOptions,
+} from '@/components/orders/OrderListFilters';
+import { deliveryGroupOf } from '@/features/orderManagement/components/CardMeta';
 import { StatusPill } from '@/features/shops/components/StatusPill';
 import { formatDateTime, formatUSD } from '@/lib/func';
 
@@ -17,8 +20,10 @@ export default function Orders() {
   const user = useSelector((state: RootState) => state.auth.user);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [productName, setProductName] = useState('');
+  const [search, setSearch] = useState('');
+  const [product, setProduct] = useState('');
   const [status, setStatus] = useState('');
+  const [delivery, setDelivery] = useState('');
 
   const { data, isPending, isError } = useGetSellerOrders({
     pageNumber: page,
@@ -26,20 +31,49 @@ export default function Orders() {
   });
 
   const orders = useMemo(() => {
-    return data ? data : [];
+    return data ?? [];
   }, [data]);
 
+  const products = useMemo(
+    () =>
+      Array.from(new Set(orders.map((order) => order.productName)))
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b)),
+    [orders],
+  );
+
+  const statusOptions = useMemo(
+    () => toStatusOptions(orders.map((order) => order.status)),
+    [orders],
+  );
+
   const filteredOrders = useMemo(() => {
+    const term = search.trim().toLowerCase();
+
     return orders.filter((order) => {
-      const matchesProduct = order.productName
-        .toLowerCase()
-        .includes(productName.trim().toLowerCase());
+      const matchesProduct = !product || order.productName === product;
       const matchesStatus =
         !status || order.status.toLowerCase() === status.toLowerCase();
+      const matchesDelivery =
+        !delivery || deliveryGroupOf(order.status) === delivery;
+      const matchesSearch =
+        !term ||
+        [
+          order.orderNumber,
+          order.productName,
+          order.category,
+          order.email,
+          order.shipTo,
+        ]
+          .join(' ')
+          .toLowerCase()
+          .includes(term);
 
-      return matchesProduct && matchesStatus;
+      return (
+        matchesProduct && matchesStatus && matchesDelivery && matchesSearch
+      );
     });
-  }, [orders, productName, status]);
+  }, [orders, search, product, status, delivery]);
 
   const totalPages = useMemo(() => {
     return filteredOrders.length
@@ -48,8 +82,11 @@ export default function Orders() {
   }, [filteredOrders, pageSize]);
 
   const clearFilters = () => {
-    setProductName('');
+    setSearch('');
+    setProduct('');
     setStatus('');
+    setDelivery('');
+    setPage(1);
   };
 
   const handlePageSizeChange = (value: number) => {
@@ -86,12 +123,32 @@ export default function Orders() {
 
   return (
     <section className="space-y-4">
-      <ExporterOrderSearchFilter
-        productName={productName}
+      <OrderListFilters
+        search={search}
+        onSearchChange={(value) => {
+          setSearch(value);
+          setPage(1);
+        }}
+        product={product}
+        products={products}
+        onProductChange={(value) => {
+          setProduct(value);
+          setPage(1);
+        }}
         status={status}
-        onProductNameChange={setProductName}
-        onStatusChange={setStatus}
+        statusOptions={statusOptions}
+        onStatusChange={(value) => {
+          setStatus(value);
+          setPage(1);
+        }}
+        delivery={delivery}
+        onDeliveryChange={(value) => {
+          setDelivery(value);
+          setPage(1);
+        }}
         onClear={clearFilters}
+        resultCount={filteredOrders.length}
+        totalCount={orders.length}
       />
 
       {filteredOrders.length === 0 ? (

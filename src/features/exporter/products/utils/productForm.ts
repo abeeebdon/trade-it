@@ -1,4 +1,9 @@
-import type { VariantFormValues } from '../components/VariantComponent';
+import type {
+  ProductVariant as VariantRow,
+  VariantFormValues,
+  VariantOption,
+} from '../components/VariantComponent';
+import type { ProductVariant as ApiProductVariant } from '../../api/productsApi';
 import type { VariantJson } from '../../types/exporter';
 
 /** Uppercase, dash-separated token used inside generated SKUs. */
@@ -47,4 +52,66 @@ export const toVariantsJson = (
 export const toExistingImageUrls = (previews?: string[]): string[] | null => {
   const urls = (previews ?? []).filter((url) => !url.startsWith('blob:'));
   return urls.length ? urls : null;
+};
+
+const combinationKey = (
+  combination: Record<string, string>,
+  fallbackIndex: number,
+) =>
+  Object.keys(combination)
+    .sort()
+    .map((name) => `${name}:${combination[name]}`)
+    .join('|') || `variant-${fallbackIndex}`;
+
+/** Converts the API variant list into the `VariantComponent` form shape. */
+export const toVariantForm = (
+  variants?: ApiProductVariant[] | null,
+): VariantFormValues => {
+  if (!variants?.length) return { options: [], variants: [] };
+
+  const optionValues = new Map<string, string[]>();
+
+  for (const variant of variants) {
+    for (const option of variant.options ?? []) {
+      const name = option.optionName.trim().toLowerCase();
+      if (!name) continue;
+
+      const values = optionValues.get(name) ?? [];
+      const exists = values.some(
+        (value) => value.toLowerCase() === option.optionValue.toLowerCase(),
+      );
+
+      if (!exists) values.push(option.optionValue);
+      optionValues.set(name, values);
+    }
+  }
+
+  const options: VariantOption[] = Array.from(optionValues.entries()).map(
+    ([name, values]) => ({
+      id: `opt-${name}`,
+      name,
+      values: values.map((value) => ({
+        id: `val-${name}-${value}`,
+        value,
+      })),
+    }),
+  );
+
+  const rows: VariantRow[] = variants.map((variant, index) => {
+    const combination: Record<string, string> = {};
+
+    for (const option of variant.options ?? []) {
+      const name = option.optionName.trim().toLowerCase();
+      if (name) combination[name] = option.optionValue;
+    }
+
+    return {
+      id: combinationKey(combination, index),
+      combination,
+      price: variant.price ?? 0,
+      available: variant.quantity ?? 0,
+    };
+  });
+
+  return { options, variants: rows };
 };

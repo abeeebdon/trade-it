@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { Lock, X } from 'lucide-react';
 import PressableBtn from '@/components/buttons/PressableBtn';
 import InputField from '@/components/form/InputFIeld';
-import SelectField from '@/components/form/SelectField';
+import CustomSelect from '@/components/form/CustomSelect';
 import Loader from '@/components/buttons/Loader';
 import { formatDateTime, formatUSD } from '@/lib/func';
 import { AcceptAndPrepayQuotePayload, Quote } from '../types/shops';
@@ -38,6 +38,7 @@ const AcceptPrepayModal = ({
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<AcceptPrepayFormValues>({
     resolver: zodResolver(acceptPrepaySchema),
@@ -108,15 +109,17 @@ const AcceptPrepayModal = ({
             error={errors.shippingAddress?.message}
             {...register('shippingAddress')}
           />
-          <SelectField
+          <CustomSelect
+            control={control}
+            name="deliveryPartner"
             label="Delivery Partner"
             error={errors.deliveryPartner?.message}
-            {...register('deliveryPartner')}
-          >
-            <option value="Escrow">Escrow</option>
-            <option value="Self Pickup">Self Pickup</option>
-            <option value="Courier">Courier</option>
-          </SelectField>
+            options={[
+              { label: 'Escrow', value: 'Escrow' },
+              { label: 'Self Pickup', value: 'Self Pickup' },
+              { label: 'Courier', value: 'Courier' },
+            ]}
+          />
 
           <div className="flex flex-wrap sm:flex-nowrap gap-3 pt-2">
             <PressableBtn

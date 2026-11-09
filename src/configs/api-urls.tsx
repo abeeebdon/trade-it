@@ -41,6 +41,8 @@ export const APIENDPOINTSTWO = {
   PRODUCT: '/v1/Product',
   PRODUCT_BY_ID: (id: string | number) => `/v1/Product/${id}`,
   PRODUCT_CREATE: '/v1/Product/create',
+  PRODUCT_PUBLISH_TO_SHOPIFY: (id: string | number) =>
+    `/v1/Product/${id}/publish-to-shopify`,
   PRODUCT_MARKET_PLACE_BY_ID: (id: string | number) =>
     `/v1/Product/market-place-products/${id}`,
   PRODUCT_MARKET_PLACE: '/v1/Product/market-place-products',
@@ -132,6 +134,7 @@ export const APIENDPOINTSTWO = {
   ORDERS: '/v1/Orders',
   ORDERS_SELLER: '/v1/Orders/seller',
   ORDERS_BY_ID: (id: string | number) => `/v1/Orders/${id}`,
+  ORDERS_FULFILLMENT: (id: string | number) => `/v1/Orders/${id}/fulfillment`,
   ORDERS_CHECKOUT_PAYMENT_INTENT: '/v1/Orders/checkout/payment-intent',
 
   // ── Consumer Dashboard ───────────────────────────────────

@@ -1,10 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Search } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import HomePageFIlter from './components/HomePageFIlter';
 import HomepageProducts from './components/HomepageProducts';
 import LandingPageCatFilter from './components/LandingPageCatFilter';
+import { CustomSearchInput } from '@/components/form/CustomSearchInput';
 
 export default function HomePage() {
   const [search, setSearch] = useState('');
@@ -75,18 +75,14 @@ export default function HomePage() {
             onSubmit={submitSearch}
             className="mt-4 flex sm:flex-row flex-col gap-2 max-w-2xl"
           >
-            <div className="flex-1 flex items-center h-12 gap-2  helix-input">
-              <label htmlFor="hero-search border">
-                <Search size={18} className="  text-[#9CA3AF]" />
-              </label>
-              <input
-                value={search}
-                id="hero-search"
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search shea butter, ankara, cocoa beans, jewelry…"
-                className="w-full text-sm py-1.5 sm:text-[15px] sm:py-3.5 border-none outline-none"
-              />
-            </div>
+            <CustomSearchInput
+              className="flex-1 h-12"
+              inputClassName="text-sm sm:text-[15px]"
+              value={search}
+              id="hero-search"
+              onChange={setSearch}
+              placeholder="Search shea butter, ankara, cocoa beans, jewelry…"
+            />
             <button type="submit" className="helix-btn-primary py-2! px-7">
               Search
             </button>

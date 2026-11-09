@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 import InputField from '@/components/form/InputFIeld';
-import SelectField from '@/components/form/SelectField';
+import CustomSelect from '@/components/form/CustomSelect';
 import type { NgnBank, WithdrawalAccount } from '../types/exporter';
 
 const addAccountSchema = z.object({
@@ -170,22 +170,20 @@ export default function AddAccountModal({
             name="bank_code"
             control={control}
             render={({ field, fieldState }) => (
-              <SelectField
+              <CustomSelect
                 label="Bank"
-                name={field.name}
+                placeholder="Select a bank"
                 value={field.value}
-                onChange={(event) => {
-                  field.onChange(event.target.value);
-                  handleBankChange(event.target.value);
+                onValueChange={(value) => {
+                  field.onChange(value);
+                  handleBankChange(value);
                 }}
                 error={fieldState.error?.message}
-              >
-                {banks.map((bank) => (
-                  <option key={bank.code} value={bank.code}>
-                    {bank.name}
-                  </option>
-                ))}
-              </SelectField>
+                options={banks.map((bank) => ({
+                  label: bank.name,
+                  value: bank.code,
+                }))}
+              />
             )}
           />
 

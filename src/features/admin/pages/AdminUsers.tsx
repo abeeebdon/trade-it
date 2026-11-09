@@ -1,6 +1,7 @@
 'use client';
 
-import { Filter, Search } from 'lucide-react';
+import { Filter } from 'lucide-react';
+import { CustomSearchInput } from '@/components/form/CustomSearchInput';
 import { useEffect, useMemo, useState } from 'react';
 
 import UserTableCard from '../components/UserTableCard';
@@ -53,37 +54,12 @@ const AdminUsers = () => {
     <section className="space-y-6">
       {/* Search + Role Filter */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="relative w-full md:w-64">
-          <Search
-            size={18}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-          />
-
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by name or email..."
-            className="
-              h-11
-              w-full
-              rounded-xl
-              border
-              border-gray-200
-              bg-white
-              pl-10
-              pr-4
-              text-sm
-              text-gray-900
-              outline-none
-              transition
-              focus:border-primary
-              dark:border-gray-700
-              dark:bg-gray-900
-              dark:text-white
-              dark:placeholder:text-gray-500
-            "
-          />
-        </div>
+        <CustomSearchInput
+          className="md:w-64"
+          value={search}
+          onChange={setSearch}
+          placeholder="Search by name or email..."
+        />
 
         <div className="relative">
           <Filter

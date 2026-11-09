@@ -14,6 +14,7 @@ import {
   useGetProductCategories,
 } from '../../hooks/useProducts';
 import InputField from '@/components/form/InputFIeld';
+import CustomSelect from '@/components/form/CustomSelect';
 import ImageUploader, { type ImageItem } from '@/components/form/ImageUploader';
 import { STATUSES } from '@/lib/constants';
 import BackButton from '@/components/buttons/BackButton';
@@ -136,28 +137,23 @@ export default function CreateProduct() {
             </div>
 
             <div>
-              <label className="helix-label">Category</label>
               {categoriesLoading ? (
-                <div className="helix-input h-10 animate-pulse opacity-40" />
+                <>
+                  <label className="helix-label">Category</label>
+                  <div className="helix-input h-10 animate-pulse opacity-40" />
+                </>
               ) : (
-                <Controller
-                  name="category"
+                <CustomSelect
                   control={control}
-                  render={({ field }) => (
-                    <select {...field} className="helix-input">
-                      {categories.map((c) => (
-                        <option key={c.id} value={c.name}>
-                          {c.name}
-                        </option>
-                      ))}
-                    </select>
-                  )}
+                  name="category"
+                  label="Category"
+                  placeholder="Select a category"
+                  options={categories.map((c) => ({
+                    label: c.name,
+                    value: c.name,
+                  }))}
+                  error={errors.category?.message}
                 />
-              )}
-              {errors.category && (
-                <p className="text-danger text-xs mt-1">
-                  {errors.category.message}
-                </p>
               )}
             </div>
 
@@ -202,23 +198,16 @@ export default function CreateProduct() {
             </div>
 
             <div>
-              <label className="helix-label">Status</label>
-              <Controller
-                name="statusId"
+              <CustomSelect
                 control={control}
-                render={({ field }) => (
-                  <select
-                    {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                    className="helix-input"
-                  >
-                    {STATUSES.map((s) => (
-                      <option key={s.id} value={s.id}>
-                        {s.label}
-                      </option>
-                    ))}
-                  </select>
-                )}
+                name="statusId"
+                label="Status"
+                valueType="number"
+                options={STATUSES.map((s) => ({
+                  label: s.label,
+                  value: String(s.id),
+                }))}
+                error={errors.statusId?.message}
               />
             </div>
           </div>

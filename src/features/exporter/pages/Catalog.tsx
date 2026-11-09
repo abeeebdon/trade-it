@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Search } from 'lucide-react';
+import { CustomSearchInput } from '@/components/form/CustomSearchInput';
 import Pagination from '../components/pagination';
 import ProductCard from '../components/ProductCard';
 import { useGetCatalogProducts } from '../hooks/useGetCatalogProducts';
@@ -108,15 +108,12 @@ export default function Catalog() {
           </div>
 
           {/* Search */}
-          <div className="flex items-center w-full max-w-60 p-2 rounded-xl border-border gap-2 border ">
-            <Search size={14} className=" text-[#9CA3AF]" />
-            <input
-              placeholder="Search products..."
-              value={search}
-              onChange={(e) => handleSearchChange(e.target.value)}
-              className="w-full outline-none border-none"
-            />
-          </div>
+          <CustomSearchInput
+            className="w-full max-w-60"
+            placeholder="Search products..."
+            value={search}
+            onChange={handleSearchChange}
+          />
         </div>
 
         {/* Country filter */}
@@ -148,7 +145,7 @@ export default function Catalog() {
               key={i}
               className="helix-card overflow-hidden animate-pulse opacity-40"
             >
-              <div className="aspect-[4/3] bg-[#1A7A6E]/10" />
+              <div className="aspect-4/3 bg-[#1A7A6E]/10" />
               <div className="p-4 space-y-2">
                 <div className="h-3 bg-[#1A7A6E]/10 rounded w-1/3" />
                 <div className="h-4 bg-[#1A7A6E]/10 rounded w-3/4" />

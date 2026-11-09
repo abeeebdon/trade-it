@@ -2,10 +2,14 @@
 
 import { useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Loader2, Pencil, ShoppingBag, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 
-import { useGetProductById, useDeleteProduct } from '../../hooks/useProducts';
+import {
+  useGetProductById,
+  useDeleteProduct,
+  usePublishProductToShopify,
+} from '../../hooks/useProducts';
 import { ProductData } from '../../api/productsApi';
 import { Loading } from '@/components/loading';
 import { StatusPill } from '@/features/shops/components/StatusPill';
@@ -35,9 +39,14 @@ export const ExporterProductDetailsManagement = () => {
     return product.thumbnailImage ? [product.thumbnailImage] : [];
   }, [product]);
 
+  const currencyLabel =
+    product.currencyId === 1 ? 'USD' : `Currency #${product.currencyId ?? '—'}`;
+
   const deleteMutation = useDeleteProduct(() => {
     router.push('/exporter/products');
   });
+
+  const publishMutation = usePublishProductToShopify(product.id);
 
   const handleDelete = () => {
     if (!product.id) return;
@@ -76,8 +85,20 @@ export const ExporterProductDetailsManagement = () => {
 
         <div className="flex items-center gap-2">
           <button
+            onClick={() => publishMutation.mutate()}
+            disabled={publishMutation.isPending}
+            className="helix-btn-primary inline-flex items-center gap-2 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {publishMutation.isPending ? (
+              <Loader2 size={14} className="animate-spin" />
+            ) : (
+              <ShoppingBag size={14} />
+            )}
+            Publish to Shopify
+          </button>
+          <button
             onClick={() => router.push(`/exporter/products/edit?id=${id}`)}
-            className="helix-btn-primary inline-flex items-center gap-2"
+            className="helix-btn-secondary inline-flex items-center gap-2"
           >
             <Pencil size={14} /> Edit
           </button>
@@ -158,8 +179,14 @@ export const ExporterProductDetailsManagement = () => {
                 value={String(product.moq ?? product.quantity ?? '—')}
               />
               <DetailRow
-                label="Unit"
+                label="Available units"
                 value={product.unit ? String(product.unit) : '—'}
+              />
+              <DetailRow label="Currency" value={currencyLabel} />
+              <DetailRow label="Source" value={product.sourceType ?? '—'} />
+              <DetailRow
+                label="Seller ID"
+                value={String(product.sellerId ?? '—')}
               />
               <DetailRow
                 label="Status"
@@ -171,10 +198,62 @@ export const ExporterProductDetailsManagement = () => {
               />
             </div>
           </div>
-          <article className="helix-card mt-6">
-            <h3></h3>
-          </article>
         </div>
+      </div>
+
+      {/* Variants */}
+      <div className="helix-card p-6 mt-8">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <h3 className="helix-h3">Variants</h3>
+          <span className="helix-status helix-status-neutral">
+            {(product.variants ?? []).length}{' '}
+            {(product.variants ?? []).length === 1 ? 'variant' : 'variants'}
+          </span>
+        </div>
+
+        {(product.variants ?? []).length === 0 ? (
+          <p className="text-sm text-muted">
+            This product does not have any variants yet.
+          </p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="helix-table min-w-140">
+              <thead>
+                <tr>
+                  <th>SKU</th>
+                  <th>Options</th>
+                  <th>Price</th>
+                  <th>Qty</th>
+                </tr>
+              </thead>
+              <tbody>
+                {product.variants.map((variant) => (
+                  <tr key={variant.id}>
+                    <td className="font-mono text-[13px] text-[#C9922A] whitespace-nowrap">
+                      {variant.sku}
+                    </td>
+                    <td>
+                      <div className="flex flex-wrap gap-1">
+                        {(variant.options ?? []).map((option) => (
+                          <span
+                            key={option.id}
+                            className="rounded-full border border-border/60 px-2 py-0.5 text-[10px] tracking-wider text-muted uppercase whitespace-nowrap"
+                          >
+                            {option.optionName}: {option.optionValue}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+                    <td className="font-mono whitespace-nowrap">
+                      {formatUSD(variant.price)}
+                    </td>
+                    <td className="font-mono">{variant.quantity}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {/* Delete Confirmation */}

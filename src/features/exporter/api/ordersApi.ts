@@ -3,6 +3,7 @@ import { APIENDPOINTSTWO } from '@/configs/api-urls';
 import {
   SellerOrder,
   SellerOrdersParams,
+  UpdateOrderFulfillmentPayload,
 } from '../orders/types/exporterOrdersType';
 import { CreateOrderPayload } from '@/features/shops/types/shops';
 import { toast } from 'sonner';
@@ -25,6 +26,21 @@ export const getOrderById = async (id: string): Promise<SellerOrder> => {
   try {
     const response = await api.get(APIENDPOINTSTWO.ORDERS_BY_ID(id));
     return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateOrderFulfillment = async (
+  id: string | number,
+  payload: UpdateOrderFulfillmentPayload,
+): Promise<{ message?: string }> => {
+  try {
+    const response = await api.put(
+      APIENDPOINTSTWO.ORDERS_FULFILLMENT(id),
+      payload,
+    );
+    return response.data;
   } catch (error) {
     throw error;
   }

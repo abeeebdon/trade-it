@@ -8,7 +8,6 @@ import { RootState } from '@/store/store';
 
 import type {
   FulfillmentMode,
-  ListingStatus,
   CreateListingPayload,
 } from '../../types/exporter';
 import { ProductListingTypes } from '../types/sellType';
@@ -16,7 +15,7 @@ import { useForm, type Resolver } from 'react-hook-form';
 import { ListingFormValues, listingSchema } from './validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import InputField from '@/components/form/InputFIeld';
-import SelectField from '@/components/form/SelectField';
+import CustomSelect from '@/components/form/CustomSelect';
 import ImageUploader, { type ImageItem } from '@/components/form/ImageUploader';
 import { Loader2 } from 'lucide-react';
 import { useGetProductCategories } from '../../hooks/useProducts';
@@ -52,12 +51,13 @@ export default function ListingForm({
       ? [{ id: 'existing-thumbnail', url: editing.thumbnailImage }]
       : [],
   );
-  const { data: categories, isPending: catPending } = useGetProductCategories();
+  const { data: categories } = useGetProductCategories();
   const catData = categories?.data;
   const {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<ListingFormValues>({
     resolver: zodResolver(listingSchema) as Resolver<ListingFormValues>,
@@ -195,17 +195,16 @@ export default function ListingForm({
               />
             </div>
 
-            <SelectField
+            <CustomSelect
+              control={control}
+              name="status"
               label="Status"
+              options={STATUS_OPTIONS.map((option) => ({
+                label: option.label,
+                value: String(option.id),
+              }))}
               error={errors.status?.message}
-              {...register('status')}
-            >
-              {STATUS_OPTIONS.map((option) => (
-                <option key={option.value} value={option.id}>
-                  {option.label}
-                </option>
-              ))}
-            </SelectField>
+            />
 
             <div>
               <label className="helix-label">Fulfillment mode</label>

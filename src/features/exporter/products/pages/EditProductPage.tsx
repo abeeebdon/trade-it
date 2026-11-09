@@ -26,13 +26,13 @@ import DescriptionEditor from '../components/DescriptionEditor';
 import FormSection from '../components/FormSection';
 import ShippingForm from '../components/ShippingForm';
 import VariantComponent, {
-  variantDefaults,
   type VariantFormValues,
 } from '../components/VariantComponent';
 import {
   toExistingImageUrls,
   toOptionNames,
   toVariantsJson,
+  toVariantForm,
 } from '../utils/productForm';
 
 const statusIdFor = (p: ProductData) => {
@@ -62,7 +62,6 @@ export default function EditProductPage() {
   const id = searchParams.get('id');
 
   const { data: product, isPending, isError } = useGetProductById(id ?? '');
-  console.log(product?.unit);
   const { data: categoryData, isPending: categoriesLoading } =
     useGetProductCategories();
 
@@ -119,8 +118,9 @@ function EditProductForm({
     router.push('/exporter/products'),
   );
 
-  const [variantForm, setVariantForm] =
-    useState<VariantFormValues>(variantDefaults);
+  const [variantForm, setVariantForm] = useState<VariantFormValues>(() =>
+    toVariantForm(product.variants),
+  );
 
   const {
     register,

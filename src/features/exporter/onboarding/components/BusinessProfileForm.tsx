@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import InputField from '@/components/form/InputFIeld';
-import CustomSelectField from '@/components/form/CustomSelectField';
+import CustomSelect from '@/components/form/CustomSelect';
 import { useGetProductCategories } from '../../hooks/useProducts';
 import { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
@@ -92,7 +92,7 @@ export default function BusinessProfileForm({
           error={errors.businessName?.message}
         />
 
-        <CustomSelectField
+        <CustomSelect
           label="Registration type"
           name="businessType"
           control={control}
@@ -103,7 +103,7 @@ export default function BusinessProfileForm({
           ]}
         />
 
-        <CustomSelectField
+        <CustomSelect
           label="Country"
           name="country"
           control={control}
@@ -111,7 +111,7 @@ export default function BusinessProfileForm({
           options={countries}
         />
 
-        <CustomSelectField
+        <CustomSelect
           label="Sector"
           name="sector"
           control={control}
