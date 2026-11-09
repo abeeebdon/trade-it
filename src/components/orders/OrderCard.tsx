@@ -10,6 +10,7 @@ import {
 } from '@/features/orderManagement/components/CardMeta';
 import { useAppSelector } from '@/hooks/store/store';
 import { useRouter } from 'next/navigation';
+import { SellerOrder } from '@/features/exporter/orders/types/exporterOrdersType';
 
 const ACTIONS: Record<TabKey, string[]> = {
   completed: ['Feedback', 'Track order', 'Review'],
@@ -21,7 +22,7 @@ const ACTIONS: Record<TabKey, string[]> = {
 };
 
 export interface OrderCardProps {
-  order: ConsumerOrder;
+  order: ConsumerOrder | SellerOrder;
   detailsHref?: (orderId: number) => string;
 }
 
