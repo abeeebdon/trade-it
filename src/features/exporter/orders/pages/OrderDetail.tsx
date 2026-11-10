@@ -8,6 +8,7 @@ import { useGetOrderById } from '../../hooks/useOrders';
 import { LIFECYCLE } from '@/lib/constants';
 import { SellerOrder } from '../types/exporterOrdersType';
 import { Loading } from '@/components/loading';
+import BackButton from '@/components/buttons/BackButton';
 import Link from 'next/link';
 
 export default function OrderDetail() {
@@ -52,6 +53,7 @@ export default function OrderDetail() {
   return (
     <main className="w-full">
       <article className="p-6 space-y-6">
+        <BackButton title="Back" />
         <section className="flex flex-wrap justify-between items-center gap-3">
           <div className="flex flex-wrap items-center gap-2">
             <StatusPill status={orderDetails.status} />
