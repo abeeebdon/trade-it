@@ -9,6 +9,8 @@ export function StatusPill({ status }: StatusPillProps) {
     confirmed: 'helix-status-ok',
     completed: 'helix-status-ok',
     delivered: 'helix-status-ok',
+    fulfilled: 'helix-status-ok',
+    unfulfilled: 'helix-status-gold',
     under_review: 'helix-status-warn',
     pending: 'helix-status-warn',
     expiring_soon: 'helix-status-warn',

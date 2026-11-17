@@ -51,20 +51,20 @@ export default function Pagination({
       <button
         disabled={page <= 1}
         onClick={() => onChange(page - 1)}
-        className="px-3 py-1.5 text-[12px] rounded border border-[#1A7A6E]/30 text-[#9CA3AF] hover:border-[#1A7A6E] disabled:opacity-40"
+        className="px-3 py-1.5 text-[12px] rounded border border-secondary/30 text-muted hover:border-secondary disabled:opacity-40"
       >
         ‹ Prev
       </button>
       {pages.map((p, i) =>
         p === '…' ? (
-          <span key={`gap-${i}`} className="px-2 text-[12px] text-[#9CA3AF]">
+          <span key={`gap-${i}`} className="px-2 text-[12px] text-muted">
             …
           </span>
         ) : (
           <button
             key={p}
             onClick={() => onChange(p as number)}
-            className={`min-w-8.5 px-2.5 py-1.5 text-[12px] rounded border ${p === page ? 'bg-[#C9922A] text-[#0A1628] border-[#C9922A] font-semibold' : 'border-[#1A7A6E]/30 text-[#9CA3AF] hover:border-[#1A7A6E]'}`}
+            className={`min-w-8.5 px-2.5 py-1.5 text-[12px] rounded border ${p === page ? 'bg-primary text-bg border-primary font-semibold' : 'border-secondary/30 text-muted hover:border-secondary'}`}
           >
             {p}
           </button>
@@ -73,7 +73,7 @@ export default function Pagination({
       <button
         disabled={page >= totalPages}
         onClick={() => onChange(page + 1)}
-        className="px-3 py-1.5 text-[12px] rounded border border-[#1A7A6E]/30 text-[#9CA3AF] hover:border-[#1A7A6E] disabled:opacity-40"
+        className="px-3 py-1.5 text-[12px] rounded border border-secondary/30 text-muted hover:border-secondary disabled:opacity-40"
       >
         Next ›
       </button>

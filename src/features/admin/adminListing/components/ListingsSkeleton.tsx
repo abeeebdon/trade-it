@@ -2,7 +2,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export function ListingRowSkeleton() {
   return (
-    <tr className="animate-pulse border-b border-[#1A7A6E]/10">
+    <tr className="animate-pulse border-b border-border">
       {Array.from({ length: 8 }).map((_, i) => (
         <td key={i} className="px-4 py-4">
           <Skeleton className="h-4 w-full rounded" />

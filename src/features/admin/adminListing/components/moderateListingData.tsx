@@ -32,18 +32,18 @@ export const actionConfig: ActionConfigItem[] = [
     label: 'active',
     icon: ShieldCheck,
     className:
-      'border-[#22C55E]/40 text-[#22C55E] hover:bg-[#22C55E]/10 data-[active=true]:bg-[#22C55E] data-[active=true]:text-white data-[active=true]:border-[#22C55E]',
+      'border-success/40 text-success hover:bg-success/10 data-[active=true]:bg-success data-[active=true]:text-bg data-[active=true]:border-success',
   },
   {
     label: 'draft',
     icon: FileText,
     className:
-      'border-[#9CA3AF]/40 text-[#9CA3AF] hover:bg-[#9CA3AF]/10 data-[active=true]:bg-[#9CA3AF] data-[active=true]:text-white data-[active=true]:border-[#9CA3AF]',
+      'border-muted/40 text-muted hover:bg-muted/10 data-[active=true]:bg-muted data-[active=true]:text-bg data-[active=true]:border-muted',
   },
   {
     label: 'archived',
     icon: Archive,
     className:
-      'border-[#EF4444]/40 text-[#EF4444] hover:bg-[#EF4444]/10 data-[active=true]:bg-[#EF4444] data-[active=true]:text-white data-[active=true]:border-[#EF4444]',
+      'border-danger/40 text-danger hover:bg-danger/10 data-[active=true]:bg-danger data-[active=true]:text-bg data-[active=true]:border-danger',
   },
 ];

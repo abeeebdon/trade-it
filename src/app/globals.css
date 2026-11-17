@@ -84,61 +84,101 @@ input[type='number'] {
 :root {
   /* Core palette 
   */
-  --helix-navy: white;
-  --helix-primeBackground: #fffdfd;
-  --helix-surface: #f4f2ee;
-  --helix-gold: #f39c12;
-  --helix-gold-dim: #c77f0a;
-  --helix-teal: #4a2e8a;
-  --helix-teal-dim: rgba(74, 46, 138, 0.12);
+  --helix-navy: #fbfaf7;
+  --helix-primeBackground: #f4f1ea;
+  --helix-surface: #ffffff;
+  --helix-gold: #9f6108;
+  --helix-gold-dim: #7d4b06;
+  --helix-teal: #0f6b63;
+  --helix-teal-dim: rgba(15, 107, 99, 0.1);
 
   /* Text */
-  --helix-text: #1f1b2e;
-  --helix-text-dim: #6b6680;
+  --helix-text: #1b1725;
+  --helix-text-dim: #5c5668;
 
   /* UI */
-  --helix-dark: #f3effa;
-  --helix-border: rgba(74, 46, 138, 0.18);
-  --helix-border-soft: rgba(74, 46, 138, 0.06);
-  --helix-hover: rgba(243, 156, 18, 0.06);
+  --helix-dark: #ece7de;
+  --helix-border: rgba(27, 23, 37, 0.12);
+  --helix-border-soft: rgba(27, 23, 37, 0.06);
+  --helix-hover: rgba(159, 97, 8, 0.06);
 
   /* States */
-  --helix-danger: #e74c3c;
-  --helix-dot: rgba(74, 46, 138, 0.14);
-  --jomp-ring: rgba(243, 156, 18, 0.22);
+  --helix-danger: #b0362a;
+  --helix-ok: #0d6b60;
+  --helix-ok-bg: rgba(13, 107, 96, 0.1);
+  --helix-ok-border: rgba(13, 107, 96, 0.34);
+  --helix-warn: #8a5308;
+  --helix-warn-bg: rgba(159, 97, 8, 0.1);
+  --helix-warn-border: rgba(159, 97, 8, 0.36);
+  --helix-danger-bg: rgba(176, 54, 42, 0.1);
+  --helix-danger-border: rgba(176, 54, 42, 0.36);
+  --helix-success: #15803d;
+  --helix-success-dim: rgba(21, 128, 61, 0.12);
+  --helix-neutral: #5c5668;
+  --helix-neutral-bg: rgba(92, 86, 104, 0.08);
+  --helix-neutral-border: rgba(92, 86, 104, 0.28);
+  --helix-gold-status: #9f6108;
+  --helix-gold-bg: rgba(159, 97, 8, 0.08);
+  --helix-gold-border: rgba(159, 97, 8, 0.34);
+  --helix-dot: rgba(159, 97, 8, 0.16);
+  --jomp-ring: rgba(159, 97, 8, 0.18);
 
   /* shadcn-compatible tokens */
-  --background: 0 0% 100%;
-  --foreground: 260 24% 14%;
-  --primary: 36 91% 52%;
-  --secondary: 260 51% 36%;
+  --background: #fbfaf7;
+  --foreground: #1b1725;
+  --primary: #9f6108;
+  --secondary: #0f6b63;
+
+  /* Aliases used by ui primitives and toasts */
+  --border: var(--helix-border);
+  --popover: var(--helix-surface);
+  --popover-foreground: var(--helix-text);
+  --card: var(--helix-surface);
+  --card-foreground: var(--helix-text);
 }
 
 .dark {
-  --helix-navy: #0a1628;
-  --helix-primeBackground: #14253f;
+  --helix-navy: #0a1421;
+  --helix-primeBackground: #101d2e;
 
-  --helix-surface: #0f2040;
-  --helix-gold: #c9922a;
-  --helix-gold-dim: #a87b23;
-  --helix-teal: #1a7a6e;
-  --helix-teal-dim: rgba(26, 122, 110, 0.2);
+  --helix-surface: #142437;
+  --helix-gold: #e0a63f;
+  --helix-gold-dim: #bd8630;
+  --helix-teal: #37ab9c;
+  --helix-teal-dim: rgba(55, 171, 156, 0.14);
 
-  --helix-text: #f5f5f5;
-  --helix-text-dim: #9ca3af;
+  --helix-text: #eef2f7;
+  --helix-text-dim: #94a3b8;
 
-  --helix-dark: #1a1a2e;
-  --helix-border: rgba(26, 122, 110, 0.22);
-  --helix-border-soft: rgba(26, 122, 110, 0.08);
-  --helix-hover: rgba(26, 122, 110, 0.05);
+  --helix-dark: #101a2a;
+  --helix-border: rgba(148, 178, 214, 0.18);
+  --helix-border-soft: rgba(148, 178, 214, 0.08);
+  --helix-hover: rgba(224, 166, 63, 0.07);
 
-  --helix-dot: rgba(26, 122, 110, 0.18);
-  --jomp-ring: rgba(201, 146, 42, 0.18);
+  --helix-danger: #f2705f;
+  --helix-ok: #4fd6c4;
+  --helix-ok-bg: rgba(55, 171, 156, 0.16);
+  --helix-ok-border: rgba(55, 171, 156, 0.45);
+  --helix-warn: #ecc26d;
+  --helix-warn-bg: rgba(224, 166, 63, 0.14);
+  --helix-warn-border: rgba(224, 166, 63, 0.45);
+  --helix-danger-bg: rgba(242, 112, 95, 0.14);
+  --helix-danger-border: rgba(242, 112, 95, 0.45);
+  --helix-success: #4ade80;
+  --helix-success-dim: rgba(74, 222, 128, 0.14);
+  --helix-neutral: #9aa7b8;
+  --helix-neutral-bg: rgba(154, 167, 184, 0.1);
+  --helix-neutral-border: rgba(154, 167, 184, 0.32);
+  --helix-gold-status: #e9bb63;
+  --helix-gold-bg: rgba(224, 166, 63, 0.12);
+  --helix-gold-border: rgba(224, 166, 63, 0.42);
+  --helix-dot: rgba(55, 171, 156, 0.16);
+  --jomp-ring: rgba(224, 166, 63, 0.2);
 
-  --background: 217 52% 10%;
-  --foreground: 0 0% 96%;
-  --primary: 38 66% 48%;
-  --secondary: 173 65% 28%;
+  --background: #0a1421;
+  --foreground: #eef2f7;
+  --primary: #e0a63f;
+  --secondary: #37ab9c;
 }
 
 @theme {
@@ -157,6 +197,24 @@ input[type='number'] {
   --color-border-soft: var(--helix-border-soft);
 
   --color-danger: var(--helix-danger);
+  --color-success: var(--helix-success);
+  --color-success-dim: var(--helix-success-dim);
+
+  /* shadcn-style aliases so ui primitives resolve real colors */
+  --color-background: var(--helix-navy);
+  --color-foreground: var(--helix-text);
+  --color-card: var(--helix-surface);
+  --color-card-foreground: var(--helix-text);
+  --color-popover: var(--helix-surface);
+  --color-popover-foreground: var(--helix-text);
+  --color-muted-foreground: var(--helix-text-dim);
+  --color-accent: var(--helix-teal-dim);
+  --color-accent-foreground: var(--helix-teal);
+  --color-destructive: var(--helix-danger);
+  --color-input: var(--helix-border);
+  --color-ring: var(--helix-gold);
+  --color-primary-foreground: var(--helix-navy);
+  --color-secondary-foreground: var(--helix-navy);
 }
 
 body {
@@ -249,29 +307,29 @@ body {
 }
 
 .helix-status-ok {
-  color: #5fd3c3;
-  background: rgba(26, 122, 110, 0.15);
-  border-color: rgba(26, 122, 110, 0.5);
+  color: var(--helix-ok);
+  background: var(--helix-ok-bg);
+  border-color: var(--helix-ok-border);
 }
 .helix-status-warn {
-  color: #e9b45e;
-  background: rgba(201, 146, 42, 0.13);
-  border-color: rgba(201, 146, 42, 0.55);
+  color: var(--helix-warn);
+  background: var(--helix-warn-bg);
+  border-color: var(--helix-warn-border);
 }
 .helix-status-danger {
-  color: #ff6a5c;
-  background: rgba(231, 76, 60, 0.12);
-  border-color: rgba(231, 76, 60, 0.55);
+  color: var(--helix-danger);
+  background: var(--helix-danger-bg);
+  border-color: var(--helix-danger-border);
 }
 .helix-status-neutral {
-  color: #9ca3af;
-  background: rgba(156, 163, 175, 0.08);
-  border-color: rgba(156, 163, 175, 0.3);
+  color: var(--helix-neutral);
+  background: var(--helix-neutral-bg);
+  border-color: var(--helix-neutral-border);
 }
 .helix-status-gold {
-  color: #c9922a;
-  background: rgba(201, 146, 42, 0.1);
-  border-color: rgba(201, 146, 42, 0.45);
+  color: var(--helix-gold-status);
+  background: var(--helix-gold-bg);
+  border-color: var(--helix-gold-border);
 }
 .hide-scrollbar {
   -ms-overflow-style: none;

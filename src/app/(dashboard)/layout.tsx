@@ -12,8 +12,8 @@ export default function DashboardLayout({
       <Sidebar />
       <div className="flex-1 w-full max-h-screen overflow-y-auto bg-bg">
         <DashboardHeader />
-        <main className=" px-6 lg:px-10 pt-8 bg-[#F8F7F4]">
-          {children}
+        <main className="  ">
+          <div className="min-h-[70vh] px-6 lg:px-10 pt-8">{children}</div>
           <DashboardFooter />
         </main>
       </div>

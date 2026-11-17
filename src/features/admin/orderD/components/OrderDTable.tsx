@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Check, Circle, Truck } from 'lucide-react';
 import { formatUSD } from '@/lib/func';
 import type { OrderDRecord } from '../types';
@@ -16,10 +17,10 @@ type OrderDTableProps = {
 function PaymentPill({ status }: { status: OrderDRecord['paymentStatus'] }) {
   const dot =
     status === 'Paid'
-      ? 'bg-emerald-500'
+      ? 'bg-success'
       : status === 'Refunded'
-        ? 'bg-red-400'
-        : 'bg-[#C9922A]';
+        ? 'bg-danger'
+        : 'bg-primary';
 
   return (
     <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-0.5 text-[11px] text-text whitespace-nowrap">
@@ -41,7 +42,7 @@ function FulfillmentPill({
       className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] whitespace-nowrap ${
         fulfilled
           ? 'border-border bg-bg-soft text-muted'
-          : 'border-[#C9922A]/40 bg-[#C9922A]/15 text-[#C9922A]'
+          : 'border-primary/40 bg-primary/15 text-primary'
       }`}
     >
       {fulfilled ? (
@@ -117,8 +118,17 @@ export default function OrderDTable({
                   />
                 </td>
 
-                <td className="font-mono text-[13px] text-[#C9922A] whitespace-nowrap">
-                  #{order.orderNumber}
+                <td className="font-mono text-[13px] text-primary whitespace-nowrap">
+                  <Link
+                    href={{
+                      pathname: '/admin/order-d/details',
+                      query: { id: order.id },
+                    }}
+                    onClick={(event) => event.stopPropagation()}
+                    className="hover:underline"
+                  >
+                    #{order.orderNumber}
+                  </Link>
                 </td>
 
                 <td className="text-[13px] text-muted whitespace-nowrap">
@@ -137,7 +147,7 @@ export default function OrderDTable({
                   </span>
                 </td>
 
-                <td className="font-mono text-[#C9922A] whitespace-nowrap">
+                <td className="font-mono text-primary whitespace-nowrap">
                   {formatUSD(order.total)}
                 </td>
 
@@ -156,7 +166,7 @@ export default function OrderDTable({
                 <td className="text-[13px] whitespace-nowrap">
                   {order.deliveryStatus ? (
                     <span className="inline-flex items-center gap-1.5 text-muted">
-                      <Truck size={13} className="text-[#1A7A6E]" />
+                      <Truck size={13} className="text-secondary" />
                       {order.deliveryStatus}
                     </span>
                   ) : (

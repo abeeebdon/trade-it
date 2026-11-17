@@ -36,7 +36,7 @@ export default function Modal({
 
   return (
     <aside
-      className="fixed inset-0 z-60  backdrop-blur-sm overflow-y-auto"
+      className="fixed inset-0 z-60 bg-black/40 backdrop-blur-sm overflow-y-auto"
       onClick={onClose}
       aria-labelledby="modal-title"
     >

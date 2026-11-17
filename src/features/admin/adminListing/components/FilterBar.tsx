@@ -24,8 +24,8 @@ export default function FilterBar({ status, onStatusChange }: FilterBarProps) {
           onClick={() => onStatusChange(value)}
           className={`px-3 py-1.5 rounded-full min-w-20 text-[12px] border transition-colors ${
             status === value
-              ? 'bg-[#C9922A] text-[#0A1628] border-[#C9922A]'
-              : 'border-[#1A7A6E]/40 text-[#9CA3AF] hover:border-[#1A7A6E] hover:text-[#F5F5F5]'
+              ? 'bg-primary text-bg border-primary'
+              : 'border-secondary/40 text-muted hover:border-secondary hover:text-text'
           }`}
         >
           {label}

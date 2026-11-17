@@ -69,14 +69,14 @@ export default function ModerateListingModal({
     <Modal title="Moderate Listing" onClose={onClose} maxWidth="max-w-lg">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* Listing context */}
-        <div className="rounded-xl border border-[#1A7A6E]/20 bg-[#0A1628]/50 p-4">
-          <p className="text-[13px] text-[#9CA3AF]">
+        <div className="rounded-xl border border-secondary/20 bg-bg p-4">
+          <p className="text-[13px] text-muted">
             Listing:{' '}
-            <span className="text-[#F5F5F5] font-medium">{listingTitle}</span>
+            <span className="text-text font-medium">{listingTitle}</span>
           </p>
-          <p className="text-[13px] text-[#9CA3AF] mt-1">
+          <p className="text-[13px] text-muted mt-1">
             Current status:{' '}
-            <span className="capitalize font-medium text-[#C9922A]">
+            <span className="capitalize font-medium text-primary">
               {currentStatus}
             </span>
           </p>

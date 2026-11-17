@@ -93,7 +93,7 @@ export function DummyStatusActionButton({
           <button
             key={t.to}
             onClick={() => handleTransition(t.to, t.actionLabel)}
-            className="helix-button flex items-center justify-center gap-2 bg-primary text-[#0A1628] cursor-pointer font-semibold rounded-lg px-4 py-2.5 w-full sm:w-auto"
+            className="helix-button flex items-center justify-center gap-2 bg-primary text-bg cursor-pointer font-semibold rounded-lg px-4 py-2.5 w-full sm:w-auto"
           >
             {t.to === OrderStatus.ACCEPTED && <CircleCheck size={16} />}
             {t.to === OrderStatus.DECLINED && <CircleX size={16} />}
