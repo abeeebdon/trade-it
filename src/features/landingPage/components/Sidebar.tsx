@@ -41,7 +41,7 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`relative h-screen overflow-y-auto hide-scrollbar hidden sm:flex bg-bg-soft border-r border-secondary/20  flex-col z-40 ${hideLabel ? 'w-20' : 'max-w-60'}`}
+      className={`relative h-screen overflow-y-auto hide-scrollbar hidden sm:flex bg-[#FFFFFF] border-r border-secondary/20  flex-col z-40 ${hideLabel ? 'w-20' : 'max-w-60'}`}
     >
       <div className="px-4 py-5 border-b border-[#1A7A6E]/15 flex items-center gap-2">
         <JompShopLogo
