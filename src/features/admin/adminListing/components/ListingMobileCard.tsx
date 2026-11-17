@@ -17,14 +17,14 @@ export default function ListingMobileCard({
   onModerate,
 }: ListingMobileCardProps) {
   return (
-    <div className="helix-card p-4 block hover:border-[#C9922A]/30 transition-colors">
+    <div className="helix-card p-4 block hover:border-primary/30 transition-colors">
       <Link href={`/admin/listings/${listing.id}`} className="block">
         <div className="flex items-start justify-between gap-2">
           <div>
-            <h3 className="text-[15px] font-semibold text-[#F5F5F5]">
+            <h3 className="text-[15px] font-semibold text-text">
               {listing.title}
             </h3>
-            <p className="text-[12px] text-[#9CA3AF] mt-0.5">
+            <p className="text-[12px] text-muted mt-0.5">
               #{listing.id} · {categoryLabel(listing.category)}
             </p>
           </div>
@@ -32,22 +32,22 @@ export default function ListingMobileCard({
         </div>
 
         <div className="flex items-center justify-between mt-3">
-          <span className="font-mono text-[#C9922A] font-semibold">
+          <span className="font-mono text-primary font-semibold">
             {formatUSD(listing.retailPriceUsd)}
           </span>
-          <span className="text-[13px] text-[#9CA3AF]">
+          <span className="text-[13px] text-muted">
             Stock: {listing.stockQty}
           </span>
         </div>
 
-        <div className="flex items-center justify-between mt-2 text-[12px] text-[#6B7280]">
+        <div className="flex items-center justify-between mt-2 text-[12px] text-muted">
           <span>{listing.sellerEmail}</span>
           <span>{formatDateTime(listing.createdAt)}</span>
         </div>
       </Link>
 
       {/* Mobile actions */}
-      <div className="flex gap-2 mt-3 pt-3 border-t border-[#1A7A6E]/15">
+      <div className="flex gap-2 mt-3 pt-3 border-t border-border">
         {listing.status.toLowerCase() === 'draft' && (
           <button
             type="button"
@@ -55,7 +55,7 @@ export default function ListingMobileCard({
               e.stopPropagation();
               onModerate(listing);
             }}
-            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-[#22C55E]/30 text-[#22C55E] text-[12px] font-medium hover:bg-[#22C55E]/10 transition-colors"
+            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-success/30 text-success text-[12px] font-medium hover:bg-success/10 transition-colors"
           >
             <ShieldCheck size={14} />
             Activate
@@ -68,7 +68,7 @@ export default function ListingMobileCard({
               e.stopPropagation();
               onModerate(listing);
             }}
-            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-[#EF4444]/30 text-[#EF4444] text-[12px] font-medium hover:bg-[#EF4444]/10 transition-colors"
+            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-danger/30 text-danger text-[12px] font-medium hover:bg-danger/10 transition-colors"
           >
             <Archive size={14} />
             Archive
@@ -81,7 +81,7 @@ export default function ListingMobileCard({
               e.stopPropagation();
               onModerate(listing);
             }}
-            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-[#22C55E]/30 text-[#22C55E] text-[12px] font-medium hover:bg-[#22C55E]/10 transition-colors"
+            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-success/30 text-success text-[12px] font-medium hover:bg-success/10 transition-colors"
           >
             <ShieldCheck size={14} />
             Activate

@@ -126,8 +126,7 @@ export default function Onboarding() {
             {currentStep === 2 && (
               <>
                 <BusinessSummaryCard biz={data} />
-                {/* Approved submissions need no further KYC action here — the
-                    summary pills already show the approved status. */}
+
                 {!isApproved &&
                   (isUnderReview ? (
                     <UnderReviewCard />

@@ -32,7 +32,7 @@ export function OrdersFilterBar({
           onClick={() => onStatusChange(value)}
           className={`px-3 cursor-pointer py-1.5 rounded-full text-[12px] border transition-colors ${
             status === value
-              ? 'bg-primary text-secondary border-primary'
+              ? 'bg-primary text-secondary-foreground border-primary'
               : 'border-border/40 text-muted hover:border-primary hover:text-text'
           }`}
         >

@@ -176,7 +176,7 @@ export default function Orders() {
           </div>
         </div>
 
-        <p className="text-[12px] text-muted">
+        <p className="text-[12px] text-muted text-right">
           Showing <strong className="text-text">{filteredOrders.length}</strong>{' '}
           of <strong className="text-text">{orders.length}</strong> orders
         </p>
@@ -210,7 +210,17 @@ export default function Orders() {
               <tbody>
                 {filteredOrders.map((order) => (
                   <tr key={order.id}>
-                    <td className="font-mono text-text">{order.orderNumber}</td>
+                    <td className="font-mono text-text">
+                      <Link
+                        href={{
+                          pathname: '/exporter/orders/details',
+                          query: { id: `${order.id}` },
+                        }}
+                        className=" hover:text-[#C9922A] hover:underline text-text "
+                      >
+                        {order.id}
+                      </Link>
+                    </td>
 
                     <td className="max-w-55 truncate">{order.productName}</td>
                     <td className="font-mono">{order.quantity}</td>

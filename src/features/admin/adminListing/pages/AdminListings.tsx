@@ -129,17 +129,17 @@ const AdminListings = () => {
             {items.map((listing) => (
               <tr
                 key={listing.id}
-                className="cursor-pointer hover:bg-[#C9922A]/5 transition-colors"
+                className="cursor-pointer hover:bg-primary/5 transition-colors"
               >
-                <td className="font-mono text-[13px] text-[#9CA3AF]">
+                <td className="font-mono text-[13px] text-muted">
                   <p className="block">#{listing.id}</p>
                 </td>
                 <td>
-                  <p className="block font-medium text-[#F5F5F5] hover:text-[#C9922A] transition-colors">
+                  <p className="block font-medium text-text hover:text-primary transition-colors">
                     {listing.title}
                   </p>
                 </td>
-                <td className="text-[13px] text-[#9CA3AF]">
+                <td className="text-[13px] text-muted">
                   <Link
                     href={`/admin/listings/${listing.id}`}
                     className="block"
@@ -155,7 +155,7 @@ const AdminListings = () => {
                     {listing.sellerEmail}
                   </Link>
                 </td>
-                <td className="font-mono text-[#C9922A]">
+                <td className="font-mono text-primary">
                   <Link
                     href={`/admin/listings/${listing.id}`}
                     className="block"
@@ -186,7 +186,7 @@ const AdminListings = () => {
                         type="button"
                         onClick={() => setModerateTarget(listing)}
                         title="Activate"
-                        className="p-1.5 rounded-lg border border-[#22C55E]/30 text-[#22C55E] hover:bg-[#22C55E]/10 transition-colors"
+                        className="p-1.5 rounded-lg border border-success/30 text-success hover:bg-success/10 transition-colors"
                       >
                         <ShieldCheck size={15} />
                       </button>
@@ -196,7 +196,7 @@ const AdminListings = () => {
                         type="button"
                         onClick={() => setModerateTarget(listing)}
                         title="Archive"
-                        className="p-1.5 rounded-lg border border-[#EF4444]/30 text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors"
+                        className="p-1.5 rounded-lg border border-danger/30 text-danger hover:bg-danger/10 transition-colors"
                       >
                         <Archive size={15} />
                       </button>
@@ -206,7 +206,7 @@ const AdminListings = () => {
                         type="button"
                         onClick={() => setModerateTarget(listing)}
                         title="Activate"
-                        className="p-1.5 rounded-lg border border-[#22C55E]/30 text-[#22C55E] hover:bg-[#22C55E]/10 transition-colors"
+                        className="p-1.5 rounded-lg border border-success/30 text-success hover:bg-success/10 transition-colors"
                       >
                         <ShieldCheck size={15} />
                       </button>
@@ -232,10 +232,9 @@ const AdminListings = () => {
 
       {/* Pagination + page size */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-2 text-[13px] text-[#9CA3AF]">
+        <div className="flex items-center gap-2 text-[13px] text-muted">
           <span>
-            Total records:{' '}
-            <strong className="text-[#F5F5F5]">{totalRecords}</strong>
+            Total records: <strong className="text-text">{totalRecords}</strong>
           </span>
         </div>
         <div className="flex items-center gap-4">

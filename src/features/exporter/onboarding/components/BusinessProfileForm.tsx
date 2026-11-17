@@ -71,7 +71,7 @@ export default function BusinessProfileForm({
     country === 'Nigeria' && businessType === 'individual';
 
   const isUS = country === 'United States';
-  const { mutate } = useSubmitOnboardingDetails();
+  // const { mutate } = useSubmitOnboardingDetails();
   const onSubmit = (data: BusinessFormValues) => {
     dispatch(setOnboardingDetails(data));
     setCurrentStep(2);

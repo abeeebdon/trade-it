@@ -72,7 +72,7 @@ export function OrderStatusActionButton({
             key={t.to}
             onClick={() => handleClick(t.to)}
             disabled={isSubmitting}
-            className="helix-button flex items-center justify-center gap-2 bg-primary text-[#0A1628] font-semibold rounded-lg px-4 py-2.5 disabled:opacity-60"
+            className="helix-button flex items-center justify-center gap-2 bg-primary text-bg font-semibold rounded-lg px-4 py-2.5 disabled:opacity-60"
           >
             {isSubmitting && <Loader2 size={16} className="animate-spin" />}
             {t.actionLabel}

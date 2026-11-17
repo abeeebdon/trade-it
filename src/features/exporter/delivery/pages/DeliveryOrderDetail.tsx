@@ -98,7 +98,6 @@ function DeliveryOrderContent({ order }: { order: SellerOrder }) {
 
   const fulfillmentMutation = useUpdateOrderFulfillment(order.id);
 
-  const currentStatus = status as OrderStatus;
   const quantity = order.quantity || 1;
   const lineItems = [
     {
@@ -241,7 +240,7 @@ function DeliveryOrderContent({ order }: { order: SellerOrder }) {
   return (
     <section>
       <div className="flex flex-col gap-4 p-4 max-w-3xl">
-        <BackButton title="Go Back" path="/exporter/fulfillment" />
+        <BackButton title="Go Back" />
 
         <div className="flex items-center mt-4 gap-2">
           <ShoppingBag size={18} className="text-primary" />
