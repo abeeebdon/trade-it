@@ -11,7 +11,7 @@ export default function TrustSection() {
     <section className="border-b border-border-soft bg-bg  py-24 sm:py-28">
       <div className="mx-auto  px-5 text-center sm:px-8">
         <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-primary text-muted">
-          <ShieldCheck className="size-7" />
+          <ShieldCheck className="size-7 text-text" />
         </div>
         <p className="mt-7 text-xs font-bold uppercase tracking-[0.2em] text-primary">
           Built around trust

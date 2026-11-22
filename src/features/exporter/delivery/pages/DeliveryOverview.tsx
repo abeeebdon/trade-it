@@ -12,7 +12,12 @@ import {
   paymentGroupOf,
 } from '@/features/orderManagement/components/CardMeta';
 import { StatusPill } from '@/features/shops/components/StatusPill';
-import { formatDateTime, formatUSD } from '@/lib/func';
+import {
+  formatDateTime,
+  formatDateToMM,
+  formatUSD,
+  sliceLastTen,
+} from '@/lib/func';
 
 import { OrderCard } from '@/components/orders/OrderCard';
 
@@ -148,7 +153,7 @@ export default function ExporterDeliveryOverview() {
                 {visibleOrders.map((order) => (
                   <tr key={order.id}>
                     <td className="font-mono text-[13px] text-[#C9922A] whitespace-nowrap">
-                      {order.orderNumber}
+                      {sliceLastTen(order.orderNumber)}
                     </td>
                     <td className="whitespace-nowrap">{order.shipTo}</td>
                     <td className="max-w-56 truncate">{order.productName}</td>
@@ -156,14 +161,18 @@ export default function ExporterDeliveryOverview() {
                     <td className="font-mono text-[#C9922A] whitespace-nowrap">
                       {formatUSD(order.totalAmount ?? order.amount)}
                     </td>
-                    <td>{order.paymentStatus}</td>
+                    <td>
+                      {order?.paymentStatus?.toLowerCase() === 'paid'
+                        ? order.paymentStatus
+                        : 'Not Paid'}
+                    </td>
                     <td>
                       {order.fulfillmentStatus && (
                         <StatusPill status={order.fulfillmentStatus} />
                       )}
                     </td>
                     <td className="text-[12px] text-muted whitespace-nowrap">
-                      {formatDateTime(order.deliveryDate)}
+                      {formatDateToMM(order.deliveryDate)}
                     </td>
                     <td>
                       <Link

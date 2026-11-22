@@ -123,10 +123,6 @@ export default function OrderDetail() {
           />
           <DetailField label="Provider" value={orderDetails.paymentProvider} />
           <DetailField
-            label="Stripe status"
-            value={humanize(orderDetails.stripePaymentStatus)}
-          />
-          <DetailField
             label="Paid at"
             value={
               orderDetails.paidAt

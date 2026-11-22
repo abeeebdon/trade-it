@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { StatusPill } from '@/features/shops/components/StatusPill';
-import { formatDateTime, formatUSD } from '@/lib/func';
+import { formatDateToMM, formatUSD } from '@/lib/func';
 import { SellerOrder } from '../types/exporterOrdersType';
 
 interface ExporterOrderCardProps {
@@ -36,7 +36,7 @@ const ExporterOrderCard = ({ order }: ExporterOrderCardProps) => {
       </div>
 
       <div className="border-t border-[#1A7A6E]/10 pt-3 text-[12px] text-muted space-y-1">
-        <div>Delivery: {formatDateTime(order.deliveryDate)}</div>
+        <div>Delivery: {formatDateToMM(order.deliveryDate)}</div>
         <div className="flex items-center justify-between gap-2">
           <span>{order.role}</span>
           <Link

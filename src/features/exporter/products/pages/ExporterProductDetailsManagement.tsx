@@ -94,7 +94,7 @@ export const ExporterProductDetailsManagement = () => {
             ) : (
               <ShoppingBag size={14} />
             )}
-            Publish to Shopify
+            Publish
           </button>
           <button
             onClick={() => router.push(`/exporter/products/edit?id=${id}`)}
@@ -184,10 +184,7 @@ export const ExporterProductDetailsManagement = () => {
               />
               <DetailRow label="Currency" value={currencyLabel} />
               <DetailRow label="Source" value={product.sourceType ?? '—'} />
-              <DetailRow
-                label="Seller ID"
-                value={String(product.sellerId ?? '—')}
-              />
+
               <DetailRow
                 label="Status"
                 value={

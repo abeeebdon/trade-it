@@ -18,7 +18,7 @@ import {
   toStatusOptions,
 } from '@/lib/orderFilters';
 import { StatusPill } from '@/features/shops/components/StatusPill';
-import { formatDateTime, formatUSD } from '@/lib/func';
+import { formatDateToMM, formatUSD } from '@/lib/func';
 
 export default function Orders() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -226,14 +226,14 @@ export default function Orders() {
                     <td className="font-mono">{order.quantity}</td>
                     <td className="font-mono">{formatUSD(order.amount)}</td>
                     <td className="text-[12px] text-[#9CA3AF]">
-                      {formatDateTime(order.deliveryDate)}
+                      {formatDateToMM(order.deliveryDate)}
                     </td>
                     <td>
                       <StatusPill
                         status={
-                          order?.status?.toLowerCase() === 'pending_payment'
-                            ? 'Not Paid'
-                            : order.status
+                          order?.paymentStatus?.toLowerCase() === 'paid'
+                            ? order.paymentStatus
+                            : 'Not Paid'
                         }
                       />
                     </td>

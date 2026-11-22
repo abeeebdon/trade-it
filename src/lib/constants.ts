@@ -3,7 +3,7 @@ export const TRANSACTION_TYPES = ['credit', 'debit', 'transfer', 'fee'];
 
 export const STATUSES = [
   { id: 1, label: 'Draft', value: 'draft' },
-  { id: 2, label: 'Active (published)', value: 'active' },
+  { id: 2, label: 'Active', value: 'active' },
   { id: 3, label: 'Archived', value: 'archived' },
 ];
 
