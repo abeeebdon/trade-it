@@ -48,6 +48,12 @@ export default function CreateProduct() {
 
   const [variantForm, setVariantForm] =
     useState<VariantFormValues>(variantDefaults);
+  const [variantError, setVariantError] = useState<string | null>(null);
+
+  const handleVariantsChange = (next: VariantFormValues) => {
+    setVariantForm(next);
+    if (next.variants.length > 0) setVariantError(null);
+  };
 
   const { data: categoryData, isPending: categoriesLoading } =
     useGetProductCategories();
@@ -101,12 +107,21 @@ export default function CreateProduct() {
     );
   };
   const onSubmit = (values: ProductFormValues) => {
+    if (variantForm.variants.length === 0) {
+      setVariantError(
+        'Add at least one variant — pick an option and add a value for it.',
+      );
+      return;
+    }
+
+    setVariantError(null);
+
     submitProduct({
       Name: values.name,
       Category: values.category,
       quantity: Number(values.quantity),
       PriceUsd: values.price_usd,
-      Moq: values.moq,
+      Moq: Number(values.moq),
       Description: values.description,
       CurrencyId: values.currencyId,
       StatusId: values.statusId,
@@ -230,7 +245,11 @@ export default function CreateProduct() {
           />
         </FormSection>
 
-        <VariantComponent value={variantForm} onChange={setVariantForm} />
+        <VariantComponent
+          value={variantForm}
+          onChange={handleVariantsChange}
+          error={variantError ?? undefined}
+        />
         {/* Media */}
         <FormSection title="Media">
           <div className="flex flex-col gap-4">

@@ -49,6 +49,8 @@ type VariantComponentProps = {
   onChange?: (value: VariantFormValues) => void;
   currencySymbol?: string;
   className?: string;
+  /** Validation message shown under the section. */
+  error?: string;
 };
 
 type VariantPatch = { price?: number; available?: number };
@@ -268,6 +270,7 @@ const VariantComponent = ({
   onChange,
   currencySymbol = '$',
   className,
+  error,
 }: VariantComponentProps) => {
   const [internal, setInternal] = useState<VariantFormValues>(variantDefaults);
 
@@ -467,9 +470,17 @@ const VariantComponent = ({
   );
 
   return (
-    <section className={cn('rounded-lg border border-border', className)}>
+    <section
+      className={cn(
+        'rounded-lg border border-border',
+        error && 'border-danger',
+        className,
+      )}
+    >
       <article className="border-b border-border px-4 py-3">
-        <h3 className="helix-h3">Variants</h3>
+        <h3 className="helix-h3">
+          Variants <span className="text-danger">*</span>
+        </h3>
         <p className="mt-1 text-xs text-muted">
           Pick the options customers can choose from, colors and size
         </p>
@@ -616,7 +627,14 @@ const VariantComponent = ({
           </div>
 
           {variants.length === 0 ? (
-            <div className="mt-3 rounded-lg border border-dashed border-border p-6 text-center text-xs text-muted">
+            <div
+              className={cn(
+                'mt-3 rounded-lg border border-dashed p-6 text-center text-xs',
+                error
+                  ? 'border-danger text-danger'
+                  : 'border-border text-muted',
+              )}
+            >
               Add at least one value to your options to generate variants.
             </div>
           ) : (
@@ -903,6 +921,12 @@ const VariantComponent = ({
           )}
         </div>
       </div>
+
+      {error && (
+        <p role="alert" className="px-4 pb-4 text-xs text-danger">
+          {error}
+        </p>
+      )}
     </section>
   );
 };

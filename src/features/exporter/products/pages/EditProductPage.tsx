@@ -43,7 +43,7 @@ const statusIdFor = (p: ProductData) => {
 const valuesFromProduct = (p: ProductData): ProductEditFormValues => ({
   name: p.productName,
   category: p.category,
-  quantity: p.unit ?? 0,
+  quantity: p.unit ?? p.quantity ?? 0,
   price_usd: p.priceUsd,
   moq: p.moq ?? 0,
   description: p.description,
