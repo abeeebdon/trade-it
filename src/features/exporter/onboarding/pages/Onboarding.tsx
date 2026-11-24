@@ -104,7 +104,7 @@ export default function Onboarding() {
   ];
 
   return (
-    <div className="max-w-4xl md:flex h-full gap-5">
+    <div className="max-w-4xl h-full flex flex-col min-[800px]:flex-row min-[800px]:flex-nowrap gap-5">
       <OnboardingStepper
         steps={steps}
         currentStep={currentStep}
@@ -112,7 +112,7 @@ export default function Onboarding() {
         setCurrentStep={handleStepClick}
       />
 
-      <section className="w-full space-y-6">
+      <section className="w-full min-w-0 flex-1 space-y-6">
         {isPending || !data ? (
           <article className="helix-card p-5 min-h-60 flex items-center justify-center">
             <Loading size="md" />

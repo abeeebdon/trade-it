@@ -18,7 +18,7 @@ export default function OnboardingStepper({
   setCurrentStep,
 }: OnboardingStepperProps) {
   return (
-    <article className="flex flex-col w-full h-fit pb-20 pt-5 gap-6 md:max-w-70  mb-10 border bg-surface rounded border-border p-4">
+    <article className="flex flex-col w-full h-fit shrink-0 pb-20 pt-5 gap-6 mb-10 min-[800px]:mb-0 min-[800px]:w-70 border bg-surface rounded border-border p-4">
       {steps.map((s, i) => {
         const locked = i + 1 > maxStep;
 
