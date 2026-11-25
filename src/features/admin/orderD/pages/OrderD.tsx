@@ -52,14 +52,6 @@ export default function OrderD() {
     );
   };
 
-  // const toggleSelectAll = () => {
-  //   setSelectedIds((prev) =>
-  //     visibleOrders.every((order) => prev.includes(order.id))
-  //       ? []
-  //       : visibleOrders.map((order) => order.id),
-  //   );
-  // };
-
   const handleExport = () => {
     if (visibleOrders.length === 0) {
       toast.error('There are no orders to export.');
@@ -155,35 +147,6 @@ export default function OrderD() {
           onToggleSelectAll={() => {}}
         />
       </div>
-
-      {/* {formOpen && (
-        <Modal
-          onClose={closeForm}
-          maxWidth="max-w-lg"
-          title={
-            editing ? `Fulfillment · #${editing.orderNumber}` : 'Create order'
-          }
-        >
-          {/* <FulfillmentForm
-            key={editing?.id ?? 'new'}
-            isSubmitting={false}
-            onCancel={closeForm}
-            // onSubmit={handleSubmit}
-            defaultValues={
-              editing
-                ? {
-                    fulfillmentStatus: toFormStatus(editing),
-                    courierName: editing.courierName,
-                    trackingNumber: editing.trackingNumber,
-                    trackingUrl: editing.trackingUrl,
-                  }
-                : undefined
-            }
-          /> 
-        </Modal>
-  )
-}
-       */}
     </section>
   );
 }
