@@ -3,50 +3,47 @@
 import { useMemo, useState } from 'react';
 import { X } from 'lucide-react';
 import { toast } from 'sonner';
-import Modal from '@/components/ui/Modal';
-import CustomSelect from '@/components/form/CustomSelect';
-import FulfillmentForm, {
-  type FulfillmentPayload,
-} from '@/components/form/FulfillmentForm';
-import OrderDFilters from '../components/OrderDFilters';
+import { Loading } from '@/components/loading';
+import { useGetAdminOrders } from '@/features/admin/hooks/useGetAdminOrders';
+import type { AdminOrder } from '@/features/admin/types/orders';
 import OrderDStats from '../components/OrderDStats';
 import OrderDTable from '../components/OrderDTable';
-import { ORDER_D_ROWS } from '../data/orderDData';
-import type { OrderDFulfillmentFilter, OrderDRecord } from '../types';
-import {
-  deliveryMethodOptions,
-  exportOrdersToCsv,
-  matchesFilters,
-  nextOrderNumber,
-  toDeliveryStatus,
-  toFulfillmentStatus,
-  toFormStatus,
-} from '../utils';
+import { exportOrdersToCsv, normalizeFulfillmentStatus } from '../utils';
+import { OrderDFulfillmentFilter } from '../types';
 
-const LOCATIONS = ['All locations', 'Lagos HQ', 'Abuja', 'Accra'];
+type FulfillmentTab = {
+  value: OrderDFulfillmentFilter;
+  label: string;
+};
 
+const FULFILLMENT_TABS: FulfillmentTab[] = [
+  { value: '', label: 'All' },
+  { value: 'unfulfilled', label: 'Unfulfilled' },
+  { value: 'shipped', label: 'Shipped' },
+  { value: 'fulfilled', label: 'Fulfilled' },
+  { value: 'delivered', label: 'Delivered' },
+];
 export default function OrderD() {
-  const [orders, setOrders] = useState<OrderDRecord[]>(ORDER_D_ROWS);
-  const [search, setSearch] = useState('');
+  const { data, isPending, isError, refetch } = useGetAdminOrders();
+
   const [fulfillment, setFulfillment] = useState<OrderDFulfillmentFilter>('');
-  const [method, setMethod] = useState('');
-  const [location, setLocation] = useState(LOCATIONS[0]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [editing, setEditing] = useState<OrderDRecord | null>(null);
-  const [formOpen, setFormOpen] = useState(false);
-
-  const methods = useMemo(() => deliveryMethodOptions(orders), [orders]);
-
   const selectedCount = selectedIds.length;
 
   const handleClearSelection = () => setSelectedIds([]);
 
-  const visibleOrders = useMemo(
+  const visibleOrders = useMemo<AdminOrder[]>(() => data?.data ?? [], [data]);
+
+  const filteredOrders = useMemo(
     () =>
-      orders.filter((order) =>
-        matchesFilters(order, { search, fulfillment, method }),
-      ),
-    [orders, search, fulfillment, method],
+      fulfillment
+        ? visibleOrders.filter(
+            (order) =>
+              normalizeFulfillmentStatus(order.fulfillmentStatus) ===
+              fulfillment,
+          )
+        : visibleOrders,
+    [visibleOrders, fulfillment],
   );
 
   const toggleSelect = (id: string) => {
@@ -55,90 +52,13 @@ export default function OrderD() {
     );
   };
 
-  const toggleSelectAll = () => {
-    setSelectedIds((prev) =>
-      visibleOrders.every((order) => prev.includes(order.id))
-        ? []
-        : visibleOrders.map((order) => order.id),
-    );
-  };
-
-  const openCreate = () => {
-    setEditing(null);
-    setFormOpen(true);
-  };
-
-  const openEdit = (order: OrderDRecord) => {
-    setEditing(order);
-    setFormOpen(true);
-  };
-
-  const closeForm = () => {
-    setFormOpen(false);
-    setEditing(null);
-  };
-
-  const handleSubmit = (payload: FulfillmentPayload) => {
-    const hasTracking = Boolean(
-      payload.courierName || payload.trackingNumber || payload.trackingUrl,
-    );
-    const fulfillmentStatus = toFulfillmentStatus(payload.fulfillmentStatus);
-    const deliveryStatus = toDeliveryStatus(
-      payload.fulfillmentStatus,
-      hasTracking,
-    );
-
-    if (editing) {
-      setOrders((prev) =>
-        prev.map((order) =>
-          order.id === editing.id
-            ? {
-                ...order,
-                fulfillmentStatus,
-                deliveryStatus,
-                courierName: payload.courierName,
-                trackingNumber: payload.trackingNumber,
-                trackingUrl: payload.trackingUrl,
-              }
-            : order,
-        ),
-      );
-
-      toast.success(`Order #${editing.orderNumber} updated.`);
-    } else {
-      const orderNumber = nextOrderNumber(orders);
-
-      setOrders((prev) => [
-        {
-          id: orderNumber,
-          orderNumber,
-          placedAt: new Date().toISOString(),
-          customer: 'No customer',
-          fulfillBy: '',
-          channel: 'Draft Orders',
-          total: 0,
-          paymentStatus: 'Pending',
-          fulfillmentStatus,
-          items: 0,
-          deliveryStatus,
-          deliveryMethod: 'Shipping',
-          tags: [],
-          courierName: payload.courierName,
-          trackingNumber: payload.trackingNumber,
-          trackingUrl: payload.trackingUrl,
-        },
-        ...prev,
-      ]);
-
-      setSearch('');
-      setFulfillment('');
-      setMethod('');
-
-      toast.success(`Order #${orderNumber} created.`);
-    }
-
-    closeForm();
-  };
+  // const toggleSelectAll = () => {
+  //   setSelectedIds((prev) =>
+  //     visibleOrders.every((order) => prev.includes(order.id))
+  //       ? []
+  //       : visibleOrders.map((order) => order.id),
+  //   );
+  // };
 
   const handleExport = () => {
     if (visibleOrders.length === 0) {
@@ -150,56 +70,61 @@ export default function OrderD() {
     toast.success(`Exported ${visibleOrders.length} orders.`);
   };
 
+  if (isPending) {
+    return (
+      <div className="flex justify-center items-center h-[60vh]">
+        <Loading />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="helix-card p-12 text-center text-muted">
+        <p className="text-lg font-medium text-text">Failed to load orders</p>
+        <p className="mt-1 text-sm">Something went wrong. Please try again.</p>
+        <button
+          type="button"
+          onClick={() => refetch()}
+          className="helix-btn-primary mt-6 inline-flex items-center gap-2"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
   return (
     <section className="pb-10">
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-        <div className="flex items-center gap-3">
-          <h1 className="text-xl font-semibold text-text">Orders</h1>
-
-          <article className="w-40">
-            <CustomSelect
-              size="sm"
-              value={location}
-              onValueChange={setLocation}
-              options={LOCATIONS.map((option) => ({
-                label: option,
-                value: option,
-              }))}
-            />
-          </article>
+      <div className="flex justify-between gap-3 mb-5">
+        <div className="flex flex-wrap items-center gap-2">
+          {FULFILLMENT_TABS.map((tab) => (
+            <button
+              key={tab.value}
+              type="button"
+              onClick={() => setFulfillment(tab.value)}
+              className={`px-3 cursor-pointer py-1.5 rounded-full text-[12px] border transition-colors ${
+                fulfillment === tab.value
+                  ? 'bg-primary text-secondary-foreground border-primary'
+                  : 'border-border/40 text-muted hover:border-primary hover:text-text'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
-
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={handleExport}
-            className="helix-btn-secondary text-sm"
-          >
-            Export
-          </button>
-
-          <button
-            type="button"
-            onClick={openCreate}
-            className="helix-btn-primary text-sm"
-          >
-            Create order
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={handleExport}
+          className="helix-btn-secondary text-sm"
+        >
+          Export CSV
+        </button>
       </div>
 
-      <OrderDStats orders={orders} />
+      <OrderDStats orders={visibleOrders} />
 
       <div className="mt-5 space-y-3">
-        <OrderDFilters
-          search={search}
-          onSearchChange={setSearch}
-          fulfillment={fulfillment}
-          onFulfillmentChange={setFulfillment}
-          method={method}
-          methods={methods}
-          onMethodChange={setMethod}
-        />
         {selectedCount > 0 && (
           <div className="flex items-center gap-2 text-[12px] text-muted">
             <span>
@@ -218,21 +143,20 @@ export default function OrderD() {
         <div className="flex items-center justify-between gap-2 text-[13px] text-muted">
           <span>
             Showing{' '}
-            <strong className="text-text">{visibleOrders.length}</strong> of{' '}
-            <strong className="text-text">{orders.length}</strong> orders
+            <strong className="text-text">{filteredOrders.length}</strong> of{' '}
+            <strong className="text-text">{visibleOrders.length}</strong> orders
           </span>
         </div>
 
         <OrderDTable
-          orders={visibleOrders}
+          orders={filteredOrders}
           selectedIds={selectedIds}
           onToggleSelect={toggleSelect}
-          onToggleSelectAll={toggleSelectAll}
-          onEdit={openEdit}
+          onToggleSelectAll={() => {}}
         />
       </div>
 
-      {formOpen && (
+      {/* {formOpen && (
         <Modal
           onClose={closeForm}
           maxWidth="max-w-lg"
@@ -240,11 +164,11 @@ export default function OrderD() {
             editing ? `Fulfillment · #${editing.orderNumber}` : 'Create order'
           }
         >
-          <FulfillmentForm
+          {/* <FulfillmentForm
             key={editing?.id ?? 'new'}
             isSubmitting={false}
             onCancel={closeForm}
-            onSubmit={handleSubmit}
+            // onSubmit={handleSubmit}
             defaultValues={
               editing
                 ? {
@@ -255,9 +179,11 @@ export default function OrderD() {
                   }
                 : undefined
             }
-          />
+          /> 
         </Modal>
-      )}
+  )
+}
+       */}
     </section>
   );
 }

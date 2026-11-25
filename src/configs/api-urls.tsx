@@ -70,12 +70,17 @@ export const APIENDPOINTSTWO = {
   BUYER_FULFILLMENT_QUEUE: '/v1/BuyerFulfillment/queue',
 
   ADMIN_ORDERS: '/v1/Admin/orders',
+  ADMIN_ORDERS_ID: (id: string | number) => `/v1/Admin/orders/${id}`,
+  ADMIN_ORDERS_FULFILLMENT: (id: string | number) =>
+    `/v1/Admin/orders/${id}/fulfillment`,
   ADMIN_LISTINGS: '/v1/Admin/listings',
   ADMIN_LISTINGS_MODERATE: (listingId: number) =>
     `/v1/Admin/listings/${listingId}/moderate`,
   ADMIN_DASHBOARD: '/v1/Admin/dashboard',
   ADMIN_ADMINS: '/v1/Admin/admins',
   ADMIN_USERS: '/v1/Admin/users',
+  ADMIN_PRODUCTS: '/v1/Admin/products',
+
   ADMIN_USERS_ACTIVATE: (id: number) => `/v1/Admin/users/${id}/activate`,
   ADMIN_USERS_SUSPEND: (id: number) => `/v1/Admin/users/${id}/suspend`,
   ADMIN_USERS_RESET_MFA: (id: number) => `/v1/Admin/users/${id}/reset-mfa`,

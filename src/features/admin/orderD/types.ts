@@ -30,4 +30,9 @@ export type OrderDRecord = {
   trackingUrl: string;
 };
 
-export type OrderDFulfillmentFilter = '' | 'unfulfilled' | 'fulfilled';
+export type OrderDFulfillmentFilter =
+  | ''
+  | 'unfulfilled'
+  | 'shipped'
+  | 'fulfilled'
+  | 'delivered';

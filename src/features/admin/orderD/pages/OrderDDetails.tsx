@@ -1,28 +1,63 @@
 'use client';
 
-import { useMemo, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { Truck } from 'lucide-react';
 import { formatDateTime, formatUSD } from '@/lib/func';
 import { StatusPill } from '@/features/shops/components/StatusPill';
 import BackButton from '@/components/buttons/BackButton';
-import { ORDER_D_ROWS } from '../data/orderDData';
-import { formatItems } from '../utils';
+import { Loading } from '@/components/loading';
+import { useGetAdminOrderById } from '@/features/admin/hooks/useGetAdminOrders';
+import UpdateOrderStatusModal from '../components/UpdateOrderStatusModal';
 
 export default function OrderDDetails() {
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
 
-  const order = useMemo(
-    () => ORDER_D_ROWS.find((row) => row.id === id || row.orderNumber === id),
-    [id],
-  );
+  const { data: order, isPending, isError, refetch } = useGetAdminOrderById(id);
+  const [statusModalOpen, setStatusModalOpen] = useState(false);
 
-  if (!order) {
+  if (!id) {
     return (
       <div className="helix-card p-12 text-center text-muted">
         Order details could not be found. Please check the order ID.
         <div className="mt-4 flex justify-center">
-          <BackButton title="Back to orders" path="/admin/order-d" />
+          <BackButton title="Back to orders" path="/admin/orders" />
+        </div>
+      </div>
+    );
+  }
+
+  if (isPending) {
+    return (
+      <div className="flex justify-center items-center h-[60vh]">
+        <Loading />
+      </div>
+    );
+  }
+
+  if (isError || !order) {
+    return (
+      <div className="helix-card p-12 text-center text-muted">
+        <p className="text-lg font-medium text-text">
+          {isError ? 'Failed to load order details' : 'Order not found'}
+        </p>
+        <p className="mt-1 text-sm">
+          {isError
+            ? 'Something went wrong. Please try again.'
+            : 'Please check the order ID and try again.'}
+        </p>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+          {isError && (
+            <button
+              type="button"
+              onClick={() => refetch()}
+              className="helix-btn-primary"
+            >
+              Retry
+            </button>
+          )}
+          <BackButton title="Back to orders" path="/admin/orders" />
         </div>
       </div>
     );
@@ -31,20 +66,32 @@ export default function OrderDDetails() {
   return (
     <main className="w-full">
       <article className="p-6 space-y-6">
-        <BackButton title="Back" path="/admin/order-d" />
+        <BackButton title="Back" path="/admin/orders" />
 
-        <section className="flex flex-wrap justify-between items-center gap-3">
+        <section className="">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-[12px] text-muted">
+              Order{' '}
+              <span className="font-mono text-primary">
+                #{order.orderNumber}
+              </span>
+            </p>
+            <button
+              type="button"
+              onClick={() => setStatusModalOpen(true)}
+              className="helix-btn-secondary text-sm inline-flex items-center gap-2"
+            >
+              <Truck size={14} />
+              Update status
+            </button>
+          </div>
           <div className="flex flex-wrap items-center gap-2">
             <StatusPill status={order.paymentStatus} />
-            <StatusPill status={order.fulfillmentStatus} />
-            {order.deliveryStatus && (
-              <StatusPill status={order.deliveryStatus} />
+            <StatusPill status={order.status} />
+            {order.fulfillmentStatus && (
+              <StatusPill status={order.fulfillmentStatus} />
             )}
           </div>
-          <p className="text-[12px] text-muted">
-            Order{' '}
-            <span className="font-mono text-primary">#{order.orderNumber}</span>
-          </p>
         </section>
 
         <DetailSection title="Order">
@@ -54,27 +101,38 @@ export default function OrderDDetails() {
             mono
             accent
           />
-          <DetailField label="Channel" value={order.channel} />
-          <DetailField label="Placed" value={formatDateTime(order.placedAt)} />
+          <DetailField label="Order type" value={order.orderType} />
+          <DetailField label="Role" value={order.role} />
           <DetailField
-            label="Fulfill by"
-            value={order.fulfillBy ? formatDateTime(order.fulfillBy) : '—'}
+            label="Delivery date"
+            value={
+              order.deliveryDate ? formatDateTime(order.deliveryDate) : '—'
+            }
           />
-          <DetailField label="Items" value={formatItems(order.items)} />
-          <DetailField
-            label="Total"
-            value={formatUSD(order.total)}
-            mono
-            accent
-          />
+          <DetailField label="Quantity" value={order.quantity} />
+          <DetailField label="Status" value={humanize(order.status)} />
+        </DetailSection>
+
+        <DetailSection title="Product">
+          <DetailField label="Product" value={order.productName} />
+          <DetailField label="Category" value={order.category} />
+          {order.variantTitle && (
+            <DetailField label="Variant" value={order.variantTitle} />
+          )}
+          {order.sku && <DetailField label="SKU" value={order.sku} mono />}
+          <div className="sm:col-span-2 lg:col-span-3">
+            <DetailField label="Description" value={order.description} />
+          </div>
         </DetailSection>
 
         <DetailSection title="Customer">
-          <DetailField label="Customer" value={order.customer} />
+          <DetailField label="Ship to" value={order.shipTo} />
+          <DetailField label="Email" value={order.email} />
+          <DetailField label="Phone" value={order.phone} />
           <div className="sm:col-span-2 lg:col-span-3">
             <DetailField
-              label="Tags"
-              value={order.tags.length > 0 ? order.tags.join(', ') : '—'}
+              label="Shipping address"
+              value={order.shippingAddress}
             />
           </div>
         </DetailSection>
@@ -84,27 +142,47 @@ export default function OrderDDetails() {
             label="Payment status"
             value={humanize(order.paymentStatus)}
           />
-          <DetailField label="Amount" value={formatUSD(order.total)} mono />
-        </DetailSection>
-
-        <DetailSection title="Delivery">
-          <DetailField label="Delivery method" value={order.deliveryMethod} />
+          <DetailField label="Provider" value={order.paymentProvider} />
           <DetailField
-            label="Delivery status"
-            value={order.deliveryStatus || '—'}
+            label="Paid at"
+            value={order.paidAt ? formatDateTime(order.paidAt) : '—'}
+          />
+          <DetailField
+            label="Subtotal"
+            value={formatUSD(order.subtotalAmount ?? order.amount)}
+            mono
+          />
+          <DetailField
+            label="Shipping"
+            value={formatUSD(order.shippingAmount ?? 0)}
+            mono
+          />
+          <DetailField
+            label="Total"
+            value={formatUSD(order.totalAmount ?? order.amount)}
+            mono
+            accent
           />
         </DetailSection>
 
-        <DetailSection title="Fulfillment">
+        <DetailSection title="Delivery & fulfillment">
           <DetailField
             label="Fulfillment status"
-            value={order.fulfillmentStatus}
+            value={humanize(order.fulfillmentStatus)}
           />
           <DetailField label="Courier" value={order.courierName} />
           <DetailField
             label="Tracking number"
             value={order.trackingNumber}
             mono
+          />
+          <DetailField
+            label="Shipped at"
+            value={order.shippedAt ? formatDateTime(order.shippedAt) : '—'}
+          />
+          <DetailField
+            label="Delivered at"
+            value={order.deliveredAt ? formatDateTime(order.deliveredAt) : '—'}
           />
           {order.trackingUrl && (
             <div className="sm:col-span-2 lg:col-span-3">
@@ -123,6 +201,13 @@ export default function OrderDDetails() {
           )}
         </DetailSection>
       </article>
+
+      {statusModalOpen && (
+        <UpdateOrderStatusModal
+          order={order}
+          onClose={() => setStatusModalOpen(false)}
+        />
+      )}
     </main>
   );
 }

@@ -1,7 +1,7 @@
-import AdminOrders from '@/features/admin/adminOrders/pages/AdminOrders';
+import OrderD from '@/features/admin/orderD/pages/OrderD';
 
 const page = () => {
-  return <AdminOrders />;
+  return <OrderD />;
 };
 
 export default page;

@@ -1,8 +1,11 @@
 import type { FulfillmentStatus } from '@/components/form/FulfillmentForm';
+import type { AdminOrder } from '@/features/admin/types/orders';
 import type {
+  OrderDChannel,
   OrderDDeliveryStatus,
   OrderDFulfillmentFilter,
   OrderDFulfillmentStatus,
+  OrderDPaymentStatus,
   OrderDRecord,
 } from './types';
 
@@ -58,6 +61,33 @@ export const formatRelativeDay = (iso: string) => {
 export const formatItems = (count: number) =>
   `${count} ${count === 1 ? 'item' : 'items'}`;
 
+export type NormalizedFulfillmentStatus =
+  | 'unfulfilled'
+  | 'shipped'
+  | 'fulfilled'
+  | 'delivered';
+
+const DELIVERED_STATUSES = ['delivered', 'received', 'completed'];
+const SHIPPED_STATUSES = [
+  'shipped',
+  'in_transit',
+  'out_for_delivery',
+  'dispatched',
+];
+
+/** Normalizes the many API fulfillment statuses onto the filter buckets. */
+export const normalizeFulfillmentStatus = (
+  status?: string | null,
+): NormalizedFulfillmentStatus => {
+  const value = (status ?? '').toLowerCase();
+
+  if (DELIVERED_STATUSES.includes(value)) return 'delivered';
+  if (SHIPPED_STATUSES.includes(value)) return 'shipped';
+  if (value === 'fulfilled') return 'fulfilled';
+
+  return 'unfulfilled';
+};
+
 /** Maps the shipment form status onto the table's fulfillment status. */
 export const toFulfillmentStatus = (
   status: FulfillmentStatus,
@@ -90,6 +120,65 @@ export const deliveryMethodOptions = (orders: OrderDRecord[]) => {
 
   return methods.sort((a, b) => a.localeCompare(b));
 };
+
+/** API fulfillment statuses that mean the order has been fulfilled. */
+const FULFILLED_STATUSES = ['fulfilled', 'shipped', 'delivered', 'in_transit'];
+
+const toPaymentStatusFromApi = (
+  status?: string | null,
+): OrderDPaymentStatus => {
+  const value = (status ?? '').toLowerCase();
+  if (value === 'paid') return 'Paid';
+  if (value === 'refunded' || value === 'failed') return 'Refunded';
+  return 'Pending';
+};
+
+const toFulfillmentStatusFromApi = (
+  status?: string | null,
+): OrderDFulfillmentStatus =>
+  FULFILLED_STATUSES.includes((status ?? '').toLowerCase())
+    ? 'Fulfilled'
+    : 'Unfulfilled';
+
+const toDeliveryStatusFromApi = (order: AdminOrder): OrderDDeliveryStatus => {
+  if (order.deliveredAt) return 'Delivered';
+  if (order.trackingNumber) return 'Tracking added';
+  return '';
+};
+
+const toChannelFromApi = (order: AdminOrder): OrderDChannel => {
+  const value = (order.orderType ?? '').toLowerCase();
+
+  if (value === 'shopify' || value === 'online' || value === 'online store') {
+    return 'Online Store';
+  }
+  if (value === 'pos') return 'POS';
+
+  return 'Draft Orders';
+};
+
+/** Maps an admin orders API record onto the table row shape. */
+export const toOrderDRecord = (order: AdminOrder): OrderDRecord => ({
+  id: String(order.id),
+  orderNumber: order.orderNumber,
+  placedAt: order.paidAt ?? order.deliveryDate ?? '',
+  customer: order.shipTo || order.email || 'No customer',
+  fulfillBy: '',
+  channel: toChannelFromApi(order),
+  total: order.totalAmount ?? order.amount ?? 0,
+  paymentStatus: toPaymentStatusFromApi(order.paymentStatus),
+  fulfillmentStatus: toFulfillmentStatusFromApi(order.fulfillmentStatus),
+  items: order.quantity ?? 0,
+  deliveryStatus: toDeliveryStatusFromApi(order),
+  deliveryMethod: 'Shipping',
+  tags: order.orderType ? [order.orderType] : [],
+  courierName: order.courierName ?? '',
+  trackingNumber: order.trackingNumber ?? '',
+  trackingUrl: order.trackingUrl ?? '',
+});
+
+export const toOrderDRecords = (orders: AdminOrder[]) =>
+  orders.map(toOrderDRecord);
 
 export const matchesFilters = (
   order: OrderDRecord,
@@ -136,36 +225,40 @@ const csvCell = (value: string | number) =>
   `"${String(value).replace(/"/g, '""')}"`;
 
 /** Downloads the currently visible orders as a CSV file. */
-export const exportOrdersToCsv = (orders: OrderDRecord[]) => {
+export const exportOrdersToCsv = (orders: AdminOrder[]) => {
   const header = [
     'Order',
-    'Date',
+    'Delivery date',
     'Customer',
-    'Fulfill by',
+    'Email',
+    'Product',
+    'Quantity',
     'Channel',
     'Total',
+    'Currency',
     'Payment status',
     'Fulfillment status',
-    'Items',
-    'Delivery status',
-    'Delivery method',
-    'Tags',
+    'Courier',
+    'Tracking number',
+    'Status',
   ];
 
   const rows = orders.map((order) =>
     [
       `#${order.orderNumber}`,
-      order.placedAt,
-      order.customer,
-      order.fulfillBy,
-      order.channel,
-      order.total.toFixed(2),
+      order.deliveryDate,
+      order.shipTo,
+      order.email,
+      order.productName,
+      order.quantity,
+      order.orderType,
+      (order.totalAmount ?? order.amount ?? 0).toFixed(2),
+      order.currency ?? 'usd',
       order.paymentStatus,
-      order.fulfillmentStatus,
-      order.items,
-      order.deliveryStatus,
-      order.deliveryMethod,
-      order.tags.join(', '),
+      order.fulfillmentStatus ?? '',
+      order.courierName ?? '',
+      order.trackingNumber ?? '',
+      order.status,
     ].map(csvCell),
   );
 

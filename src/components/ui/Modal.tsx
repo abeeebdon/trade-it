@@ -57,11 +57,11 @@ export default function Modal({
             <button
               type="button"
               onClick={onClose}
-              className="text-muted hover:text-text transition-colors"
+              className="text-muted hover:text-text cursor-pointer  text-right transition-colors"
               aria-label="Close modal"
               data-testid="modal-close"
             >
-              <X size={18} />
+              <X size={22} />
             </button>
           </header>
 

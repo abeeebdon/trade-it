@@ -1,7 +1,7 @@
-import ExporterProducts from '@/features/exporter/products/pages/MyProducts';
+import AdminProductPage from '@/features/admin/products/pages/AdminProductPage';
 
 const page = () => {
-  return <ExporterProducts />;
+  return <AdminProductPage />;
 };
 
 export default page;
